@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reservation – Insta Hotel - mainbranch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    
+    /* 🔥 무한 슬라이드 애니메이션 */
+    @keyframes slideInfinite {
+      0%    { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-slide {
+        animation: slideInfinite 30s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900 font-sans">
+
+  <header id="header" class="fixed top-0 left-0 right-0 z-30 text-white transition-colors duration-300 bg-transparent">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
+      
+      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
+
+      <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md">
+        <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
+        <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
+        <a href="about.html" class="hover:text-orange-200">about</a>
+        <a href="rooms.html" class="hover:text-orange-200">rooms</a>
+        <a href="reservation.html" class="hover:text-orange-200">reservation</a>
+        <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
+        <a href="contact.html" class="hover:text-orange-200">contact</a>
+      </nav>
+
+      <div class="flex items-center relative drop-shadow-md">
+         <div class="flex items-center gap-1 cursor-pointer relative">
+            <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+
+            <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="en">🇺🇸 English</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="zh">🇨🇳 中文</option>
+            </select>
+         </div>
+      </div>
+
+    </div>
+  </header>
+
+  <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity duration-300"></div>
+  
+  <nav id="mobile-drawer" class="fixed top-0 left-0 w-[75%] max-w-sm h-full z-50 bg-white shadow-xl text-slate-900 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
+    <div class="p-6">
+      <button id="mobile-menu-close-btn" class="absolute top-4 right-4 text-3xl font-light hover:text-[#ff6900]">&times;</button>
+      
+      <div class="mt-2 mb-8">
+        <span class="text-xl font-bold tracking-tight text-[#ff6900]">Insta hotel</span>
+      </div>
+      
+      <ul class="flex flex-col space-y-4 text-lg font-medium">
+        <li><a href="about.html" class="block hover:text-[#ff6900]">about</a></li>
+        
+        <li>
+            <div class="flex justify-between items-center cursor-pointer hover:text-[#ff6900]" id="rooms-toggle">
+                <span>rooms</span> <span class="text-sm">▼</span>
+            </div>
+            <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Special</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Luxury</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Premium</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Deluxe</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Standard</a></li>
+                <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
+            </ul>
+        </li>
+
+        <li><a href="reservation.html" class="block hover:text-[#ff6900]">reservation</a></li>
+        <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
+        <li><a href="contact.html" class="block hover:text-[#ff6900]">contact</a></li>
+      </ul>
+
+      <div class="mt-8 border-t pt-4">
+          <p class="text-sm text-slate-400 mb-2">Language</p>
+          <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
+              <option value="ko">Korean</option>
+              <option value="en">English</option>
+              <option value="ja">Japanese</option>
+              <option value="zh">Chinese</option>
+          </select>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pt-0">
+    <section class="relative h-[360px] md:h-[460px] overflow-hidden">
+      <img
+        src="hero6.jpg"
+        alt="Room view"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/10"></div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-4 py-12 md:py-16">
+      <h1 class="text-lg md:text-xl font-semibold mb-10">
+        Room Reservation
+      </h1>
+
+      <div class="grid md:grid-cols-3 gap-10 mb-12">
+        <div class="text-center transition hover:-translate-y-1 duration-300">
+          <a href="https://www.booking.com/hotel/kr/hotelinsta-main-branch.ko.html" class="block">
+            <img src="hero7.jpg" alt="패키지 1" class="w-44 h-44 mx-auto rounded-full object-cover shadow-md font-bold" />
+            <p class="mt-4 text-sm font-semibold text-slate-700">Friends & Fun</p>
+          </a>
+        </div>
+        <div class="text-center transition hover:-translate-y-1 duration-300">
+          <a href="https://www.agoda.com/ko-kr/ko-kr/suwon-hue/hotel/seoul-kr.html" class="block">
+            <img src="럭셔리5.png" alt="패키지 2" class="w-44 h-44 mx-auto rounded-full object-cover shadow-md font-bold" />
+            <p class="mt-4 text-sm font-semibold text-slate-700">Stylish Retreat</p>
+          </a>
+        </div>
+        <div class="text-center transition hover:-translate-y-1 duration-300">
+          <a href="https://www.agoda.com/ko-kr/ko-kr/suwon-hue/hotel/seoul-kr.html" class="block">
+            <img src="hero9.png" alt="패키지 3" class="w-44 h-44 mx-auto rounded-full object-cover shadow-md font-bold" />
+            <p class="mt-4 text-sm font-semibold text-slate-700">Relax & Recharge</p>
+          </a>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-10 items-start mb-12">
+        <div class="md:col-span-3 text-[15px] leading-relaxed space-y-1 text-[#ff6900] font-semibold" id="res-notice-group">
+          <p>• 예약 및 호텔 이용 관련 : yhl5258@naver.com</p>
+          <p>• 제휴사이트(아고다, 트립닷컴, 부킹닷컴, 익스피디아 등)에서 예약부탁드립니다.</p>
+        </div>
+        <div class="flex md:justify-end items-center">
+          <a href="https://www.booking.com/hotel/kr/hotelinsta-main-branch.ko.html" target="_blank" class="w-full md:w-56 py-3 bg-[#ff6900] text-white text-sm font-semibold rounded-full shadow-md hover:bg-orange-500 transition text-center" id="btn-reserve">
+            예약하기
+          </a>
+        </div>
+      </div>
+
+      <section class="max-w-5xl mx-auto px-4 pt-10 pb-12 text-sm leading-relaxed border-t border-slate-100 mt-10">
+        <p class="text-orange-500 font-semibold mb-2" id="long-stay-label">장기숙박 관련 안내</p>
+        <h2 class="text-2xl md:text-3xl font-bold mb-4" id="long-stay-title">인스타호텔 장기 투숙 안내 (Long-term stay announcement)</h2>
+        
+        <div id="long-stay-desc">
+            <p class="text-orange-500 font-semibold mb-1">
+              인스타호텔에서 보증금 없이<br />특별한 가격으로 일상을 여행하는 삶을 경험해보세요!
+            </p>
+        </div>
+
+        <div class="space-y-1 mb-6 mt-6" id="long-stay-details">
+          <p>▶ 주소 : 경기도 수원시 영통구 영통로 94-6, 인스타호텔 본점</p>
+          <p>▶ 거주기간 : 최소 1개월 이상</p>
+          <p>▶ 방 형태 : 룸 1개, 화장실 1개</p>
+          <p>▶ 옵션 : TV, WiFi, 침대, 냉장고, 에어컨, 공기청정기, 자동비데, 욕조(일부 객실) 등</p>
+          <p>▶ 관리비 : 없음</p>
+          <p>▶ 입주일 : 즉시 가능</p>
+          <p>▶ 문의 : 카카오톡 플러스친구 [인스타호텔] / 인스타그램 @instahotel_mainbranch / 전화 031-203-4301</p>
+        </div>
+        
+        </section>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-4 pt-10 pb-16">
+      <div class="relative w-full max-w-5xl mx-auto h-[180px] md:h-[420px] overflow-hidden rounded shadow-md mt-10">
+        <div id="slideTrack" class="flex h-full gap-3 w-[200%] animate-slide">
+          <img src="hero7.jpg" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 1" />
+          <img src="hero8.png" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 2" />
+          <img src="hero5.jpg" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 3" />
+          <img src="조식.jpg"   class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 4" />
+          <img src="hero2.jpg"  class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 5" />
+          <img src="조식.png"  class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 6" />
+          <img src="hero7.jpg" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 1 copy" />
+          <img src="hero8.png" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 2 copy" />
+          <img src="hero5.jpg" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 3 copy" />
+          <img src="조식.jpg"   class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 4 copy" />
+          <img src="hero2.jpg"  class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 5 copy" />
+          <img src="조식.png"  class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 6 copy" />
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
+      <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
+        <div class="flex justify-center gap-4 text-lg"> 
+           <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank">
+               <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
+           </a>
+           <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
+               <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
+           </a>
+           <a href="http://pf.kakao.com/_xiITuG" target="_blank">
+               <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
+           </a>
+           <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
+               <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
+           </a>       
+        </div>
+
+        <div class="space-y-1">
+          <p>insta hotel mainbranch, Korea</p>
+          
+          <p id="companyName">(주)호텔인스타</p>
+          <p id="ceoName">대표자 : 이영환</p>
+          <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
+          <p id="address">수원시 영통구 영통로 94-6</p>
+          
+          <p>Business License 176-24-01388 | Tel 031-203-4301</p>
+        </div>
+
+        <div class="flex justify-center gap-4 pt-2">
+          <a href="#" class="hover:underline" id="terms">이용약관</a>
+          <a href="#" class="hover:underline" id="privacy">개인정보처리방침</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <a 
+    href="http://pf.kakao.com/_xiITuG"
+    target="_blank"
+    class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#FFEB00] text-black px-4 py-2 rounded-full shadow-lg hover:bg-yellow-400 transition-colors font-bold"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+      <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
+    </svg>
+    <span id="inquiryBtn" class="text-lg">문의</span>
+  </a>
+
+  <script>
+    /* --------------------------------------
+       1. 헤더 스크롤 효과 & 모바일 메뉴
+    -------------------------------------- */
+    const header = document.getElementById("header");
+    
+    // 스크롤 시 배경색 변경
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 50) {
+        header.classList.add("bg-[#ff6900]", "shadow-lg");
+        header.classList.remove("bg-transparent");
+      } else {
+        header.classList.remove("bg-[#ff6900]", "shadow-lg");
+        header.classList.add("bg-transparent");
+      }
+    });
+
+    // 모바일 메뉴 제어
+    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+    const mobileDrawer = document.getElementById("mobile-drawer");
+    const drawerOverlay = document.getElementById("drawer-overlay");
+    const mobileCloseBtn = document.getElementById("mobile-menu-close-btn");
+
+    function openMenu() {
+        mobileDrawer.classList.remove("-translate-x-full");
+        drawerOverlay.classList.remove("hidden");
+        document.body.style.overflow = "hidden"; 
+    }
+    function closeMenu() {
+        mobileDrawer.classList.add("-translate-x-full");
+        drawerOverlay.classList.add("hidden");
+        document.body.style.overflow = ""; 
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMenu);
+    if (mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMenu);
+    if (drawerOverlay) drawerOverlay.addEventListener("click", closeMenu);
+
+    // 모바일 하위 메뉴 토글
+    const roomsToggle = document.getElementById("rooms-toggle");
+    const roomsSubmenu = document.getElementById("rooms-submenu");
+    if(roomsToggle && roomsSubmenu){
+        roomsToggle.addEventListener("click", () => {
+            roomsSubmenu.classList.toggle("hidden");
+        });
+    }
+
+    /* --------------------------------------
+       2. 다국어 번역 데이터 (한국어 부분만)
+    -------------------------------------- */
+    const translations = {
+      ko: {
+        flag: "🇰🇷",
+        
+        // 예약 상단 알림
+        "res-notice-group": `
+          <p>• 예약 및 호텔 이용 관련 : yhl5258@naver.com</p>
+          <p>• 제휴사이트(아고다, 트립닷컴, 부킹닷컴, 익스피디아 등)에서 예약부탁드립니다.</p>
+        `,
+        "btn-reserve": "예약하기",
+
+        // 장기 숙박
+        "long-stay-label": "장기숙박 관련 안내",
+        "long-stay-title": "인스타호텔 장기 투숙 안내 (Long-term stay announcement)",
+        "long-stay-desc": `
+            <p class="text-orange-500 font-semibold mb-1">
+              인스타호텔에서 보증금 없이<br />특별한 가격으로 일상을 여행하는 삶을 경험해보세요!
+            </p>
+        `,
+        "long-stay-details": `
+          <p>▶ 주소 : 경기도 수원시 영통구 영통로 94-6, 인스타호텔 본점</p>
+          <p>▶ 거주기간 : 최소 1개월 이상</p>
+          <p>▶ 방 형태 : 룸 1개, 화장실 1개</p>
+          <p>▶ 옵션 : TV, WiFi, 침대, 냉장고, 에어컨, 공기청정기, 자동비데, 욕조(일부 객실) 등</p>
+          <p>▶ 관리비 : 없음</p>
+          <p>▶ 입주일 : 즉시 가능</p>
+          <p>▶ 문의 : 카카오톡 플러스친구 [인스타호텔] / 인스타그램 @instahotel_mainbranch / 전화 031-203-4301</p>
+        `,
+
+        // Footer
+        companyName: "(주)호텔인스타", ceoName: "대표자 : 이영환", bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", address: "수원시 영통구 영통로 94-6",
+        terms: "이용약관", privacy: "개인정보처리방침", inquiryBtn: "문의"
+      },
+
+      en: {
+        flag: "🇺🇸",
+
+        "res-notice-group": `
+          <p>• Inquiries regarding reservations & usage: yhl5258@naver.com</p>
+          <p>• Please make reservations through affiliate sites (Agoda, Trip.com, Booking.com, Expedia, etc.).</p>
+        `,
+        "btn-reserve": "Book Now",
+
+        "long-stay-label": "Long-term Stay Info",
+        "long-stay-title": "Insta Hotel Long-term Stay Announcement",
+        "long-stay-desc": `
+            <p class="text-orange-500 font-semibold mb-1">
+              Experience the life of traveling daily at a special price<br />without a deposit at the Insta Hotel!
+            </p>
+        `,
+        "long-stay-details": `
+          <p>▶ Address : Insta Hotel Main Branch, 94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si</p>
+          <p>▶ Stay Duration : Minimum 1 month</p>
+          <p>▶ Room Type : 1 Room, 1 Bathroom</p>
+          <p>▶ Amenities : TV, WiFi, Bed, Refrigerator, AC, Air Purifier, Bidet, Bathtub (selected rooms), etc.</p>
+          <p>▶ Maintenance Fee : None</p>
+          <p>▶ Move-in Date : Immediate move-in available</p>
+          <p>▶ Contact : KakaoTalk [Insta Hotel] / Instagram @instahotel_mainbranch / Tel +82-31-203-4301</p>
+        `,
+
+        companyName: "Insta Hotel Co., Ltd.", ceoName: "CEO: Lee Young Hwan", bizNumber: "Registration: 2023-Suwon Yeongtong-1696", address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si",
+        terms: "Terms of Use", privacy: "Privacy Policy", inquiryBtn: "Contact"
+      },
+
+      ja: {
+        flag: "🇯🇵",
+
+        "res-notice-group": `
+          <p>• 予約および利用に関するお問い合わせ : yhl5258@naver.com</p>
+          <p>• 提携サイト(Agoda, Trip.com, Booking.com, Expediaなど)からのご予約をお願いいたします。</p>
+        `,
+        "btn-reserve": "予約する",
+
+        "long-stay-label": "長期滞在のご案内",
+        "long-stay-title": "インスタホテル長期滞在のご案内",
+        "long-stay-desc": `
+            <p class="text-orange-500 font-semibold mb-1">
+              保証金なしで特別な価格で<br />日常を旅するような生活をインスタホテルで体験してください！
+            </p>
+        `,
+        "long-stay-details": `
+          <p>▶ 住所 : 京畿道 水原市 霊通区 霊通路 94-6, インスタホテル本店</p>
+          <p>▶ 居住期間 : 最低1ヶ月以上</p>
+          <p>▶ 部屋タイプ : ルーム1、バスルーム1</p>
+          <p>▶ オプション : TV, WiFi, ベッド, 冷蔵庫, エアコン, 空気清浄機, 自動ビデ, 浴槽(一部客室)など</p>
+          <p>▶ 管理費 : なし</p>
+          <p>▶ 入居日 : 即時可能</p>
+          <p>▶ お問い合わせ : カカオトーク [インスタホテル] / Instagram @instahotel_mainbranch / 電話 031-203-4301</p>
+        `,
+
+        companyName: "インスタホテル株式会社", ceoName: "代表者 : イ・ヨンファン", bizNumber: "登録番号: 2023-水原霊通-1696", address: "水原市霊通区霊通路94-6",
+        terms: "利用規約", privacy: "個人情報処理方針", inquiryBtn: "お問い合わせ"
+      },
+
+      zh: {
+        flag: "🇨🇳",
+
+        "res-notice-group": `
+          <p>• 预订及使用咨询 : yhl5258@naver.com</p>
+          <p>• 请通过合作网站 (Agoda, Trip.com, Booking.com, Expedia等) 进行预订。</p>
+        `,
+        "btn-reserve": "立即预订",
+
+        "long-stay-label": "长期住宿指南",
+        "long-stay-title": "Insta Hotel 长期住宿公告",
+        "long-stay-desc": `
+            <p class="text-orange-500 font-semibold mb-1">
+              在Insta Hotel体验无需押金、<br />以特惠价格享受如旅行般的日常生活！
+            </p>
+        `,
+        "long-stay-details": `
+          <p>▶ 地址 : 京畿道 水原市 灵通区 灵通路 94-6, Insta Hotel总店</p>
+          <p>▶ 居住期间 : 至少1个月以上</p>
+          <p>▶ 房型 : 1室 1卫</p>
+          <p>▶ 设施 : 电视, WiFi, 床, 冰箱, 空调, 空气净化器, 智能马桶盖, 浴缸(部分客房)等</p>
+          <p>▶ 管理费 : 无</p>
+          <p>▶ 入住日 : 可立即入住</p>
+          <p>▶ 咨询 : KakaoTalk Plus Friend [Insta Hotel] / Instagram @instahotel_mainbranch / 电话 031-203-4301</p>
+        `,
+
+        companyName: "Insta Hotel有限公司", ceoName: "代表：李永焕", bizNumber: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6",
+        terms: "使用条款", privacy: "隐私政策", inquiryBtn: "咨询"
+      }
+    };
+
+    const headerSelect = document.getElementById("header-lang-select");
+    const drawerSelect = document.getElementById("drawer-lang-select");
+    const currentFlagIcon = document.getElementById("current-flag-icon");
+
+    function updateLanguage(lang) {
+        const t = translations[lang] || translations.ko;
+
+        // 1. 상단 국기 아이콘 변경
+        if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
+
+        // 2. 텍스트 업데이트
+        const textIds = [
+            "res-notice-group", "btn-reserve",
+            "long-stay-label", "long-stay-title", "long-stay-desc", "long-stay-details",
+            "companyName", "ceoName", "bizNumber", "address",
+            "terms", "privacy", "inquiryBtn"
+        ];
+
+        textIds.forEach(id => {
+            const el = document.getElementById(id);
+            if(el && t[id]) {
+                el.innerHTML = t[id];
+            }
+        });
+    }
+
+    // 헤더 투명 셀렉트 박스 이벤트
+    if(headerSelect) {
+        headerSelect.addEventListener("change", (e) => {
+            const lang = e.target.value;
+            if(drawerSelect) drawerSelect.value = lang; 
+            updateLanguage(lang);
+        });
+    }
+
+    // 드로어 메뉴 셀렉트 박스 이벤트
+    if(drawerSelect) {
+        drawerSelect.addEventListener("change", (e) => {
+            const lang = e.target.value;
+            if(headerSelect) headerSelect.value = lang; 
+            updateLanguage(lang);
+        });
+    }
+  </script>
+
+</body>
+</html>
+
