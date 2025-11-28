@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# GitHub Pages 자동 캐싱 방지 (선택)
+# Remove query strings = faster crawling
+Clean-param: *
+
+# Sitemap 위치 명시
+Sitemap: https://dlehdgk94-star.github.io/sitemap.xml
