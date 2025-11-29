@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>예약하기 - Hotel Insta Reference</title>
+    <title>예약하기 - Insta Hotel</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -26,7 +26,7 @@
 
         /* [헤더 영역] */
         header {
-            background-color: #FF5000; /* 이미지의 주황색 */
+            background-color: #FF5000;
             color: white;
             padding: 0 40px;
             height: 60px;
@@ -207,31 +207,45 @@
             margin-top: 100px;
             padding: 50px 0;
             text-align: center;
-            font-size: 11px;
+            font-size: 12px;
             color: #666;
-            line-height: 1.6;
+            line-height: 1.8;
+            border-top: 1px solid #eee;
         }
         
         .social-icons {
-            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 25px;
         }
-        .social-icons i {
-            font-size: 18px;
-            margin: 0 5px;
-            color: #888;
-            cursor: pointer;
+        .social-icons img {
+            transition: transform 0.2s;
+        }
+        .social-icons img:hover {
+            transform: scale(1.1);
         }
         
         .footer-info {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .footer-copy a {
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .footer-copy a:hover {
+            text-decoration: underline;
         }
 
-        /* [문의 플로팅 버튼] */
+        /* [문의 플로팅 버튼 - 수정됨] */
         .fab-inquiry {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background-color: #FFD700; /* 노란색 */
+            background-color: #FFEB00; /* 카카오 노란색 */
+            color: #000; /* 글자색 검정 */
             width: 60px;
             height: 60px;
             border-radius: 30px;
@@ -239,10 +253,15 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
             cursor: pointer;
             font-size: 12px;
             font-weight: bold;
+            z-index: 100;
+            transition: transform 0.2s;
+        }
+        .fab-inquiry:hover {
+            transform: scale(1.05);
         }
         .fab-inquiry i { font-size: 20px; margin-bottom: 2px; }
 
@@ -251,14 +270,14 @@
 <body>
 
     <header>
-        <div class="logo">g/ue</div>
+        <div class="logo">Insta Hotel</div>
         <nav>
             <ul class="nav-menu">
-                <li>about</li>
-                <li>rooms</li>
-                <li>reservation</li>
-                <li>bluerain lounge</li>
-                <li>contact</li>
+                <li><a href="about.html">about</a></li>
+                <li><a href="rooms.html">rooms</a></li>
+                <li><a href="reservation.html">reservation</a></li>
+                <li><a href="#lounge">bluerain lounge</a></li>
+                <li><a href="contact.html">contact</a></li>
                 <li class="lang-select"><img src="https://flagcdn.com/w20/kr.png" alt="KR"> <i class="fas fa-caret-down"></i></li>
             </ul>
         </nav>
@@ -267,8 +286,8 @@
     <div class="container">
         
         <div class="notice-section">
-            <div class="notice-title">g/ue hotel 예약 혜택</div>
-            <div class="notice-desc">* 글루호텔 홈페이지 예약 시, 비비/B1A4/나인뮤지스/이수근 생목가요제/포코쿠 등을 촬영한 지하1층 <span>'블루레인라운지'</span> 에서 다양한 패키지 상품을 함께 이용하실 수 있습니다 :)</div>
+            <div class="notice-title">Insta Hotel 예약 혜택</div>
+            <div class="notice-desc">* 홈페이지 예약 시, 다양한 혜택을 함께 이용하실 수 있습니다 :)</div>
         </div>
 
         <div class="booking-grid">
@@ -319,32 +338,12 @@
                     </div>
                     <button class="btn-reserve">예약</button>
                 </article>
-
+                
                 <article class="room-card">
                     <div class="room-img"><img src="https://placehold.co/300x200?text=Deluxe+Double" alt="Deluxe Double"></div>
                     <div class="room-info">
                         <div class="room-title">디럭스 더블</div>
                         <div class="room-price">130,000원</div>
-                        <div class="room-cap">기준 2인 (최대 2인)</div>
-                    </div>
-                    <button class="btn-reserve">예약</button>
-                </article>
-                
-                 <article class="room-card">
-                    <div class="room-img"><img src="https://placehold.co/300x200?text=Deluxe+Twin" alt="Deluxe Twin"></div>
-                    <div class="room-info">
-                        <div class="room-title">디럭스 트윈</div>
-                        <div class="room-price">125,000원</div>
-                        <div class="room-cap">기준 2인 (최대 2인)</div>
-                    </div>
-                    <button class="btn-reserve">예약</button>
-                </article>
-
-                 <article class="room-card">
-                    <div class="room-img"><img src="https://placehold.co/300x200?text=Suite+Room" alt="Suite Room"></div>
-                    <div class="room-info">
-                        <div class="room-title">스위트룸</div>
-                        <div class="room-price">270,000원</div>
                         <div class="room-cap">기준 2인 (최대 2인)</div>
                     </div>
                     <button class="btn-reserve">예약</button>
@@ -356,27 +355,36 @@
 
     <footer>
         <div class="social-icons">
-            <i class="fab fa-instagram"></i>
-            <i class="fas fa-bold"></i> <i class="fas fa-comment"></i>
-            <i class="fab fa-facebook-f"></i>
+            <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank">
+                <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24">
+            </a>
+            <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
+                <img src="icons8-네이버-64.png" alt="Naver" width="24">
+            </a>
+            <a href="http://pf.kakao.com/_xiITuG" target="_blank">
+                <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24">
+            </a>
+            <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
+                <img src="icons8-페이스-북-48.png" alt="Facebook" width="24">
+            </a>
         </div>
         <div class="footer-info">
-            glue hotel Seoul, Korea<br>
-            (주)헤이글루<br>
-            대표자 : 고현우<br>
-            통신판매업 신고번호: 2023-서울종로-1653호<br>
-            서울시 종로구 율곡로 228 (이화동 105-2)<br>
-            Business License 216-87-02088 | Tel 02-2024-8400
+            insta hotel mainbranch, Korea<br>
+            (주)호텔인스타<br>
+            대표자 : 이영환<br>
+            통신판매업 신고번호: 2023-수원영통-1696호<br>
+            수원시 영통구 영통로 94-6<br>
+            Business License 176-24-01388 | Tel 031-203-4301
         </div>
         <div class="footer-copy">
-            이용약관 | 개인정보처리방침
+            <a href="#">이용약관</a> | <a href="#">개인정보처리방침</a>
         </div>
     </footer>
 
-    <div class="fab-inquiry">
+    <a href="http://pf.kakao.com/_xiITuG" target="_blank" class="fab-inquiry">
         <i class="fas fa-comment-dots"></i>
         <span>문의</span>
-    </div>
+    </a>
 
 </body>
 </html>
