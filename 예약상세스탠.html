@@ -81,36 +81,77 @@
 
         .price-summary { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #ff6900; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
 
-        /* [수정됨] 옵션 박스 스타일 */
+
+        /* [수정됨] 스크롤 가능한 옵션 박스 스타일 적용 */
         .option-select-box {
             margin-bottom: 30px;
-            padding: 20px 0;
-            border-bottom: 1px solid #eee;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #fff;
+            overflow: hidden; /* 내부 스크롤 넘침 방지 */
+            padding: 0; /* 기존 padding 제거 */
         }
-        .option-label {
-            display: block;
-            font-size: 14px;
+
+        .option-header {
+            background-color: #f9f9f9;
+            padding: 15px 20px;
             font-weight: bold;
-            margin-bottom: 15px;
+            font-size: 15px;
+            border-bottom: 1px solid #eee;
             color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        /* 체크박스 아이템 스타일 */
+
+        /* 스크롤 영역 */
+        .option-scroll-area {
+            height: 300px; /* 높이 고정 */
+            overflow-y: auto; /* 내용이 넘치면 스크롤 생김 */
+            padding: 15px 20px;
+        }
+
+        /* 스크롤바 디자인 */
+        .option-scroll-area::-webkit-scrollbar { width: 6px; }
+        .option-scroll-area::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 3px; }
+        .option-scroll-area::-webkit-scrollbar-track { background-color: #f1f1f1; }
+
+        .category-title {
+            font-size: 13px;
+            color: #ff6900;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed #ddd;
+            padding-bottom: 5px;
+        }
+        .category-title:first-child { margin-top: 0; }
+
         .option-item {
             display: flex;
+            justify-content: space-between; /* 이름과 가격 양끝 정렬 */
             align-items: center;
-            margin-bottom: 12px;
+            padding: 10px 0;
             cursor: pointer;
             font-size: 14px;
             color: #555;
+            transition: background 0.1s;
+            border-bottom: 1px solid #f9f9f9;
         }
-        .option-item:hover { color: #333; }
+        .option-item:last-child { border-bottom: none; }
+        .option-item:hover { background-color: #fafafa; }
+
+        .option-left { display: flex; align-items: flex-start; } /* 텍스트 줄바꿈 대응 */
         .option-checkbox {
             width: 18px; 
             height: 18px; 
             accent-color: #ff6900; 
-            margin-right: 10px;
+            margin-right: 12px;
             cursor: pointer;
+            margin-top: 3px; /* 텍스트와 줄 맞춤 */
         }
+        .option-price-text { font-weight: 500; color: #333; white-space: nowrap; margin-left: 10px; }
+
 
         /* 총 합계 */
         .total-section { margin-top: 30px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
@@ -307,31 +348,135 @@
             </div>
 
             <div class="option-select-box">
-                <label class="option-label">조식 및 추가 옵션 선택 (중복 가능)</label>
-                
-                <div class="option-list">
-                    <label class="option-item">
-                        <input type="checkbox" class="option-checkbox" value="35000" onchange="calculateTotalWrapper()">
-                        <span>시그니처 칵테일 세트 (+35,000원)</span>
-                    </label>
-                    <label class="option-item">
-                        <input type="checkbox" class="option-checkbox" value="37000" onchange="calculateTotalWrapper()">
-                        <span>쁘띠 애프터눈티 (+37,000원)</span>
-                    </label>
-                    <label class="option-item">
-                        <input type="checkbox" class="option-checkbox" value="50000" onchange="calculateTotalWrapper()">
-                        <span>와인 & 치즈 플래터 (+50,000원)</span>
-                    </label>
-                    <label class="option-item">
-                        <input type="checkbox" class="option-checkbox" value="15000" onchange="calculateTotalWrapper()">
-                        <span>레이트 체크아웃 1시간 (+15,000원)</span>
-                    </label>
-                    <label class="option-item">
-                        <input type="checkbox" class="option-checkbox" value="30000" onchange="calculateTotalWrapper()">
-                        <span>조식 2인 패키지 (+30,000원)</span>
-                    </label>
+                <div class="option-header">
+                    <span>조식 & 룸서비스 (Breakfast & Room Service)</span>
+                    <span style="font-size:12px; font-weight:normal; color:#888;">원하는 메뉴를 체크해주세요</span>
                 </div>
-            </div>
+                
+                <div class="option-scroll-area">
+                    
+                    <div class="category-title">🥪 SANDWICH & BURGER</div>
+                    
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="7300" onchange="calculateTotalWrapper()">
+                            <span>[A1] 햄치즈 크라상 샌드위치<br><span style="font-size:11px; color:#888;">Ham & Cheese Croissant Sandwich</span></span>
+                        </div>
+                        <span class="option-price-text">+7,300원</span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="8200" onchange="calculateTotalWrapper()">
+                            <span>[B2] 브라운 햄에그 샌드위치<br><span style="font-size:11px; color:#888;">Brown Ham & Egg Sandwich</span></span>
+                        </div>
+                        <span class="option-price-text">+8,200원</span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="8200" onchange="calculateTotalWrapper()">
+                            <span>[C3] 햄&치즈 샌드위치<br><span style="font-size:11px; color:#888;">Ham & Cheese Sandwich</span></span>
+                        </div>
+                        <span class="option-price-text">+8,200원</span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="8600" onchange="calculateTotalWrapper()">
+                            <span>[D4] 런치 샌드위치<br><span style="font-size:11px; color:#888;">Lunch Sandwich</span></span>
+                        </div>
+                        <span class="option-price-text">+8,600원</span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="8200" onchange="calculateTotalWrapper()">
+                            <span>[E5] 칠리크랩 샌드위치<br><span style="font-size:11px; color:#888;">Chili Crab Sandwich</span></span>
+                        </div>
+                        <span class="option-price-text">+8,200원</span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="8900" onchange="calculateTotalWrapper()">
+                            <span>[F6] Fresh 한입쏙 미니버거<br><span style="font-size:11px; color:#888;">Fresh Mini Burger</span></span>
+                        </div>
+                        <span class="option-price-text">+8,900원</span>
+                    </label>
+                    
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="8200" onchange="calculateTotalWrapper()">
+                            <span>[J10] 에그 샐러드 샌드위치<br><span style="font-size:11px; color:#888;">Egg Salad Sandwich</span></span>
+                        </div>
+                        <span class="option-price-text">+8,200원</span>
+                    </label>
+
+
+                    <div class="category-title">🥗 SALAD</div>
+                    
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="9300" onchange="calculateTotalWrapper()">
+                            <span>[G7] 단백질 듬뿍 치킨 에그 샐러드<br><span style="font-size:11px; color:#888;">Protein-packed Chicken Egg Salad</span></span>
+                        </div>
+                        <span class="option-price-text">+9,300원</span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="9300" onchange="calculateTotalWrapper()">
+                            <span>[H8] 크리스피 치킨 샐러드<br><span style="font-size:11px; color:#888;">Crispy Chicken Salad</span></span>
+                        </div>
+                        <span class="option-price-text">+9,300원</span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="9600" onchange="calculateTotalWrapper()">
+                            <span>[I9] 크랜베리 치킨 리코타 샐러드<br><span style="font-size:11px; color:#888;">Cranberry Chicken Ricotta Salad</span></span>
+                        </div>
+                        <span class="option-price-text">+9,600원</span>
+                    </label>
+
+
+                    <div class="category-title">🥤 BEVERAGE & COFFEE</div>
+                    
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="2000" onchange="calculateTotalWrapper()">
+                            <span>[K11] 우유 (300ml)<br><span style="font-size:11px; color:#888;">Milk</span></span>
+                        </div>
+                        <span class="option-price-text">+2,000원</span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="2000" onchange="calculateTotalWrapper()">
+                            <span>[L12] 바나나 우유 (240ml)<br><span style="font-size:11px; color:#888;">Banana Milk</span></span>
+                        </div>
+                        <span class="option-price-text">+2,000원</span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="2400" onchange="calculateTotalWrapper()">
+                            <span>[M13] 오렌지 주스 (350ml)<br><span style="font-size:11px; color:#888;">Orange Juice</span></span>
+                        </div>
+                        <span class="option-price-text">+2,400원</span>
+                    </label>
+                    
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="2500" onchange="calculateTotalWrapper()">
+                            <span>[N14] 커피 - 아메리카노<br><span style="font-size:11px; color:#888;">Coffee - Americano</span></span>
+                        </div>
+                        <span class="option-price-text">+2,500원</span>
+                    </label>
+
+                </div>
+                </div>
 
             <div class="total-section">
                 <span class="total-label">총 합계</span>
