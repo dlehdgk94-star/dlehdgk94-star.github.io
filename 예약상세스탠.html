@@ -45,13 +45,74 @@
             transition: background-image 0.3s ease-in-out;
         }
 
-        /* 썸네일 리스트 스타일 */
-        .thumbnails { display: flex; gap: 10px; margin-bottom: 40px; overflow-x: auto; padding-bottom: 5px; }
+        /* ---------------------------------------------------------
+           [수정됨] 썸네일 영역 스타일 (스크롤 힌트 및 그라데이션)
+           --------------------------------------------------------- */
+        
+        /* 썸네일 전체를 감싸는 컨테이너 */
+        .thumbnail-wrapper {
+            position: relative;
+            margin-bottom: 40px; /* 기존 margin 유지 */
+        }
+
+        /* 오른쪽 그라데이션 효과 (뒤에 내용이 더 있다는 표시) */
+        .thumbnail-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 25px; /* 텍스트 힌트 높이만큼 내림 */
+            right: 0;
+            bottom: 5px; 
+            width: 40px; /* 그라데이션 너비 */
+            background: linear-gradient(to right, transparent, #fcfcfc); /* 배경색과 자연스럽게 연결 */
+            pointer-events: none; /* 터치는 통과되도록 설정 */
+            z-index: 10;
+        }
+
+        /* 스크롤 힌트 텍스트 (깜빡임 효과) */
+        .scroll-hint {
+            font-size: 11px;
+            color: #ff6900;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: right;
+            padding-right: 5px;
+            display: none; /* 기본적으로 숨김 (PC) */
+            animation: blink 2s infinite;
+        }
+
+        /* 모바일에서만 힌트 텍스트 보이기 */
+        @media (max-width: 768px) {
+            .scroll-hint { display: block; }
+        }
+
+        /* 깜빡임 애니메이션 */
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        /* 썸네일 리스트 스타일 (수정됨) */
+        .thumbnails { 
+            display: flex; 
+            gap: 10px; 
+            overflow-x: auto; 
+            padding-bottom: 5px; 
+            padding-right: 30px; /* 마지막 사진이 그라데이션에 가리지 않게 여백 추가 */
+            
+            /* 스크롤바 숨기기 (모바일에서 깔끔하게) */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .thumbnails::-webkit-scrollbar {
+            display: none;
+        }
+
         .thumb { 
             width: 100px; 
             height: 70px; 
             background-color: #eee; 
-            border-radius: 2px; 
+            border-radius: 4px; 
             cursor: pointer; 
             background-size: cover; 
             background-position: center; 
@@ -59,7 +120,7 @@
             border: 2px solid transparent;
             transition: 0.2s;
         }
-        .thumb:hover { border-color: #ff6900; opacity: 0.8; }
+        .thumb:hover { border-color: #ff6900; opacity: 1; }
         
         .description-header { font-size: 14px; font-weight: bold; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: inline-block; }
         .description-text { font-size: 14px; line-height: 1.8; color: #555; }
@@ -309,12 +370,17 @@
        <div class="left-column">
             <div class="main-image" id="main-photo" style="background-image: url('hero11.jpg');"></div>
             
-            <div class="thumbnails">
-                <div class="thumb" onclick="changeMainImage('hero11.jpg')" style="background-image: url('hero11.jpg')"></div>
-                <div class="thumb" onclick="changeMainImage('스탠다드1.png')" style="background-image: url('스탠다드1.png')"></div>
-                <div class="thumb" onclick="changeMainImage('스탠다드2.png')" style="background-image: url('스탠다드2.png')"></div>
-                <div class="thumb" onclick="changeMainImage('스탠다드3.jpg')" style="background-image: url('스탠다드3.jpg')"></div>
-                <div class="thumb" onclick="changeMainImage('스탠다드4.jpg')" style="background-image: url('스탠다드4.jpg')"></div>
+            <div class="thumbnail-wrapper">
+                <div class="scroll-hint">
+                    ← 옆으로 밀어서 더 보기
+                </div>
+                <div class="thumbnails">
+                    <div class="thumb" onclick="changeMainImage('hero11.jpg')" style="background-image: url('hero11.jpg')"></div>
+                    <div class="thumb" onclick="changeMainImage('스탠다드1.png')" style="background-image: url('스탠다드1.png')"></div>
+                    <div class="thumb" onclick="changeMainImage('스탠다드2.png')" style="background-image: url('스탠다드2.png')"></div>
+                    <div class="thumb" onclick="changeMainImage('스탠다드3.jpg')" style="background-image: url('스탠다드3.jpg')"></div>
+                    <div class="thumb" onclick="changeMainImage('스탠다드4.jpg')" style="background-image: url('스탠다드4.jpg')"></div>
+                </div>
             </div>
 
             <div class="description-header">상세정보</div>
