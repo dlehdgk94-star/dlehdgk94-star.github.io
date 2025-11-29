@@ -14,20 +14,23 @@
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
 
-        /* 헤더 */
-        header { background-color: #FF5000; color: white; padding: 0 40px; height: 60px; display: flex; justify-content: space-between; align-items: center; }
+        /* [PC용 헤더 스타일] */
+        header { background-color: #FF5000; color: white; padding: 0 40px; height: 60px; display: flex; justify-content: space-between; align-items: center; position: relative; }
         .logo { font-size: 24px; font-weight: 800; letter-spacing: -1px; }
         .nav-menu { display: flex; gap: 30px; font-size: 14px; font-weight: 500; align-items: center; }
         .lang-select { display: flex; align-items: center; gap: 5px; font-size: 12px; }
+        
+        /* 모바일용 햄버거 아이콘 (PC에선 숨김) */
+        .mobile-menu-icon { display: none; font-size: 20px; cursor: pointer; }
 
-        /* 컨텐츠 */
+        /* [컨텐츠] */
         .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
         .notice-section { margin-bottom: 50px; }
         .notice-title { color: #FF5000; font-weight: 700; font-size: 16px; margin-bottom: 10px; }
-        .notice-desc { font-size: 13px; color: #666; }
+        .notice-desc { font-size: 13px; color: #666; line-height: 1.5; }
         .notice-desc span { color: #FF5000; font-weight: 500; text-decoration: underline; cursor: pointer; }
 
-        /* 그리드 */
+        /* [그리드 레이아웃] */
         .booking-grid { display: flex; gap: 60px; }
         
         /* [달력 스타일] */
@@ -39,28 +42,29 @@
         .calendar-table { width: 100%; text-align: center; font-size: 13px; color: #888; }
         .calendar-table th { font-weight: 400; padding-bottom: 15px; color: #bbb; }
         .calendar-table td { padding: 10px 0; cursor: pointer; border-radius: 50%; width: 40px; height: 40px; }
-        
-        /* 날짜 호버 및 선택 효과 */
         .calendar-table td:hover { color: #FF5000; font-weight: bold; background-color: #fff0e6; }
         
-        .today { color: #FF5000 !important; font-weight: 800 !important; } /* 오늘 날짜 강조 */
-        .other-month { color: #eee !important; pointer-events: none; } /* 빈 칸 */
-
-        /* [추가됨] 지난 날짜 스타일 (연한 회색 + 클릭 금지) */
-        .past-day { 
-            color: #e0e0e0 !important; /* 아주 연한 회색 */
-            pointer-events: none;      /* 마우스 클릭 금지 */
-            cursor: default;           /* 마우스 커서 기본 모양 */
-        }
-        /* 지난 날짜는 호버 효과도 없앰 */
+        .today { color: #FF5000 !important; font-weight: 800 !important; }
+        .other-month { color: #eee !important; pointer-events: none; }
+        .past-day { color: #e0e0e0 !important; pointer-events: none; cursor: default; }
         .past-day:hover { background-color: transparent !important; color: #e0e0e0 !important; font-weight: normal !important; }
 
-
-        /* 객실 리스트 */
+        /* [객실 리스트] */
         .room-section { flex-grow: 1; }
-        .section-guide { margin-bottom: 20px; font-size: 14px; color: #555; display: flex; align-items: center; gap: 8px; }
+        
+        /* 모바일 토글 버튼 (PC에서는 일반 텍스트처럼 보임) */
+        .section-guide { 
+            margin-bottom: 20px; 
+            font-size: 14px; 
+            color: #555; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+        }
+        .toggle-arrow { display: none; margin-left: auto; } /* PC에선 화살표 숨김 */
+
         .room-card { display: flex; align-items: center; padding: 30px 0; border-bottom: 1px solid #eee; }
-        .room-img { width: 160px; height: 120px; background-color: #ddd; border-radius: 8px; overflow: hidden; margin-right: 30px; }
+        .room-img { width: 160px; height: 120px; background-color: #ddd; border-radius: 8px; overflow: hidden; margin-right: 30px; flex-shrink: 0; }
         .room-img img { width: 100%; height: 100%; object-fit: cover; }
         .room-info { flex-grow: 1; }
         .room-title { font-size: 16px; font-weight: 500; margin-bottom: 8px; }
@@ -69,24 +73,91 @@
         .btn-reserve { padding: 8px 25px; border: 1px solid #ccc; background: white; border-radius: 4px; font-size: 13px; cursor: pointer; transition: 0.2s; }
         .btn-reserve:hover { border-color: #333; background-color: #f9f9f9; }
 
-        /* 푸터 */
+        /* [푸터] */
         footer { margin-top: 100px; padding: 50px 0; text-align: center; font-size: 12px; color: #666; line-height: 1.8; border-top: 1px solid #eee; }
         .social-icons { display: flex; justify-content: center; gap: 15px; align-items: center; margin-bottom: 25px; }
         .social-icons img { transition: transform 0.2s; }
         .social-icons img:hover { transform: scale(1.1); }
-        .footer-info { margin-bottom: 15px; }
-        .footer-copy a { margin: 0 10px; cursor: pointer; }
 
-        /* 문의 버튼 */
+        /* [문의 버튼] */
         .fab-inquiry { position: fixed; bottom: 30px; right: 30px; background-color: #FFEB00; color: #000; width: 60px; height: 60px; border-radius: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.15); cursor: pointer; font-size: 12px; font-weight: bold; z-index: 100; transition: transform 0.2s; }
         .fab-inquiry:hover { transform: scale(1.05); }
-        .fab-inquiry i { font-size: 20px; margin-bottom: 2px; }
+
+        /* =========================================
+           🔥 모바일 전용 스타일 (화면 폭 768px 이하)
+           ========================================= */
+        @media (max-width: 768px) {
+            /* 1. 헤더 재배치: 햄버거 - 로고 - 언어 */
+            header { padding: 0 20px; justify-content: space-between; }
+            .nav-menu { display: none; } /* PC 메뉴 숨김 */
+            .mobile-menu-icon { display: block; order: 1; } /* 햄버거 보이기 */
+            .logo { order: 2; font-size: 20px; position: absolute; left: 50%; transform: translateX(-50%); } /* 로고 중앙 정렬 */
+            .lang-select { order: 3; }
+
+            /* 2. 레이아웃 변경 */
+            .container { padding: 20px; }
+            .booking-grid { flex-direction: column; gap: 0; } /* 세로 정렬 */
+
+            /* 3. 달력 토글 버튼 디자인 (사진처럼 박스 모양으로) */
+            .section-guide {
+                order: 1; /* 달력보다 위에 위치 */
+                border: 1px solid #333;
+                padding: 12px 15px;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                cursor: pointer;
+                background: white;
+                justify-content: flex-start;
+                font-weight: 500;
+            }
+            .toggle-arrow { display: block; color: #333; } /* 화살표 보이기 */
+            
+            /* 달력 섹션 (처음엔 숨김) */
+            .calendar-section {
+                order: 2; 
+                width: 100%;
+                margin-bottom: 30px;
+                display: none; /* 기본 숨김 */
+                border: 1px solid #eee;
+                padding: 20px 0;
+                border-radius: 8px;
+            }
+            .calendar-section.active { display: block; } /* 활성화시 보임 */
+
+            /* 4. 객실 리스트 디자인 (모바일 카드형) */
+            .room-section { order: 3; }
+            .room-card { 
+                padding: 20px 0; 
+                position: relative;
+            }
+            .room-img { 
+                width: 90px; height: 90px; /* 사진 크기 작게 */
+                margin-right: 15px; 
+                border-radius: 12px;
+            }
+            .room-info { padding-right: 10px; }
+            .room-title { font-size: 15px; margin-bottom: 4px; }
+            .room-price { font-size: 16px; margin-bottom: 4px; }
+            .room-cap { font-size: 12px; }
+            
+            .btn-reserve { 
+                padding: 6px 12px; 
+                font-size: 12px;
+                position: absolute; /* 버튼 위치 고정 */
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+        }
     </style>
 </head>
 <body>
 
     <header>
+        <div class="mobile-menu-icon"><i class="fas fa-bars"></i></div>
+
         <div class="logo">Insta Hotel</div>
+        
         <nav>
             <ul class="nav-menu">
                 <li><a href="about.html">about</a></li>
@@ -94,9 +165,13 @@
                 <li><a href="reservation.html">reservation</a></li>
                 <li><a href="#lounge">bluerain lounge</a></li>
                 <li><a href="contact.html">contact</a></li>
-                <li class="lang-select"><img src="https://flagcdn.com/w20/kr.png" alt="KR"> <i class="fas fa-caret-down"></i></li>
             </ul>
         </nav>
+        
+        <div class="lang-select">
+            <img src="https://flagcdn.com/w20/kr.png" alt="KR"> 
+            <i class="fas fa-caret-down" style="color:white; margin-left: 3px;"></i>
+        </div>
     </header>
 
     <div class="container">
@@ -106,7 +181,14 @@
         </div>
 
         <div class="booking-grid">
-            <aside class="calendar-section">
+            
+            <div class="section-guide" onclick="toggleCalendar()">
+                <i class="far fa-calendar-alt"></i> 
+                <span id="selected-date-display">캘린더에서 예약 날짜를 선택해 주세요</span>
+                <i class="fas fa-chevron-down toggle-arrow" id="toggle-icon"></i>
+            </div>
+
+            <aside class="calendar-section" id="calendar-wrapper">
                 <div class="cal-header">
                     <i class="fas fa-chevron-left" onclick="changeMonth(-1)"></i>
                     <span id="current-month-year">2025.11</span>
@@ -114,45 +196,58 @@
                 </div>
                 <table class="calendar-table">
                     <thead>
-                        <tr>
-                            <th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
-                        </tr>
+                        <tr><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr>
                     </thead>
-                    <tbody id="calendar-body">
-                    </tbody>
+                    <tbody id="calendar-body"></tbody>
                 </table>
             </aside>
 
             <section class="room-section">
-                <div class="section-guide">
-                    <i class="far fa-calendar-alt"></i> <span id="selected-date-display">캘린더에서 예약 날짜를 선택해 주세요</span>
-                </div>
-
                 <article class="room-card">
                     <div class="room-img"><img src="hero11.jpg" alt="Standard Double"></div>
                     <div class="room-info">
-                        <div class="room-title">스탠다드</div>
-                        <div class="room-price">85,000~110,000원</div>
+                        <div class="room-title">스탠다드 더블</div>
+                        <div class="room-price">100,000원</div>
                         <div class="room-cap">기준 2인 (최대 2인)</div>
                     </div>
                     <button class="btn-reserve">예약</button>
                 </article>
 
                 <article class="room-card">
-                    <div class="room-img"><img src="hero8.png" alt="Deluxe Double"></div>
+                    <div class="room-img"><img src="hero8.png" alt="Superior Double"></div>
                     <div class="room-info">
-                        <div class="room-title">디럭스</div>
-                        <div class="room-price">90,000~120,000원</div>
+                        <div class="room-title">슈페리어 더블</div>
+                        <div class="room-price">110,000원</div>
                         <div class="room-cap">기준 2인 (최대 2인)</div>
                     </div>
                     <button class="btn-reserve">예약</button>
                 </article>
                 
                  <article class="room-card">
-                    <div class="room-img"><img src="hero2.jpg" alt="Premium"></div>
+                    <div class="room-img"><img src="hero2.jpg" alt="Deluxe Double"></div>
                     <div class="room-info">
-                        <div class="room-title">프리미엄</div>
-                        <div class="room-price">100,000~130,000원</div>
+                        <div class="room-title">디럭스 더블</div>
+                        <div class="room-price">130,000원</div>
+                        <div class="room-cap">기준 2인 (최대 2인)</div>
+                    </div>
+                    <button class="btn-reserve">예약</button>
+                </article>
+
+                 <article class="room-card">
+                    <div class="room-img"><img src="hero5.jpg" alt="Deluxe Twin"></div>
+                    <div class="room-info">
+                        <div class="room-title">디럭스 트윈</div>
+                        <div class="room-price">125,000원</div>
+                        <div class="room-cap">기준 2인 (최대 2인)</div>
+                    </div>
+                    <button class="btn-reserve">예약</button>
+                </article>
+
+                 <article class="room-card">
+                    <div class="room-img"><img src="hero9.png" alt="Suite Room"></div>
+                    <div class="room-info">
+                        <div class="room-title">스위트룸</div>
+                        <div class="room-price">270,000원</div>
                         <div class="room-cap">기준 2인 (최대 2인)</div>
                     </div>
                     <button class="btn-reserve">예약</button>
@@ -195,9 +290,25 @@
         const monthYearEl = document.getElementById("current-month-year");
         const calendarBody = document.getElementById("calendar-body");
         const selectedDateDisplay = document.getElementById("selected-date-display");
+        const calendarWrapper = document.getElementById("calendar-wrapper");
+        const toggleIcon = document.getElementById("toggle-icon");
 
+        // [모바일] 달력 토글 함수
+        function toggleCalendar() {
+            // 화면 너비가 768px 이하일 때만 작동 (모바일)
+            if (window.innerWidth <= 768) {
+                calendarWrapper.classList.toggle("active");
+                // 화살표 방향 바꾸기 (위/아래)
+                if(calendarWrapper.classList.contains("active")){
+                    toggleIcon.classList.replace("fa-chevron-down", "fa-chevron-up");
+                } else {
+                    toggleIcon.classList.replace("fa-chevron-up", "fa-chevron-down");
+                }
+            }
+        }
+
+        // 달력 그리기
         function renderCalendar() {
-            // "오늘"이 언제인지 기준점 잡기 (시간은 0시 0분으로 초기화해서 날짜만 비교)
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
@@ -220,28 +331,20 @@
                         cell.classList.add("other-month");
                         cell.textContent = ""; 
                     } else if (dateCount > lastDate) {
-                        // 남은 칸 빈칸 유지
+                        // 빈칸
                     } else {
                         cell.textContent = dateCount;
-
-                        // [핵심] 현재 그리고 있는 날짜(checkDate)가 오늘(today)보다 전인지 확인
-                        // 이 날짜 객체를 만들어 비교해야 정확함
                         const checkDate = new Date(currentYear, currentMonth, dateCount);
                         
-                        // 1. 오늘 날짜인 경우
+                        // 오늘, 과거, 미래 날짜 처리
                         if (checkDate.getTime() === today.getTime()) {
                             cell.classList.add("today");
-                            addClickEvent(cell, displayMonth, dateCount); // 오늘 날짜는 클릭 가능
-                        } 
-                        // 2. 과거 날짜인 경우 (오늘보다 작을 때)
-                        else if (checkDate < today) {
-                            cell.classList.add("past-day"); // CSS에서 흐리게 처리
-                        }
-                        // 3. 미래 날짜인 경우
-                        else {
+                            addClickEvent(cell, displayMonth, dateCount);
+                        } else if (checkDate < today) {
+                            cell.classList.add("past-day");
+                        } else {
                             addClickEvent(cell, displayMonth, dateCount);
                         }
-
                         dateCount++;
                     }
                     row.appendChild(cell);
@@ -251,14 +354,16 @@
             }
         }
 
-        // 클릭 이벤트 함수 분리
         function addClickEvent(cell, month, day) {
             cell.addEventListener("click", function() {
-                // 기존 선택된 효과 제거 (필요시 추가 구현)
-                selectedDateDisplay.textContent = 
-                    `${currentYear}년 ${month}월 ${day}일을 선택하셨습니다.`;
+                selectedDateDisplay.textContent = `${currentYear}년 ${month}월 ${day}일을 선택하셨습니다.`;
                 selectedDateDisplay.style.color = "#FF5000";
                 selectedDateDisplay.style.fontWeight = "bold";
+                
+                // 모바일에서는 날짜 선택 후 달력을 자동으로 접어주면 좋습니다
+                if (window.innerWidth <= 768) {
+                    toggleCalendar();
+                }
             });
         }
 
