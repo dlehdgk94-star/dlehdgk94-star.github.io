@@ -9,10 +9,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   
   <style>
-    /* 폰트 설정 */
+    /* 폰트 설정: 헤더와 전체 분위기를 맞춤 */
     body { font-family: 'Poppins', 'Noto Sans KR', sans-serif; }
     
-    /* [기존 예약 페이지 스타일 유지] */
+    /* [예약 페이지 그리드 레이아웃] */
     .booking-grid { display: flex; gap: 40px; }
     
     /* 달력 스타일 */
@@ -86,7 +86,7 @@
     }
   </style>
 </head>
-<body class="bg-white text-slate-900">
+<body class="bg-white text-slate-900 font-sans">
 
   <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
@@ -171,8 +171,8 @@
   <main class="mx-auto max-w-6xl px-4 pb-20 pt-24 md:px-6">
     
     <div class="mb-12">
-        <h2 class="text-[#FF5000] font-bold text-lg mb-2">Insta Hotel 예약 혜택</h2>
-        <p class="text-sm text-gray-600">* 홈페이지 예약 시, 다양한 혜택을 함께 이용하실 수 있습니다 :)</p>
+        <h2 class="text-[#FF5000] font-bold text-lg mb-2" id="benefit-title">Insta Hotel 예약 혜택</h2>
+        <p class="text-sm text-gray-600" id="benefit-desc">* 홈페이지 예약 시, 다양한 혜택을 함께 이용하실 수 있습니다 :)</p>
     </div>
 
     <div class="booking-grid">
@@ -196,8 +196,8 @@
                 </table>
                 
                 <div class="modal-buttons">
-                    <button class="btn-modal btn-cancel" onclick="closeModal()">취소</button>
-                    <button class="btn-modal btn-confirm" onclick="confirmDate()">확인</button>
+                    <button class="btn-modal btn-cancel" onclick="closeModal()" id="btn-cancel">취소</button>
+                    <button class="btn-modal btn-confirm" onclick="confirmDate()" id="btn-confirm">확인</button>
                 </div>
             </div>
         </aside>
@@ -206,51 +206,51 @@
             <article class="room-card">
                 <div class="room-img"><img src="hero11.jpg" alt="Standard Double"></div>
                 <div class="room-info">
-                    <div class="room-title">스탠다드 더블</div>
+                    <div class="room-title" id="room1-title">스탠다드 더블</div>
                     <div class="room-price">100,000원</div>
-                    <div class="room-cap">기준 2인 (최대 2인)</div>
+                    <div class="room-cap" id="room1-cap">기준 2인 (최대 2인)</div>
                 </div>
-                <button class="btn-reserve">예약</button>
+                <button class="btn-reserve dynamic-reserve-btn">예약</button>
             </article>
 
             <article class="room-card">
                 <div class="room-img"><img src="hero8.png" alt="Superior Double"></div>
                 <div class="room-info">
-                    <div class="room-title">슈페리어 더블</div>
+                    <div class="room-title" id="room2-title">슈페리어 더블</div>
                     <div class="room-price">110,000원</div>
-                    <div class="room-cap">기준 2인 (최대 2인)</div>
+                    <div class="room-cap" id="room2-cap">기준 2인 (최대 2인)</div>
                 </div>
-                <button class="btn-reserve">예약</button>
+                <button class="btn-reserve dynamic-reserve-btn">예약</button>
             </article>
 
              <article class="room-card">
                 <div class="room-img"><img src="hero2.jpg" alt="Deluxe Double"></div>
                 <div class="room-info">
-                    <div class="room-title">디럭스 더블</div>
+                    <div class="room-title" id="room3-title">디럭스 더블</div>
                     <div class="room-price">130,000원</div>
-                    <div class="room-cap">기준 2인 (최대 2인)</div>
+                    <div class="room-cap" id="room3-cap">기준 2인 (최대 2인)</div>
                 </div>
-                <button class="btn-reserve">예약</button>
+                <button class="btn-reserve dynamic-reserve-btn">예약</button>
             </article>
 
              <article class="room-card">
                 <div class="room-img"><img src="hero5.jpg" alt="Deluxe Twin"></div>
                 <div class="room-info">
-                    <div class="room-title">디럭스 트윈</div>
+                    <div class="room-title" id="room4-title">디럭스 트윈</div>
                     <div class="room-price">125,000원</div>
-                    <div class="room-cap">기준 2인 (최대 2인)</div>
+                    <div class="room-cap" id="room4-cap">기준 2인 (최대 2인)</div>
                 </div>
-                <button class="btn-reserve">예약</button>
+                <button class="btn-reserve dynamic-reserve-btn">예약</button>
             </article>
 
              <article class="room-card">
                 <div class="room-img"><img src="hero9.png" alt="Suite Room"></div>
                 <div class="room-info">
-                    <div class="room-title">스위트룸</div>
+                    <div class="room-title" id="room5-title">스위트룸</div>
                     <div class="room-price">270,000원</div>
-                    <div class="room-cap">기준 2인 (최대 2인)</div>
+                    <div class="room-cap" id="room5-cap">기준 2인 (최대 2인)</div>
                 </div>
-                <button class="btn-reserve">예약</button>
+                <button class="btn-reserve dynamic-reserve-btn">예약</button>
             </article>
         </section>
     </div>
@@ -304,7 +304,7 @@
 
   <script>
     // ------------------------------------
-    // 1. 헤더/모바일 메뉴/언어 기능 (Code A)
+    // 1. 헤더/모바일 메뉴 기능
     // ------------------------------------
     const mobileMenuBtn = document.getElementById("mobile-menu-btn");
     const mobileDrawer = document.getElementById("mobile-drawer");
@@ -335,26 +335,118 @@
     }
 
     // ------------------------------------
-    // 2. 다국어 번역 데이터 (Code A 기반)
+    // 2. 다국어 번역 데이터 (객실 정보 포함)
     // ------------------------------------
     const translations = {
       ko: {
         flag: "🇰🇷",
+        
+        // 상단 안내
+        "benefit-title": "Insta Hotel 예약 혜택",
+        "benefit-desc": "* 홈페이지 예약 시, 다양한 혜택을 함께 이용하실 수 있습니다 :)",
+        "display-text-mobile": "캘린더에서 예약 날짜를 선택해 주세요",
+        "btn-cancel": "취소",
+        "btn-confirm": "확인",
+
+        // 객실 이름
+        "room1-title": "스탠다드 더블",
+        "room2-title": "슈페리어 더블",
+        "room3-title": "디럭스 더블",
+        "room4-title": "디럭스 트윈",
+        "room5-title": "스위트룸",
+
+        // 객실 수용 인원
+        "room1-cap": "기준 2인 (최대 2인)",
+        "room2-cap": "기준 2인 (최대 2인)",
+        "room3-cap": "기준 2인 (최대 2인)",
+        "room4-cap": "기준 2인 (최대 2인)",
+        "room5-cap": "기준 2인 (최대 2인)",
+
+        // 버튼
+        "reserve-btn": "예약",
+
+        // Footer
         companyName: "(주)호텔인스타", ceoName: "대표자 : 이영환", bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", address: "수원시 영통구 영통로 94-6",
         terms: "이용약관", privacy: "개인정보처리방침", inquiryBtn: "문의"
       },
+
       en: {
         flag: "🇺🇸",
+
+        "benefit-title": "Insta Hotel Booking Benefits",
+        "benefit-desc": "* Enjoy various benefits when booking through our homepage :)",
+        "display-text-mobile": "Please select a date from the calendar",
+        "btn-cancel": "Cancel",
+        "btn-confirm": "Confirm",
+
+        "room1-title": "Standard Double",
+        "room2-title": "Superior Double",
+        "room3-title": "Deluxe Double",
+        "room4-title": "Deluxe Twin",
+        "room5-title": "Suite Room",
+
+        "room1-cap": "Std 2 ppl (Max 2)",
+        "room2-cap": "Std 2 ppl (Max 2)",
+        "room3-cap": "Std 2 ppl (Max 2)",
+        "room4-cap": "Std 2 ppl (Max 2)",
+        "room5-cap": "Std 2 ppl (Max 2)",
+
+        "reserve-btn": "Book",
+
         companyName: "Insta Hotel Co., Ltd.", ceoName: "CEO: Lee Young Hwan", bizNumber: "Registration: 2023-Suwon Yeongtong-1696", address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si",
         terms: "Terms of Use", privacy: "Privacy Policy", inquiryBtn: "Contact"
       },
+
       ja: {
         flag: "🇯🇵",
+
+        "benefit-title": "Insta Hotel 予約特典",
+        "benefit-desc": "* ホームページからご予約いただくと、様々な特典をご利用いただけます :)",
+        "display-text-mobile": "カレンダーから日付を選択してください",
+        "btn-cancel": "キャンセル",
+        "btn-confirm": "確認",
+
+        "room1-title": "スタンダードダブル",
+        "room2-title": "スーペリアダブル",
+        "room3-title": "デラックスダブル",
+        "room4-title": "デラックスツイン",
+        "room5-title": "スイートルーム",
+
+        "room1-cap": "基準 2名 (最大 2名)",
+        "room2-cap": "基準 2名 (最大 2名)",
+        "room3-cap": "基準 2名 (最大 2名)",
+        "room4-cap": "基準 2名 (最大 2名)",
+        "room5-cap": "基準 2名 (最大 2名)",
+
+        "reserve-btn": "予約",
+
         companyName: "インスタホテル株式会社", ceoName: "代表者 : イ・ヨンファン", bizNumber: "登録番号: 2023-水原霊通-1696", address: "水原市霊通区霊通路94-6",
         terms: "利用規約", privacy: "個人情報処理方針", inquiryBtn: "お問い合わせ"
       },
+
       zh: {
         flag: "🇨🇳",
+
+        "benefit-title": "Insta Hotel 预订优惠",
+        "benefit-desc": "* 通过官网预订，可享受多种优惠 :)",
+        "display-text-mobile": "请在日历中选择日期",
+        "btn-cancel": "取消",
+        "btn-confirm": "确认",
+
+        "room1-title": "标准大床房",
+        "room2-title": "高级大床房",
+        "room3-title": "豪华大床房",
+        "room4-title": "豪华双床房",
+        "room5-title": "套房",
+
+        "room1-cap": "标准 2人 (最大 2人)",
+        "room2-cap": "标准 2人 (最大 2人)",
+        "room3-cap": "标准 2人 (最大 2人)",
+        "room4-cap": "标准 2人 (最大 2人)",
+        "room5-cap": "标准 2人 (最大 2人)",
+
+        "reserve-btn": "预订",
+
         companyName: "Insta Hotel有限公司", ceoName: "代表：李永焕", bizNumber: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6",
         terms: "使用条款", privacy: "隐私政策", inquiryBtn: "咨询"
       }
@@ -366,15 +458,31 @@
 
     function updateLanguage(lang) {
         const t = translations[lang] || translations.ko;
+        
+        // 1. 국기 변경
         if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
 
+        // 2. 텍스트 요소 변경 (ID 기반)
         const textIds = [
+            "benefit-title", "benefit-desc", "display-text-mobile", "btn-cancel", "btn-confirm",
+            "room1-title", "room1-cap",
+            "room2-title", "room2-cap",
+            "room3-title", "room3-cap",
+            "room4-title", "room4-cap",
+            "room5-title", "room5-cap",
             "companyName", "ceoName", "bizNumber", "address",
             "terms", "privacy", "inquiryBtn"
         ];
+        
         textIds.forEach(id => {
             const el = document.getElementById(id);
             if(el && t[id]) el.innerHTML = t[id];
+        });
+
+        // 3. 클래스 기반 변경 (여러 개의 예약 버튼 등)
+        const reserveBtns = document.querySelectorAll(".dynamic-reserve-btn");
+        reserveBtns.forEach(btn => {
+            btn.textContent = t["reserve-btn"];
         });
     }
 
@@ -394,7 +502,7 @@
     }
 
     // ------------------------------------
-    // 3. 달력 기능 (Code B)
+    // 3. 달력 기능
     // ------------------------------------
     let date = new Date(); 
     let currentYear = date.getFullYear();
@@ -416,11 +524,13 @@
     }
     function confirmDate() {
         if (selectedDate) {
+            // 모바일 텍스트 업데이트
             displayTextMobile.textContent = selectedDate;
             displayTextMobile.style.color = "#FF5000";
             displayTextMobile.style.fontWeight = "bold";
             closeModal();
         } else {
+            // 현재 언어 설정을 확인하여 알림 메시지를 띄우는 것이 좋으나 간소화를 위해 한국어로
             alert("날짜를 선택해 주세요.");
         }
     }
@@ -473,11 +583,8 @@
             this.classList.add("selected-day");
             selectedDate = `${currentYear}년 ${month}월 ${day}일`;
 
-            if (window.innerWidth > 768) {
-                displayTextMobile.textContent = `${selectedDate}을 선택하셨습니다.`;
-                displayTextMobile.style.color = "#FF5000";
-                displayTextMobile.style.fontWeight = "bold";
-            }
+            // PC 화면에서는 즉시 안내 문구 변경 (선택사항)
+            // if (window.innerWidth > 768) { ... }
         });
     }
 
