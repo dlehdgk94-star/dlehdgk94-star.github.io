@@ -81,7 +81,7 @@
 
         .price-summary { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #ff6900; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
 
-        /* [수정됨] 드롭다운(Select) 스타일 */
+        /* [수정됨] 옵션 박스 스타일 */
         .option-select-box {
             margin-bottom: 30px;
             padding: 20px 0;
@@ -91,30 +91,25 @@
             display: block;
             font-size: 14px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             color: #333;
         }
-        .custom-select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        /* 체크박스 아이템 스타일 */
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            cursor: pointer;
             font-size: 14px;
             color: #555;
-            background-color: white;
-            cursor: pointer;
-            outline: none;
-            /* 브라우저 기본 화살표 디자인 유지 또는 커스텀 가능 */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right 15px top 50%;
-            background-size: 10px auto;
         }
-        .custom-select:focus {
-            border-color: #ff6900;
+        .option-item:hover { color: #333; }
+        .option-checkbox {
+            width: 18px; 
+            height: 18px; 
+            accent-color: #ff6900; 
+            margin-right: 10px;
+            cursor: pointer;
         }
 
         /* 총 합계 */
@@ -312,15 +307,30 @@
             </div>
 
             <div class="option-select-box">
-                <label class="option-label">조식.룸서비스 메뉴선택</label>
-                <select id="option-select" class="custom-select" onchange="calculateTotalWrapper()">
-                    <option value="0">선택 안함</option>
-                    <option value="35000">시그니처 칵테일 세트 (+35,000원)</option>
-                    <option value="37000">쁘띠 애프터눈티 (+37,000원)</option>
-                    <option value="50000">와인 & 치즈 플래터 (+50,000원)</option>
-                    <option value="15000">레이트 체크아웃 1시간 (+15,000원)</option>
-                    <option value="30000">조식 2인 패키지 (+30,000원)</option>
-                </select>
+                <label class="option-label">조식 및 추가 옵션 선택 (중복 가능)</label>
+                
+                <div class="option-list">
+                    <label class="option-item">
+                        <input type="checkbox" class="option-checkbox" value="35000" onchange="calculateTotalWrapper()">
+                        <span>시그니처 칵테일 세트 (+35,000원)</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" class="option-checkbox" value="37000" onchange="calculateTotalWrapper()">
+                        <span>쁘띠 애프터눈티 (+37,000원)</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" class="option-checkbox" value="50000" onchange="calculateTotalWrapper()">
+                        <span>와인 & 치즈 플래터 (+50,000원)</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" class="option-checkbox" value="15000" onchange="calculateTotalWrapper()">
+                        <span>레이트 체크아웃 1시간 (+15,000원)</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" class="option-checkbox" value="30000" onchange="calculateTotalWrapper()">
+                        <span>조식 2인 패키지 (+30,000원)</span>
+                    </label>
+                </div>
             </div>
 
             <div class="total-section">
@@ -667,16 +677,22 @@
             return totalPrice;
         }
 
+        // [수정된 JS] 체크박스 중복 계산 로직
         function calculateTotalWrapper() {
-            // 1. 객실 가격 계산
+            // 1. 객실 가격 계산 (기존 함수 활용)
             let roomPrice = calculateTotal();
             
-            // 2. [수정됨] 드롭다운 옵션 가격 가져오기
-            const optionSelect = document.getElementById('option-select');
-            // 선택된 option의 value(가격)를 숫자로 변환, 없으면 0
-            let optionPrice = parseInt(optionSelect.value) || 0;
+            // 2. 옵션 가격 계산 (체크된 것들 모두 합산)
+            let optionPrice = 0;
+            
+            // class가 'option-checkbox'인 요소들 중 체크된(:checked) 것만 가져옴
+            const checkboxes = document.querySelectorAll('.option-checkbox:checked');
+            
+            checkboxes.forEach((box) => {
+                optionPrice += parseInt(box.value);
+            });
 
-            // 3. 최종 합계
+            // 3. 최종 합계 표시
             let grandTotal = roomPrice + optionPrice;
             document.getElementById('grand-total').innerText = grandTotal.toLocaleString();
         }
