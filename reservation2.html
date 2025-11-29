@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예약하기 - Hotel Insta Reference</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* [기본 설정] */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            color: #333;
+            background-color: #fff;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* [헤더 영역] */
+        header {
+            background-color: #FF5000; /* 이미지의 주황색 */
+            color: white;
+            padding: 0 40px;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            align-items: center;
+        }
+        
+        .lang-select {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+        }
+
+        /* [메인 컨텐츠 영역] */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* 상단 안내 문구 */
+        .notice-section {
+            margin-bottom: 50px;
+        }
+        .notice-title {
+            color: #FF5000;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .notice-desc {
+            font-size: 13px;
+            color: #666;
+        }
+        .notice-desc span {
+            color: #FF5000;
+            font-weight: 500;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* [예약 그리드 (달력 + 객실리스트)] */
+        .booking-grid {
+            display: flex;
+            gap: 60px;
+        }
+
+        /* 왼쪽: 달력 */
+        .calendar-section {
+            width: 300px;
+            flex-shrink: 0;
+        }
+        
+        .cal-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            font-weight: 500;
+            font-size: 18px;
+        }
+        .cal-header i { margin: 0 20px; cursor: pointer; color: #888; font-size: 14px;}
+
+        .calendar-table {
+            width: 100%;
+            text-align: center;
+            font-size: 13px;
+            color: #888;
+        }
+        .calendar-table th {
+            font-weight: 400;
+            padding-bottom: 15px;
+            color: #bbb;
+        }
+        .calendar-table td {
+            padding: 10px 0;
+            cursor: pointer;
+        }
+        .calendar-table td:hover {
+            color: #FF5000;
+            font-weight: bold;
+        }
+        .today {
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* 오른쪽: 객실 리스트 */
+        .room-section {
+            flex-grow: 1;
+        }
+        
+        .section-guide {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .room-card {
+            display: flex;
+            align-items: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .room-img {
+            width: 160px;
+            height: 120px;
+            background-color: #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-right: 30px;
+        }
+        
+        .room-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .room-info {
+            flex-grow: 1;
+        }
+        
+        .room-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .room-price {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .room-cap {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .btn-reserve {
+            padding: 8px 25px;
+            border: 1px solid #ccc;
+            background: white;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .btn-reserve:hover {
+            border-color: #333;
+            background-color: #f9f9f9;
+        }
+
+        /* [푸터] */
+        footer {
+            margin-top: 100px;
+            padding: 50px 0;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .social-icons {
+            margin-bottom: 20px;
+        }
+        .social-icons i {
+            font-size: 18px;
+            margin: 0 5px;
+            color: #888;
+            cursor: pointer;
+        }
+        
+        .footer-info {
+            margin-bottom: 10px;
+        }
+
+        /* [문의 플로팅 버튼] */
+        .fab-inquiry {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #FFD700; /* 노란색 */
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .fab-inquiry i { font-size: 20px; margin-bottom: 2px; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">g/ue</div>
+        <nav>
+            <ul class="nav-menu">
+                <li>about</li>
+                <li>rooms</li>
+                <li>reservation</li>
+                <li>bluerain lounge</li>
+                <li>contact</li>
+                <li class="lang-select"><img src="https://flagcdn.com/w20/kr.png" alt="KR"> <i class="fas fa-caret-down"></i></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        
+        <div class="notice-section">
+            <div class="notice-title">g/ue hotel 예약 혜택</div>
+            <div class="notice-desc">* 글루호텔 홈페이지 예약 시, 비비/B1A4/나인뮤지스/이수근 생목가요제/포코쿠 등을 촬영한 지하1층 <span>'블루레인라운지'</span> 에서 다양한 패키지 상품을 함께 이용하실 수 있습니다 :)</div>
+        </div>
+
+        <div class="booking-grid">
+            <aside class="calendar-section">
+                <div class="cal-header">
+                    <i class="fas fa-chevron-left"></i>
+                    <span>2025.11</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <table class="calendar-table">
+                    <thead>
+                        <tr>
+                            <th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td>1</td></tr>
+                        <tr><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr>
+                        <tr><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr>
+                        <tr><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td></tr>
+                        <tr><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td></tr>
+                        <tr><td class="today">30</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    </tbody>
+                </table>
+            </aside>
+
+            <section class="room-section">
+                <div class="section-guide">
+                    <i class="far fa-calendar-alt"></i> 캘린더에서 예약 날짜를 선택해 주세요
+                </div>
+
+                <article class="room-card">
+                    <div class="room-img"><img src="https://placehold.co/300x200?text=Standard+Double" alt="Standard Double"></div>
+                    <div class="room-info">
+                        <div class="room-title">스탠다드 더블</div>
+                        <div class="room-price">100,000원</div>
+                        <div class="room-cap">기준 2인 (최대 2인)</div>
+                    </div>
+                    <button class="btn-reserve">예약</button>
+                </article>
+
+                <article class="room-card">
+                    <div class="room-img"><img src="https://placehold.co/300x200?text=Superior+Double" alt="Superior Double"></div>
+                    <div class="room-info">
+                        <div class="room-title">슈페리어 더블</div>
+                        <div class="room-price">110,000원</div>
+                        <div class="room-cap">기준 2인 (최대 2인)</div>
+                    </div>
+                    <button class="btn-reserve">예약</button>
+                </article>
+
+                <article class="room-card">
+                    <div class="room-img"><img src="https://placehold.co/300x200?text=Deluxe+Double" alt="Deluxe Double"></div>
+                    <div class="room-info">
+                        <div class="room-title">디럭스 더블</div>
+                        <div class="room-price">130,000원</div>
+                        <div class="room-cap">기준 2인 (최대 2인)</div>
+                    </div>
+                    <button class="btn-reserve">예약</button>
+                </article>
+                
+                 <article class="room-card">
+                    <div class="room-img"><img src="https://placehold.co/300x200?text=Deluxe+Twin" alt="Deluxe Twin"></div>
+                    <div class="room-info">
+                        <div class="room-title">디럭스 트윈</div>
+                        <div class="room-price">125,000원</div>
+                        <div class="room-cap">기준 2인 (최대 2인)</div>
+                    </div>
+                    <button class="btn-reserve">예약</button>
+                </article>
+
+                 <article class="room-card">
+                    <div class="room-img"><img src="https://placehold.co/300x200?text=Suite+Room" alt="Suite Room"></div>
+                    <div class="room-info">
+                        <div class="room-title">스위트룸</div>
+                        <div class="room-price">270,000원</div>
+                        <div class="room-cap">기준 2인 (최대 2인)</div>
+                    </div>
+                    <button class="btn-reserve">예약</button>
+                </article>
+
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <div class="social-icons">
+            <i class="fab fa-instagram"></i>
+            <i class="fas fa-bold"></i> <i class="fas fa-comment"></i>
+            <i class="fab fa-facebook-f"></i>
+        </div>
+        <div class="footer-info">
+            glue hotel Seoul, Korea<br>
+            (주)헤이글루<br>
+            대표자 : 고현우<br>
+            통신판매업 신고번호: 2023-서울종로-1653호<br>
+            서울시 종로구 율곡로 228 (이화동 105-2)<br>
+            Business License 216-87-02088 | Tel 02-2024-8400
+        </div>
+        <div class="footer-copy">
+            이용약관 | 개인정보처리방침
+        </div>
+    </footer>
+
+    <div class="fab-inquiry">
+        <i class="fas fa-comment-dots"></i>
+        <span>문의</span>
+    </div>
+
+</body>
+</html>
