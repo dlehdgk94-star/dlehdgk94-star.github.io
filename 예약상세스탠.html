@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>호텔 인스타 - 객실 예약</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* [기본 스타일 설정] */
+        body { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; color: #333; background-color: #fcfcfc; }
+        
+        /* 상단 헤더 (주황색) */
+        header { background-color: #ff5a00; color: white; padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; }
+        header .logo { font-weight: 900; font-size: 24px; letter-spacing: -1px; }
+        header nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; font-weight: 500; }
+
+        /* 메인 레이아웃 (2단 구성) */
+        .container { max-width: 1200px; margin: 40px auto; display: flex; gap: 50px; padding: 0 20px; align-items: flex-start; }
+        
+        /* 왼쪽: 이미지 및 상세설명 */
+        .left-column { flex: 1.5; }
+        .main-image { width: 100%; height: 500px; background-color: #ddd; background-image: url('https://images.unsplash.com/photo-1560185007-cde436f6a4d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'); background-size: cover; background-position: center; border-radius: 4px; margin-bottom: 10px; }
+        .thumbnails { display: flex; gap: 10px; margin-bottom: 40px; }
+        .thumb { width: 80px; height: 60px; background-color: #eee; border-radius: 2px; cursor: pointer; background-size: cover; background-position: center; }
+        
+        .description-header { font-size: 14px; font-weight: bold; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: inline-block; }
+        .description-text { font-size: 14px; line-height: 1.8; color: #555; }
+
+        /* 오른쪽: 예약 패널 (스크롤 시 고정) */
+        .right-column { flex: 1; position: sticky; top: 20px; background: #fff; padding: 0; }
+        
+        .room-title { font-size: 24px; font-weight: 700; margin-bottom: 30px; }
+
+        /* 달력/날짜 선택 영역 스타일 */
+        .date-picker-box { border: 1px solid #eee; padding: 20px; border-radius: 4px; margin-bottom: 20px; background: #fff; }
+        .date-picker-box label { display: block; font-size: 12px; color: #888; margin-bottom: 5px; }
+        .date-picker-box input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
+
+        .price-summary { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #ff5a00; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+
+        /* 옵션 상품 영역 */
+        .option-item { display: flex; gap: 15px; padding: 20px 0; border-bottom: 1px solid #eee; }
+        .option-img { width: 60px; height: 60px; background-color: #eee; border-radius: 4px; background-size: cover; background-position: center; }
+        .option-details h4 { margin: 0 0 5px 0; font-size: 14px; }
+        .option-details p { margin: 0; font-size: 12px; color: #888; line-height: 1.4; }
+        .option-price { margin-top: 10px; font-size: 13px; font-weight: bold; }
+        .option-check { margin-left: auto; }
+
+        /* 총 합계 및 버튼 */
+        .total-section { margin-top: 30px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
+        .total-label { font-size: 14px; font-weight: bold; }
+        .total-amount { font-size: 24px; font-weight: 700; color: #ff5a00; }
+
+        .action-buttons { display: flex; gap: 10px; }
+        .btn-reserve { flex: 1; background-color: #ff5a00; color: white; border: none; padding: 15px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 2px; }
+        .btn-icon { width: 50px; border: 1px solid #ddd; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #888; }
+        .btn-reserve:hover { background-color: #e04e00; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">glue</div>
+        <nav>
+            <a href="#">about</a>
+            <a href="#">rooms</a>
+            <a href="#">reservation</a>
+            <a href="#">bluerain lounge</a>
+            <a href="#">contact</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="left-column">
+            <div class="main-image"></div>
+            <div class="thumbnails">
+                <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=200&q=80')"></div>
+                <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=200&q=80')"></div>
+                <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=200&q=80')"></div>
+            </div>
+
+            <div class="description-header">상세정보</div>
+            <div class="description-text">
+                <p>[스탠다드 더블]<br>
+                glue hotel은 힙지로라 불리는 을지로의 매력을 한눈에 담을 수 있는 공간입니다.<br>
+                내부 공간은 작가와 콜라보하여 감각적인 분위기를 자아냅니다.</p>
+                <p>큰 창 너머로 보이는 다양한 서울의 풍경을 최대한 집중할 수 있도록<br>
+                객실 배치를 모두 다르게 구성했습니다.</p>
+                <p>투숙객에게는 블루레인 라운지 이용권이 제공됩니다.</p>
+            </div>
+        </div>
+
+        <div class="right-column">
+            <h2 class="room-title">스탠다드 더블</h2>
+
+            <div class="date-picker-box">
+                <label>체크인 (Check-in)</label>
+                <input type="date" id="checkin" onchange="calculateTotalWrapper()">
+                
+                <label>체크아웃 (Check-out)</label>
+                <input type="date" id="checkout" onchange="calculateTotalWrapper()">
+            </div>
+
+            <div class="price-summary">
+                <span id="date-range-text">날짜를 선택해주세요</span>
+                <span><span id="nights">0</span>박 <span id="total">0</span>원</span>
+            </div>
+
+            <div class="option-item">
+                <div class="option-details">
+                    <h4>시그니처 칵테일 2잔 + 디저트 1종 (10% 할인)</h4>
+                    <p>호텔 루프탑 라운지에서 즐기는 칵테일 세트입니다.</p>
+                    <div class="option-price">35,000원</div>
+                </div>
+                <div class="option-check">
+                    <input type="checkbox" id="opt1" value="35000" onchange="calculateTotalWrapper()">
+                </div>
+            </div>
+
+            <div class="option-item">
+                <div class="option-details">
+                    <h4>쁘띠 애프터눈티 (2인, 음료포함) 12% 할인</h4>
+                    <p>체크인 후 라운지에서 여유로운 오후를 즐겨보세요.</p>
+                    <div class="option-price">37,000원</div>
+                </div>
+                <div class="option-check">
+                    <input type="checkbox" id="opt2" value="37000" onchange="calculateTotalWrapper()">
+                </div>
+            </div>
+
+            <div class="total-section">
+                <span class="total-label">총 합계</span>
+                <span class="total-amount"><span id="grand-total">0</span>원</span>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-reserve" onclick="alert('예약 페이지로 넘어갑니다!')">예약하기</button>
+                <button class="btn-icon">♡</button>
+                <button class="btn-icon">🔗</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. 사장님이 요청하신 핵심 로직 (숙박비 계산)
+        function calculateTotal() {
+            const checkinInput = document.getElementById('checkin').value;
+            const checkoutInput = document.getElementById('checkout').value;
+            
+            if (!checkinInput || !checkoutInput) return 0; // 값이 없으면 0 리턴
+
+            const startDate = new Date(checkinInput);
+            const endDate = new Date(checkoutInput);
+
+            if (startDate >= endDate) {
+                alert("퇴실 날짜는 입실 날짜 이후여야 합니다.");
+                document.getElementById('checkout').value = "";
+                return 0;
+            }
+
+            let totalPrice = 0;
+            let currentDate = new Date(startDate);
+            let nightCount = 0;
+
+            // 퇴실일 전날까지 하루씩 반복하며 계산
+            while (currentDate < endDate) {
+                const dayOfWeek = currentDate.getDay(); // 0:일, 1:월 ... 6:토
+                
+                // ★ 수정된 핵심 로직 ★
+                if (dayOfWeek === 6) { 
+                    // 토요일이면 110,000원
+                    totalPrice += 110000;
+                } else {
+                    // 일~금요일이면 85,000원
+                    totalPrice += 85000; 
+                }
+
+                // 다음 날짜로 이동
+                currentDate.setDate(currentDate.getDate() + 1);
+                nightCount++;
+            }
+
+            // [화면 표시 1] 숙박 박수와 기본 숙박비 표시
+            document.getElementById('nights').innerText = nightCount;
+            document.getElementById('total').innerText = totalPrice.toLocaleString();
+            
+            // [추가] 날짜 범위 텍스트 업데이트 (예: 2025-11-30 ~ ...)
+            document.getElementById('date-range-text').innerText = `${checkinInput} ~ ${checkoutInput}`;
+
+            return totalPrice; // 옵션 합산을 위해 가격을 반환하도록 약간 수정
+        }
+
+        // 2. 전체 합계 계산 (숙박비 + 옵션)
+        // 사용자가 날짜를 바꾸거나, 옵션 체크박스를 누를 때마다 실행됩니다.
+        function calculateTotalWrapper() {
+            // 위에서 만든 사장님의 로직을 먼저 실행해서 숙박비를 구함
+            let roomPrice = calculateTotal();
+
+            // 옵션 가격 더하기
+            let optionPrice = 0;
+            const opt1 = document.getElementById('opt1');
+            const opt2 = document.getElementById('opt2');
+
+            if (opt1.checked) optionPrice += parseInt(opt1.value);
+            if (opt2.checked) optionPrice += parseInt(opt2.value);
+
+            // 최종 합계 (숙박비 + 옵션비)
+            let grandTotal = roomPrice + optionPrice;
+
+            // 화면에 최종 금액 표시
+            document.getElementById('grand-total').innerText = grandTotal.toLocaleString();
+        }
+    </script>
+</body>
+</html>
