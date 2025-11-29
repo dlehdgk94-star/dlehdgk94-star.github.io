@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation – Insta Hotel - mainbranch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* [기본 스타일 설정] */
+        html { scroll-behavior: smooth; }
+        body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; color: #333; background-color: #fcfcfc; }
+        
+        /* ----------------------------------------------------
+           [기존 예약 페이지 전용 Custom CSS] 
+           ---------------------------------------------------- */
+        
+        /* 메인 레이아웃 */
+        .reservation-container { max-width: 1200px; margin: 100px auto 40px; display: flex; gap: 50px; padding: 0 20px; align-items: flex-start; }
+        
+        /* 미디어 쿼리: 모바일 최적화 */
+        @media (max-width: 768px) {
+            .reservation-container { flex-direction: column; margin-top: 80px; }
+            .left-column, .right-column { width: 100%; }
+            
+            /* 모바일에서 이미지 높이 축소 */
+            .main-image { 
+                height: 300px !important; 
+            }
+        }
+        
+        .left-column { flex: 1.5; }
+        
+        /* 메인 이미지 영역 */
+        .main-image { 
+            width: 100%; 
+            height: 500px; /* PC 기본 높이 */
+            background-color: #ddd; 
+            background-image: url('hero11.jpg'); 
+            background-size: cover; 
+            background-position: center; 
+            border-radius: 4px; 
+            margin-bottom: 10px; 
+            transition: background-image 0.3s ease-in-out;
+        }
+
+        /* ---------------------------------------------------------
+           썸네일 영역 스타일 (스크롤 힌트 및 그라데이션)
+           --------------------------------------------------------- */
+        
+        /* 썸네일 전체를 감싸는 컨테이너 */
+        .thumbnail-wrapper {
+            position: relative;
+            margin-bottom: 40px; 
+        }
+
+        /* 오른쪽 그라데이션 효과 */
+        .thumbnail-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 25px; 
+            right: 0;
+            bottom: 5px; 
+            width: 40px; 
+            background: linear-gradient(to right, transparent, #fcfcfc); 
+            pointer-events: none; 
+            z-index: 10;
+        }
+
+        /* 스크롤 힌트 텍스트 (깜빡임 효과) */
+        .scroll-hint {
+            font-size: 11px;
+            color: #ff6900;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: right;
+            padding-right: 5px;
+            display: none; /* PC 숨김 */
+            animation: blink 2s infinite;
+        }
+
+        /* 모바일에서만 힌트 텍스트 보이기 */
+        @media (max-width: 768px) {
+            .scroll-hint { display: block; }
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        /* 썸네일 리스트 스타일 */
+        .thumbnails { 
+            display: flex; 
+            gap: 10px; 
+            overflow-x: auto; 
+            padding-bottom: 5px; 
+            padding-right: 30px; 
+            
+            /* 스크롤바 숨기기 */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .thumbnails::-webkit-scrollbar {
+            display: none;
+        }
+
+        .thumb { 
+            width: 100px; 
+            height: 70px; 
+            background-color: #eee; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            background-size: cover; 
+            background-position: center; 
+            flex-shrink: 0; 
+            border: 2px solid transparent;
+            transition: 0.2s;
+        }
+        .thumb:hover { border-color: #ff6900; opacity: 1; }
+        
+        .description-header { font-size: 14px; font-weight: bold; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: inline-block; }
+        .description-text { font-size: 14px; line-height: 1.8; color: #555; }
+
+        /* 오른쪽: 예약 패널 (스크롤 시 고정) */
+        .right-column { flex: 1; position: sticky; top: 100px; background: #fff; padding: 0; }
+        
+        .room-title { font-size: 24px; font-weight: 700; margin-bottom: 30px; }
+
+        /* 커스텀 캘린더 스타일 */
+        .calendar-wrapper { border: 1px solid #eee; padding: 20px; border-radius: 4px; margin-bottom: 20px; background: #fff; user-select: none; }
+        .calendar-header { display: flex; justify-content: center; align-items: center; margin-bottom: 20px; font-size: 16px; font-weight: 700; }
+        .calendar-header button { background: none; border: none; font-size: 18px; cursor: pointer; padding: 0 15px; color: #888; }
+        .calendar-header button:hover { color: #333; }
+        
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 13px; gap: 5px; }
+        .weekday { font-weight: bold; color: #888; margin-bottom: 10px; font-size: 12px; }
+        .day { padding: 10px 0; cursor: pointer; border-radius: 4px; transition: 0.2s; }
+        .day:hover:not(.disabled) { background-color: #f5f5f5; }
+        
+        .day.disabled { color: #e0e0e0; cursor: default; pointer-events: none; } 
+        .day.selected { background-color: #ff6900; color: white; font-weight: bold; } 
+        .day.in-range { background-color: #fff0e6; color: #ff6900; } 
+
+        .selected-info { font-size: 13px; color: #666; margin-bottom: 15px; text-align: center; }
+
+        .price-summary { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #ff6900; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+
+
+        /* 옵션 박스 스타일 */
+        .option-select-box {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #fff;
+            overflow: hidden; 
+            padding: 0; 
+        }
+
+        .option-header {
+            background-color: #f9f9f9;
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 15px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 스크롤 영역 */
+        .option-scroll-area {
+            height: 300px; 
+            overflow-y: auto; 
+            padding: 15px 20px;
+        }
+
+        /* 스크롤바 디자인 */
+        .option-scroll-area::-webkit-scrollbar { width: 6px; }
+        .option-scroll-area::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 3px; }
+        .option-scroll-area::-webkit-scrollbar-track { background-color: #f1f1f1; }
+
+        .category-title {
+            font-size: 13px;
+            color: #ff6900;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed #ddd;
+            padding-bottom: 5px;
+        }
+        .category-title:first-child { margin-top: 0; }
+
+        .option-item {
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+            padding: 10px 0;
+            cursor: pointer;
+            font-size: 14px;
+            color: #555;
+            transition: background 0.1s;
+            border-bottom: 1px solid #f9f9f9;
+        }
+        .option-item:last-child { border-bottom: none; }
+        .option-item:hover { background-color: #fafafa; }
+
+        .option-left { display: flex; align-items: flex-start; } 
+        .option-checkbox {
+            width: 18px; 
+            height: 18px; 
+            accent-color: #ff6900; 
+            margin-right: 12px;
+            cursor: pointer;
+            margin-top: 3px; 
+        }
+        .option-price-text { font-weight: 500; color: #333; white-space: nowrap; margin-left: 10px; }
+
+
+        /* 총 합계 */
+        .total-section { margin-top: 30px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
+        .total-label { font-size: 14px; font-weight: bold; }
+        .total-amount { font-size: 24px; font-weight: 700; color: #ff6900; }
+
+        /* 하단 버튼 그룹 스타일 */
+        .action-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            height: 56px;
+        }
+        
+        .btn-reserve-final {
+            flex: 1.2;
+            background-color: #ff5a00;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-reserve-final:hover { background-color: #e04e00; }
+
+        .btn-group-right {
+            flex: 1.5;
+            display: flex;
+            border: 1px solid #ddd;
+            background-color: white;
+            align-items: center;
+        }
+
+        .like-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            height: 100%;
+            border-right: 1px solid #eee;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+        }
+        .like-box:hover { background-color: #f9f9f9; }
+        .like-box svg { width: 22px; height: 22px; fill: none; stroke: #333; stroke-width: 1.5; transition: 0.2s; }
+        .like-box.liked svg { fill: #ff5a00; stroke: #ff5a00; } 
+
+        .share-box {
+            width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            height: 100%;
+        }
+        .share-box:hover { background-color: #f9f9f9; }
+        .share-box svg { width: 22px; height: 22px; stroke: #333; stroke-width: 1.5; }
+
+    </style>
+</head>
+<body class="bg-white text-slate-900 font-sans">
+
+    <header id="header" class="fixed top-0 left-0 right-0 z-30 text-white transition-colors duration-300 bg-[#ff6900] shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
+            
+          <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+    
+          <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md">
+            <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
+            <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
+          </a>
+    
+          <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
+            <a href="about.html" class="hover:text-orange-200" data-i18n="nav_about">about</a>
+            <a href="rooms.html" class="hover:text-orange-200" data-i18n="nav_rooms">rooms</a>
+            <a href="reservation.html" class="hover:text-orange-200 underline underline-offset-4" data-i18n="nav_reservation">reservation</a>
+            <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
+            <a href="contact.html" class="hover:text-orange-200" data-i18n="nav_contact">contact</a>
+          </nav>
+    
+          <div class="flex items-center relative drop-shadow-md">
+             <div class="flex items-center gap-1 cursor-pointer relative">
+                <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+                <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
+                    <option value="ko">🇰🇷 한국어</option>
+                    <option value="en">🇺🇸 English</option>
+                    <option value="ja">🇯🇵 日本語</option>
+                    <option value="zh">🇨🇳 中文</option>
+                </select>
+             </div>
+          </div>
+    
+        </div>
+    </header>
+
+    <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity duration-300"></div>
+        
+    <nav id="mobile-drawer" class="fixed top-0 left-0 w-[75%] max-w-sm h-full z-50 bg-white shadow-xl text-slate-900 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="p-6">
+          <button id="mobile-menu-close-btn" class="absolute top-4 right-4 text-3xl font-light hover:text-[#ff6900]">&times;</button>
+          <div class="mt-2 mb-8">
+            <span class="text-xl font-bold tracking-tight text-[#ff6900]">Insta hotel</span>
+          </div>
+          <ul class="flex flex-col space-y-4 text-lg font-medium">
+            <li><a href="about.html" class="block hover:text-[#ff6900]" data-i18n="nav_about">about</a></li>
+            <li>
+                <div class="flex justify-between items-center cursor-pointer hover:text-[#ff6900]" id="rooms-toggle">
+                    <span data-i18n="nav_rooms">rooms</span> <span class="text-sm">▼</span>
+                </div>
+                <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Standard</a></li>
+                </ul>
+            </li>
+            <li><a href="reservation.html" class="block hover:text-[#ff6900] text-[#ff6900]" data-i18n="nav_reservation">reservation</a></li>
+            <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
+            <li><a href="contact.html" class="block hover:text-[#ff6900]" data-i18n="nav_contact">contact</a></li>
+          </ul>
+    
+          <div class="mt-8 border-t pt-4">
+              <p class="text-sm text-slate-400 mb-2">Language</p>
+              <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
+                  <option value="ko">Korean</option>
+                  <option value="en">English</option>
+                  <option value="ja">Japanese</option>
+                  <option value="zh">Chinese</option>
+              </select>
+          </div>
+        </div>
+    </nav>
+
+
+    <main class="reservation-container">
+       <div class="left-column">
+            <div class="main-image" id="main-photo" style="background-image: url('hero8.png');"></div>
+            
+            <div class="thumbnail-wrapper">
+                <div class="scroll-hint" data-i18n="scroll_hint">
+                    ← 옆으로 밀어서 더 보기
+                </div>
+                <div class="thumbnails">
+                    <div class="thumb" onclick="changeMainImage('hero8.png')" style="background-image: url('hero8.png')"></div>
+                    <div class="thumb" onclick="changeMainImage('hero9.png')" style="background-image: url('hero9.png')"></div>
+                    <div class="thumb" onclick="changeMainImage('hero15.png')" style="background-image: url('hero15.png')"></div>
+                    <div class="thumb" onclick="changeMainImage('hero13.png')" style="background-image: url('hero13.png')"></div>
+                    <div class="thumb" onclick="changeMainImage('hero14.png')" style="background-image: url('hero14.png')"></div>
+                    <div class="thumb" onclick="changeMainImage('럭셔리7.png')" style="background-image: url('럭셔리7.png')"></div>
+                    <div class="thumb" onclick="changeMainImage('hero5.jpg')" style="background-image: url('hero5.jpg')"></div>
+                </div>
+            </div>
+
+            <div class="description-header" data-i18n="desc_header">상세정보</div>
+            <div class="description-text">
+                <p data-i18n="desc_p1">[트윈]<br>insta hotel은 편안함과 감성을 한눈에 담을 수 있는 공간입니다.<br>은은한 조명과 따뜻한 우드 톤의 객실은 여행과 일상 속에서 잠시 쉬어갈 수 있는 편안한 분위기를 제공합니다.</p>
+                <p data-i18n="desc_p2">객실마다 다른 감성의 공간 연출로 <br>고요한 밤의 분위기를 자연스럽게 느낄 수 있도록 구성했습니다.</p>
+                <p data-i18n="desc_p3">투숙객에게는 편안한 휴식이 될 수 있도록 모든 객실에 Free wi-fi, 편리한 주차 등이 제공됩니다.</p>
+            </div>
+        </div>
+
+        <div class="right-column">
+            <h2 class="room-title" data-i18n="room_title">트윈</h2>
+
+            <div class="calendar-wrapper">
+                <div class="calendar-header">
+                    <button onclick="changeMonth(-1)">‹</button>
+                    <span id="current-month">2025년 11월</span>
+                    <button onclick="changeMonth(1)">›</button>
+                </div>
+                <div class="calendar-grid" id="calendar-body">
+                </div>
+            </div>
+            
+            <div class="selected-info">
+                <span data-i18n="checkin_label">체크인</span>: <span id="display-checkin" style="font-weight:bold; color:#ff6900;">-</span> 
+                / <span data-i18n="checkout_label">체크아웃</span>: <span id="display-checkout" style="font-weight:bold; color:#ff6900;">-</span>
+            </div>
+
+            <input type="hidden" id="checkin">
+            <input type="hidden" id="checkout">
+
+            <div class="price-summary">
+                <span id="date-range-text" data-i18n="msg_select_date">날짜를 선택해주세요</span>
+                <span><span id="nights">0</span><span data-i18n="label_nights">박</span> <span id="total">0</span><span class="currency-unit" data-i18n="label_won">원</span></span>
+            </div>
+
+            <div class="option-select-box">
+                <div class="option-header">
+                    <span data-i18n="opt_header">조식·룸서비스</span>
+                    <span style="font-size:12px; font-weight:normal; color:#888;" data-i18n="opt_sub">원하는 메뉴를 체크해주세요</span>
+                </div>
+                
+                <div class="option-scroll-area">
+                    
+                  <div class="category-title" style="display: flex; align-items: center;">
+    <img src="샌드위치아이콘.png" alt="icon" style="width: 18px; height: 18px; margin-right: 5px;">
+    SANDWICH & BURGER
+</div>
+                    
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="7300" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_A1">[A1] 햄치즈 크라상 샌드위치<br><span style="font-size:11px; color:#888;">Ham & Cheese Croissant Sandwich</span></span>
+                        </div>
+                        <span class="option-price-text">+7,300<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="8200" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_B2">[B2] 브라운 햄에그 샌드위치<br><span style="font-size:11px; color:#888;">Brown Ham & Egg Sandwich</span></span>
+                        </div>
+                        <span class="option-price-text">+8,200<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="8200" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_C3">[C3] 햄&치즈 샌드위치<br><span style="font-size:11px; color:#888;">Ham & Cheese Sandwich</span></span>
+                        </div>
+                        <span class="option-price-text">+8,200<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="8600" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_D4">[D4] 런치 샌드위치<br><span style="font-size:11px; color:#888;">Lunch Sandwich</span></span>
+                        </div>
+                        <span class="option-price-text">+8,600<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="8200" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_E5">[E5] 칠리크랩 샌드위치<br><span style="font-size:11px; color:#888;">Chili Crab Sandwich</span></span>
+                        </div>
+                        <span class="option-price-text">+8,200<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="8900" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_F6">[F6] Fresh 한입쏙 미니버거<br><span style="font-size:11px; color:#888;">Fresh Mini Burger</span></span>
+                        </div>
+                        <span class="option-price-text">+8,900<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+                    
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="8200" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_J10">[J10] 에그 샐러드 샌드위치<br><span style="font-size:11px; color:#888;">Egg Salad Sandwich</span></span>
+                        </div>
+                        <span class="option-price-text">+8,200<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+
+
+                    <div class="category-title">🥗 SALAD</div>
+                    
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="9300" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_G7">[G7] 단백질 듬뿍 치킨 에그 샐러드<br><span style="font-size:11px; color:#888;">Protein-packed Chicken Egg Salad</span></span>
+                        </div>
+                        <span class="option-price-text">+9,300<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="9300" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_H8">[H8] 크리스피 치킨 샐러드<br><span style="font-size:11px; color:#888;">Crispy Chicken Salad</span></span>
+                        </div>
+                        <span class="option-price-text">+9,300<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="9600" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_I9">[I9] 크랜베리 치킨 리코타 샐러드<br><span style="font-size:11px; color:#888;">Cranberry Chicken Ricotta Salad</span></span>
+                        </div>
+                        <span class="option-price-text">+9,600<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+
+
+                    <div class="category-title" style="display: flex; align-items: center;">
+    <img src="커피아이콘.png" alt="icon" style="width: 18px; height: 18px; margin-right: 5px;">
+    Beverage & Coffee
+</div>
+                    
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="2000" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_K11">[K11] 우유 (300ml)<br><span style="font-size:11px; color:#888;">Milk</span></span>
+                        </div>
+                        <span class="option-price-text">+2,000<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="2000" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_L12">[L12] 바나나 우유 (240ml)<br><span style="font-size:11px; color:#888;">Banana Milk</span></span>
+                        </div>
+                        <span class="option-price-text">+2,000<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="2400" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_M13">[M13] 오렌지 주스 (350ml)<br><span style="font-size:11px; color:#888;">Orange Juice</span></span>
+                        </div>
+                        <span class="option-price-text">+2,400<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+                    
+                    <label class="option-item">
+                        <div class="option-left">
+                            <input type="checkbox" class="option-checkbox" value="2500" onchange="calculateTotalWrapper()">
+                            <span data-i18n="menu_N14">[N14] 커피 - 아메리카노<br><span style="font-size:11px; color:#888;">Coffee - Americano</span></span>
+                        </div>
+                        <span class="option-price-text">+2,500<span class="currency-unit" data-i18n="label_won">원</span></span>
+                    </label>
+
+                </div>
+                </div>
+
+            <div class="total-section">
+                <span class="total-label" data-i18n="total_label">총 합계</span>
+                <span class="total-amount"><span id="grand-total">0</span><span class="currency-unit" data-i18n="label_won">원</span></span>
+            </div>
+
+            <div class="action-container">
+                <button class="btn-reserve-final" onclick="alert('예약 페이지로 넘어갑니다!')" id="btn-reserve-text" data-i18n="btn_reserve">
+                    예약하기
+                </button>
+                
+                <div class="btn-group-right">
+                    <div class="like-box" id="like-btn">
+                        <svg id="heart-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                        <span id="like-count">178</span>
+                    </div>
+
+                    <div class="share-box" onclick="alert('공유하기 링크가 복사되었습니다!')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="5" r="3"></circle>
+                            <circle cx="6" cy="12" r="3"></circle>
+                            <circle cx="18" cy="19" r="3"></circle>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
+        <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
+          <div class="flex justify-center gap-4 text-lg"> 
+              <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank">
+                  <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
+              </a>
+              <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
+                  <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
+              </a>
+              <a href="http://pf.kakao.com/_xiITuG" target="_blank">
+                  <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
+              </a>
+              <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
+                  <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
+              </a>         
+          </div>
+  
+          <div class="space-y-1">
+            <p>insta hotel mainbranch, Korea</p>
+            <p id="companyName">(주)호텔인스타</p>
+            <p id="ceoName">대표자 : 이영환</p>
+            <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
+            <p id="address">수원시 영통구 영통로 94-6</p>
+            <p>Business License 176-24-01388 | Tel 031-203-4301</p>
+          </div>
+  
+          <div class="flex justify-center gap-4 pt-2">
+            <a href="#" class="hover:underline" id="terms">이용약관</a>
+            <a href="#" class="hover:underline" id="privacy">개인정보처리방침</a>
+          </div>
+        </div>
+    </section>
+  
+    <a href="http://pf.kakao.com/_xiITuG" target="_blank"
+      class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#FFEB00] text-black px-4 py-2 rounded-full shadow-lg hover:bg-yellow-400 transition-colors font-bold">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+        <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
+      </svg>
+      <span id="inquiryBtn" class="text-lg">문의</span>
+    </a>
+
+    <script>
+        // --- 좋아요 버튼 기능 ---
+        const likeBtn = document.getElementById('like-btn');
+        const likeCountDisplay = document.getElementById('like-count');
+        let likeCount = 178; 
+        
+        likeBtn.addEventListener('click', function() {
+            likeCount++; 
+            likeCountDisplay.innerText = likeCount;
+            this.classList.add('liked');
+        });
+
+        // --- 공통 스크립트 ---
+        const header = document.getElementById("header");
+        const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+        const mobileDrawer = document.getElementById("mobile-drawer");
+        const drawerOverlay = document.getElementById("drawer-overlay");
+        const mobileCloseBtn = document.getElementById("mobile-menu-close-btn");
+        const roomsToggle = document.getElementById("rooms-toggle");
+        const roomsSubmenu = document.getElementById("rooms-submenu");
+
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 50) {
+                header.classList.add("bg-[#ff6900]", "shadow-lg");
+            } else {
+                header.classList.add("bg-[#ff6900]", "shadow-lg"); 
+            }
+        });
+
+        function openMenu() {
+            mobileDrawer.classList.remove("-translate-x-full");
+            drawerOverlay.classList.remove("hidden");
+            document.body.style.overflow = "hidden"; 
+        }
+        function closeMenu() {
+            mobileDrawer.classList.add("-translate-x-full");
+            drawerOverlay.classList.add("hidden");
+            document.body.style.overflow = ""; 
+        }
+
+        if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMenu);
+        if (mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMenu);
+        if (drawerOverlay) drawerOverlay.addEventListener("click", closeMenu);
+        if(roomsToggle && roomsSubmenu){
+            roomsToggle.addEventListener("click", () => {
+                roomsSubmenu.classList.toggle("hidden");
+            });
+        }
+
+        // --- 다국어 번역 데이터 ---
+        const translations = {
+            ko: {
+                flag: "🇰🇷",
+                // 네비게이션
+                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+                // 상세정보 및 메인
+                scroll_hint: "← 옆으로 밀어서 더 보기",
+                desc_header: "상세정보",
+                desc_p1: "[럭셔리]<br>insta hotel은 편안함과 감성을 한눈에 담을 수 있는 공간입니다.<br>은은한 조명과 따뜻한 우드 톤의 객실은 여행과 일상 속에서 잠시 쉬어갈 수 있는 편안한 분위기를 제공합니다.",
+                desc_p2: "객실마다 다른 감성의 공간 연출로 <br>고요한 밤의 분위기를 자연스럽게 느낄 수 있도록 구성했습니다.",
+                desc_p3: "투숙객에게는 편안한 휴식이 될 수 있도록 모든 객실에 Free wi-fi, 편리한 주차 등이 제공됩니다.",
+                // 우측 예약 패널
+                room_title: "럭셔리",
+                checkin_label: "체크인", checkout_label: "체크아웃",
+                msg_select_date: "날짜를 선택해주세요",
+                label_nights: "박", label_total: "총 합계", label_won: "원",
+                opt_header: "조식·룸서비스", opt_sub: "원하는 메뉴를 체크해주세요",
+                btn_reserve: "예약하기",
+                // Footer
+                companyName: "(주)호텔인스타", ceoName: "대표자 : 이영환", bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", address: "수원시 영통구 영통로 94-6",
+                terms: "이용약관", privacy: "개인정보처리방침", inquiryBtn: "문의",
+                // 메뉴 아이템 (Korean format)
+                menu_A1: "[A1] 햄치즈 크라상 샌드위치<br><span style='font-size:11px; color:#888;'>Ham & Cheese Croissant Sandwich</span>",
+                menu_B2: "[B2] 브라운 햄에그 샌드위치<br><span style='font-size:11px; color:#888;'>Brown Ham & Egg Sandwich</span>",
+                menu_C3: "[C3] 햄&치즈 샌드위치<br><span style='font-size:11px; color:#888;'>Ham & Cheese Sandwich</span>",
+                menu_D4: "[D4] 런치 샌드위치<br><span style='font-size:11px; color:#888;'>Lunch Sandwich</span>",
+                menu_E5: "[E5] 칠리크랩 샌드위치<br><span style='font-size:11px; color:#888;'>Chili Crab Sandwich</span>",
+                menu_F6: "[F6] Fresh 한입쏙 미니버거<br><span style='font-size:11px; color:#888;'>Fresh Mini Burger</span>",
+                menu_J10: "[J10] 에그 샐러드 샌드위치<br><span style='font-size:11px; color:#888;'>Egg Salad Sandwich</span>",
+                menu_G7: "[G7] 단백질 듬뿍 치킨 에그 샐러드<br><span style='font-size:11px; color:#888;'>Protein-packed Chicken Egg Salad</span>",
+                menu_H8: "[H8] 크리스피 치킨 샐러드<br><span style='font-size:11px; color:#888;'>Crispy Chicken Salad</span>",
+                menu_I9: "[I9] 크랜베리 치킨 리코타 샐러드<br><span style='font-size:11px; color:#888;'>Cranberry Chicken Ricotta Salad</span>",
+                menu_K11: "[K11] 우유 (300ml)<br><span style='font-size:11px; color:#888;'>Milk</span>",
+                menu_L12: "[L12] 바나나 우유 (240ml)<br><span style='font-size:11px; color:#888;'>Banana Milk</span>",
+                menu_M13: "[M13] 오렌지 주스 (350ml)<br><span style='font-size:11px; color:#888;'>Orange Juice</span>",
+                menu_N14: "[N14] 커피 - 아메리카노<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
+            },
+            en: {
+                flag: "🇺🇸",
+                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+                scroll_hint: "← Swipe to see more",
+                desc_header: "Details",
+                desc_p1: "[Luxury]<br>Insta Hotel is a space where you can capture comfort and sensibility at a glance.<br>The softly lit rooms with warm wood tones provide a comfortable atmosphere for a break during your trip.",
+                desc_p2: "Each room is designed with a different emotional vibe,<br>allowing you to naturally feel the atmosphere of a quiet night.",
+                desc_p3: "For a comfortable rest, all rooms are provided with Free Wi-Fi, convenient parking, etc.",
+                room_title: "Luxury",
+                checkin_label: "Check-in", checkout_label: "Check-out",
+                msg_select_date: "Please select dates",
+                label_nights: "nights", label_total: "Total", label_won: "KRW",
+                opt_header: "Breakfast/Room Service", opt_sub: "Please check desired menu",
+                btn_reserve: "Book Now",
+                companyName: "Insta Hotel Co., Ltd.", ceoName: "CEO: Lee Young Hwan", bizNumber: "Registration: 2023-Suwon Yeongtong-1696", address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si",
+                terms: "Terms of Use", privacy: "Privacy Policy", inquiryBtn: "Contact",
+                // 메뉴 아이템 (English: Just the English Name)
+                menu_A1: "[A1] Ham & Cheese Croissant Sandwich",
+                menu_B2: "[B2] Brown Ham & Egg Sandwich",
+                menu_C3: "[C3] Ham & Cheese Sandwich",
+                menu_D4: "[D4] Lunch Sandwich",
+                menu_E5: "[E5] Chili Crab Sandwich",
+                menu_F6: "[F6] Fresh Mini Burger",
+                menu_J10: "[J10] Egg Salad Sandwich",
+                menu_G7: "[G7] Protein-packed Chicken Egg Salad",
+                menu_H8: "[H8] Crispy Chicken Salad",
+                menu_I9: "[I9] Cranberry Chicken Ricotta Salad",
+                menu_K11: "[K11] Milk (300ml)",
+                menu_L12: "[L12] Banana Milk (240ml)",
+                menu_M13: "[M13] Orange Juice (350ml)",
+                menu_N14: "[N14] Coffee - Americano",
+            },
+            ja: {
+                flag: "🇯🇵",
+                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+                scroll_hint: "← スワイプしてもっと見る",
+                desc_header: "詳細情報",
+                desc_p1: "[ラグジュアリー]<br>インスタホテルは、快適さと感性を一目で感じられる空間です。<br>ほのかな照明と温かみのあるウッドトーンの客室は、旅や日常の中で一休みできる快適な雰囲気を提供します。",
+                desc_p2: "客室ごとに異なる感性の空間演出により、<br>静かな夜の雰囲気を自然に感じられるように構成しました。",
+                desc_p3: "お客様の快適な休息のために、全客室に無料Wi-Fi、便利な駐車場などが提供されます。",
+                room_title: "ラグジュアリー",
+                checkin_label: "チェックイン", checkout_label: "チェックアウト",
+                msg_select_date: "日付を選択してください",
+                label_nights: "泊", label_total: "合計", label_won: "ウォン",
+                opt_header: "朝食・ルームサービス", opt_sub: "ご希望のメニューをチェックしてください",
+                btn_reserve: "予約する",
+                companyName: "インスタホテル株式会社", ceoName: "代表者 : イ・ヨンファン", bizNumber: "登録番号: 2023-水原霊通-1696", address: "水原市霊通区霊通路94-6",
+                terms: "利用規約", privacy: "個人情報処理方針", inquiryBtn: "お問い合わせ",
+                // 메뉴 아이템 (JP + EN Sub)
+                menu_A1: "[A1] ハムチーズクロワッサンサンドイッチ<br><span style='font-size:11px; color:#888;'>Ham & Cheese Croissant Sandwich</span>",
+                menu_B2: "[B2] ブラウンハムエッグサンドイッチ<br><span style='font-size:11px; color:#888;'>Brown Ham & Egg Sandwich</span>",
+                menu_C3: "[C3] ハム＆チーズサンドイッチ<br><span style='font-size:11px; color:#888;'>Ham & Cheese Sandwich</span>",
+                menu_D4: "[D4] ランチサンドイッチ<br><span style='font-size:11px; color:#888;'>Lunch Sandwich</span>",
+                menu_E5: "[E5] チリクラブサンドイッチ<br><span style='font-size:11px; color:#888;'>Chili Crab Sandwich</span>",
+                menu_F6: "[F6] フレッシュミニバーガー<br><span style='font-size:11px; color:#888;'>Fresh Mini Burger</span>",
+                menu_J10: "[J10] エッグサラダサンドイッチ<br><span style='font-size:11px; color:#888;'>Egg Salad Sandwich</span>",
+                menu_G7: "[G7] タンパク質たっぷりチキンエッグサラダ<br><span style='font-size:11px; color:#888;'>Protein-packed Chicken Egg Salad</span>",
+                menu_H8: "[H8] クリスピーチキンサラダ<br><span style='font-size:11px; color:#888;'>Crispy Chicken Salad</span>",
+                menu_I9: "[I9] クランベリーチキンリコッタサラダ<br><span style='font-size:11px; color:#888;'>Cranberry Chicken Ricotta Salad</span>",
+                menu_K11: "[K11] 牛乳 (300ml)<br><span style='font-size:11px; color:#888;'>Milk</span>",
+                menu_L12: "[L12] バナナ牛乳 (240ml)<br><span style='font-size:11px; color:#888;'>Banana Milk</span>",
+                menu_M13: "[M13] オレンジジュース (350ml)<br><span style='font-size:11px; color:#888;'>Orange Juice</span>",
+                menu_N14: "[N14] コーヒー - アメリカーノ<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
+            },
+            zh: {
+                flag: "🇨🇳",
+                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+                scroll_hint: "← 滑动查看更多",
+                desc_header: "详细信息",
+                desc_p1: "[豪华房]<br>Insta Hotel 是一个可以一眼容纳舒适和感性的空间。<br>隐隐的灯光和温暖的木色调客房，为您提供旅行和日常生活中可以暂时休息的舒适氛围。",
+                desc_p2: "每个客房都有不同的感性空间设计，<br>让您自然地感受到宁静夜晚的氛围。",
+                desc_p3: "为了给住客提供舒适的休息，所有客房均提供免费Wi-Fi、便捷的停车服务等。",
+                room_title: "豪华房",
+                checkin_label: "入住", checkout_label: "退房",
+                msg_select_date: "请选择日期",
+                label_nights: "晚", label_total: "总计", label_won: "韩元",
+                opt_header: "早餐·客房服务", opt_sub: "请勾选您想要的菜单",
+                btn_reserve: "立即预订",
+                companyName: "Insta Hotel有限公司", ceoName: "代表：李永焕", bizNumber: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6",
+                terms: "使用条款", privacy: "隐私政策", inquiryBtn: "咨询",
+                // 메뉴 아이템 (CN + EN Sub)
+                menu_A1: "[A1] 火腿芝士牛角包三明治<br><span style='font-size:11px; color:#888;'>Ham & Cheese Croissant Sandwich</span>",
+                menu_B2: "[B2] 棕色火腿蛋三明治<br><span style='font-size:11px; color:#888;'>Brown Ham & Egg Sandwich</span>",
+                menu_C3: "[C3] 火腿芝士三明治<br><span style='font-size:11px; color:#888;'>Ham & Cheese Sandwich</span>",
+                menu_D4: "[D4] 午餐三明治<br><span style='font-size:11px; color:#888;'>Lunch Sandwich</span>",
+                menu_E5: "[E5] 辣椒蟹三明治<br><span style='font-size:11px; color:#888;'>Chili Crab Sandwich</span>",
+                menu_F6: "[F6] 新鲜一口迷你汉堡<br><span style='font-size:11px; color:#888;'>Fresh Mini Burger</span>",
+                menu_J10: "[J10] 鸡蛋沙拉三明治<br><span style='font-size:11px; color:#888;'>Egg Salad Sandwich</span>",
+                menu_G7: "[G7] 高蛋白鸡肉鸡蛋沙拉<br><span style='font-size:11px; color:#888;'>Protein-packed Chicken Egg Salad</span>",
+                menu_H8: "[H8] 脆皮鸡肉沙拉<br><span style='font-size:11px; color:#888;'>Crispy Chicken Salad</span>",
+                menu_I9: "[I9] 蔓越莓鸡肉瑞可塔沙拉<br><span style='font-size:11px; color:#888;'>Cranberry Chicken Ricotta Salad</span>",
+                menu_K11: "[K11] 牛奶 (300ml)<br><span style='font-size:11px; color:#888;'>Milk</span>",
+                menu_L12: "[L12] 香蕉牛奶 (240ml)<br><span style='font-size:11px; color:#888;'>Banana Milk</span>",
+                menu_M13: "[M13] 橙汁 (350ml)<br><span style='font-size:11px; color:#888;'>Orange Juice</span>",
+                menu_N14: "[N14] 咖啡 - 美式咖啡<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
+            }
+        };
+        
+        // 현재 선택된 언어 (기본값: 한국어)
+        let currentLang = 'ko';
+
+        const headerSelect = document.getElementById("header-lang-select");
+        const drawerSelect = document.getElementById("drawer-lang-select");
+        const currentFlagIcon = document.getElementById("current-flag-icon");
+
+        function updateLanguage(lang) {
+            currentLang = lang; // 전역 변수 업데이트
+            const t = translations[lang] || translations.ko;
+            
+            // 1. 플래그 아이콘 업데이트
+            if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
+
+            // 2. ID를 사용하는 요소 업데이트 (Footer 등)
+            const textIds = [
+                "companyName", "ceoName", "bizNumber", "address",
+                "terms", "privacy", "inquiryBtn"
+            ];
+            textIds.forEach(id => {
+                const el = document.getElementById(id);
+                if(el && t[id]) el.innerText = t[id];
+            });
+
+            // 3. data-i18n 속성을 사용하는 모든 요소 업데이트
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) {
+                    el.innerHTML = t[key]; // HTML 태그(br 등) 포함을 위해 innerHTML 사용
+                }
+            });
+
+            // 4. 화폐 단위(원/KRW 등) 업데이트 (class="currency-unit")
+            const currencyUnits = document.querySelectorAll('.currency-unit');
+            currencyUnits.forEach(el => {
+                el.innerText = t.label_won;
+            });
+
+            // 5. 캘린더 다시 그리기 (요일 언어 변경을 위해)
+            renderCalendar(currentYear, currentMonth);
+        }
+
+        if(headerSelect) {
+            headerSelect.addEventListener("change", (e) => {
+                const lang = e.target.value;
+                if(drawerSelect) drawerSelect.value = lang; 
+                updateLanguage(lang);
+            });
+        }
+        if(drawerSelect) {
+            drawerSelect.addEventListener("change", (e) => {
+                const lang = e.target.value;
+                if(headerSelect) headerSelect.value = lang; 
+                updateLanguage(lang);
+            });
+        }
+
+        function changeMainImage(url) {
+            const mainPhoto = document.getElementById('main-photo');
+            mainPhoto.style.backgroundImage = `url('${url}')`;
+        }
+
+        // --- 달력 로직 ---
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth(); 
+        let selectedStartDate = null;
+        let selectedEndDate = null;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        function renderCalendar(year, month) {
+            const calendarBody = document.getElementById('calendar-body');
+            const monthTitle = document.getElementById('current-month');
+            
+            // 달력 헤더 (연/월 표시 - 영어권은 순서 변경)
+            if (currentLang === 'en') {
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                monthTitle.innerText = `${monthNames[month]} ${year}`;
+            } else {
+                monthTitle.innerText = `${year}년 ${month + 1}월`;
+            }
+            
+            calendarBody.innerHTML = "";
+
+            // 요일 배열 (언어별)
+            let weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+            if (currentLang === 'en') weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            if (currentLang === 'ja') weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+            if (currentLang === 'zh') weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+
+            weekdays.forEach(day => {
+                const div = document.createElement('div');
+                div.className = 'weekday';
+                div.innerText = day;
+                calendarBody.appendChild(div);
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                const div = document.createElement('div');
+                calendarBody.appendChild(div);
+            }
+
+            for (let i = 1; i <= lastDate; i++) {
+                const dateDiv = document.createElement('div');
+                dateDiv.className = 'day';
+                dateDiv.innerText = i;
+                
+                const thisDate = new Date(year, month, i);
+
+                if (thisDate < today) {
+                    dateDiv.classList.add('disabled');
+                } else {
+                    dateDiv.onclick = () => selectDate(thisDate);
+                }
+
+                if (selectedStartDate && thisDate.getTime() === selectedStartDate.getTime()) {
+                    dateDiv.classList.add('selected');
+                }
+                if (selectedEndDate && thisDate.getTime() === selectedEndDate.getTime()) {
+                    dateDiv.classList.add('selected');
+                }
+                if (selectedStartDate && selectedEndDate && thisDate > selectedStartDate && thisDate < selectedEndDate) {
+                    dateDiv.classList.add('in-range');
+                }
+
+                calendarBody.appendChild(dateDiv);
+            }
+        }
+
+        function changeMonth(direction) {
+            currentMonth += direction;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar(currentYear, currentMonth);
+        }
+
+        function selectDate(date) {
+            if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
+                selectedStartDate = date;
+                selectedEndDate = null;
+            } else if (selectedStartDate && !selectedEndDate) {
+                if (date < selectedStartDate) {
+                    selectedStartDate = date;
+                } else if (date.getTime() === selectedStartDate.getTime()) {
+                } else {
+                    selectedEndDate = date;
+                }
+            }
+            renderCalendar(currentYear, currentMonth);
+            updateInputValues();
+        }
+
+        function updateInputValues() {
+            const checkinInput = document.getElementById('checkin');
+            const checkoutInput = document.getElementById('checkout');
+            const displayCheckin = document.getElementById('display-checkin');
+            const displayCheckout = document.getElementById('display-checkout');
+
+            if (selectedStartDate) {
+                checkinInput.value = toDateString(selectedStartDate);
+                displayCheckin.innerText = toDateString(selectedStartDate);
+            } else {
+                checkinInput.value = "";
+                displayCheckin.innerText = "-";
+            }
+
+            if (selectedEndDate) {
+                checkoutInput.value = toDateString(selectedEndDate);
+                displayCheckout.innerText = toDateString(selectedEndDate);
+                calculateTotalWrapper();
+            } else {
+                checkoutInput.value = "";
+                displayCheckout.innerText = "-";
+                document.getElementById('nights').innerText = "0";
+                document.getElementById('total').innerText = "0";
+                document.getElementById('grand-total').innerText = "0";
+                
+                // 날짜 미선택 시 문구도 번역 반영
+                const t = translations[currentLang] || translations.ko;
+                document.getElementById('date-range-text').innerText = t.msg_select_date;
+            }
+        }
+
+        function toDateString(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        renderCalendar(currentYear, currentMonth);
+
+        // --- 가격 계산 로직 ---
+        function calculateTotal() {
+            const checkinInput = document.getElementById('checkin').value;
+            const checkoutInput = document.getElementById('checkout').value;
+            
+            if (!checkinInput || !checkoutInput) return 0;
+
+            const startDate = new Date(checkinInput);
+            const endDate = new Date(checkoutInput);
+
+            let totalPrice = 0;
+            let currentDate = new Date(startDate);
+            let nightCount = 0;
+
+            while (currentDate < endDate) {
+                const dayOfWeek = currentDate.getDay(); 
+                if (dayOfWeek === 6) { 
+                    totalPrice += 140000; 
+                } else {
+                    totalPrice += 115000; 
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+                nightCount++;
+            }
+
+            document.getElementById('nights').innerText = nightCount;
+            document.getElementById('total').innerText = totalPrice.toLocaleString();
+            document.getElementById('date-range-text').innerText = `${checkinInput} ~ ${checkoutInput}`;
+
+            return totalPrice;
+        }
+
+        // 체크박스 중복 계산 로직
+        function calculateTotalWrapper() {
+            // 1. 객실 가격 계산
+            let roomPrice = calculateTotal();
+            
+            // 2. 옵션 가격 계산
+            let optionPrice = 0;
+            
+            const checkboxes = document.querySelectorAll('.option-checkbox:checked');
+            
+            checkboxes.forEach((box) => {
+                optionPrice += parseInt(box.value);
+            });
+
+            // 3. 최종 합계 표시
+            let grandTotal = roomPrice + optionPrice;
+            document.getElementById('grand-total').innerText = grandTotal.toLocaleString();
+        }
+    </script>
+</body>
+</html>
