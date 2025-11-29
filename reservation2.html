@@ -9,7 +9,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   
   <style>
-    /* 폰트 설정: 헤더와 전체 분위기를 맞춤 */
+    /* 폰트 설정 */
     body { font-family: 'Poppins', 'Noto Sans KR', sans-serif; }
     
     /* [예약 페이지 그리드 레이아웃] */
@@ -53,24 +53,18 @@
     /* [반응형 - 모바일] */
     @media (max-width: 768px) {
         .booking-grid { flex-direction: column; gap: 0; }
-        
-        /* 달력 버튼 보이기 */
         .section-guide { display: flex; }
-
-        /* 달력 섹션 -> 모달 팝업으로 변경 */
         .calendar-section {
-            display: none; /* 평소엔 숨김 */
+            display: none; 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0,0,0,0.6); z-index: 9999;
             justify-content: center; align-items: center;
         }
         .calendar-section.active { display: flex; }
-        
         .calendar-inner-box {
             background: white; width: 90%; max-width: 400px; padding: 30px 20px;
             border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
-        
         .modal-buttons { display: flex; gap: 10px; margin-top: 25px; }
         .btn-modal { flex: 1; padding: 15px 0; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; }
         .btn-cancel { background: white; border: 1px solid #ddd; color: #666; }
@@ -204,54 +198,65 @@
 
         <section class="room-section">
             <article class="room-card">
-                <div class="room-img"><img src="hero11.jpg" alt="Standard Double"></div>
+                <div class="room-img"><img src="hero11.jpg" alt="Standard"></div>
                 <div class="room-info">
-                    <div class="room-title" id="room1-title">스탠다드 더블</div>
-                    <div class="room-price">100,000원</div>
+                    <div class="room-title" id="room1-title">스탠다드</div>
+                    <div class="room-price">85,000~110,000원</div>
                     <div class="room-cap" id="room1-cap">기준 2인 (최대 2인)</div>
                 </div>
                 <button class="btn-reserve dynamic-reserve-btn">예약</button>
             </article>
 
             <article class="room-card">
-                <div class="room-img"><img src="hero8.png" alt="Superior Double"></div>
+                <div class="room-img"><img src="hero12.jpg" alt="Deluxe"></div>
                 <div class="room-info">
-                    <div class="room-title" id="room2-title">슈페리어 더블</div>
-                    <div class="room-price">110,000원</div>
+                    <div class="room-title" id="room2-title">디럭스</div>
+                    <div class="room-price">95,000~120,000원</div>
                     <div class="room-cap" id="room2-cap">기준 2인 (최대 2인)</div>
                 </div>
                 <button class="btn-reserve dynamic-reserve-btn">예약</button>
             </article>
 
-             <article class="room-card">
-                <div class="room-img"><img src="hero2.jpg" alt="Deluxe Double"></div>
+            <article class="room-card">
+                <div class="room-img"><img src="hero13.jpg" alt="Premium"></div>
                 <div class="room-info">
-                    <div class="room-title" id="room3-title">디럭스 더블</div>
-                    <div class="room-price">130,000원</div>
+                    <div class="room-title" id="room3-title">프리미엄</div>
+                    <div class="room-price">105,000~130,000원</div>
                     <div class="room-cap" id="room3-cap">기준 2인 (최대 2인)</div>
                 </div>
                 <button class="btn-reserve dynamic-reserve-btn">예약</button>
             </article>
 
-             <article class="room-card">
-                <div class="room-img"><img src="hero5.jpg" alt="Deluxe Twin"></div>
+            <article class="room-card">
+                <div class="room-img"><img src="hero14.jpg" alt="Luxury"></div>
                 <div class="room-info">
-                    <div class="room-title" id="room4-title">디럭스 트윈</div>
-                    <div class="room-price">125,000원</div>
+                    <div class="room-title" id="room4-title">럭셔리</div>
+                    <div class="room-price">115,000~140,000원</div>
                     <div class="room-cap" id="room4-cap">기준 2인 (최대 2인)</div>
                 </div>
                 <button class="btn-reserve dynamic-reserve-btn">예약</button>
             </article>
 
-             <article class="room-card">
-                <div class="room-img"><img src="hero9.png" alt="Suite Room"></div>
+            <article class="room-card">
+                <div class="room-img"><img src="hero15.jpg" alt="Twin"></div>
                 <div class="room-info">
-                    <div class="room-title" id="room5-title">스위트룸</div>
-                    <div class="room-price">270,000원</div>
-                    <div class="room-cap" id="room5-cap">기준 2인 (최대 2인)</div>
+                    <div class="room-title" id="room5-title">트윈</div>
+                    <div class="room-price">120,000~150,000원</div>
+                    <div class="room-cap" id="room5-cap">기준 2인 (최대 3인 무료)</div>
                 </div>
                 <button class="btn-reserve dynamic-reserve-btn">예약</button>
             </article>
+
+            <article class="room-card">
+                <div class="room-img"><img src="hero16.jpg" alt="Special"></div>
+                <div class="room-info">
+                    <div class="room-title" id="room6-title">특실</div>
+                    <div class="room-price">180,000~250,000원</div>
+                    <div class="room-cap" id="room6-cap">기준 2인 (최대 4인 무료)</div>
+                </div>
+                <button class="btn-reserve dynamic-reserve-btn">예약</button>
+            </article>
+        
         </section>
     </div>
   </main>
@@ -349,18 +354,20 @@
         "btn-confirm": "확인",
 
         // 객실 이름
-        "room1-title": "스탠다드 더블",
-        "room2-title": "슈페리어 더블",
-        "room3-title": "디럭스 더블",
-        "room4-title": "디럭스 트윈",
-        "room5-title": "스위트룸",
+        "room1-title": "스탠다드",
+        "room2-title": "디럭스",
+        "room3-title": "프리미엄",
+        "room4-title": "럭셔리",
+        "room5-title": "트윈",
+        "room6-title": "특실",
 
-        // 객실 수용 인원
+        // 객실 수용 인원 (수정: 무료 문구 추가)
         "room1-cap": "기준 2인 (최대 2인)",
         "room2-cap": "기준 2인 (최대 2인)",
         "room3-cap": "기준 2인 (최대 2인)",
         "room4-cap": "기준 2인 (최대 2인)",
-        "room5-cap": "기준 2인 (최대 2인)",
+        "room5-cap": "기준 2인 (최대 3인 무료)",
+        "room6-cap": "기준 2인 (최대 4인 무료)",
 
         // 버튼
         "reserve-btn": "예약",
@@ -379,17 +386,19 @@
         "btn-cancel": "Cancel",
         "btn-confirm": "Confirm",
 
-        "room1-title": "Standard Double",
-        "room2-title": "Superior Double",
-        "room3-title": "Deluxe Double",
-        "room4-title": "Deluxe Twin",
-        "room5-title": "Suite Room",
+        "room1-title": "Standard",
+        "room2-title": "Deluxe",
+        "room3-title": "Premium",
+        "room4-title": "Luxury",
+        "room5-title": "Twin",
+        "room6-title": "Suite",
 
-        "room1-cap": "Std 2 ppl (Max 2)",
-        "room2-cap": "Std 2 ppl (Max 2)",
-        "room3-cap": "Std 2 ppl (Max 2)",
-        "room4-cap": "Std 2 ppl (Max 2)",
-        "room5-cap": "Std 2 ppl (Max 2)",
+        "room1-cap": "Std 2 / Max 2",
+        "room2-cap": "Std 2 / Max 2",
+        "room3-cap": "Std 2 / Max 2",
+        "room4-cap": "Std 2 / Max 2",
+        "room5-cap": "Std 2 / Max 3 (Free)",
+        "room6-cap": "Std 2 / Max 4 (Free)",
 
         "reserve-btn": "Book",
 
@@ -406,17 +415,19 @@
         "btn-cancel": "キャンセル",
         "btn-confirm": "確認",
 
-        "room1-title": "スタンダードダブル",
-        "room2-title": "スーペリアダブル",
-        "room3-title": "デラックスダブル",
-        "room4-title": "デラックスツイン",
-        "room5-title": "スイートルーム",
+        "room1-title": "スタンダード",
+        "room2-title": "デラックス",
+        "room3-title": "プレミアム",
+        "room4-title": "ラグジュアリー",
+        "room5-title": "ツイン",
+        "room6-title": "スイートルーム",
 
-        "room1-cap": "基準 2名 (最大 2名)",
-        "room2-cap": "基準 2名 (最大 2名)",
-        "room3-cap": "基準 2名 (最大 2名)",
-        "room4-cap": "基準 2名 (最大 2名)",
-        "room5-cap": "基準 2名 (最大 2名)",
+        "room1-cap": "基準 2名 / 最大 2名",
+        "room2-cap": "基準 2名 / 最大 2名",
+        "room3-cap": "基準 2名 / 最大 2名",
+        "room4-cap": "基準 2名 / 最大 2名",
+        "room5-cap": "基準 2名 / 最大 3名 (無料)",
+        "room6-cap": "基準 2名 / 最大 4名 (無料)",
 
         "reserve-btn": "予約",
 
@@ -433,17 +444,19 @@
         "btn-cancel": "取消",
         "btn-confirm": "确认",
 
-        "room1-title": "标准大床房",
-        "room2-title": "高级大床房",
-        "room3-title": "豪华大床房",
-        "room4-title": "豪华双床房",
-        "room5-title": "套房",
+        "room1-title": "标准房",
+        "room2-title": "豪华房",
+        "room3-title": "尊贵房",
+        "room4-title": "奢华房",
+        "room5-title": "双床房",
+        "room6-title": "套房",
 
-        "room1-cap": "标准 2人 (最大 2人)",
-        "room2-cap": "标准 2人 (最大 2人)",
-        "room3-cap": "标准 2人 (最大 2人)",
-        "room4-cap": "标准 2人 (最大 2人)",
-        "room5-cap": "标准 2人 (最大 2人)",
+        "room1-cap": "标准 2人 / 最大 2人",
+        "room2-cap": "标准 2人 / 最大 2人",
+        "room3-cap": "标准 2人 / 最大 2人",
+        "room4-cap": "标准 2人 / 最大 2人",
+        "room5-cap": "标准 2人 / 最大 3人 (免费)",
+        "room6-cap": "标准 2人 / 最大 4人 (免费)",
 
         "reserve-btn": "预订",
 
@@ -470,6 +483,7 @@
             "room3-title", "room3-cap",
             "room4-title", "room4-cap",
             "room5-title", "room5-cap",
+            "room6-title", "room6-cap",
             "companyName", "ceoName", "bizNumber", "address",
             "terms", "privacy", "inquiryBtn"
         ];
@@ -582,9 +596,6 @@
 
             this.classList.add("selected-day");
             selectedDate = `${currentYear}년 ${month}월 ${day}일`;
-
-            // PC 화면에서는 즉시 안내 문구 변경 (선택사항)
-            // if (window.innerWidth > 768) { ... }
         });
     }
 
