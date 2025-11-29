@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* [기본 스타일 유지] */
+        /* [기본 스타일] */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
         body { color: #333; background-color: #fff; }
         a { text-decoration: none; color: inherit; }
@@ -34,7 +34,7 @@
         .calendar-section { width: 300px; flex-shrink: 0; }
         .cal-header { display: flex; justify-content: center; align-items: center; margin-bottom: 20px; font-weight: 500; font-size: 18px; }
         .cal-header i { margin: 0 20px; cursor: pointer; color: #888; font-size: 14px; padding: 10px; }
-        .cal-header i:hover { color: #FF5000; } /* 화살표 호버 효과 추가 */
+        .cal-header i:hover { color: #FF5000; }
         
         .calendar-table { width: 100%; text-align: center; font-size: 13px; color: #888; }
         .calendar-table th { font-weight: 400; padding-bottom: 15px; color: #bbb; }
@@ -42,8 +42,19 @@
         
         /* 날짜 호버 및 선택 효과 */
         .calendar-table td:hover { color: #FF5000; font-weight: bold; background-color: #fff0e6; }
+        
         .today { color: #FF5000 !important; font-weight: 800 !important; } /* 오늘 날짜 강조 */
         .other-month { color: #eee !important; pointer-events: none; } /* 빈 칸 */
+
+        /* [추가됨] 지난 날짜 스타일 (연한 회색 + 클릭 금지) */
+        .past-day { 
+            color: #e0e0e0 !important; /* 아주 연한 회색 */
+            pointer-events: none;      /* 마우스 클릭 금지 */
+            cursor: default;           /* 마우스 커서 기본 모양 */
+        }
+        /* 지난 날짜는 호버 효과도 없앰 */
+        .past-day:hover { background-color: transparent !important; color: #e0e0e0 !important; font-weight: normal !important; }
+
 
         /* 객실 리스트 */
         .room-section { flex-grow: 1; }
@@ -108,7 +119,7 @@
                         </tr>
                     </thead>
                     <tbody id="calendar-body">
-                        </tbody>
+                    </tbody>
                 </table>
             </aside>
 
@@ -177,101 +188,92 @@
     </a>
 
     <script>
-        let date = new Date(); // 현재 날짜 가져오기
+        let date = new Date(); 
         let currentYear = date.getFullYear();
-        let currentMonth = date.getMonth(); // 0(1월) ~ 11(12월)
+        let currentMonth = date.getMonth(); 
 
         const monthYearEl = document.getElementById("current-month-year");
         const calendarBody = document.getElementById("calendar-body");
         const selectedDateDisplay = document.getElementById("selected-date-display");
 
-        // 달력 그리는 함수
         function renderCalendar() {
-            // 이번 달의 1일이 무슨 요일인지 (0:일요일 ~ 6:토요일)
+            // "오늘"이 언제인지 기준점 잡기 (시간은 0시 0분으로 초기화해서 날짜만 비교)
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
             const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-            // 이번 달의 마지막 날짜 (예: 28, 30, 31)
             const lastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-            // 헤더 텍스트 변경 (예: 2025.11)
-            // 월은 0부터 시작하므로 +1 해줌. 10보다 작으면 앞에 '0' 붙임
             const displayMonth = currentMonth + 1;
-            monthYearEl.textContent = `${currentYear}.${displayMonth < 10 ? '0' + displayMonth : displayMonth}`;
 
-            // 기존 날짜들 다 지우기
+            monthYearEl.textContent = `${currentYear}.${displayMonth < 10 ? '0' + displayMonth : displayMonth}`;
             calendarBody.innerHTML = "";
 
             let dateCount = 1;
             
-            // 6주까지 있을 수 있으므로 넉넉히 루프 (보통 5~6줄)
             for (let i = 0; i < 6; i++) {
                 let row = document.createElement("tr");
 
                 for (let j = 0; j < 7; j++) {
                     let cell = document.createElement("td");
 
-                    // 첫째 주인데 시작 요일보다 앞인 경우 (빈칸)
                     if (i === 0 && j < firstDay) {
                         cell.classList.add("other-month");
                         cell.textContent = ""; 
-                    } 
-                    // 날짜가 마지막 날짜를 넘어가면 (빈칸)
-                    else if (dateCount > lastDate) {
-                        // 남은 칸은 그냥 비워둠
-                    } 
-                    // 실제 날짜
-                    else {
+                    } else if (dateCount > lastDate) {
+                        // 남은 칸 빈칸 유지
+                    } else {
                         cell.textContent = dateCount;
 
-                        // 오늘 날짜인지 확인 (오늘이면 색깔 표시)
-                        const today = new Date();
-                        if (dateCount === today.getDate() && 
-                            currentMonth === today.getMonth() && 
-                            currentYear === today.getFullYear()) {
+                        // [핵심] 현재 그리고 있는 날짜(checkDate)가 오늘(today)보다 전인지 확인
+                        // 이 날짜 객체를 만들어 비교해야 정확함
+                        const checkDate = new Date(currentYear, currentMonth, dateCount);
+                        
+                        // 1. 오늘 날짜인 경우
+                        if (checkDate.getTime() === today.getTime()) {
                             cell.classList.add("today");
+                            addClickEvent(cell, displayMonth, dateCount); // 오늘 날짜는 클릭 가능
+                        } 
+                        // 2. 과거 날짜인 경우 (오늘보다 작을 때)
+                        else if (checkDate < today) {
+                            cell.classList.add("past-day"); // CSS에서 흐리게 처리
                         }
-
-                        // 날짜 클릭 이벤트
-                        cell.addEventListener("click", function() {
-                            // 모든 선택된 효과 제거 (혹시 있다면)
-                            // 여기서는 간단하게 텍스트만 변경
-                            selectedDateDisplay.textContent = 
-                                `${currentYear}년 ${displayMonth}월 ${this.textContent}일을 선택하셨습니다.`;
-                            selectedDateDisplay.style.color = "#FF5000";
-                            selectedDateDisplay.style.fontWeight = "bold";
-                        });
+                        // 3. 미래 날짜인 경우
+                        else {
+                            addClickEvent(cell, displayMonth, dateCount);
+                        }
 
                         dateCount++;
                     }
                     row.appendChild(cell);
                 }
-                
                 calendarBody.appendChild(row);
-
-                // 날짜를 다 채웠으면 루프 종료
-                if (dateCount > lastDate) {
-                    break;
-                }
+                if (dateCount > lastDate) break;
             }
         }
 
-        // 이전 달, 다음 달 이동 함수
+        // 클릭 이벤트 함수 분리
+        function addClickEvent(cell, month, day) {
+            cell.addEventListener("click", function() {
+                // 기존 선택된 효과 제거 (필요시 추가 구현)
+                selectedDateDisplay.textContent = 
+                    `${currentYear}년 ${month}월 ${day}일을 선택하셨습니다.`;
+                selectedDateDisplay.style.color = "#FF5000";
+                selectedDateDisplay.style.fontWeight = "bold";
+            });
+        }
+
         function changeMonth(step) {
             currentMonth += step;
-
-            // 12월을 넘어가면 내년 1월로
             if (currentMonth > 11) {
                 currentMonth = 0;
                 currentYear++;
-            }
-            // 1월에서 뒤로 가면 작년 12월로
-            else if (currentMonth < 0) {
+            } else if (currentMonth < 0) {
                 currentMonth = 11;
                 currentYear--;
             }
             renderCalendar();
         }
 
-        // 페이지 로드 시 달력 그림
         renderCalendar();
     </script>
 
