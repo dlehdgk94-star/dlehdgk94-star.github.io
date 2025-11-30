@@ -39,13 +39,13 @@
       </a>
 
       <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
-        <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
-        <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
-        <a <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>
-        <a href="reservation.html" class="hover:text-orange-200 transition-colors">reservation (예약)</a>
-        <a href="instaspot.html" class="hover:text-orange-200 transition-colors">insta spot (관광&맛집&카페)</a>
-        <a href="#lounge" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
-        <a href="contact.html" class="hover:text-orange-200 transition-colors">contact</a>
+        <a href="about.html" id="nav-about" class="hover:text-orange-200 transition-colors">about</a>
+        <a href="rooms.html" id="nav-rooms" class="hover:text-orange-200 transition-colors">rooms</a>
+        <a href="조식메뉴판.html" id="nav-breakfast" class="hover:text-orange-200 transition-colors">breakfast</a>
+        <a href="reservation.html" id="nav-reservation" class="hover:text-orange-200 transition-colors">reservation (예약)</a>
+        <a href="instaspot.html" id="nav-instaspot" class="hover:text-orange-200 transition-colors">insta spot (관광&맛집&카페)</a>
+        <a href="#lounge" id="nav-lounge" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
+        <a href="contact.html" id="nav-contact" class="hover:text-orange-200 transition-colors">contact</a>
       </nav>
 
       <div class="flex items-center relative drop-shadow-md">
@@ -78,11 +78,11 @@
       </div>
       
       <ul class="flex flex-col space-y-4 text-lg font-medium flex-grow">
-        <li><a href="about.html" class="block hover:text-[#ff6900]">about</a></li>
+        <li><a href="about.html" id="mob-about" class="block hover:text-[#ff6900]">about</a></li>
         
         <li>
             <div class="flex justify-between items-center cursor-pointer hover:text-[#ff6900]" id="rooms-toggle">
-                <span>rooms</span> <span class="text-sm">▼</span>
+                <span id="mob-rooms">rooms</span> <span class="text-sm">▼</span>
             </div>
             <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
                 <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
@@ -95,11 +95,11 @@
             </ul>
         </li>
 
-        <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]">breakfast</a></li>
-        <li><a href="reservation.html" class="block hover:text-[#ff6900]">reservation (예약)</a></li>
-        <li><a href="instaspot.html" class="block hover:text-[#ff6900]">insta spot (관광&맛집&카페)</a></li>
-        <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
-        <li><a href="contact.html" class="block hover:text-[#ff6900]">contact</a></li>
+        <li><a href="조식메뉴판.html" id="mob-breakfast" class="block hover:text-[#ff6900]">breakfast</a></li>
+        <li><a href="reservation.html" id="mob-reservation" class="block hover:text-[#ff6900]">reservation (예약)</a></li>
+        <li><a href="instaspot.html" id="mob-instaspot" class="block hover:text-[#ff6900]">insta spot (관광&맛집&카페)</a></li>
+        <li><a href="#lounge" id="mob-lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
+        <li><a href="contact.html" id="mob-contact" class="block hover:text-[#ff6900]">contact</a></li>
       </ul>
 
       <div class="mt-8 border-t pt-4">
@@ -485,11 +485,22 @@
     }
 
     /* --------------------------------------
-       3. 다국어 번역 로직
+       3. 다국어 번역 로직 (헤더 메뉴 추가됨)
     -------------------------------------- */
     const translations = {
       ko: { 
           flag: "🇰🇷",
+          
+          /* 헤더 메뉴 */
+          about: "about",
+          rooms: "rooms",
+          breakfast: "breakfast",
+          reservation: "reservation (예약)",
+          instaspot: "insta spot (관광&맛집&카페)",
+          lounge: "bluerain lounge",
+          contact: "contact",
+
+          /* 하단 정보 */
           btnMore: "더보기", 
           companyName: "(주)호텔인스타", 
           ceoName: "대표자 : 이영환", 
@@ -501,6 +512,17 @@
       },
       en: { 
           flag: "🇺🇸",
+
+          /* 헤더 메뉴 */
+          about: "about",
+          rooms: "rooms",
+          breakfast: "breakfast",
+          reservation: "reservation",
+          instaspot: "insta spot (Tour & Cafe)",
+          lounge: "bluerain lounge",
+          contact: "contact",
+
+          /* 하단 정보 */
           btnMore: "View more", 
           companyName: "Insta Hotel Co., Ltd.", 
           ceoName: "CEO: Lee Young Hwan", 
@@ -512,6 +534,17 @@
       },
       ja: { 
           flag: "🇯🇵",
+
+          /* 헤더 메뉴 */
+          about: "about (ホテル紹介)",
+          rooms: "rooms",
+          breakfast: "breakfast (朝食)",
+          reservation: "reservation (予約)",
+          instaspot: "insta spot (観光&グルメ)",
+          lounge: "bluerain lounge",
+          contact: "contact",
+
+          /* 하단 정보 */
           btnMore: "もっと見る", 
           companyName: "インスタホテル株式会社", 
           ceoName: "代表者 : イ・ヨンファン", 
@@ -523,6 +556,17 @@
       },
       zh: { 
           flag: "🇨🇳",
+
+          /* 헤더 메뉴 */
+          about: "about (酒店介绍)",
+          rooms: "rooms",
+          breakfast: "breakfast (早餐)",
+          reservation: "reservation (预订)",
+          instaspot: "insta spot (旅游&美食)",
+          lounge: "bluerain lounge",
+          contact: "contact",
+
+          /* 하단 정보 */
           btnMore: "查看更多", 
           companyName: "Insta Hotel有限公司", 
           ceoName: "代表：李永焕", 
@@ -545,16 +589,36 @@
         if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
 
         // 2. 텍스트 변경
+        // (1) 일반 텍스트 요소들
         const textIds = [
             "btnMore", "companyName", "ceoName", "bizNumber", "address",
             "termsLink", "privacyLink", "inquiryBtn"
         ];
-        
         textIds.forEach(id => {
             const el = document.getElementById(id);
             if(el && t[id]) {
                 el.textContent = t[id];
             }
+        });
+
+        // (2) 헤더 메뉴 & 모바일 메뉴 변경
+        // 맵핑: [데이터키, 데스크탑ID, 모바일ID]
+        const menuItems = [
+            { key: "about",       desktop: "nav-about",       mobile: "mob-about" },
+            { key: "rooms",       desktop: "nav-rooms",       mobile: "mob-rooms" },
+            { key: "breakfast",   desktop: "nav-breakfast",   mobile: "mob-breakfast" },
+            { key: "reservation", desktop: "nav-reservation", mobile: "mob-reservation" },
+            { key: "instaspot",   desktop: "nav-instaspot",   mobile: "mob-instaspot" },
+            { key: "lounge",      desktop: "nav-lounge",      mobile: "mob-lounge" },
+            { key: "contact",     desktop: "nav-contact",     mobile: "mob-contact" },
+        ];
+
+        menuItems.forEach(item => {
+            const dEl = document.getElementById(item.desktop); // 데스크탑 메뉴
+            const mEl = document.getElementById(item.mobile);  // 모바일 메뉴
+            
+            if (dEl && t[item.key]) dEl.textContent = t[item.key];
+            if (mEl && t[item.key]) mEl.textContent = t[item.key];
         });
     }
 
