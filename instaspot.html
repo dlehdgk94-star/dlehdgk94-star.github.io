@@ -1,138 +1,322 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insta Spot - Hotel Insta</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Noto Sans KR', sans-serif; }
-        .font-serif-title { font-family: 'Playfair Display', 'Noto Serif KR', serif; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Insta Spot – Insta Hotel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    /* Insta Spot 페이지 전용 폰트 스타일 */
+    .font-serif-title { font-family: 'Playfair Display', 'Noto Serif KR', serif; }
+  </style>
 </head>
-<body class="bg-[#111111] text-white">
+<body class="bg-white text-slate-900 font-sans">
 
-    <header class="bg-[#ff6b00] text-white">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
-            <div class="font-bold text-lg tracking-wide">
-                Insta Hotel - <span class="font-normal">mainbranch</span>
-            </div>
-            
-            <nav class="hidden md:flex space-x-8 text-xs font-medium uppercase tracking-wider">
-                <a href="#" class="hover:text-black/70 transition">about</a>
-                <a href="#" class="hover:text-black/70 transition">rooms</a>
-                <a href="#" class="hover:text-black/70 transition">reservation (예약)</a>
-                <a href="#" class="hover:text-black/70 transition">bluerain lounge</a>
-                <a href="#" class="text-black/80 font-bold">insta spot (주변관광&맛집&카페)</a>
-                <a href="#" class="hover:text-black/70 transition">contact</a>
-            </nav>
+  <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
+      
+      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
 
-            <div class="text-xs font-bold cursor-pointer">
-                KR <span class="text-[10px]">▼</span>
-            </div>
-        </div>
-    </header>
+      <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center">
+        <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
+        <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
+      </a>
 
-    <main class="max-w-6xl mx-auto px-6 py-20">
-        
-        <div class="text-center mb-24">
-            <h1 class="font-serif-title text-[#ff6b00] text-4xl md:text-5xl mb-6">Curated by Hotel Insta</h1>
-            <p class="text-gray-400 text-sm md:text-base leading-relaxed font-light">
-                호텔 인스타가 엄선한 주변의 매력적인 공간들을 소개합니다.<br>
-                수원의 낮과 밤을 더욱 특별하게 만들어줄 장소들입니다.
-            </p>
-        </div>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="about.html" class="hover:text-orange-200">about</a>
+        <a href="rooms.html" class="hover:text-orange-200">rooms</a>
+        <a href="reservation.html" class="hover:text-orange-200">reservation (예약)</a>
+        <a href="instaspot.html" class="font-bold text-white border-b-2 border-white pb-0.5">insta spot (관광&맛집&카페)</a>
+        <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
+        <a href="contact.html" class="hover:text-orange-200">contact</a>
+      </nav>
 
-        <div class="space-y-32">
+      <div class="flex items-center relative">
+         <div class="flex items-center gap-1 cursor-pointer relative">
+            <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
 
-            <div class="flex flex-col md:flex-row items-center gap-12">
-                <div class="w-full md:w-1/2 aspect-[4/3] bg-[#1a1a1a] flex items-center justify-center text-gray-600 relative overflow-hidden rounded-lg">
-                    <img src="https://images.unsplash.com/photo-1596417752156-b08953109a1d?q=80&w=1000&auto=format&fit=crop" alt="수원 화성" class="object-cover w-full h-full opacity-80 hover:scale-105 transition duration-500">
-                    <span class="absolute top-4 left-4 text-xs text-white bg-black/50 px-2 py-1">수원 화성</span>
-                </div>
-                <div class="w-full md:w-1/2 text-left">
-                    <span class="text-[#ff6b00] text-xs font-bold tracking-widest uppercase mb-2 block">Culture & Sight</span>
-                    <h2 class="font-serif-title text-2xl md:text-3xl mb-4 leading-tight">고즈넉한 성곽길 산책, 수원 화성</h2>
-                    <p class="text-gray-400 text-sm leading-7 mb-8 font-light">
-                        낮에는 웅장한 성곽을 따라 걷고, 밤에는 은은한 조명이 비추는 야경을 감상해보세요. 호텔에서 차로 이동하면 금방 닿을 수 있는 거리에 역사의 숨결이 살아있습니다.
-                    </p>
-                    <div class="flex items-center text-xs text-gray-300 space-x-4">
-                        <span class="flex items-center"><span class="mr-1">🚗</span> 차량 10분</span>
-                        <a href="#" class="border-b border-gray-500 hover:text-white hover:border-white transition">지도 보기 →</a>
-                    </div>
-                </div>
-            </div>
+            <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="en">🇺🇸 English</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="zh">🇨🇳 中文</option>
+            </select>
+         </div>
+      </div>
 
-            <div class="flex flex-col md:flex-row-reverse items-center gap-12">
-                <div class="w-full md:w-1/2 aspect-[4/3] bg-[#1a1a1a] overflow-hidden rounded-lg">
-                    <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1000&auto=format&fit=crop" alt="행궁동 카페" class="object-cover w-full h-full hover:scale-105 transition duration-500">
-                </div>
-                <div class="w-full md:w-1/2 text-left">
-                    <span class="text-[#ff6b00] text-xs font-bold tracking-widest uppercase mb-2 block">Coffee & Dessert</span>
-                    <h2 class="font-serif-title text-2xl md:text-3xl mb-4 leading-tight">감성 가득한 오후, 행궁동 카페거리</h2>
-                    <p class="text-gray-400 text-sm leading-7 mb-8 font-light">
-                        골목마다 숨겨진 개성 넘치는 카페들. 향긋한 커피 한 잔과 함께 여유로운 오후를 즐겨보세요. 트렌디한 인테리어는 물론 맛있는 디저트가 눈과 입을 즐겁게 합니다.
-                    </p>
-                    <div class="flex items-center text-xs text-gray-300 space-x-4">
-                        <span class="flex items-center"><span class="mr-1">🚶</span> 도보/차량 15분</span>
-                        <a href="#" class="border-b border-gray-500 hover:text-white hover:border-white transition">지도 보기 →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-col md:flex-row items-center gap-12">
-                <div class="w-full md:w-1/2 aspect-[4/3] bg-[#1a1a1a] overflow-hidden rounded-lg">
-                    <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?q=80&w=1000&auto=format&fit=crop" alt="파스타" class="object-cover w-full h-full hover:scale-105 transition duration-500">
-                </div>
-                <div class="w-full md:w-1/2 text-left">
-                    <span class="text-[#ff6b00] text-xs font-bold tracking-widest uppercase mb-2 block">Dining & Pub</span>
-                    <h2 class="font-serif-title text-2xl md:text-3xl mb-4 leading-tight">여행의 맛, 수원 로컬 맛집</h2>
-                    <p class="text-gray-400 text-sm leading-7 mb-8 font-light">
-                        수원에 왔다면 꼭 맛봐야 할 대표 메뉴부터, 숨겨진 로컬 맛집까지. 실패 없는 미식 여행을 위해 호텔 인스타가 추천하는 리스트를 확인해보세요.
-                    </p>
-                    <div class="flex items-center text-xs text-gray-300 space-x-4">
-                        <span class="flex items-center"><span class="mr-1">🚗</span> 차량 5분 ~</span>
-                        <a href="#" class="border-b border-gray-500 hover:text-white hover:border-white transition">지도 보기 →</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <footer class="bg-white text-gray-600 py-12 text-center text-[10px] border-t border-gray-100">
-        <div class="max-w-4xl mx-auto px-4">
-            <div class="flex justify-center space-x-4 mb-6">
-                <a href="#" class="w-6 h-6 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 rounded-md text-white flex items-center justify-center">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.36-.2 6.78-2.618 6.98-6.98.058-1.28.072-1.689.072-4.948 0-3.259-.014-3.667-.072-4.947-.2-4.361-2.617-6.78-6.98-6.98-1.281-.059-1.689-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                </a>
-                <a href="#" class="w-6 h-6 bg-[#03C75A] rounded-md text-white flex items-center justify-center font-bold text-[10px]">N</a>
-                <a href="#" class="w-6 h-6 bg-[#FAE100] rounded-md text-[#3c1e1e] flex items-center justify-center font-bold text-[10px]">talk</a>
-                <a href="#" class="w-6 h-6 bg-[#3b5998] rounded-md text-white flex items-center justify-center">f</a>
-            </div>
-
-            <div class="space-y-1 leading-relaxed">
-                <p class="font-bold text-gray-800">Insta hotel main branch, Korea</p>
-                <p>(주)호텔인스타 | 대표자 : 이영환</p>
-                <p>통신판매업 신고번호: 2023-수원영통-1696호</p>
-                <p>수원시 영통구 영통로 96-5</p>
-                <p class="mt-2 text-gray-400">Business License 123-45-67890 | Tel: 031-203-4301</p>
-            </div>
-
-            <div class="mt-6 space-x-4 text-gray-400">
-                <a href="#">이용약관</a>
-                <a href="#">개인정보처리방침</a>
-            </div>
-        </div>
-    </footer>
-
-    <div class="fixed bottom-6 right-6">
-        <button class="bg-[#FAE100] text-[#3c1e1e] px-5 py-3 rounded-full font-bold shadow-lg flex items-center space-x-2 hover:bg-yellow-300 transition">
-            <span class="text-xl">💬</span>
-            <span>문의</span>
-        </button>
     </div>
+  </header>
+
+  <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity duration-300"></div>
+  
+  <nav id="mobile-drawer" class="fixed top-0 left-0 w-[75%] max-w-sm h-full z-50 bg-white shadow-xl text-slate-900 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
+    <div class="p-6">
+      <button id="mobile-menu-close-btn" class="absolute top-4 right-4 text-3xl font-light hover:text-[#ff6900]">&times;</button>
+      
+      <div class="mt-2 mb-8">
+        <span class="text-xl font-bold tracking-tight text-[#ff6900]">Insta hotel</span>
+      </div>
+      
+      <ul class="flex flex-col space-y-4 text-lg font-medium">
+        <li><a href="about.html" class="block hover:text-[#ff6900]">about</a></li>
+        
+        <li>
+            <div class="flex justify-between items-center cursor-pointer hover:text-[#ff6900]" id="rooms-toggle">
+                <span>rooms</span> <span class="text-sm">▼</span>
+            </div>
+            <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Special</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Luxury</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Premium</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Deluxe</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Standard</a></li>
+                <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
+            </ul>
+        </li>
+
+        <li><a href="reservation.html" class="block hover:text-[#ff6900]">reservation (예약)</a></li>
+        <li><a href="instaspot.html" class="block text-[#ff6900] font-bold">insta spot (관광&맛집&카페)</a></li>
+        <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
+        <li><a href="contact.html" class="block hover:text-[#ff6900]">contact</a></li>
+      </ul>
+
+      <div class="mt-8 border-t pt-4">
+         <p class="text-sm text-slate-400 mb-2">Language</p>
+         <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
+             <option value="ko">Korean</option>
+             <option value="en">English</option>
+             <option value="ja">Japanese</option>
+             <option value="zh">Chinese</option>
+         </select>
+      </div>
+    </div>
+  </nav>
+
+  <main class="w-full pb-0 pt-14"> 
+    
+    <div class="bg-[#111111] text-white w-full py-20 px-4 md:px-6">
+        <div class="max-w-6xl mx-auto">
+            
+            <div class="text-center mb-24">
+                <h1 class="font-serif-title text-[#ff6900] text-4xl md:text-5xl mb-6">Curated by Hotel Insta</h1>
+                <p class="text-gray-400 text-sm md:text-base leading-relaxed font-light">
+                    호텔 인스타가 엄선한 주변의 매력적인 공간들을 소개합니다.<br>
+                    수원의 낮과 밤을 더욱 특별하게 만들어줄 장소들입니다.
+                </p>
+            </div>
+
+            <div class="space-y-32">
+
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="w-full md:w-1/2 aspect-[4/3] bg-[#1a1a1a] flex items-center justify-center text-gray-600 relative overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1596417752156-b08953109a1d?q=80&w=1000&auto=format&fit=crop" alt="수원 화성" class="object-cover w-full h-full opacity-80 hover:scale-105 transition duration-500">
+                        <span class="absolute top-4 left-4 text-xs text-white bg-black/50 px-2 py-1">수원 화성</span>
+                    </div>
+                    <div class="w-full md:w-1/2 text-left">
+                        <span class="text-[#ff6900] text-xs font-bold tracking-widest uppercase mb-2 block">Culture & Sight</span>
+                        <h2 class="font-serif-title text-2xl md:text-3xl mb-4 leading-tight">고즈넉한 성곽길 산책, 수원 화성</h2>
+                        <p class="text-gray-400 text-sm leading-7 mb-8 font-light">
+                            낮에는 웅장한 성곽을 따라 걷고, 밤에는 은은한 조명이 비추는 야경을 감상해보세요. 호텔에서 차로 이동하면 금방 닿을 수 있는 거리에 역사의 숨결이 살아있습니다.
+                        </p>
+                        <div class="flex items-center text-xs text-gray-300 space-x-4">
+                            <span class="flex items-center"><span class="mr-1">🚗</span> 차량 10분</span>
+                            <a href="#" class="border-b border-gray-500 hover:text-white hover:border-white transition">지도 보기 →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row-reverse items-center gap-12">
+                    <div class="w-full md:w-1/2 aspect-[4/3] bg-[#1a1a1a] overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1000&auto=format&fit=crop" alt="행궁동 카페" class="object-cover w-full h-full hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="w-full md:w-1/2 text-left">
+                        <span class="text-[#ff6900] text-xs font-bold tracking-widest uppercase mb-2 block">Coffee & Dessert</span>
+                        <h2 class="font-serif-title text-2xl md:text-3xl mb-4 leading-tight">감성 가득한 오후, 행궁동 카페거리</h2>
+                        <p class="text-gray-400 text-sm leading-7 mb-8 font-light">
+                            골목마다 숨겨진 개성 넘치는 카페들. 향긋한 커피 한 잔과 함께 여유로운 오후를 즐겨보세요. 트렌디한 인테리어는 물론 맛있는 디저트가 눈과 입을 즐겁게 합니다.
+                        </p>
+                        <div class="flex items-center text-xs text-gray-300 space-x-4">
+                            <span class="flex items-center"><span class="mr-1">🚶</span> 도보/차량 15분</span>
+                            <a href="#" class="border-b border-gray-500 hover:text-white hover:border-white transition">지도 보기 →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="w-full md:w-1/2 aspect-[4/3] bg-[#1a1a1a] overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?q=80&w=1000&auto=format&fit=crop" alt="파스타" class="object-cover w-full h-full hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="w-full md:w-1/2 text-left">
+                        <span class="text-[#ff6900] text-xs font-bold tracking-widest uppercase mb-2 block">Dining & Pub</span>
+                        <h2 class="font-serif-title text-2xl md:text-3xl mb-4 leading-tight">여행의 맛, 수원 로컬 맛집</h2>
+                        <p class="text-gray-400 text-sm leading-7 mb-8 font-light">
+                            수원에 왔다면 꼭 맛봐야 할 대표 메뉴부터, 숨겨진 로컬 맛집까지. 실패 없는 미식 여행을 위해 호텔 인스타가 추천하는 리스트를 확인해보세요.
+                        </p>
+                        <div class="flex items-center text-xs text-gray-300 space-x-4">
+                            <span class="flex items-center"><span class="mr-1">🚗</span> 차량 5분 ~</span>
+                            <a href="#" class="border-b border-gray-500 hover:text-white hover:border-white transition">지도 보기 →</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
+      <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
+        <div class="flex justify-center gap-4 text-lg"> 
+            <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank">
+                <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
+            </a>
+            <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
+                <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
+            </a>
+            <a href="http://pf.kakao.com/_xiITuG" target="_blank">
+                <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
+            </a>
+            <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
+                <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
+            </a>        
+        </div>
+
+        <div class="space-y-1">
+          <p>insta hotel mainbranch, Korea</p>
+          
+          <p id="companyName">(주)호텔인스타</p>
+          <p id="ceoName">대표자 : 이영환</p>
+          <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
+          <p id="address">수원시 영통구 영통로 94-6</p>
+          
+          <p>Business License 176-24-01388 | Tel 031-203-4301</p>
+        </div>
+
+        <div class="flex justify-center gap-4 pt-2">
+          <a href="#" class="hover:underline" id="terms">이용약관</a>
+          <a href="#" class="hover:underline" id="privacy">개인정보처리방침</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <a 
+    href="http://pf.kakao.com/_xiITuG"
+    target="_blank"
+    class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#FFEB00] text-black px-4 py-2 rounded-full shadow-lg hover:bg-yellow-400 transition-colors font-bold"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+      <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
+    </svg>
+    <span id="inquiryBtn" class="text-lg">문의</span>
+  </a>
+
+  <script>
+    /* 1. 모바일 메뉴 (Drawer) 열기/닫기 */
+    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+    const mobileDrawer = document.getElementById("mobile-drawer");
+    const drawerOverlay = document.getElementById("drawer-overlay");
+    const mobileCloseBtn = document.getElementById("mobile-menu-close-btn");
+
+    function openMenu() {
+        mobileDrawer.classList.remove("-translate-x-full");
+        drawerOverlay.classList.remove("hidden");
+        document.body.style.overflow = "hidden"; 
+    }
+    function closeMenu() {
+        mobileDrawer.classList.add("-translate-x-full");
+        drawerOverlay.classList.add("hidden");
+        document.body.style.overflow = ""; 
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMenu);
+    if (mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMenu);
+    if (drawerOverlay) drawerOverlay.addEventListener("click", closeMenu);
+
+    const roomsToggle = document.getElementById("rooms-toggle");
+    const roomsSubmenu = document.getElementById("rooms-submenu");
+    if(roomsToggle && roomsSubmenu){
+        roomsToggle.addEventListener("click", () => {
+            roomsSubmenu.classList.toggle("hidden");
+        });
+    }
+
+    /* 2. 다국어 번역 데이터 (Header/Footer용) */
+    const translations = {
+      ko: {
+        flag: "🇰🇷",
+        // Header & Footer
+        companyName: "(주)호텔인스타", ceoName: "대표자 : 이영환", bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", address: "수원시 영통구 영통로 94-6",
+        terms: "이용약관", privacy: "개인정보처리방침", inquiryBtn: "문의"
+      },
+      en: {
+        flag: "🇺🇸",
+        companyName: "Insta Hotel Co., Ltd.", ceoName: "CEO: Lee Young Hwan", bizNumber: "Registration: 2023-Suwon Yeongtong-1696", address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si",
+        terms: "Terms of Use", privacy: "Privacy Policy", inquiryBtn: "Contact"
+      },
+      ja: {
+        flag: "🇯🇵",
+        companyName: "インスタホテル株式会社", ceoName: "代表者 : イ・ヨンファン", bizNumber: "登録番号: 2023-水原霊通-1696", address: "水原市霊通区霊通路94-6",
+        terms: "利用規約", privacy: "個人情報処理方針", inquiryBtn: "お問い合わせ"
+      },
+      zh: {
+        flag: "🇨🇳",
+        companyName: "Insta Hotel有限公司", ceoName: "代表：李永焕", bizNumber: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6",
+        terms: "使用条款", privacy: "隐私政策", inquiryBtn: "咨询"
+      }
+    };
+
+    const headerSelect = document.getElementById("header-lang-select");
+    const drawerSelect = document.getElementById("drawer-lang-select");
+    const currentFlagIcon = document.getElementById("current-flag-icon");
+
+    function updateLanguage(lang) {
+        const t = translations[lang] || translations.ko;
+
+        // 1. 상단 국기 아이콘 변경
+        if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
+
+        // 2. 텍스트 업데이트 (Header/Footer ID만 해당)
+        const textIds = [
+            "companyName", "ceoName", "bizNumber", "address",
+            "terms", "privacy", "inquiryBtn"
+        ];
+
+        textIds.forEach(id => {
+            const el = document.getElementById(id);
+            if(el && t[id]) {
+                el.innerHTML = t[id];
+            }
+        });
+    }
+
+    if(headerSelect) {
+        headerSelect.addEventListener("change", (e) => {
+            const lang = e.target.value;
+            if(drawerSelect) drawerSelect.value = lang; 
+            updateLanguage(lang);
+        });
+    }
+
+    if(drawerSelect) {
+        drawerSelect.addEventListener("change", (e) => {
+            const lang = e.target.value;
+            if(headerSelect) headerSelect.value = lang; 
+            updateLanguage(lang);
+        });
+    }
+  </script>
 
 </body>
 </html>
