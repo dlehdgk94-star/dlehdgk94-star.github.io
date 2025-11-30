@@ -522,8 +522,8 @@
           lounge: "bluerain lounge",
           contact: "contact",
 
-          /* 배달 안내 */
-          noticeText: "아침 7시~8시 객실 문 앞 배달, 벨로 안내드립니다.<br>준비된 조식을 받아 객실에서 편하게 즐겨주세요.",
+          /* 배달 안내 (수정된 키값: notice-text) */
+          "notice-text": "아침 7시~8시 객실 문 앞 배달, 벨로 안내드립니다.<br>준비된 조식을 받아 객실에서 편하게 즐겨주세요.",
 
           /* 메뉴 번역 (타이틀은 HTML 태그 포함하여 디자인 유지) */
           "menu-title-a1": "햄치즈 크라상 샌드위치<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Croissant Sandwich</span>",
@@ -584,8 +584,8 @@
           lounge: "bluerain lounge",
           contact: "contact",
 
-          /* 배달 안내 */
-          noticeText: "Breakfast is delivered to your door between 7:00 and 8:00 AM.<br>We will ring the bell. Please enjoy your meal in the comfort of your room.",
+          /* 배달 안내 (수정된 키값: notice-text) */
+          "notice-text": "Breakfast is delivered to your door between 7:00 and 8:00 AM.<br>We will ring the bell. Please enjoy your meal in the comfort of your room.",
 
           /* 메뉴 번역 */
           "menu-title-a1": "Ham & Cheese Croissant Sandwich",
@@ -645,8 +645,8 @@
           lounge: "bluerain lounge",
           contact: "contact",
 
-          /* 배달 안내 */
-          noticeText: "朝7時～8時の間に客室の前までお届けし、ベルでお知らせします。<br>客室でごゆっくり朝食をお楽しみください。",
+          /* 배달 안내 (수정된 키값: notice-text) */
+          "notice-text": "朝7時～8時の間に客室の前までお届けし、ベルでお知らせします。<br>客室でごゆっくり朝食をお楽しみください。",
 
           /* 메뉴 번역 */
           "menu-title-a1": "ハムチーズクロワッサンサンド<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Croissant Sandwich</span>",
@@ -706,8 +706,8 @@
           lounge: "bluerain lounge",
           contact: "contact",
 
-          /* 배달 안내 */
-          noticeText: "早餐于7:00~8:00送到客房门口并按铃通知。<br>请在客房内舒适地享用为您准备的早餐。",
+          /* 배달 안내 (수정된 키값: notice-text) */
+          "notice-text": "早餐于7:00~8:00送到客房门口并按铃通知。<br>请在客房内舒适地享用为您准备的早餐。",
 
           /* 메뉴 번역 */
           "menu-title-a1": "火腿芝士牛角包三明治<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Croissant Sandwich</span>",
@@ -769,10 +769,11 @@
 
         // 2. 텍스트 변경
         // (1) 일반 텍스트 요소들 (ID가 있는 모든 요소 자동 업데이트)
-        // 기존 ID 목록 + 새로 추가된 Notice + 메뉴 ID들
+        // 기존 ID 목록 + 새로 추가된 Notice (key값 수정됨: notice-text) + 메뉴 ID들
         const textIds = [
             "btnMore", "companyName", "ceoName", "bizNumber", "address",
-            "termsLink", "privacyLink", "inquiryBtn", "noticeText",
+            "termsLink", "privacyLink", "inquiryBtn", 
+            "notice-text", // 여기 ID를 notice-text로 수정
             // 메뉴 타이틀 및 설명 ID 목록
             "menu-title-a1", "menu-desc-a1",
             "menu-title-b2", "menu-desc-b2",
