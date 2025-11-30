@@ -115,14 +115,14 @@
       </p>
 
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-8">
-        <img src="민속촌1.png" alt="" class="w-full aspect-square object-cover" />
-        <img src="화성1.png" alt="" class="w-full aspect-square object-cover" />
-        <img src="스타필드1.jpg" alt="" class="w-full aspect-square object-cover" />
-        <img src="호수공원1.png" alt="" class="w-full aspect-square object-cover" />
-        <img src="에버랜드1.png" alt="" class="w-full aspect-square object-cover" />
-        <img src="화성2.png" alt="" class="w-full aspect-square object-cover" />
-        <img src="스타필드2.jpg" alt="" class="w-full aspect-square object-cover" />
-        <img src="에버랜드2.png" alt="" class="w-full aspect-square object-cover" />
+        <img src="민속촌1.png" alt="" class="w-full aspect-square object-cover cursor-pointer hover:opacity-90 transition-opacity zoomable-image" />
+        <img src="화성1.png" alt="" class="w-full aspect-square object-cover cursor-pointer hover:opacity-90 transition-opacity zoomable-image" />
+        <img src="스타필드1.jpg" alt="" class="w-full aspect-square object-cover cursor-pointer hover:opacity-90 transition-opacity zoomable-image" />
+        <img src="호수공원1.png" alt="" class="w-full aspect-square object-cover cursor-pointer hover:opacity-90 transition-opacity zoomable-image" />
+        <img src="에버랜드1.png" alt="" class="w-full aspect-square object-cover cursor-pointer hover:opacity-90 transition-opacity zoomable-image" />
+        <img src="화성2.png" alt="" class="w-full aspect-square object-cover cursor-pointer hover:opacity-90 transition-opacity zoomable-image" />
+        <img src="스타필드2.jpg" alt="" class="w-full aspect-square object-cover cursor-pointer hover:opacity-90 transition-opacity zoomable-image" />
+        <img src="에버랜드2.png" alt="" class="w-full aspect-square object-cover cursor-pointer hover:opacity-90 transition-opacity zoomable-image" />
       </div>
 
       <div class="text-center">
@@ -181,6 +181,11 @@
     <span id="inquiryBtn" class="text-lg">문의</span>
   </a>
 
+  <div id="image-modal" class="fixed inset-0 z-[9999] hidden bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm cursor-pointer">
+    <button id="modal-close" class="absolute top-6 right-6 text-white text-5xl font-light hover:text-gray-300 focus:outline-none">&times;</button>
+    <img id="modal-img" src="" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl transition-transform duration-300" onclick="event.stopPropagation()">
+  </div>
+
   <script>
     /* --------------------------------------
        1. 모바일 메뉴 (Drawer)
@@ -214,7 +219,40 @@
     }
 
     /* --------------------------------------
-       2. 다국어 번역 로직
+       2. [추가] 이미지 확대 (Lightbox) 기능
+    -------------------------------------- */
+    const modal = document.getElementById('image-modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalCloseBtn = document.getElementById('modal-close');
+    const zoomableImages = document.querySelectorAll('.zoomable-image'); // 클래스로 이미지들 선택
+
+    // 2-1. 이미지 클릭 시 모달 열기
+    zoomableImages.forEach(img => {
+        img.addEventListener('click', function() {
+            modalImg.src = this.src; // 클릭한 이미지의 주소를 모달 이미지에 넣기
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // 뒤에 배경 스크롤 막기
+        });
+    });
+
+    // 2-2. 모달 닫기 함수
+    function closeModal() {
+        modal.classList.add('hidden');
+        modalImg.src = '';
+        document.body.style.overflow = ''; // 스크롤 다시 허용
+    }
+
+    // 2-3. 닫기 버튼이나 배경 클릭 시 닫기
+    if(modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+    if(modal) {
+        modal.addEventListener('click', (e) => {
+            // 이미지가 아닌 배경을 클릭했을 때만 닫기
+            if(e.target === modal) closeModal();
+        });
+    }
+
+    /* --------------------------------------
+       3. 다국어 번역 로직
     -------------------------------------- */
     const translations = {
       ko: { 
