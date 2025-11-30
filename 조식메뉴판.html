@@ -1,341 +1,575 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insta Hotel - Menu</title>
-    <style>
-        /* 기본 초기화 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Georgia', serif; /* 메뉴판에 어울리는 명조 계열 폰트 */
-            background-color: #fdfdfd;
-            color: #333;
-        }
-
-        /* 상단 헤더 (Insta Hotel) */
-        header {
-            background-color: #ff6600; /* 이미지의 주황색 */
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: sans-serif;
-            font-size: 14px;
-        }
-
-        .header-logo {
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            margin-left: 20px;
-            font-size: 12px;
-            text-transform: lowercase;
-        }
-        
-        .nav-links a:hover {
-            text-decoration: underline;
-        }
-
-        /* 메인 컨텐츠 영역 (배경 패턴) */
-        .main-wrapper {
-            background-color: #fff0f5; /* 옅은 분홍색 배경 */
-            background-image: linear-gradient(135deg, #ffe4e1 25%, transparent 25%), 
-                              linear-gradient(225deg, #ffe4e1 25%, transparent 25%), 
-                              linear-gradient(45deg, #ffe4e1 25%, transparent 25%), 
-                              linear-gradient(315deg, #ffe4e1 25%, transparent 25%);
-            background-position:  10px 0, 10px 0, 0 0, 0 0;
-            background-size: 20px 20px;
-            background-repeat: repeat;
-            padding: 40px 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        /* 메뉴판 종이 스타일 */
-        .menu-container {
-            width: 100%;
-            max-width: 900px;
-            background-color: white;
-            border: 8px solid #ffcccb; /* 테두리 분홍색 */
-            padding: 40px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        /* Awake 타이틀 */
-        .brand-title {
-            text-align: center;
-            color: #ff4d4d;
-            font-family: 'Courier New', Courier, monospace; /* 타자기 폰트 느낌 */
-            font-size: 80px;
-            font-weight: bold;
-            letter-spacing: 5px;
-            margin-bottom: 5px;
-        }
-
-        .brand-info {
-            text-align: center;
-            color: #dfa8a8;
-            font-size: 14px;
-            margin-bottom: 30px;
-            font-weight: bold;
-        }
-
-        /* 상단 3개 이미지 그리드 */
-        .top-images {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .food-img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            background-color: #ddd; /* 이미지 없을 때 회색 배경 */
-        }
-
-        /* 섹션 배너 (Mains, Specials 등) */
-        .section-banner {
-            background-color: #ff6b6b;
-            color: white;
-            text-align: center;
-            font-weight: bold;
-            font-size: 20px;
-            padding: 5px 0;
-            margin-bottom: 20px;
-            font-family: sans-serif;
-            text-transform: lowercase;
-        }
-
-        /* 2단 메뉴 리스트 레이아웃 */
-        .menu-columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 30px;
-        }
-
-        /* 개별 메뉴 아이템 스타일 */
-        .menu-item {
-            margin-bottom: 15px;
-        }
-
-        .menu-header {
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
-            font-size: 16px;
-            color: #333;
-            border-bottom: 1px dotted #ccc;
-            padding-bottom: 2px;
-            margin-bottom: 4px;
-        }
-
-        .menu-desc {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.4;
-        }
-
-        /* 중간 이미지 2개 */
-        .mid-images {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        /* 하단 Specials / Combos 영역 */
-        .bottom-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
-
-        /* 푸터 */
-        footer {
-            text-align: center;
-            padding: 30px 10px;
-            background-color: white;
-            font-size: 11px;
-            color: #888;
-            line-height: 1.6;
-        }
-
-        .social-icons {
-            margin-bottom: 10px;
-        }
-        .social-icons span {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            background-color: #ddd;
-            margin: 0 5px;
-            border-radius: 4px;
-        }
-
-        /* 모바일 대응 */
-        @media (max-width: 768px) {
-            .brand-title { font-size: 50px; }
-            .menu-columns, .bottom-section, .mid-images { grid-template-columns: 1fr; gap: 20px; }
-            .nav-links { display: none; } /* 모바일에서 메뉴 숨김 (필요시 햄버거 메뉴 구현) */
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="google-site-verification" content="fsXjRMcfj7Jm3Vswe92wB_Tf7mTOIy7_CckNERtv_wY" />
+  <meta name="naver-site-verification" content="507ad30f2472ed24be95dd772ab1cf49e5f32c51" />
+  <title>Insta Hotel - Main</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Insta Hotel - MainBranch">
+  <meta property="og:description" content="인스타 호텔에 오신 것을 환영합니다.">
+  <meta property="og:image" content="https://dlehdgk94-star.github.io/hero7.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    html { scroll-behavior: smooth; font-family: 'Poppins', sans-serif; }
+    /* 메뉴 카드 스타일 */
+    .menu-card {
+        background-color: #fffbf0; /* 연한 노란색 배경 */
+        border-radius: 1.5rem; /* 둥근 모서리 */
+    }
+  </style>
 </head>
-<body>
 
-    <header>
-        <div class="header-logo">Insta Hotel - mainbranch</div>
-        <nav class="nav-links">
-            <a href="#">about</a>
-            <a href="#">rooms</a>
-            <a href="#">reservation (예약)</a>
-            <a href="#">bluerain lounge</a>
-            <a href="#">insta spot (주변관광&맛집&카페)</a>
-            <a href="#">contact</a>
-            <a href="#">KR ⌄</a>
-        </nav>
-    </header>
+<body class="text-slate-900 bg-white">
 
-    <div class="main-wrapper">
-        <div class="menu-container">
-            
-            <div class="brand-title">awake</div>
-            <div class="brand-info">(333) 444-5555 | awakecafe.com | @awakecafe</div>
+  <header id="header" class="fixed top-0 left-0 right-0 z-30 transition-colors duration-300 bg-[#ff6900] shadow-md text-white">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between h-14 relative">
+      
+      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
 
-            <div class="top-images">
-                <img src="https://via.placeholder.com/300x200/eee?text=Waffle" class="food-img" alt="food">
-                <img src="https://via.placeholder.com/300x200/eee?text=Yogurt" class="food-img" alt="food">
-                <img src="https://via.placeholder.com/300x200/eee?text=Toast" class="food-img" alt="food">
-            </div>
+      <a href="#" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md">
+        <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
+        <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
+      </a>
 
-            <div class="section-banner">mains</div>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
+        <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
+        <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
+        <a href="reservation.html" class="hover:text-orange-200 transition-colors">reservation (예약)</a>
+        <a href="instaspot.html" class="hover:text-orange-200 transition-colors">insta spot (관광&맛집&카페)</a>
+        <a href="#lounge" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
+        <a href="contact.html" class="hover:text-orange-200 transition-colors">contact</a>
+      </nav>
 
-            <div class="menu-columns">
-                <div class="col-left">
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Buttermilk or Buckwheat Pancakes</span> <span>10.99</span></div>
-                        <div class="menu-desc">with bacon or maple sausage</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>French Toast</span> <span>9.99</span></div>
-                        <div class="menu-desc">three bacon or maple sausage</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Belgian Waffle</span> <span>9.99</span></div>
-                        <div class="menu-desc">with seasonal fruit and whipped cream</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Dutch Baby</span> <span>12.99</span></div>
-                        <div class="menu-desc">lemon wedges and powdered sugar</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Good Morning Parfait</span> <span>8.99</span></div>
-                        <div class="menu-desc">layers of Nancy's Yogurt, house granola and berries</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Bob's Red Mill Oatmeal</span> <span>7.99</span></div>
-                        <div class="menu-desc">slow-cooked with brown sugar & cream</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Chia Seed Pudding</span> <span>10.99</span></div>
-                        <div class="menu-desc">almond milk, hazelnut, pear, and local honey</div>
-                    </div>
-                </div>
+      <div class="flex items-center relative drop-shadow-md">
+         <div class="flex items-center gap-1 cursor-pointer relative">
+            <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
 
-                <div class="col-right">
-                    <div class="menu-item">
-                        <div class="menu-header"><span>The Junior</span> <span>10.99</span></div>
-                        <div class="menu-desc">two eggs any way, bacon and home fried potatoes, and your choice of toast</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>The Scrambler</span> <span>10.99</span></div>
-                        <div class="menu-desc">three eggs scrambled with onions, green peppers, mushrooms, and dice chicken-apple sausage</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Lumberjack Omelet</span> <span>10.99</span></div>
-                        <div class="menu-desc">with ham, sausage, spinach, mushrooms, cheddar, and home fried potatoes</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Mediterranean Omelet</span> <span>10.99</span></div>
-                        <div class="menu-desc">with roasted red peppers, tomatoes, onions, feta, and home fried potatoes</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Huevos Rancheros</span> <span>11.99</span></div>
-                        <div class="menu-desc">two eggs, black beans, bell peppers, jalapeños, chorizo, avocado, cotija and corn tortillas</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Farm Vegetable Frittata</span> <span>13.99</span></div>
-                        <div class="menu-desc">seasonal vegetables, foraged mushrooms, herbed hollandaise</div>
-                    </div>
-                </div>
-            </div>
+            <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="en">🇺🇸 English</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="zh">🇨🇳 中文</option>
+            </select>
+         </div>
+      </div>
 
-            <div class="mid-images">
-                <img src="https://via.placeholder.com/400x200/eee?text=Omelet" class="food-img" alt="food">
-                <img src="https://via.placeholder.com/400x200/eee?text=Salad" class="food-img" alt="food">
-            </div>
-
-            <div class="bottom-section">
-                <div class="specials-col">
-                    <div class="section-banner">specials</div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Pacific NW Hash</span> <span>11.99</span></div>
-                        <div class="menu-desc">with flaked smoked salmon, bacon, potatoes, onions, topped with poached eggs and sour cream</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Grilled Flatiron Steak & Eggs</span> <span>18.99</span></div>
-                        <div class="menu-desc">two eggs any way, crispy potato, sausage gravy</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>The Legend Breakfast Sandwich</span> <span>10.99</span></div>
-                        <div class="menu-desc">ham, bacon, cheese, eggs and avocado</div>
-                    </div>
-                </div>
-
-                <div class="combos-col">
-                    <div class="section-banner">combos</div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Pancake Combo</span> <span>6.99</span></div>
-                        <div class="menu-desc">two pancakes, bacon or country sausage, two eggs</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Classic Combo</span> <span>5.99</span></div>
-                        <div class="menu-desc">bacon, ham, or country sausage with two eggs</div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-header"><span>Hawaiian Combo</span> <span>7.99</span></div>
-                        <div class="menu-desc">grilled ham, pineapple, two eggs, two silver dollar pancakes</div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+  </header>
 
-    <footer>
-        <div class="social-icons">
-            <span></span> <span></span> <span></span> <span></span>
-        </div>
-        <div>
-            Insta Hotel Mainbranch, Korea<br>
-            (주)호텔인스타 | 대표자: 이영희<br>
-            통신판매업 신고번호: 2023-수원영통-1234호<br>
-            수원시 영통구 영통로 123-1<br>
-            Business License 123-45-67890 | Tel. 031-234-5678
-        </div>
-    </footer>
+  <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity duration-300"></div>
+  
+  <nav id="mobile-drawer" class="fixed top-0 left-0 w-[75%] max-w-sm h-full z-50 bg-white shadow-xl text-slate-900 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
+    <div class="p-6 h-full flex flex-col">
+      <button id="mobile-menu-close-btn" class="absolute top-4 right-4 text-3xl font-light hover:text-[#ff6900]">&times;</button>
+      
+      <div class="mt-2 mb-8">
+        <span class="text-xl font-bold tracking-tight text-[#ff6900]">Insta hotel</span>
+      </div>
+      
+      <ul class="flex flex-col space-y-4 text-lg font-medium flex-grow">
+        <li><a href="about.html" class="block hover:text-[#ff6900]">about</a></li>
+        
+        <li>
+            <div class="flex justify-between items-center cursor-pointer hover:text-[#ff6900]" id="rooms-toggle">
+                <span>rooms</span> <span class="text-sm">▼</span>
+            </div>
+            <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Special</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Luxury</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Premium</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Deluxe</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Standard</a></li>
+                <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
+            </ul>
+        </li>
 
+        <li><a href="reservation.html" class="block hover:text-[#ff6900]">reservation (예약)</a></li>
+        <li><a href="instaspot.html" class="block hover:text-[#ff6900]">insta spot (관광&맛집&카페)</a></li>
+        <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
+        <li><a href="contact.html" class="block hover:text-[#ff6900]">contact</a></li>
+      </ul>
+
+      <div class="mt-8 border-t pt-4">
+         <p class="text-sm text-slate-400 mb-2">Language</p>
+         <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
+             <option value="ko">Korean</option>
+             <option value="en">English</option>
+             <option value="ja">Japanese</option>
+             <option value="zh">Chinese</option>
+         </select>
+      </div>
+    </div>
+  </nav>
+
+  <section id="menu" class="pt-24 pb-16 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-slate-900">Breakfast & Lounge <span class="text-[#ff6900]">Menu</span></h2>
+        <p class="text-slate-500 mt-2">Fresh sandwiches, salads, and beverages prepared daily.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="sandwich1.jpg" alt="Ham & Cheese Croissant" class="w-full h-40 object-cover rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="font-bold text-lg text-slate-800 leading-tight">햄치즈 크라상 샌드위치<br><span class="text-sm font-semibold text-slate-600">Ham & Cheese Croissant Sandwich</span></h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              겹겹이 고소한 크라상에 신선한 토마토와 짭조름한 햄, 치즈를 넣은 크라상의 베스트 플레이버 샌드위치<br>
+              Layered buttery croissant with fresh tomato, savory ham, and cheese.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Eggs, Milk, Wheat, Soy, Tomato, Pork, Beef
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 7,300</span>
+              <span class="font-bold text-slate-900">No. A 1</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="sandwich2.jpg" alt="Brown Ham & Egg Sandwich" class="w-full h-40 object-cover rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="font-bold text-lg text-slate-800 leading-tight">브라운 햄에그 샌드위치<br><span class="text-sm font-semibold text-slate-600">Brown Ham & Egg Sandwich</span></h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              곡물이 가득담긴 브라운식빵에 햄, 에그슬라이스, 신선한 야채를 올린 든든 샌드위치<br>
+              Hearty sandwich with ham, egg slices & fresh vegetables on multigrain brown bread.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Eggs, Milk, Soy, Wheat, Pork, Tomato
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 8,200</span>
+              <span class="font-bold text-slate-900">No. B 2</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="sandwich3.jpg" alt="Ham & Cheese Sandwich" class="w-full h-40 object-cover rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="font-bold text-lg text-slate-800 leading-tight">햄&치즈 샌드위치<br><span class="text-sm font-semibold text-slate-600">Ham & Cheese Sandwich</span></h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              부드러운 브라운식빵에 신선한 야채와 햄&치즈가 들어간 샌드위치<br>
+              Sandwich with ham & cheese and fresh vegetables on soft brown bread.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Eggs, Milk, Soy, Wheat, Tomato, Pork, Beef
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 8,200</span>
+              <span class="font-bold text-slate-900">No. C 3</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="sandwich4.jpg" alt="Lunch Sandwich" class="w-full h-40 object-cover rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="font-bold text-lg text-slate-800 leading-tight">런치샌드위치<br><span class="text-sm font-semibold text-slate-600">Lunch Sandwich</span></h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              부드러운 페스츄리 식빵에 신선한 야채와 햄&치즈가 들어간 샌드위치<br>
+              Pastry Sandwich with Savory Ham & Cheese.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Wheat, Milk, Tomato, Soy, Eggs, Pork
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 8,600</span>
+              <span class="font-bold text-slate-900">No. D 4</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="sandwich5.jpg" alt="Chili Crab Sandwich" class="w-full h-40 object-cover rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="font-bold text-lg text-slate-800 leading-tight">칠리크랩샌드위치<br><span class="text-sm font-semibold text-slate-600">Chili Crab Sandwich</span></h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              고소한 크런치빵에 매콤한 사천소스로 버무린 게맛살 내용물과 아삭한 채소를 더한 매콤한 샌드위치<br>
+              Spicy Crab Stick Sandwich with Sichuan Sauce & Fresh Vegetables.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Wheat, Milk, Tomato, Soy, Eggs, Crab
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 8,200</span>
+              <span class="font-bold text-slate-900">No. E 5</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="burger.jpg" alt="Fresh Mini Burger" class="w-full h-40 object-cover rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="font-bold text-lg text-slate-800 leading-tight">fresh한입쏙미니버거<br><span class="text-sm font-semibold text-slate-600">Fresh Mini Burger</span></h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              부드러운 모닝롤빵에 불고기맛 버거패티와 아삭한 프리레터스, 다양한 야채가 어우러진 미니버거 샌드위치<br>
+              Mini Burger Sandwich with Bulgogi Patty, Crispy Frisee & Fresh Vegetables.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Wheat, Soy, Tomato, Milk, Eggs, Pork, Beef
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 8,900</span>
+              <span class="font-bold text-slate-900">No. F 6</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="salad1.jpg" alt="Chicken Egg Salad" class="w-full h-40 object-cover rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="font-bold text-lg text-slate-800 leading-tight">단백질 듬뿍 치킨 에그샐러드<br><span class="text-sm font-semibold text-slate-600">Protein-packed Chicken Egg Salad</span></h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              단백질이 풍부한 로스트 치킨과 계란 내용물을 듬뿍 담아 더욱 건강한 샐러드<br>
+              Healthy salad with protein-rich roasted chicken and plenty of egg.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Milk, Soy, Chicken, Tomato, Eggs
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 9,300</span>
+              <span class="font-bold text-slate-900">No. G 7</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="salad2.jpg" alt="Crispy Chicken Salad" class="w-full h-40 object-cover rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="font-bold text-lg text-slate-800 leading-tight">크리스피 치킨 샐러드<br><span class="text-sm font-semibold text-slate-600">Crispy Chicken Salad</span></h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              부드럽고 바삭하게 튀긴 치킨커틀릿에 건강한 병아리콩, 옥수수가 어우러진 샐러드<br>
+              Crispy Chicken Cutlet Salad with Chickpeas & Sweet Corn.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Chicken, Wheat, Soy, Milk, Tomato
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 9,300</span>
+              <span class="font-bold text-slate-900">No. H 8</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="salad3.jpg" alt="Cranberry Chicken Ricotta" class="w-full h-40 object-cover rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="font-bold text-lg text-slate-800 leading-tight">크랜베리 치킨 리코타 샐러드<br><span class="text-sm font-semibold text-slate-600">Cranberry Chicken Ricotta Salad</span></h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              고소한 리코타치즈와 구운 치킨, 크랜베리가 어우러진 샐러드<br>
+              Salad with creamy ricotta, roasted chicken & cranberries.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Milk, Tomato, Eggs, Soy, Chicken
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 9,600</span>
+              <span class="font-bold text-slate-900">No. I 9</span>
+            </div>
+          </div>
+        </div>
+
+         <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+            <div class="w-full sm:w-40 flex-shrink-0">
+              <img src="sandwich6.jpg" alt="Egg Salad Sandwich" class="w-full h-40 object-cover rounded-xl shadow-sm zoomable-image cursor-pointer">
+            </div>
+            <div class="flex-1 space-y-2">
+              <h3 class="font-bold text-lg text-slate-800 leading-tight">에그샐러드샌드위치<br><span class="text-sm font-semibold text-slate-600">Egg Salad Sandwich</span></h3>
+              <p class="text-xs text-slate-500 leading-relaxed">
+                부드러운 식빵에 고소하면서도 새콤달콤한 계란샐러드와 햄, 당근 등 신선한 야채를 듬뿍 넣은 샌드위치<br>
+                Soft bread sandwich with egg salad, ham & fresh vegetables.
+              </p>
+              <div class="text-[10px] text-slate-400 pt-1">
+                Allergy Info: Eggs, Milk, Soy, Wheat, Pork, Chicken
+              </div>
+              <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+                <span class="font-bold text-[#ff6900]">KRW 8,200</span>
+                <span class="font-bold text-slate-900">No. J 10</span>
+              </div>
+            </div>
+          </div>
+
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div class="menu-card p-5 flex flex-col items-center text-center shadow-sm">
+            <img src="milk.jpg" alt="Milk" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
+            <h3 class="font-bold text-slate-800">우유 . Milk (300ml)</h3>
+            <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
+                <span class="font-bold text-[#ff6900]">KRW 2,000</span>
+                <span class="font-semibold text-slate-700">No. K 11</span>
+            </div>
+        </div>
+
+        <div class="menu-card p-5 flex flex-col items-center text-center shadow-sm">
+            <img src="banana_milk.jpg" alt="Banana Milk" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
+            <h3 class="font-bold text-slate-800">바나나 우유 . Banana Milk</h3>
+            <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
+                <span class="font-bold text-[#ff6900]">KRW 2,000</span>
+                <span class="font-semibold text-slate-700">No. L 12</span>
+            </div>
+        </div>
+
+        <div class="menu-card p-5 flex flex-col items-center text-center shadow-sm">
+            <img src="juice.jpg" alt="Orange Juice" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
+            <h3 class="font-bold text-slate-800">오렌지 주스 . Orange juice</h3>
+            <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
+                <span class="font-bold text-[#ff6900]">KRW 2,400</span>
+                <span class="font-semibold text-slate-700">No. M 13</span>
+            </div>
+        </div>
+
+        <div class="menu-card p-5 flex flex-col items-center text-center shadow-sm">
+            <img src="coffee.jpg" alt="Americano" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
+            <h3 class="font-bold text-slate-800">커피 - 아메리카노 . Americano</h3>
+            <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
+                <span class="font-bold text-[#ff6900]">KRW 2,500</span>
+                <span class="font-semibold text-slate-700">No. N 14</span>
+            </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-100">
+    <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-500">
+      
+      <div class="flex justify-center gap-4 mb-6">
+        <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank" class="hover:opacity-75 transition-opacity">
+            <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
+        </a>
+        <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank" class="hover:opacity-75 transition-opacity">
+            <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
+        </a>
+        <a href="http://pf.kakao.com/_xiITuG" target="_blank" class="hover:opacity-75 transition-opacity">
+            <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
+        </a>
+        <a href="https://www.facebook.com/VIPdesign2020" target="_blank" class="hover:opacity-75 transition-opacity">
+            <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
+        </a>
+      </div>
+
+      <div class="space-y-1.5 leading-relaxed font-light">
+        <p>insta hotel mainbranch, Korea</p>
+        
+        <p>
+            <span id="companyName">(주)호텔인스타</span>
+            <span class="mx-1">|</span>
+            <span id="ceoName">대표자 : 이영환</span>
+        </p>
+
+        <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
+        <p id="address">수원시 영통구 영통로 94-6</p>
+        <p>Business License 176-24-01388 <span class="mx-1">|</span> Tel 031-203-4301</p>
+      </div>
+
+      <div class="flex justify-center gap-8 mt-8 text-slate-400">
+        <a href="#" id="termsLink" class="hover:text-slate-600">이용약관</a>
+        <a href="#" id="privacyLink" class="hover:text-slate-600 font-medium">개인정보처리방침</a>
+      </div>
+
+    </div>
+  </section>
+
+  <a href="http://pf.kakao.com/_xiITuG" target="_blank"
+    class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#FFEB00] text-black px-4 py-2 rounded-full shadow-lg hover:bg-yellow-400 transition-colors font-bold">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+      <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
+    </svg>
+    <span id="inquiryBtn" class="text-lg">문의</span>
+  </a>
+
+  <div id="image-modal" class="fixed inset-0 z-[9999] hidden bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm cursor-pointer">
+    <button id="modal-close" class="absolute top-6 right-6 text-white text-5xl font-light hover:text-gray-300 focus:outline-none">&times;</button>
+    <img id="modal-img" src="" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl transition-transform duration-300" onclick="event.stopPropagation()">
+  </div>
+
+  <script>
+    /* --------------------------------------
+       1. 모바일 메뉴 (Drawer)
+    -------------------------------------- */
+    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+    const mobileDrawer = document.getElementById("mobile-drawer");
+    const drawerOverlay = document.getElementById("drawer-overlay");
+    const mobileCloseBtn = document.getElementById("mobile-menu-close-btn");
+
+    function openMenu() {
+        mobileDrawer.classList.remove("-translate-x-full");
+        drawerOverlay.classList.remove("hidden");
+        document.body.style.overflow = "hidden"; 
+    }
+    function closeMenu() {
+        mobileDrawer.classList.add("-translate-x-full");
+        drawerOverlay.classList.add("hidden");
+        document.body.style.overflow = ""; 
+    }
+
+    if(mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMenu);
+    if(mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMenu);
+    if(drawerOverlay) drawerOverlay.addEventListener("click", closeMenu);
+
+    const roomsToggle = document.getElementById("rooms-toggle");
+    const roomsSubmenu = document.getElementById("rooms-submenu");
+    if(roomsToggle && roomsSubmenu){
+        roomsToggle.addEventListener("click", () => {
+            roomsSubmenu.classList.toggle("hidden");
+        });
+    }
+
+    /* --------------------------------------
+       2. 이미지 확대 (Lightbox) 기능
+    -------------------------------------- */
+    const modal = document.getElementById('image-modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalCloseBtn = document.getElementById('modal-close');
+    const zoomableImages = document.querySelectorAll('.zoomable-image'); 
+
+    zoomableImages.forEach(img => {
+        img.addEventListener('click', function() {
+            modalImg.src = this.src; 
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; 
+        });
+    });
+
+    function closeModal() {
+        modal.classList.add('hidden');
+        modalImg.src = '';
+        document.body.style.overflow = ''; 
+    }
+
+    if(modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+    if(modal) {
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) closeModal();
+        });
+    }
+
+    /* --------------------------------------
+       3. 다국어 번역 로직
+    -------------------------------------- */
+    const translations = {
+      ko: { 
+          flag: "🇰🇷",
+          btnMore: "더보기", 
+          companyName: "(주)호텔인스타", 
+          ceoName: "대표자 : 이영환", 
+          bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", 
+          address: "수원시 영통구 영통로 94-6", 
+          termsLink: "이용약관", 
+          privacyLink: "개인정보처리방침", 
+          inquiryBtn: "문의" 
+      },
+      en: { 
+          flag: "🇺🇸",
+          btnMore: "View more", 
+          companyName: "Insta Hotel Co., Ltd.", 
+          ceoName: "CEO: Lee Young Hwan", 
+          bizNumber: "Registration: 2023-Suwon Yeongtong-1696", 
+          address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si", 
+          termsLink: "Terms of Use", 
+          privacyLink: "Privacy Policy", 
+          inquiryBtn: "Contact" 
+      },
+      ja: { 
+          flag: "🇯🇵",
+          btnMore: "もっと見る", 
+          companyName: "インスタホテル株式会社", 
+          ceoName: "代表者 : イ・ヨンファン", 
+          bizNumber: "通信販売業申告番号: 2023-水原ヨントン-1696号", 
+          address: "水原市 永東区 永東路 94-6", 
+          termsLink: "利用規約", 
+          privacyLink: "個人情報処理方針", 
+          inquiryBtn: "お問い合わせ" 
+      },
+      zh: { 
+          flag: "🇨🇳",
+          btnMore: "查看更多", 
+          companyName: "Insta Hotel有限公司", 
+          ceoName: "代表：李永焕", 
+          bizNumber: "通信销售业申报编号：2023-水原灵通-1696号", 
+          address: "水原市 灵通区 灵通路94-6", 
+          termsLink: "使用条款", 
+          privacyLink: "隐私政策", 
+          inquiryBtn: "咨询" 
+      },
+    };
+
+    const headerSelect = document.getElementById("header-lang-select");
+    const drawerSelect = document.getElementById("drawer-lang-select");
+    const currentFlagIcon = document.getElementById("current-flag-icon");
+
+    function updateLanguage(lang) {
+        const t = translations[lang] || translations.ko;
+
+        // 1. 국기 변경
+        if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
+
+        // 2. 텍스트 변경
+        const textIds = [
+            "btnMore", "companyName", "ceoName", "bizNumber", "address",
+            "termsLink", "privacyLink", "inquiryBtn"
+        ];
+        
+        textIds.forEach(id => {
+            const el = document.getElementById(id);
+            if(el && t[id]) {
+                el.textContent = t[id];
+            }
+        });
+    }
+
+    if(headerSelect) {
+        headerSelect.addEventListener("change", (e) => {
+            const lang = e.target.value;
+            if(drawerSelect) drawerSelect.value = lang;
+            updateLanguage(lang);
+        });
+    }
+
+    if(drawerSelect) {
+        drawerSelect.addEventListener("change", (e) => {
+            const lang = e.target.value;
+            if(headerSelect) headerSelect.value = lang;
+            updateLanguage(lang);
+        });
+    }
+  </script>
 </body>
 </html>
