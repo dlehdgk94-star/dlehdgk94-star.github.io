@@ -8,21 +8,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        /* [기본 스타일 설정 - 기존 결제 페이지 CSS 유지 및 일부 수정] */
+        /* [기본 스타일 설정] */
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f4f4f4; color: #333; }
         
-        /* Tailwind와 충돌 방지 및 레이아웃 보정 */
         .payment-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 100px 20px 60px; /* 헤더가 fixed이므로 상단 여백(padding-top) 100px 추가 */
+            padding: 100px 20px 60px;
         }
 
-        /* ----------------------------------------------------
-           [기존 결제 페이지 전용 Custom CSS] 
-           ---------------------------------------------------- */
-        
+        /* 폼 스타일 */
         input[type="text"], input[type="email"], textarea {
             width: 100%;
             padding: 12px;
@@ -32,16 +28,14 @@
             font-family: inherit;
             font-size: 14px;
         }
-
         input[type="checkbox"], input[type="radio"] {
             margin-right: 5px;
             vertical-align: middle;
-            accent-color: #ff6900; /* 브랜드 컬러 적용 */
+            accent-color: #ff6900;
         }
-
         label { vertical-align: middle; cursor: pointer; }
 
-        /* 타이틀 */
+        /* 타이틀 & 그리드 */
         .page-title {
             text-align: center;
             padding-bottom: 40px;
@@ -49,15 +43,13 @@
             font-weight: 700;
             color: #333;
         }
-
-        /* 메인 레이아웃 (Grid) */
         .checkout-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr; /* 좌측 2 : 우측 1 비율 */
+            grid-template-columns: 2fr 1fr;
             gap: 30px;
         }
 
-        /* 섹션 카드 스타일 */
+        /* 카드 섹션 */
         .section-card {
             background: white;
             padding: 30px;
@@ -65,7 +57,6 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-
         .section-title {
             font-size: 18px;
             font-weight: 700;
@@ -75,7 +66,7 @@
             color: #222;
         }
 
-        /* 좌측: 예약 상품 정보 */
+        /* 상품 정보 */
         .product-info { display: flex; gap: 20px; }
         .product-img {
             width: 120px;
@@ -88,13 +79,13 @@
         .product-details p { font-size: 14px; color: #666; margin-bottom: 5px; }
         .price { font-weight: bold; font-size: 18px; margin-top: 15px; color: #ff6900; }
 
-        /* 좌측: 예약자 정보 */
+        /* 입력 폼 레이아웃 */
         .input-row { display: flex; gap: 10px; }
         .input-half { width: 50%; }
 
-        /* 좌측: 추가정보 입력 (파란 박스 -> 브랜드 컬러톤 변경 고려, 일단 유지) */
+        /* 안내 박스 */
         .info-box {
-            background-color: #fff0e6; /* 연한 주황색 배경 */
+            background-color: #fff0e6;
             border-left: 4px solid #ff6900;
             padding: 15px;
             margin-bottom: 20px;
@@ -102,14 +93,12 @@
             color: #555;
             line-height: 1.5;
         }
-
         .notice-text {
             font-size: 13px;
             color: #666;
             line-height: 1.6;
             margin-bottom: 10px;
         }
-
         .confirm-check {
             display: block;
             margin-top: 10px;
@@ -117,7 +106,7 @@
             font-size: 14px;
         }
 
-        /* 좌측: 취소 규정 테이블 */
+        /* 테이블 */
         .refund-table {
             width: 100%;
             border-collapse: collapse;
@@ -131,7 +120,7 @@
         }
         .refund-table th { background-color: #f9f9f9; width: 60%; font-weight: 600; }
 
-        /* 우측 사이드바: 최종 결제금액 */
+        /* 우측 결제 요약 */
         .price-summary-row {
             display: flex;
             justify-content: space-between;
@@ -151,10 +140,7 @@
         }
         .total-price { color: #ff6900; font-size: 24px; }
 
-        /* 우측: 결제수단 */
         .payment-method label { margin-right: 15px; font-size: 14px; }
-
-        /* 우측: 약관 동의 */
         .terms-list { list-style: none; margin-top: 10px; padding: 0; }
         .terms-list li { margin-bottom: 10px; font-size: 13px; color: #666; display: flex; justify-content: space-between; align-items: center; }
         .terms-list li.main-check {
@@ -162,7 +148,6 @@
         }
         .term-link { color: #888; text-decoration: underline; font-size: 11px; cursor: pointer; }
 
-        /* 결제하기 버튼 */
         .btn-submit {
             width: 100%;
             background-color: #ff6900;
@@ -178,7 +163,6 @@
         }
         .btn-submit:hover { background-color: #e05e00; }
 
-        /* 모바일 대응 */
         @media (max-width: 768px) {
             .payment-container { padding-top: 80px; }
             .checkout-grid { grid-template-columns: 1fr; gap: 20px; }
@@ -191,18 +175,15 @@
 
     <header id="header" class="fixed top-0 left-0 right-0 z-30 text-white transition-colors duration-300 bg-[#ff6900] shadow-lg">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
-            
           <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
           </button>
-    
           <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md">
             <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
             <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
           </a>
-    
           <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
             <a href="about.html" class="hover:text-orange-200">about</a>
             <a href="rooms.html" class="hover:text-orange-200">rooms</a>
@@ -212,53 +193,13 @@
             <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
             <a href="contact.html" class="hover:text-orange-200">contact</a>
           </nav>
-    
           <div class="flex items-center relative drop-shadow-md">
              <div class="flex items-center gap-1 cursor-pointer relative">
                 <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                </svg>
-                <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                    <option value="ko">🇰🇷 한국어</option>
-                    <option value="en">🇺🇸 English</option>
-                    <option value="ja">🇯🇵 日本語</option>
-                    <option value="zh">🇨🇳 中文</option>
-                </select>
              </div>
           </div>
-    
         </div>
     </header>
-
-    <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity duration-300"></div>
-    <nav id="mobile-drawer" class="fixed top-0 left-0 w-[75%] max-w-sm h-full z-50 bg-white shadow-xl text-slate-900 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
-        <div class="p-6">
-          <button id="mobile-menu-close-btn" class="absolute top-4 right-4 text-3xl font-light hover:text-[#ff6900]">&times;</button>
-          <div class="mt-2 mb-8">
-            <span class="text-xl font-bold tracking-tight text-[#ff6900]">Insta hotel</span>
-          </div>
-          <ul class="flex flex-col space-y-4 text-lg font-medium">
-            <li><a href="about.html" class="block hover:text-[#ff6900]">about</a></li>
-            <li>
-                <div class="flex justify-between items-center cursor-pointer hover:text-[#ff6900]" id="rooms-toggle">
-                    <span>rooms</span> <span class="text-sm">▼</span>
-                </div>
-                <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Special</a></li>
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Luxury</a></li>
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Premium</a></li>
-                </ul>
-            </li>
-            <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]">breakfast</a></li>
-            <li><a href="reservation.html" class="block hover:text-[#ff6900] text-[#ff6900]">reservation (예약)</a></li>
-            <li><a href="instaspot.html" class="block hover:text-[#ff6900]">insta spot</a></li>
-            <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
-            <li><a href="contact.html" class="block hover:text-[#ff6900]">contact</a></li>
-          </ul>
-        </div>
-    </nav>
 
     <main class="payment-container">
         <h2 class="page-title">결제하기</h2>
@@ -273,9 +214,9 @@
                         <img src="hero2.jpg" alt="객실 이미지" class="product-img">
                         <div class="product-details">
                             <h3>프리미엄 (Premium)</h3>
-                            <p>일정: 1박 (2025-11-20 ~ 2025-11-21)</p>
-                            <p>인원: 성인 2명</p>
-                            <div class="price">105,000원</div>
+                            <p>일정: <span id="display-nights">1박</span> (<span id="display-date-range">날짜 미선택</span>)</p>
+                            <p>인원: 성인 2명 (기본)</p>
+                            <div class="price" id="display-room-price-info">0원</div>
                         </div>
                     </div>
                 </div>
@@ -296,25 +237,19 @@
 
                 <div class="section-card">
                     <div class="section-title">추가정보 입력</div>
-                    
                     <div class="info-box">
                         예약 확정은 이메일 또는 카카오톡 알림을 받으셔야 완료됩니다.
                     </div>
-
                     <p class="notice-text">
                         <strong>예약과 관련하여 •</strong><br>
                         * insta hotel email (yhl5258@naver.com)을 받으셔야 예약 확정이 된 것입니다.<br>
                         * 체크인 당일 현장에서 예약자 본인 확인이 진행됩니다.
                     </p>
-
                     <label class="confirm-check">
                         <input type="radio" name="confirm1"> 내용을 확인했습니다.
                     </label>
-
                     <br>
-                    <p class="notice-text" style="color:#333; font-weight:bold;">
-                        요청사항 입력
-                    </p>
+                    <p class="notice-text" style="color:#333; font-weight:bold;">요청사항 입력</p>
                     <p class="notice-text">이메일로 소통 가능합니다.</p>
                     <textarea rows="4" placeholder="호텔에 전달하실 내용이 있다면 입력해주세요."></textarea>
                 </div>
@@ -344,27 +279,23 @@
                     <div class="section-title">최종 결제금액</div>
                     <div class="price-summary-row">
                         <span>객실 가격</span>
-                        <span>105,000원</span>
+                        <span id="summary-room-price">0원</span>
                     </div>
                     <div class="price-summary-row">
                         <span>옵션(조식 등)</span>
-                        <span>0원</span>
+                         <span id="summary-option-price">0원</span>
                     </div>
                     <div class="total-price-row">
                         <span>총 결제금액</span>
-                        <span class="total-price">105,000원</span>
+                         <span class="total-price" id="summary-total-price">0원</span>
                     </div>
                 </div>
 
                 <div class="section-card">
                     <div class="section-title">결제수단</div>
                     <div class="payment-method">
-                        <label>
-                            <input type="radio" name="payment" checked> 신용카드
-                        </label>
-                        <label>
-                            <input type="radio" name="payment"> 계좌이체
-                        </label>
+                        <label><input type="radio" name="payment" checked> 신용카드</label>
+                        <label><input type="radio" name="payment"> 계좌이체</label>
                     </div>
                 </div>
 
@@ -383,7 +314,7 @@
                     </ul>
                 </div>
 
-                <button class="btn-submit">결제하기</button>
+                <button class="btn-submit" onclick="alert('결제가 완료되었습니다! (데모)')">결제하기</button>
 
             </div>
         </div>
@@ -392,20 +323,11 @@
     <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
         <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
           <div class="flex justify-center gap-4 text-lg"> 
-              <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank">
-                  <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
-              </a>
-              <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
-                  <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
-              </a>
-              <a href="http://pf.kakao.com/_xiITuG" target="_blank">
-                  <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
-              </a>
-              <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
-                  <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
-              </a>        
+              <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank"><img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24"></a>
+              <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank"><img src="icons8-네이버-64.png" alt="Naver" width="24" height="24"></a>
+              <a href="http://pf.kakao.com/_xiITuG" target="_blank"><img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24"></a>
+              <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>       
           </div>
-  
           <div class="space-y-1">
             <p>insta hotel mainbranch, Korea</p>
             <p id="companyName">(주)호텔인스타</p>
@@ -414,83 +336,44 @@
             <p id="address">수원시 영통구 영통로 94-6</p>
             <p>Business License 176-24-01388 | Tel 031-203-4301</p>
           </div>
-  
-          <div class="flex justify-center gap-4 pt-2">
-            <a href="#" class="hover:underline" id="terms">이용약관</a>
-            <a href="#" class="hover:underline" id="privacy">개인정보처리방침</a>
-          </div>
         </div>
     </section>
 
-    <a href="http://pf.kakao.com/_xiITuG" target="_blank"
-      class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#FFEB00] text-black px-4 py-2 rounded-full shadow-lg hover:bg-yellow-400 transition-colors font-bold">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-        <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
-      </svg>
-      <span id="inquiryBtn" class="text-lg">문의</span>
-    </a>
-
     <script>
-        // --- 헤더 동작 및 다국어 스크립트 (기본 기능만 포함) ---
-        const header = document.getElementById("header");
-        const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-        const mobileDrawer = document.getElementById("mobile-drawer");
-        const drawerOverlay = document.getElementById("drawer-overlay");
-        const mobileCloseBtn = document.getElementById("mobile-menu-close-btn");
-        const roomsToggle = document.getElementById("rooms-toggle");
-        const roomsSubmenu = document.getElementById("rooms-submenu");
+        // --- 데이터 로드 스크립트 ---
+        window.onload = function() {
+            // 1. URL에서 파라미터 가져오기
+            const params = new URLSearchParams(window.location.search);
+            
+            // 데이터 추출 (없으면 기본값 0 또는 빈 문자열)
+            const checkin = params.get('checkin');
+            const checkout = params.get('checkout');
+            const nights = params.get('nights') || '0';
+            const roomPrice = parseInt(params.get('roomPrice')) || 0;
+            const optionPrice = parseInt(params.get('optionPrice')) || 0;
+            const total = parseInt(params.get('total')) || 0;
 
-        window.addEventListener("scroll", () => {
-            // 항상 주황색 배경 유지 (통일성)
-            header.classList.add("bg-[#ff6900]", "shadow-lg");
-        });
+            // 2. 데이터가 없다면 (잘못된 접근) 처리
+            if(!checkin || !checkout) {
+                // 필요하다면 alert('올바르지 않은 접근입니다.'); history.back(); 등을 사용할 수 있습니다.
+                // 여기서는 데모를 위해 그냥 둡니다.
+            }
 
-        function openMenu() {
-            mobileDrawer.classList.remove("-translate-x-full");
-            drawerOverlay.classList.remove("hidden");
-            document.body.style.overflow = "hidden"; 
-        }
-        function closeMenu() {
-            mobileDrawer.classList.add("-translate-x-full");
-            drawerOverlay.classList.add("hidden");
-            document.body.style.overflow = ""; 
-        }
+            // 3. 숫자 포맷팅 함수 (10,000원 형태)
+            const fmt = (n) => n.toLocaleString() + '원';
 
-        if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMenu);
-        if (mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMenu);
-        if (drawerOverlay) drawerOverlay.addEventListener("click", closeMenu);
-        if(roomsToggle && roomsSubmenu){
-            roomsToggle.addEventListener("click", () => {
-                roomsSubmenu.classList.toggle("hidden");
-            });
-        }
+            // 4. HTML 요소에 값 넣기
+            
+            // 왼쪽: 상품 정보 영역
+            document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
+            document.getElementById('display-nights').innerText = `${nights}박`;
+            document.getElementById('display-room-price-info').innerText = fmt(roomPrice); // 객실 가격 표시
 
-        // 언어 변경 로직 (결제 페이지용 간소화: 푸터 정보만 변경 예시)
-        const headerSelect = document.getElementById("header-lang-select");
-        const currentFlagIcon = document.getElementById("current-flag-icon");
-
-        const translations = {
-            ko: { flag: "🇰🇷", company: "(주)호텔인스타", ceo: "대표자 : 이영환", biz: "통신판매업 신고번호: 2023-수원영통-1696호", addr: "수원시 영통구 영통로 94-6" },
-            en: { flag: "🇺🇸", company: "Insta Hotel Co., Ltd.", ceo: "CEO: Lee Young Hwan", biz: "Registration: 2023-Suwon Yeongtong-1696", addr: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si" },
-            ja: { flag: "🇯🇵", company: "インスタホテル株式会社", ceo: "代表者 : イ・ヨンファン", biz: "登録番号: 2023-水原霊通-1696", addr: "水原市霊通区霊通路94-6" },
-            zh: { flag: "🇨🇳", company: "Insta Hotel有限公司", ceo: "代表：李永焕", biz: "注册号：2023-水原灵通-1696", addr: "水原市灵通区灵通路94-6" }
+            // 오른쪽: 금액 요약 영역
+            document.getElementById('summary-room-price').innerText = fmt(roomPrice);
+            document.getElementById('summary-option-price').innerText = fmt(optionPrice);
+            document.getElementById('summary-total-price').innerText = fmt(total);
         };
-
-        if(headerSelect) {
-            headerSelect.addEventListener("change", (e) => {
-                const lang = e.target.value;
-                const t = translations[lang] || translations.ko;
-                
-                // 플래그 업데이트
-                currentFlagIcon.textContent = t.flag;
-
-                // 푸터 정보 업데이트
-                document.getElementById("companyName").innerText = t.company;
-                document.getElementById("ceoName").innerText = t.ceo;
-                document.getElementById("bizNumber").innerText = t.biz;
-                document.getElementById("address").innerText = t.addr;
-            });
-        }
     </script>
 </body>
 </html>
