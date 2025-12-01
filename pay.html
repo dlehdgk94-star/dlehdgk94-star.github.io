@@ -176,6 +176,52 @@
         }
         .btn-submit:hover { background-color: #e05e00; }
 
+        /* 팝업 모달 스타일 */
+        .modal {
+            display: none; /* 기본적으로 숨김 */
+            position: fixed; 
+            z-index: 100; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.5); /* 반투명 배경 */
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 10px;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
         @media (max-width: 768px) {
             .payment-container { padding-top: 80px; }
             .checkout-grid { grid-template-columns: 1fr; gap: 20px; }
@@ -314,7 +360,7 @@
                         </li>
                         <li>
                             <label><input type="checkbox" class="chk-sub"> 개인정보 수집 및 이용 동의</label>
-                            <span class="term-link">약관보기</span>
+                            <span class="term-link" onclick="openModal()">약관보기</span>
                         </li>
                         <li>
                             <label><input type="checkbox" class="chk-sub"> 구매조건 확인 및 결제진행 동의</label>
@@ -327,6 +373,13 @@
             </div>
         </div>
     </main>
+
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <img src="1.png" alt="개인정보 수집 및 이용 동의" style="width: 100%;">
+        </div>
+    </div>
 
     <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
         <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
@@ -350,19 +403,13 @@
     <script>
         // --- 데이터 로드 스크립트 ---
         window.onload = function() {
-            // 1. URL에서 파라미터 가져오기
             const params = new URLSearchParams(window.location.search);
-            
             const checkin = params.get('checkin');
             const checkout = params.get('checkout');
             const nights = params.get('nights') || '0';
             const roomPrice = parseInt(params.get('roomPrice')) || 0;
             const optionPrice = parseInt(params.get('optionPrice')) || 0;
             const total = parseInt(params.get('total')) || 0;
-
-            if(!checkin || !checkout) {
-                // 필요하다면 alert('올바르지 않은 접근입니다.');
-            }
 
             const fmt = (n) => n.toLocaleString() + '원';
 
@@ -379,12 +426,10 @@
         const chkAll = document.getElementById('chk-all');
         const subChks = document.querySelectorAll('.chk-sub');
 
-        // 전체 동의 클릭 시 하위 체크박스 동기화
         chkAll.addEventListener('change', function() {
             subChks.forEach(chk => chk.checked = this.checked);
         });
 
-        // 하위 체크박스 개별 클릭 시 전체 동의 상태 변경
         subChks.forEach(chk => {
             chk.addEventListener('change', function() {
                 const allChecked = Array.from(subChks).every(c => c.checked);
@@ -392,24 +437,36 @@
             });
         });
 
+        // --- 팝업 모달 함수 ---
+        const modal = document.getElementById("termsModal");
+
+        function openModal() {
+            modal.style.display = "flex"; // flex로 보이게 하여 중앙 정렬
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        // 모달 밖을 클릭하면 닫히게 설정
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
         // --- 결제 요청 함수 (유효성 검사) ---
         function requestPayment() {
-            // 1. 확인 사항 체크 여부 (라디오)
             const isInfoChecked = document.getElementById('chk-info').checked;
-            // 2. 환불 규정 체크 여부 (체크박스)
             const isRefundChecked = document.getElementById('chk-refund').checked;
-            // 3. 약관 전체 동의 체크 여부 (체크박스)
             const isTermsChecked = document.getElementById('chk-all').checked;
 
-            // 하나라도 체크 안되어 있으면 경고
             if (!isInfoChecked || !isRefundChecked || !isTermsChecked) {
                 alert('모두 동의를 해야 결제를 할 수 있습니다.');
                 return;
             }
 
-            // 모든 체크가 완료되면 결제 로직 실행
             alert('결제가 완료되었습니다! (데모)');
-            // 실제 결제 API 연동은 여기에 작성
         }
     </script>
 </body>
