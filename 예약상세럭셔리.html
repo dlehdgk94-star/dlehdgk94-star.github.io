@@ -305,7 +305,7 @@
           <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
             <a href="about.html" class="hover:text-orange-200" data-i18n="nav_about">about</a>
             <a href="rooms.html" class="hover:text-orange-200" data-i18n="nav_rooms">rooms</a>
-            <a <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a> 
+            <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a> 
             <a href="reservation.html" class="hover:text-orange-200 underline underline-offset-4" data-i18n="nav_reservation">reservation (예약)</a>
             <a href="instaspot.html" class="hover:text-orange-200">insta spot (관광&맛집&카페)</a>
             <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
@@ -571,7 +571,7 @@
             </div>
 
             <div class="action-container">
-                <button class="btn-reserve-final" onclick="alert('예약 페이지로 넘어갑니다!')" id="btn-reserve-text" data-i18n="btn_reserve">
+                <button class="btn-reserve-final" onclick="goToPayment()" id="btn-reserve-text" data-i18n="btn_reserve">
                     예약하기
                 </button>
                 
@@ -613,7 +613,7 @@
               </a>
               <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
                   <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
-              </a>         
+              </a>          
           </div>
   
           <div class="space-y-1">
@@ -693,25 +693,20 @@
         const translations = {
             ko: {
                 flag: "🇰🇷",
-                // 네비게이션
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
-                // 상세정보 및 메인
                 scroll_hint: "← 옆으로 밀어서 더 보기",
                 desc_header: "상세정보",
                 desc_p1: "[럭셔리]<br>insta hotel은 편안함과 감성을 한눈에 담을 수 있는 공간입니다.<br>은은한 조명과 따뜻한 우드 톤의 객실은 여행과 일상 속에서 잠시 쉬어갈 수 있는 편안한 분위기를 제공합니다.",
                 desc_p2: "객실마다 다른 감성의 공간 연출로 <br>고요한 밤의 분위기를 자연스럽게 느낄 수 있도록 구성했습니다.",
                 desc_p3: "투숙객에게는 편안한 휴식이 될 수 있도록 모든 객실에 Free wi-fi, 편리한 주차 등이 제공됩니다.",
-                // 우측 예약 패널
                 room_title: "럭셔리",
                 checkin_label: "체크인", checkout_label: "체크아웃",
                 msg_select_date: "날짜를 선택해주세요",
                 label_nights: "박", label_total: "총 합계", label_won: "원",
                 opt_header: "조식·룸서비스", opt_sub: "원하는 메뉴를 체크해주세요",
                 btn_reserve: "예약하기",
-                // Footer
                 companyName: "(주)호텔인스타", ceoName: "대표자 : 이영환", bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", address: "수원시 영통구 영통로 94-6",
                 terms: "이용약관", privacy: "개인정보처리방침", inquiryBtn: "문의",
-                // 메뉴 아이템 (Korean format)
                 menu_A1: "[A1] 햄치즈 크라상 샌드위치<br><span style='font-size:11px; color:#888;'>Ham & Cheese Croissant Sandwich</span>",
                 menu_B2: "[B2] 브라운 햄에그 샌드위치<br><span style='font-size:11px; color:#888;'>Brown Ham & Egg Sandwich</span>",
                 menu_C3: "[C3] 햄&치즈 샌드위치<br><span style='font-size:11px; color:#888;'>Ham & Cheese Sandwich</span>",
@@ -743,7 +738,6 @@
                 btn_reserve: "Book Now",
                 companyName: "Insta Hotel Co., Ltd.", ceoName: "CEO: Lee Young Hwan", bizNumber: "Registration: 2023-Suwon Yeongtong-1696", address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si",
                 terms: "Terms of Use", privacy: "Privacy Policy", inquiryBtn: "Contact",
-                // 메뉴 아이템 (English: Just the English Name)
                 menu_A1: "[A1] Ham & Cheese Croissant Sandwich",
                 menu_B2: "[B2] Brown Ham & Egg Sandwich",
                 menu_C3: "[C3] Ham & Cheese Sandwich",
@@ -775,7 +769,6 @@
                 btn_reserve: "予約する",
                 companyName: "インスタホテル株式会社", ceoName: "代表者 : イ・ヨンファン", bizNumber: "登録番号: 2023-水原霊通-1696", address: "水原市霊通区霊通路94-6",
                 terms: "利用規約", privacy: "個人情報処理方針", inquiryBtn: "お問い合わせ",
-                // 메뉴 아이템 (JP + EN Sub)
                 menu_A1: "[A1] ハムチーズクロワッサンサンドイッチ<br><span style='font-size:11px; color:#888;'>Ham & Cheese Croissant Sandwich</span>",
                 menu_B2: "[B2] ブラウンハムエッグサンドイッチ<br><span style='font-size:11px; color:#888;'>Brown Ham & Egg Sandwich</span>",
                 menu_C3: "[C3] ハム＆チーズサンドイッチ<br><span style='font-size:11px; color:#888;'>Ham & Cheese Sandwich</span>",
@@ -807,7 +800,6 @@
                 btn_reserve: "立即预订",
                 companyName: "Insta Hotel有限公司", ceoName: "代表：李永焕", bizNumber: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6",
                 terms: "使用条款", privacy: "隐私政策", inquiryBtn: "咨询",
-                // 메뉴 아이템 (CN + EN Sub)
                 menu_A1: "[A1] 火腿芝士牛角包三明治<br><span style='font-size:11px; color:#888;'>Ham & Cheese Croissant Sandwich</span>",
                 menu_B2: "[B2] 棕色火腿蛋三明治<br><span style='font-size:11px; color:#888;'>Brown Ham & Egg Sandwich</span>",
                 menu_C3: "[C3] 火腿芝士三明治<br><span style='font-size:11px; color:#888;'>Ham & Cheese Sandwich</span>",
@@ -1011,7 +1003,6 @@
                 document.getElementById('total').innerText = "0";
                 document.getElementById('grand-total').innerText = "0";
                 
-                // 날짜 미선택 시 문구도 번역 반영
                 const t = translations[currentLang] || translations.ko;
                 document.getElementById('date-range-text').innerText = t.msg_select_date;
             }
@@ -1058,12 +1049,9 @@
             return totalPrice;
         }
 
-        // 체크박스 중복 계산 로직
+        // 체크박스 중복 계산 로직 (화면 표시용)
         function calculateTotalWrapper() {
-            // 1. 객실 가격 계산
             let roomPrice = calculateTotal();
-            
-            // 2. 옵션 가격 계산
             let optionPrice = 0;
             
             const checkboxes = document.querySelectorAll('.option-checkbox:checked');
@@ -1072,9 +1060,34 @@
                 optionPrice += parseInt(box.value);
             });
 
-            // 3. 최종 합계 표시
             let grandTotal = roomPrice + optionPrice;
             document.getElementById('grand-total').innerText = grandTotal.toLocaleString();
+        }
+
+        // --- [NEW] 결제 페이지로 이동하는 함수 ---
+        function goToPayment() {
+            const checkin = document.getElementById('checkin').value;
+            const checkout = document.getElementById('checkout').value;
+            const nights = document.getElementById('nights').innerText;
+
+            if(!checkin || !checkout) {
+                alert(translations[currentLang].msg_select_date);
+                return;
+            }
+
+            // 가격 재계산 (URL에 넘기기 위해 숫자 값 확보)
+            const roomPrice = calculateTotal(); 
+            let optionPrice = 0;
+            document.querySelectorAll('.option-checkbox:checked').forEach(box => {
+                optionPrice += parseInt(box.value);
+            });
+            const total = roomPrice + optionPrice;
+
+            // URL 파라미터 생성 (GET 방식)
+            const url = `결제럭셔리.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${total}`;
+
+            // 페이지 이동
+            window.location.href = url;
         }
     </script>
 </body>
