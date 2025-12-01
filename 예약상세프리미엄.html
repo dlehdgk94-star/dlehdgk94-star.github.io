@@ -1098,23 +1098,48 @@
             return;
         }
 
-        // 3. 금액 계산 (쉼표 제거 후 정수 변환)
-        // 객실 가격은 기존 함수 calculateTotal()을 호출하여 가져옴
+        // 3. 객실 가격 (기존 함수 사용)
         const roomPrice = calculateTotal(); 
         
-        // 총 합계(화면에 보이는 금액) 가져오기
+        // 4. 총 합계(화면에 보이는 금액) 가져오기
         const totalText = document.getElementById('grand-total').innerText.replace(/,/g, '');
         const grandTotal = parseInt(totalText) || 0;
         
-        // 옵션 가격 = 총 합계 - 객실 가격
+        // 5. 옵션 가격 = 총 합계 - 객실 가격
         const optionPrice = grandTotal - roomPrice;
 
-        // 4. URL 생성 (데이터를 쿼리스트링으로 붙임)
-        const url = `pay.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${grandTotal}`;
-        
-        // 5. 페이지 이동
+        // 6. 선택한 옵션 이름들 수집
+        const selectedOptions = [];
+        const checkedBoxes = document.querySelectorAll('.option-checkbox:checked');
+
+        checkedBoxes.forEach((box) => {
+            const optionLeft = box.closest('.option-left');
+            if (optionLeft) {
+                // 옵션 텍스트(span[data-i18n]) 가져오기 (현재 언어 그대로)
+                const labelSpan = optionLeft.querySelector('span[data-i18n]');
+                if (labelSpan) {
+                    selectedOptions.push(labelSpan.innerText.trim());
+                }
+            }
+        });
+
+        // 7. 옵션 이름 배열을 JSON으로 만들어 URL에 담기
+        const optionDetailsParam = encodeURIComponent(JSON.stringify(selectedOptions));
+
+        // 8. URL 생성 (데이터를 쿼리스트링으로 붙임)
+        const url =
+            `pay.html?` +
+            `checkin=${checkin}` +
+            `&checkout=${checkout}` +
+            `&nights=${nights}` +
+            `&roomPrice=${roomPrice}` +
+            `&optionPrice=${optionPrice}` +
+            `&total=${grandTotal}` +
+            `&optionDetails=${optionDetailsParam}`;
+
+        // 9. 페이지 이동
         location.href = url;
     }
-    </script>
+</script>
 </body>
 </html>
