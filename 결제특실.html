@@ -261,7 +261,31 @@
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
                 <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-              료)</p>
+                    <option value="ko">🇰🇷 한국어</option>
+                    <option value="en">🇺🇸 English</option>
+                    <option value="ja">🇯🇵 日本語</option>
+                    <option value="zh">🇨🇳 中文</option>
+                </select>
+             </div>
+          </div>
+        </div>
+    </header>
+
+    <main class="payment-container">
+        <h2 class="page-title" data-i18n="page_title">결제하기</h2>
+
+        <div class="checkout-grid">
+            
+            <div class="left-column">
+                
+                <div class="section-card">
+                    <div class="section-title" data-i18n="sect_product">예약 상품 정보</div>
+                    <div class="product-info">
+                        <img src="hero10.jpg" alt="객실 이미지" class="product-img">
+                        <div class="product-details">
+                            <h3 data-i18n="room_name">특실 (Special)</h3>
+                            <p><span data-i18n="label_schedule">일정</span>: <span id="display-nights">1박</span> (<span id="display-date-range">날짜 미선택</span>)</p>
+                            <p><span data-i18n="label_guests">인원</span>: 성인 2명 (기본)</p>
                             <div class="price" id="display-room-price-info">0원</div>
                         </div>
                     </div>
@@ -278,7 +302,6 @@
                         </div>
                     </div>
                     <input type="email" id="input-email" placeholder="이메일 (E-mail)">
-                    
                     <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
                 </div>
 
@@ -366,7 +389,7 @@
     <div id="termsModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
-            <img src="약관보기.png" alt="개인정보 수집 및 이용 동의" style="width: 100%;">
+            <img src="1.png" alt="개인정보 수집 및 이용 동의" style="width: 100%;">
         </div>
     </div>
 
@@ -402,7 +425,7 @@
                 
                 page_title: "결제하기",
                 sect_product: "예약 상품 정보",
-                room_name: "프리미엄 (Premium)",
+                room_name: "특실 (Special)",
                 label_schedule: "일정",
                 label_guests: "인원",
                 
@@ -410,7 +433,7 @@
                 ph_name: "이름 (Name)",
                 ph_phone: "연락처 (Phone)",
                 ph_email: "이메일 (E-mail)",
-                ph_request: "요청사항 (Requests)", // 추가된 부분
+                ph_request: "요청사항 (Requests)",
                 
                 sect_extra: "추가정보 입력",
                 notice_confirm_email: "예약 확정은 이메일 알림을 받으셔야 완료됩니다.",
@@ -452,7 +475,7 @@
                 
                 page_title: "Payment",
                 sect_product: "Booking Info",
-                room_name: "Premium",
+                room_name: "Special Room",
                 label_schedule: "Schedule",
                 label_guests: "Guests",
                 
@@ -502,7 +525,7 @@
                 
                 page_title: "決済",
                 sect_product: "予約情報",
-                room_name: "プレミアム (Premium)",
+                room_name: "スペシャルルーム (Special)",
                 label_schedule: "日程",
                 label_guests: "人数",
                 
@@ -552,7 +575,7 @@
                 
                 page_title: "支付",
                 sect_product: "预订信息",
-                room_name: "优选房 (Premium)",
+                room_name: "特别房 (Special)",
                 label_schedule: "日程",
                 label_guests: "人数",
                 
@@ -611,7 +634,7 @@
             document.getElementById('input-name').placeholder = t.ph_name;
             document.getElementById('input-phone').placeholder = t.ph_phone;
             document.getElementById('input-email').placeholder = t.ph_email;
-            document.getElementById('input-request').placeholder = t.ph_request; // 요청사항 번역
+            document.getElementById('input-request').placeholder = t.ph_request;
 
             document.getElementById("companyName").innerText = t.company;
             document.getElementById("ceoName").innerText = t.ceo;
