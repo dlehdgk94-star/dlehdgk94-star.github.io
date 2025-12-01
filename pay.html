@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제하기</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 초기화 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f4f4f4; /* 배경색: 밝은 회색 */
+            color: #333;
+            font-size: 14px;
+        }
+
+        /* 공통 스타일 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+
+        input[type="checkbox"], input[type="radio"] {
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        label {
+            vertical-align: middle;
+        }
+
+        /* 헤더 (Header) */
+        header {
+            background-color: #ff5a00; /* 메인 주황색 */
+            color: white;
+            padding: 15px 0;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            text-transform: lowercase;
+        }
+
+        /* 타이틀 */
+        .page-title {
+            text-align: center;
+            padding: 40px 0;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        /* 메인 레이아웃 (Grid) */
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* 좌측 2 : 우측 1 비율 */
+            gap: 20px;
+            padding-bottom: 60px;
+        }
+
+        /* 섹션 카드 스타일 */
+        .section-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* 좌측: 예약 상품 정보 */
+        .product-info {
+            display: flex;
+            gap: 20px;
+        }
+
+        .product-img {
+            width: 100px;
+            height: 100px;
+            background-color: #eee;
+            object-fit: cover;
+        }
+
+        .product-details h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .product-details p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .price {
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        /* 좌측: 예약자 정보 */
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+        .input-half {
+            width: 50%;
+        }
+
+        /* 좌측: 추가정보 입력 (파란 박스) */
+        .info-box {
+            background-color: #f0f7fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .notice-text {
+            font-size: 12px;
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .confirm-check {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        /* 좌측: 취소 규정 테이블 */
+        .refund-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .refund-table th, .refund-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .refund-table th {
+            background-color: #f9f9f9;
+            width: 60%;
+        }
+
+        /* 우측 사이드바: 최종 결제금액 */
+        .price-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .total-price-row {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .total-price {
+            color: #ff5a00;
+        }
+
+        /* 우측: 결제수단 */
+        .payment-method {
+            margin-bottom: 10px;
+        }
+
+        /* 우측: 약관 동의 */
+        .terms-list {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .terms-list li {
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #666;
+            padding-left: 5px;
+        }
+        
+        .terms-list li.main-check {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            padding-left: 0;
+        }
+
+        .term-link {
+            float: right;
+            color: #ff5a00;
+            text-decoration: underline;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        /* 결제하기 버튼 */
+        .btn-submit {
+            width: 100%;
+            background-color: #ff5a00;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        .btn-submit:hover {
+            background-color: #e65100;
+        }
+
+        /* 푸터 (Footer) */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #888;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+        
+        .footer-icons {
+            margin-bottom: 10px;
+        }
+        
+        .footer-icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 0 5px;
+            text-align: center;
+            line-height: 24px;
+            color: white;
+            font-size: 10px;
+        }
+
+        /* 모바일 대응 (반응형) */
+        @media (max-width: 768px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav ul {
+                display: none; /* 모바일 메뉴 생략 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container header-inner">
+            <a href="#" class="logo">Glue Hotel</a>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#">about</a></li>
+                    <li><a href="#">rooms</a></li>
+                    <li><a href="#">reservation</a></li>
+                    <li><a href="#">bluerain lounge</a></li>
+                    <li><a href="#">contact</a></li>
+                    <li><a href="#">🇰🇷 ▾</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2 class="page-title">결제하기</h2>
+
+        <div class="checkout-grid">
+            
+            <div class="left-column">
+                
+                <div class="section-card">
+                    <div class="section-title">예약 상품 정보</div>
+                    <div class="product-info">
+                        <img src="https://via.placeholder.com/100" alt="객실 이미지" class="product-img">
+                        <div class="product-details">
+                            <h3>슈페리어 더블</h3>
+                            <p>일정: 1박(2026-01-10 ~ 2026-01-11)</p>
+                            <div class="price">130,000원</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-title">예약자 정보</div>
+                    <div class="input-row">
+                        <div class="input-half">
+                            <input type="text" placeholder="이름">
+                        </div>
+                        <div class="input-half">
+                            <input type="text" placeholder="연락처">
+                        </div>
+                    </div>
+                    <input type="email" placeholder="이메일">
+                    <input type="text" placeholder="요청사항">
+                </div>
+
+                <div class="section-card">
+                    <div class="section-title">추가정보 입력</div>
+                    
+                    <div class="info-box">
+                        예약 확정은 이메일을 받으셔야 완료됩니다.
+                    </div>
+
+                    <p class="notice-text">
+                        <strong>예약과 관련하여 •</strong><br>
+                        *예약 후 연락두절이 많은 시 예약이 취소될 수 있으며, 'glue hotel confirmation email'을 받으셔야 예약 확정이 된 것입니다. *패키지를 예약하신 경우, bluerain lounge가 대관으로 사용될 시 제공이 불가하여 부분 취소 될 수 있습니다.
+                    </p>
+
+                    <label class="confirm-check">
+                        <input type="radio" name="confirm1"> 확인했습니다.
+                    </label>
+
+                    <br><br>
+                    <p class="notice-text" style="color:#333;">
+                        패키지 상품을 예약하신 분들은 이용하려는 날짜, 시간을 하단에 꼭 적어주시기 바랍니다. 이메일로 수동되니 반드시 메일을 확인해주세요.
+                    </p>
+                    <textarea rows="4" placeholder="내용을 입력해주세요"></textarea>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-title">취소/환불 규정에 대한 동의</div>
+                    <table class="refund-table">
+                        <tr>
+                            <th>이용 8일 전까지</th>
+                            <td>취소수수료 없음</td>
+                        </tr>
+                        <tr>
+                            <th>이용 당일 ~ 이용 7일 전까지</th>
+                            <td>환불불가능</td>
+                        </tr>
+                    </table>
+                    <label class="confirm-check">
+                        <input type="checkbox"> 동의합니다.
+                    </label>
+                </div>
+
+            </div>
+
+            <div class="right-column">
+                
+                <div class="section-card">
+                    <div class="section-title">최종 결제금액</div>
+                    <div class="price-summary-row">
+                        <span>상품가격</span>
+                        <span>130,000원</span>
+                    </div>
+                    <div class="total-price-row">
+                        <span>총 결제금액</span>
+                        <span class="total-price">130,000원</span>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-title">결제수단</div>
+                    <div class="payment-method">
+                        <label>
+                            <input type="radio" name="payment" checked> 신용카드
+                        </label>
+                    </div>
+                </div>
+
+                <div class="section-card" style="border:none; box-shadow:none; padding: 0;">
+                    <ul class="terms-list">
+                        <li class="main-check">
+                            <label><input type="checkbox"> 전체 동의</label>
+                        </li>
+                        <li>
+                            <label><input type="checkbox"> 개인정보 수집 및 이용 동의</label>
+                            <span class="term-link">약관보기</span>
+                        </li>
+                        <li>
+                            <label><input type="checkbox"> 구매조건 확인 및 결제진행 동의</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <button class="btn-submit">결제하기</button>
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-icons">
+                <span class="footer-icon">N</span>
+                <span class="footer-icon">t</span>
+                <span class="footer-icon">f</span>
+            </div>
+            <p>
+                glue hotel Seoul, Korea<br>
+                (주)글루호텔<br>
+                대표자 : 고원우<br>
+                통신판매업 신고번호 : 2023-서울종로-1653호<br>
+                서울시 종로구 율곡로 228 (이화동 105-2)<br>
+                Business License 216-87-02088 | Tel 02-2024-8400
+            </p>
+            <br>
+            <p>이용약관 | 개인정보처리방침</p>
+        </div>
+        <div style="position: fixed; bottom: 30px; right: 30px; background: #ffe600; padding: 10px 20px; border-radius: 20px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer;">
+            💬 문의
+        </div>
+    </footer>
+
+</body>
+</html>
