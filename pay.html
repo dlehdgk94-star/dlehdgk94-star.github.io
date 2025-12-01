@@ -245,7 +245,7 @@
                         </div>
                     </div>
                     <input type="email" placeholder="이메일 (E-mail)">
-                    </div>
+                </div>
 
                 <div class="section-card">
                     <div class="section-title">추가정보 입력</div>
@@ -259,10 +259,9 @@
                     </p>
                     
                     <label class="confirm-check">
-                        <input type="radio" name="confirm1"> &nbsp;확인했습니다.
+                        <input type="radio" name="confirm1" id="chk-info"> &nbsp;확인했습니다.
                     </label>
-                    
-                    </div>
+                </div>
 
                 <div class="section-card">
                     <div class="section-title">취소/환불 규정에 대한 동의</div>
@@ -277,7 +276,7 @@
                         </tr>
                     </table>
                     <label class="confirm-check">
-                        <input type="checkbox"> &nbsp;취소 및 환불 규정에 동의합니다.
+                        <input type="checkbox" id="chk-refund"> &nbsp;취소 및 환불 규정에 동의합니다.
                     </label>
                 </div>
 
@@ -311,19 +310,19 @@
                 <div class="section-card" style="border:none; box-shadow:none; padding: 0; background:none;">
                     <ul class="terms-list">
                         <li class="main-check">
-                            <label><input type="checkbox"> 전체 동의</label>
+                            <label><input type="checkbox" id="chk-all"> 전체 동의</label>
                         </li>
                         <li>
-                            <label><input type="checkbox"> 개인정보 수집 및 이용 동의</label>
+                            <label><input type="checkbox" class="chk-sub"> 개인정보 수집 및 이용 동의</label>
                             <span class="term-link">약관보기</span>
                         </li>
                         <li>
-                            <label><input type="checkbox"> 구매조건 확인 및 결제진행 동의</label>
+                            <label><input type="checkbox" class="chk-sub"> 구매조건 확인 및 결제진행 동의</label>
                         </li>
                     </ul>
                 </div>
 
-                <button class="btn-submit" onclick="alert('결제가 완료되었습니다! (데모)')">결제하기</button>
+                <button class="btn-submit" onclick="requestPayment()">결제하기</button>
 
             </div>
         </div>
@@ -354,7 +353,6 @@
             // 1. URL에서 파라미터 가져오기
             const params = new URLSearchParams(window.location.search);
             
-            // 데이터 추출 (없으면 기본값 0 또는 빈 문자열)
             const checkin = params.get('checkin');
             const checkout = params.get('checkout');
             const nights = params.get('nights') || '0';
@@ -362,26 +360,57 @@
             const optionPrice = parseInt(params.get('optionPrice')) || 0;
             const total = parseInt(params.get('total')) || 0;
 
-            // 2. 데이터가 없다면 (잘못된 접근) 처리
             if(!checkin || !checkout) {
-                // 필요하다면 alert('올바르지 않은 접근입니다.'); history.back(); 등을 사용할 수 있습니다.
+                // 필요하다면 alert('올바르지 않은 접근입니다.');
             }
 
-            // 3. 숫자 포맷팅 함수 (10,000원 형태)
             const fmt = (n) => n.toLocaleString() + '원';
 
-            // 4. HTML 요소에 값 넣기
-            
-            // 왼쪽: 상품 정보 영역
             document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
             document.getElementById('display-nights').innerText = `${nights}박`;
-            document.getElementById('display-room-price-info').innerText = fmt(roomPrice); // 객실 가격 표시
+            document.getElementById('display-room-price-info').innerText = fmt(roomPrice);
 
-            // 오른쪽: 금액 요약 영역
             document.getElementById('summary-room-price').innerText = fmt(roomPrice);
             document.getElementById('summary-option-price').innerText = fmt(optionPrice);
             document.getElementById('summary-total-price').innerText = fmt(total);
         };
+
+        // --- 전체 동의 체크박스 로직 ---
+        const chkAll = document.getElementById('chk-all');
+        const subChks = document.querySelectorAll('.chk-sub');
+
+        // 전체 동의 클릭 시 하위 체크박스 동기화
+        chkAll.addEventListener('change', function() {
+            subChks.forEach(chk => chk.checked = this.checked);
+        });
+
+        // 하위 체크박스 개별 클릭 시 전체 동의 상태 변경
+        subChks.forEach(chk => {
+            chk.addEventListener('change', function() {
+                const allChecked = Array.from(subChks).every(c => c.checked);
+                chkAll.checked = allChecked;
+            });
+        });
+
+        // --- 결제 요청 함수 (유효성 검사) ---
+        function requestPayment() {
+            // 1. 확인 사항 체크 여부 (라디오)
+            const isInfoChecked = document.getElementById('chk-info').checked;
+            // 2. 환불 규정 체크 여부 (체크박스)
+            const isRefundChecked = document.getElementById('chk-refund').checked;
+            // 3. 약관 전체 동의 체크 여부 (체크박스)
+            const isTermsChecked = document.getElementById('chk-all').checked;
+
+            // 하나라도 체크 안되어 있으면 경고
+            if (!isInfoChecked || !isRefundChecked || !isTermsChecked) {
+                alert('모두 동의를 해야 결제를 할 수 있습니다.');
+                return;
+            }
+
+            // 모든 체크가 완료되면 결제 로직 실행
+            alert('결제가 완료되었습니다! (데모)');
+            // 실제 결제 API 연동은 여기에 작성
+        }
     </script>
 </body>
 </html>
