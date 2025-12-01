@@ -23,11 +23,7 @@
         @media (max-width: 768px) {
             .reservation-container { flex-direction: column; margin-top: 80px; }
             .left-column, .right-column { width: 100%; }
-            
-            /* 모바일에서 이미지 높이 축소 */
-            .main-image { 
-                height: 300px !important; 
-            }
+            .main-image { height: 300px !important; }
         }
         
         .left-column { flex: 1.5; }
@@ -37,7 +33,7 @@
             width: 100%; 
             height: 500px; /* PC 기본 높이 */
             background-color: #ddd; 
-            background-image: url('hero11.jpg'); 
+            background-image: url('hero10.jpg'); 
             background-size: cover; 
             background-position: center; 
             border-radius: 4px; 
@@ -50,10 +46,7 @@
            --------------------------------------------------------- */
         
         /* 썸네일 전체를 감싸는 컨테이너 */
-        .thumbnail-wrapper {
-            position: relative;
-            margin-bottom: 40px; 
-        }
+        .thumbnail-wrapper { position: relative; margin-bottom: 40px; }
 
         /* 오른쪽 그라데이션 효과 */
         .thumbnail-wrapper::after {
@@ -76,7 +69,7 @@
             margin-bottom: 5px;
             text-align: right;
             padding-right: 5px;
-            display: none; /* PC 숨김 */
+            display: none; 
             animation: blink 2s infinite;
         }
 
@@ -316,7 +309,7 @@
           <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
             <a href="about.html" class="hover:text-orange-200" data-i18n="nav_about">about</a>
             <a href="rooms.html" class="hover:text-orange-200" data-i18n="nav_rooms">rooms</a>
-            <a <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>   
+            <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a> 
             <a href="reservation.html" class="hover:text-orange-200 underline underline-offset-4" data-i18n="nav_reservation">reservation (예약)</a>
             <a href="instaspot.html" class="hover:text-orange-200">insta spot (관광&맛집&카페)</a>
             <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
@@ -356,7 +349,7 @@
                     <span data-i18n="nav_rooms">rooms</span> <span class="text-sm">▼</span>
                 </div>
                 <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
-                     <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
                     <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Special</a></li>
                     <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Luxury</a></li>
                     <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Premium</a></li>
@@ -387,7 +380,7 @@
 
 
     <main class="reservation-container">
-       <div class="left-column">
+        <div class="left-column">
             <div class="main-image" id="main-photo" style="background-image: url('hero10.jpg');"></div>
             
             <div class="thumbnail-wrapper">
@@ -581,7 +574,7 @@
             </div>
 
             <div class="action-container">
-               <button class="btn-reserve-final" onclick="goToPayment()" id="btn-reserve-text" data-i18n="btn_reserve">
+                <button class="btn-reserve-final" onclick="goToPayment()" id="btn-reserve-text" data-i18n="btn_reserve">
     예약하기
 </button>
                 
@@ -611,37 +604,29 @@
 
     <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
         <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
-          <div class="flex justify-center gap-4 text-lg"> 
-              <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank">
-                  <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
-              </a>
-              <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
-                  <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
-              </a>
-              <a href="http://pf.kakao.com/_xiITuG" target="_blank">
-                  <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
-              </a>
-              <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
-                  <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
-              </a>          
-          </div>
-  
-          <div class="space-y-1">
-            <p>insta hotel mainbranch, Korea</p>
-            <p id="companyName">(주)호텔인스타</p>
-            <p id="ceoName">대표자 : 이영환</p>
-            <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
-            <p id="address">수원시 영통구 영통로 94-6</p>
-            <p>Business License 176-24-01388 | Tel 031-203-4301</p>
-          </div>
-  
-          <div class="flex justify-center gap-4 pt-2">
-            <a href="#" class="hover:underline" id="terms">이용약관</a>
-            <a href="#" class="hover:underline" id="privacy">개인정보처리방침</a>
-          </div>
+            <div class="flex justify-center gap-4 text-lg"> 
+                <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank"><img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24"></a>
+                <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank"><img src="icons8-네이버-64.png" alt="Naver" width="24" height="24"></a>
+                <a href="http://pf.kakao.com/_xiITuG" target="_blank"><img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24"></a>
+                <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>        
+            </div>
+            
+            <div class="space-y-1">
+                <p>insta hotel mainbranch, Korea</p>
+                <p id="companyName">(주)호텔인스타</p>
+                <p id="ceoName">대표자 : 이영환</p>
+                <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
+                <p id="address">수원시 영통구 영통로 94-6</p>
+                <p>Business License 176-24-01388 | Tel 031-203-4301</p>
+            </div>
+            
+            <div class="flex justify-center gap-4 pt-2">
+                <a href="#" class="hover:underline" id="terms">이용약관</a>
+                <a href="#" class="hover:underline" id="privacy">개인정보처리방침</a>
+            </div>
         </div>
     </section>
-  
+    
     <a href="http://pf.kakao.com/_xiITuG" target="_blank"
       class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#FFEB00] text-black px-4 py-2 rounded-full shadow-lg hover:bg-yellow-400 transition-colors font-bold">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
@@ -691,7 +676,7 @@
         }
 
         if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMenu);
-        if (mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMenu);
+        if (mobileCloseBtn) mobileMenuBtn.addEventListener("click", closeMenu); // 수정: close button uses closeMenu function
         if (drawerOverlay) drawerOverlay.addEventListener("click", closeMenu);
         if(roomsToggle && roomsSubmenu){
             roomsToggle.addEventListener("click", () => {
@@ -753,21 +738,7 @@
                 btn_reserve: "Book Now",
                 companyName: "Insta Hotel Co., Ltd.", ceoName: "CEO: Lee Young Hwan", bizNumber: "Registration: 2023-Suwon Yeongtong-1696", address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si",
                 terms: "Terms of Use", privacy: "Privacy Policy", inquiryBtn: "Contact",
-                // 메뉴 아이템 (English: Just the English Name)
-                menu_A1: "[A1] Ham & Cheese Croissant Sandwich",
-                menu_B2: "[B2] Brown Ham & Egg Sandwich",
-                menu_C3: "[C3] Ham & Cheese Sandwich",
-                menu_D4: "[D4] Lunch Sandwich",
-                menu_E5: "[E5] Chili Crab Sandwich",
-                menu_F6: "[F6] Fresh Mini Burger",
-                menu_J10: "[J10] Egg Salad Sandwich",
-                menu_G7: "[G7] Protein-packed Chicken Egg Salad",
-                menu_H8: "[H8] Crispy Chicken Salad",
-                menu_I9: "[I9] Cranberry Chicken Ricotta Salad",
-                menu_K11: "[K11] Milk (300ml)",
-                menu_L12: "[L12] Banana Milk (240ml)",
-                menu_M13: "[M13] Orange Juice (350ml)",
-                menu_N14: "[N14] Coffee - Americano",
+                menu_A1: "[A1] Ham & Cheese Croissant Sandwich", menu_B2: "[B2] Brown Ham & Egg Sandwich", menu_C3: "[C3] Ham & Cheese Sandwich", menu_D4: "[D4] Lunch Sandwich", menu_E5: "[E5] Chili Crab Sandwich", menu_F6: "[F6] Fresh Mini Burger", menu_J10: "[J10] Egg Salad Sandwich", menu_G7: "[G7] Protein-packed Chicken Egg Salad", menu_H8: "[H8] Crispy Chicken Salad", menu_I9: "[I9] Cranberry Chicken Ricotta Salad", menu_K11: "[K11] Milk (300ml)", menu_L12: "[L12] Banana Milk (240ml)", menu_M13: "[M13] Orange Juice (350ml)", menu_N14: "[N14] Coffee - Americano",
             },
             ja: {
                 flag: "🇯🇵",
@@ -785,21 +756,7 @@
                 btn_reserve: "予約する",
                 companyName: "インスタホテル株式会社", ceoName: "代表者 : イ・ヨンファン", bizNumber: "登録番号: 2023-水原霊通-1696", address: "水原市霊通区霊通路94-6",
                 terms: "利用規約", privacy: "個人情報処理方針", inquiryBtn: "お問い合わせ",
-                // 메뉴 아이템 (JP + EN Sub)
-                menu_A1: "[A1] ハムチーズクロワッサンサンドイッチ<br><span style='font-size:11px; color:#888;'>Ham & Cheese Croissant Sandwich</span>",
-                menu_B2: "[B2] ブラウンハムエッグサンドイッチ<br><span style='font-size:11px; color:#888;'>Brown Ham & Egg Sandwich</span>",
-                menu_C3: "[C3] ハム＆チーズサンドイッチ<br><span style='font-size:11px; color:#888;'>Ham & Cheese Sandwich</span>",
-                menu_D4: "[D4] ランチサンドイッチ<br><span style='font-size:11px; color:#888;'>Lunch Sandwich</span>",
-                menu_E5: "[E5] チリクラブサンドイッチ<br><span style='font-size:11px; color:#888;'>Chili Crab Sandwich</span>",
-                menu_F6: "[F6] フレッシュミニバーガー<br><span style='font-size:11px; color:#888;'>Fresh Mini Burger</span>",
-                menu_J10: "[J10] エッグサラダサンドイッチ<br><span style='font-size:11px; color:#888;'>Egg Salad Sandwich</span>",
-                menu_G7: "[G7] タンパク質たっぷりチキンエッグサラダ<br><span style='font-size:11px; color:#888;'>Protein-packed Chicken Egg Salad</span>",
-                menu_H8: "[H8] クリスピーチキンサラダ<br><span style='font-size:11px; color:#888;'>Crispy Chicken Salad</span>",
-                menu_I9: "[I9] クランベリーチキンリコッタサラダ<br><span style='font-size:11px; color:#888;'>Cranberry Chicken Ricotta Salad</span>",
-                menu_K11: "[K11] 牛乳 (300ml)<br><span style='font-size:11px; color:#888;'>Milk</span>",
-                menu_L12: "[L12] バナナ牛乳 (240ml)<br><span style='font-size:11px; color:#888;'>Banana Milk</span>",
-                menu_M13: "[M13] オレンジジュース (350ml)<br><span style='font-size:11px; color:#888;'>Orange Juice</span>",
-                menu_N14: "[N14] コーヒー - アメリカーノ<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
+                menu_A1: "[A1] ハムチーズクロワッサンサンドイッチ<br><span style='font-size:11px; color:#888;'>Ham & Cheese Croissant Sandwich</span>", menu_B2: "[B2] ブラウンハムエッグサンドイッチ<br><span style='font-size:11px; color:#888;'>Brown Ham & Egg Sandwich</span>", menu_C3: "[C3] ハム＆チーズサンドイッチ<br><span style='font-size:11px; color:#888;'>Ham & Cheese Sandwich</span>", menu_D4: "[D4] ランチサンドイッチ<br><span style='font-size:11px; color:#888;'>Lunch Sandwich</span>", menu_E5: "[E5] チリクラブサンドイッチ<br><span style='font-size:11px; color:#888;'>Chili Crab Sandwich</span>", menu_F6: "[F6] フレッシュミニバーガー<br><span style='font-size:11px; color:#888;'>Fresh Mini Burger</span>", menu_J10: "[J10] エッグサラダサンドイッチ<br><span style='font-size:11px; color:#888;'>Egg Salad Sandwich</span>", menu_G7: "[G7] タンパク質たっぷりチキンエッグサラダ<br><span style='font-size:11px; color:#888;'>Protein-packed Chicken Egg Salad</span>", menu_H8: "[H8] クリスピーチキンサラダ<br><span style='font-size:11px; color:#888;'>Crispy Chicken Salad</span>", menu_I9: "[I9] クランベリーチキンリコッタサラダ<br><span style='font-size:11px; color:#888;'>Cranberry Chicken Ricotta Salad</span>", menu_K11: "[K11] 牛乳 (300ml)<br><span style='font-size:11px; color:#888;'>Milk</span>", menu_L12: "[L12] バナナ牛乳 (240ml)<br><span style='font-size:11px; color:#888;'>Banana Milk</span>", menu_M13: "[M13] オレンジジュース (350ml)<br><span style='font-size:11px; color:#888;'>Orange Juice</span>", menu_N14: "[N14] コーヒー - アメリカーノ<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
             },
             zh: {
                 flag: "🇨🇳",
@@ -817,39 +774,18 @@
                 btn_reserve: "立即预订",
                 companyName: "Insta Hotel有限公司", ceoName: "代表：李永焕", bizNumber: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6",
                 terms: "使用条款", privacy: "隐私政策", inquiryBtn: "咨询",
-                // 메뉴 아이템 (CN + EN Sub)
-                menu_A1: "[A1] 火腿芝士牛角包三明治<br><span style='font-size:11px; color:#888;'>Ham & Cheese Croissant Sandwich</span>",
-                menu_B2: "[B2] 棕色火腿蛋三明治<br><span style='font-size:11px; color:#888;'>Brown Ham & Egg Sandwich</span>",
-                menu_C3: "[C3] 火腿芝士三明治<br><span style='font-size:11px; color:#888;'>Ham & Cheese Sandwich</span>",
-                menu_D4: "[D4] 午餐三明治<br><span style='font-size:11px; color:#888;'>Lunch Sandwich</span>",
-                menu_E5: "[E5] 辣椒蟹三明治<br><span style='font-size:11px; color:#888;'>Chili Crab Sandwich</span>",
-                menu_F6: "[F6] 新鲜一口迷你汉堡<br><span style='font-size:11px; color:#888;'>Fresh Mini Burger</span>",
-                menu_J10: "[J10] 鸡蛋沙拉三明治<br><span style='font-size:11px; color:#888;'>Egg Salad Sandwich</span>",
-                menu_G7: "[G7] 高蛋白鸡肉鸡蛋沙拉<br><span style='font-size:11px; color:#888;'>Protein-packed Chicken Egg Salad</span>",
-                menu_H8: "[H8] 脆皮鸡肉沙拉<br><span style='font-size:11px; color:#888;'>Crispy Chicken Salad</span>",
-                menu_I9: "[I9] 蔓越莓鸡肉瑞可塔沙拉<br><span style='font-size:11px; color:#888;'>Cranberry Chicken Ricotta Salad</span>",
-                menu_K11: "[K11] 牛奶 (300ml)<br><span style='font-size:11px; color:#888;'>Milk</span>",
-                menu_L12: "[L12] 香蕉牛奶 (240ml)<br><span style='font-size:11px; color:#888;'>Banana Milk</span>",
-                menu_M13: "[M13] 橙汁 (350ml)<br><span style='font-size:11px; color:#888;'>Orange Juice</span>",
-                menu_N14: "[N14] 咖啡 - 美式咖啡<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
+                menu_A1: "[A1] 火腿芝士牛角包三明治<br><span style='font-size:11px; color:#888;'>Ham & Cheese Croissant Sandwich</span>", menu_B2: "[B2] 棕色火腿蛋三明治<br><span style='font-size:11px; color:#888;'>Brown Ham & Egg Sandwich</span>", menu_C3: "[C3] 火腿芝士三明治<br><span style='font-size:11px; color:#888;'>Ham & Cheese Sandwich</span>", menu_D4: "[D4] 午餐三明治<br><span style='font-size:11px; color:#888;'>Lunch Sandwich</span>", menu_E5: "[E5] 辣椒蟹三明治<br><span style='font-size:11px; color:#888;'>Chili Crab Sandwich</span>", menu_F6: "[F6] 新鲜一口迷你汉堡<br><span style='font-size:11px; color:#888;'>Fresh Mini Burger</span>", menu_J10: "[J10] 鸡蛋沙拉三明治<br><span style='font-size:11px; color:#888;'>Egg Salad Sandwich</span>", menu_G7: "[G7] 高蛋白鸡肉鸡蛋沙拉<br><span style='font-size:11px; color:#888;'>Protein-packed Chicken Egg Salad</span>", menu_H8: "[H8] 脆皮鸡肉沙拉<br><span style='font-size:11px; color:#888;'>Crispy Chicken Salad</span>", menu_I9: "[I9] 蔓越莓鸡肉瑞可塔沙拉<br><span style='font-size:11px; color:#888;'>Cranberry Chicken Ricotta Salad</span>", menu_K11: "[K11] 牛奶 (300ml)<br><span style='font-size:11px; color:#888;'>Milk</span>", menu_L12: "[L12] 香蕉牛奶 (240ml)<br><span style='font-size:11px; color:#888;'>Banana Milk</span>", menu_M13: "[M13] 橙汁 (350ml)<br><span style='font-size:11px; color:#888;'>Orange Juice</span>", menu_N14: "[N14] 咖啡 - 美式咖啡<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
             }
         };
-        
-        // 현재 선택된 언어 (기본값: 한국어)
+
         let currentLang = 'ko';
 
-        const headerSelect = document.getElementById("header-lang-select");
-        const drawerSelect = document.getElementById("drawer-lang-select");
-        const currentFlagIcon = document.getElementById("current-flag-icon");
-
         function updateLanguage(lang) {
-            currentLang = lang; // 전역 변수 업데이트
+            currentLang = lang; 
             const t = translations[lang] || translations.ko;
             
-            // 1. 플래그 아이콘 업데이트
             if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
 
-            // 2. ID를 사용하는 요소 업데이트 (Footer 등)
             const textIds = [
                 "companyName", "ceoName", "bizNumber", "address",
                 "terms", "privacy", "inquiryBtn"
@@ -859,23 +795,22 @@
                 if(el && t[id]) el.innerText = t[id];
             });
 
-            // 3. data-i18n 속성을 사용하는 모든 요소 업데이트
             const elements = document.querySelectorAll('[data-i18n]');
             elements.forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (t[key]) {
-                    el.innerHTML = t[key]; // HTML 태그(br 등) 포함을 위해 innerHTML 사용
+                    el.innerHTML = t[key]; 
                 }
             });
 
-            // 4. 화폐 단위(원/KRW 등) 업데이트 (class="currency-unit")
             const currencyUnits = document.querySelectorAll('.currency-unit');
             currencyUnits.forEach(el => {
                 el.innerText = t.label_won;
             });
 
-            // 5. 캘린더 다시 그리기 (요일 언어 변경을 위해)
             renderCalendar(currentYear, currentMonth);
+            updateInputValues(); // 언어 변경 후 디스플레이 텍스트 업데이트
+            calculateTotalWrapper(); // 총합계 재계산 (화폐 단위 업데이트)
         }
 
         if(headerSelect) {
@@ -910,7 +845,6 @@
             const calendarBody = document.getElementById('calendar-body');
             const monthTitle = document.getElementById('current-month');
             
-            // 달력 헤더 (연/월 표시 - 영어권은 순서 변경)
             if (currentLang === 'en') {
                 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
                 monthTitle.innerText = `${monthNames[month]} ${year}`;
@@ -920,7 +854,6 @@
             
             calendarBody.innerHTML = "";
 
-            // 요일 배열 (언어별)
             let weekdays = ['일', '월', '화', '수', '목', '금', '토'];
             if (currentLang === 'en') weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             if (currentLang === 'ja') weekdays = ['日', '月', '火', '水', '木', '金', '土'];
@@ -1021,7 +954,6 @@
                 document.getElementById('total').innerText = "0";
                 document.getElementById('grand-total').innerText = "0";
                 
-                // 날짜 미선택 시 문구도 번역 반영
                 const t = translations[currentLang] || translations.ko;
                 document.getElementById('date-range-text').innerText = t.msg_select_date;
             }
@@ -1099,20 +1031,43 @@
             return;
         }
 
-        // 3. 금액 데이터 정제 (쉼표 제거 후 숫자로 변환)
+        // 3. 금액 데이터 정제
         const roomPrice = calculateTotal(); 
-        
-        // 화면에 표시된 총 합계(객실+옵션) 가져오기
         const totalText = document.getElementById('grand-total').innerText.replace(/,/g, '');
         const grandTotal = parseInt(totalText) || 0;
-        
-        // 옵션 가격 계산
         const optionPrice = grandTotal - roomPrice;
 
-        // ▼▼▼ [중요] 여기가 수정되었습니다! (pay.html -> 결제특실.html) ▼▼▼
-        const url = `결제특실.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${grandTotal}`;
+        // 4. ▼▼▼ 핵심 추가: 선택된 옵션의 이름(텍스트) 수집 및 인코딩 ▼▼▼
+        const selectedOptions = [];
+        const checkedBoxes = document.querySelectorAll('.option-checkbox:checked');
+
+        checkedBoxes.forEach((box) => {
+            const optionLeft = box.closest('.option-left');
+            if (optionLeft) {
+                const labelSpan = optionLeft.querySelector('span[data-i18n]');
+                if (labelSpan) {
+                    // 옵션의 메인 이름만 가져오기 (줄 바꿈 이전 텍스트)
+                    const rawText = labelSpan.innerText.trim(); 
+                    selectedOptions.push(rawText.split('\n')[0].trim());
+                }
+            }
+        });
+
+        // 5. 옵션 이름 배열을 JSON 문자열로 인코딩 (URL에 안전하게 전송)
+        const optionDetailsParam = encodeURIComponent(JSON.stringify(selectedOptions));
+
+        // 6. ▼▼▼ URL 생성 (옵션 리스트 파라미터 추가) ▼▼▼
+        const url =
+            `결제특실.html?` +
+            `checkin=${checkin}` +
+            `&checkout=${checkout}` +
+            `&nights=${nights}` +
+            `&roomPrice=${roomPrice}` +
+            `&optionPrice=${optionPrice}` +
+            `&total=${grandTotal}` +
+            `&optionDetails=${optionDetailsParam}`; // ★ 이 부분이 추가됨!
         
-        // 5. 페이지 이동
+        // 7. 페이지 이동
         location.href = url;
     }
     </script>
