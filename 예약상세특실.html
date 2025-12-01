@@ -12,14 +12,9 @@
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; color: #333; background-color: #fcfcfc; }
         
-        /* ----------------------------------------------------
-           [기존 예약 페이지 전용 Custom CSS] 
-           ---------------------------------------------------- */
-        
-        /* 메인 레이아웃 */
+        /* [기존 예약 페이지 전용 Custom CSS] */
         .reservation-container { max-width: 1200px; margin: 100px auto 40px; display: flex; gap: 50px; padding: 0 20px; align-items: flex-start; }
         
-        /* 미디어 쿼리: 모바일 최적화 */
         @media (max-width: 768px) {
             .reservation-container { flex-direction: column; margin-top: 80px; }
             .left-column, .right-column { width: 100%; }
@@ -27,91 +22,18 @@
         }
         
         .left-column { flex: 1.5; }
-        
-        /* 메인 이미지 영역 */
-        .main-image { 
-            width: 100%; 
-            height: 500px; /* PC 기본 높이 */
-            background-color: #ddd; 
-            background-image: url('hero10.jpg'); 
-            background-size: cover; 
-            background-position: center; 
-            border-radius: 4px; 
-            margin-bottom: 10px; 
-            transition: background-image 0.3s ease-in-out;
-        }
+        .main-image { width: 100%; height: 500px; background-color: #ddd; background-image: url('hero10.jpg'); background-size: cover; background-position: center; border-radius: 4px; margin-bottom: 10px; transition: background-image 0.3s ease-in-out; }
 
-        /* ---------------------------------------------------------
-           썸네일 영역 스타일 (스크롤 힌트 및 그라데이션)
-           --------------------------------------------------------- */
-        
-        /* 썸네일 전체를 감싸는 컨테이너 */
+        /* 썸네일 영역 스타일 */
         .thumbnail-wrapper { position: relative; margin-bottom: 40px; }
+        .thumbnail-wrapper::after { content: ''; position: absolute; top: 25px; right: 0; bottom: 5px; width: 40px; background: linear-gradient(to right, transparent, #fcfcfc); pointer-events: none; z-index: 10; }
+        .scroll-hint { font-size: 11px; color: #ff6900; font-weight: bold; margin-bottom: 5px; text-align: right; padding-right: 5px; display: none; animation: blink 2s infinite; }
+        @media (max-width: 768px) { .scroll-hint { display: block; } }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        .thumbnails { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; padding-right: 30px; -ms-overflow-style: none; scrollbar-width: none; }
+        .thumbnails::-webkit-scrollbar { display: none; }
 
-        /* 오른쪽 그라데이션 효과 */
-        .thumbnail-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 25px; 
-            right: 0;
-            bottom: 5px; 
-            width: 40px; 
-            background: linear-gradient(to right, transparent, #fcfcfc); 
-            pointer-events: none; 
-            z-index: 10;
-        }
-
-        /* 스크롤 힌트 텍스트 (깜빡임 효과) */
-        .scroll-hint {
-            font-size: 11px;
-            color: #ff6900;
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-align: right;
-            padding-right: 5px;
-            display: none; 
-            animation: blink 2s infinite;
-        }
-
-        /* 모바일에서만 힌트 텍스트 보이기 */
-        @media (max-width: 768px) {
-            .scroll-hint { display: block; }
-        }
-
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-
-        /* 썸네일 리스트 스타일 */
-        .thumbnails { 
-            display: flex; 
-            gap: 10px; 
-            overflow-x: auto; 
-            padding-bottom: 5px; 
-            padding-right: 30px; 
-            
-            /* 스크롤바 숨기기 */
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .thumbnails::-webkit-scrollbar {
-            display: none;
-        }
-
-        .thumb { 
-            width: 100px; 
-            height: 70px; 
-            background-color: #eee; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            background-size: cover; 
-            background-position: center; 
-            flex-shrink: 0; 
-            border: 2px solid transparent;
-            transition: 0.2s;
-        }
+        .thumb { width: 100px; height: 70px; background-color: #eee; border-radius: 4px; cursor: pointer; background-size: cover; background-position: center; flex-shrink: 0; border: 2px solid transparent; transition: 0.2s; }
         .thumb:hover { border-color: #ff6900; opacity: 1; }
         
         .description-header { font-size: 14px; font-weight: bold; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: inline-block; }
@@ -688,39 +610,21 @@
         const translations = {
             ko: {
                 flag: "🇰🇷",
-                // 네비게이션
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
-                // 상세정보 및 메인
                 scroll_hint: "← 옆으로 밀어서 더 보기",
                 desc_header: "상세정보",
                 desc_p1: "[특실]<br>insta hotel은 편안함과 감성을 한눈에 담을 수 있는 공간입니다.<br>은은한 조명과 따뜻한 우드 톤의 객실은 여행과 일상 속에서 잠시 쉬어갈 수 있는 편안한 분위기를 제공합니다.",
                 desc_p2: "객실마다 다른 감성의 공간 연출로 <br>고요한 밤의 분위기를 자연스럽게 느낄 수 있도록 구성했습니다.",
                 desc_p3: "투숙객에게는 편안한 휴식이 될 수 있도록 모든 객실에 Free wi-fi, 편리한 주차 등이 제공됩니다.",
-                // 우측 예약 패널
                 room_title: "특실",
                 checkin_label: "체크인", checkout_label: "체크아웃",
                 msg_select_date: "날짜를 선택해주세요",
                 label_nights: "박", label_total: "총 합계", label_won: "원",
                 opt_header: "조식·룸서비스", opt_sub: "원하는 메뉴를 체크해주세요",
                 btn_reserve: "예약하기",
-                // Footer
                 companyName: "(주)호텔인스타", ceoName: "대표자 : 이영환", bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", address: "수원시 영통구 영통로 94-6",
                 terms: "이용약관", privacy: "개인정보처리방침", inquiryBtn: "문의",
-                // 메뉴 아이템 (Korean format)
-                menu_A1: "[A1] 햄치즈 크라상 샌드위치<br><span style='font-size:11px; color:#888;'>Ham & Cheese Croissant Sandwich</span>",
-                menu_B2: "[B2] 브라운 햄에그 샌드위치<br><span style='font-size:11px; color:#888;'>Brown Ham & Egg Sandwich</span>",
-                menu_C3: "[C3] 햄&치즈 샌드위치<br><span style='font-size:11px; color:#888;'>Ham & Cheese Sandwich</span>",
-                menu_D4: "[D4] 런치 샌드위치<br><span style='font-size:11px; color:#888;'>Lunch Sandwich</span>",
-                menu_E5: "[E5] 칠리크랩 샌드위치<br><span style='font-size:11px; color:#888;'>Chili Crab Sandwich</span>",
-                menu_F6: "[F6] Fresh 한입쏙 미니버거<br><span style='font-size:11px; color:#888;'>Fresh Mini Burger</span>",
-                menu_J10: "[J10] 에그 샐러드 샌드위치<br><span style='font-size:11px; color:#888;'>Egg Salad Sandwich</span>",
-                menu_G7: "[G7] 단백질 듬뿍 치킨 에그 샐러드<br><span style='font-size:11px; color:#888;'>Protein-packed Chicken Egg Salad</span>",
-                menu_H8: "[H8] 크리스피 치킨 샐러드<br><span style='font-size:11px; color:#888;'>Crispy Chicken Salad</span>",
-                menu_I9: "[I9] 크랜베리 치킨 리코타 샐러드<br><span style='font-size:11px; color:#888;'>Cranberry Chicken Ricotta Salad</span>",
-                menu_K11: "[K11] 우유 (300ml)<br><span style='font-size:11px; color:#888;'>Milk</span>",
-                menu_L12: "[L12] 바나나 우유 (240ml)<br><span style='font-size:11px; color:#888;'>Banana Milk</span>",
-                menu_M13: "[M13] 오렌지 주스 (350ml)<br><span style='font-size:11px; color:#888;'>Orange Juice</span>",
-                menu_N14: "[N14] 커피 - 아메리카노<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
+                menu_A1: "[A1] 햄치즈 크라상 샌드위치<br><span style='font-size:11px; color:#888;'>Ham & Cheese Croissant Sandwich</span>", menu_B2: "[B2] 브라운 햄에그 샌드위치<br><span style='font-size:11px; color:#888;'>Brown Ham & Egg Sandwich</span>", menu_C3: "[C3] 햄&치즈 샌드위치<br><span style='font-size:11px; color:#888;'>Ham & Cheese Sandwich</span>", menu_D4: "[D4] 런치 샌드위치<br><span style='font-size:11px; color:#888;'>Lunch Sandwich</span>", menu_E5: "[E5] 칠리크랩 샌드위치<br><span style='font-size:11px; color:#888;'>Chili Crab Sandwich</span>", menu_F6: "[F6] Fresh 한입쏙 미니버거<br><span style='font-size:11px; color:#888;'>Fresh Mini Burger</span>", menu_J10: "[J10] 에그 샐러드 샌드위치<br><span style='font-size:11px; color:#888;'>Egg Salad Sandwich</span>", menu_G7: "[G7] 단백질 듬뿍 치킨 에그 샐러드<br><span style='font-size:11px; color:#888;'>Protein-packed Chicken Egg Salad</span>", menu_H8: "[H8] 크리스피 치킨 샐러드<br><span style='font-size:11px; color:#888;'>Crispy Chicken Salad</span>", menu_I9: "[I9] 크랜베리 치킨 리코타 샐러드<br><span style='font-size:11px; color:#888;'>Cranberry Chicken Ricotta Salad</span>", menu_K11: "[K11] 우유 (300ml)<br><span style='font-size:11px; color:#888;'>Milk</span>", menu_L12: "[L12] 바나나 우유 (240ml)<br><span style='font-size:11px; color:#888;'>Banana Milk</span>", menu_M13: "[M13] 오렌지 주스 (350ml)<br><span style='font-size:11px; color:#888;'>Orange Juice</span>", menu_N14: "[N14] 커피 - 아메리카노<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
             },
             en: {
                 flag: "🇺🇸",
@@ -809,8 +713,8 @@
             });
 
             renderCalendar(currentYear, currentMonth);
-            updateInputValues(); // 언어 변경 후 디스플레이 텍스트 업데이트
-            calculateTotalWrapper(); // 총합계 재계산 (화폐 단위 업데이트)
+            updateInputValues(); 
+            calculateTotalWrapper();
         }
 
         if(headerSelect) {
