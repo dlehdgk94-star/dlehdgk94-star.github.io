@@ -28,11 +28,17 @@
             font-family: inherit;
             font-size: 14px;
         }
+        
+        /* 라디오/체크박스 스타일 - 주황색 강조 */
         input[type="checkbox"], input[type="radio"] {
             margin-right: 5px;
             vertical-align: middle;
-            accent-color: #ff6900;
+            accent-color: #ff6900; /* 체크 시 주황색으로 표시됨 */
+            width: 18px; 
+            height: 18px;
+            cursor: pointer;
         }
+        
         label { vertical-align: middle; cursor: pointer; }
 
         /* 타이틀 & 그리드 */
@@ -100,10 +106,12 @@
             margin-bottom: 10px;
         }
         .confirm-check {
-            display: block;
-            margin-top: 10px;
-            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 10px;
             font-size: 14px;
+            font-weight: 500;
         }
 
         /* 테이블 */
@@ -140,7 +148,12 @@
         }
         .total-price { color: #ff6900; font-size: 24px; }
 
-        .payment-method label { margin-right: 15px; font-size: 14px; }
+        .payment-method label { 
+            display: flex; 
+            align-items: center; 
+            margin-right: 15px; 
+            font-size: 14px; 
+        }
         .terms-list { list-style: none; margin-top: 10px; padding: 0; }
         .terms-list li { margin-bottom: 10px; font-size: 13px; color: #666; display: flex; justify-content: space-between; align-items: center; }
         .terms-list li.main-check {
@@ -232,8 +245,7 @@
                         </div>
                     </div>
                     <input type="email" placeholder="이메일 (E-mail)">
-                    <input type="text" placeholder="요청사항 (Requests)">
-                </div>
+                    </div>
 
                 <div class="section-card">
                     <div class="section-title">추가정보 입력</div>
@@ -245,14 +257,12 @@
                         * insta hotel email (yhl5258@naver.com)을 받으셔야 예약 확정이 된 것입니다.<br>
                         * 체크인 당일 현장에서 예약자 본인 확인이 진행됩니다.
                     </p>
+                    
                     <label class="confirm-check">
-                        <input type="radio" name="confirm1"> 내용을 확인했습니다.
+                        <input type="radio" name="confirm1"> &nbsp;확인했습니다.
                     </label>
-                    <br>
-                    <p class="notice-text" style="color:#333; font-weight:bold;">요청사항 입력</p>
-                    <p class="notice-text">이메일로 소통 가능합니다.</p>
-                    <textarea rows="4" placeholder="호텔에 전달하실 내용이 있다면 입력해주세요."></textarea>
-                </div>
+                    
+                    </div>
 
                 <div class="section-card">
                     <div class="section-title">취소/환불 규정에 대한 동의</div>
@@ -267,7 +277,7 @@
                         </tr>
                     </table>
                     <label class="confirm-check">
-                        <input type="checkbox"> 취소 및 환불 규정에 동의합니다.
+                        <input type="checkbox"> &nbsp;취소 및 환불 규정에 동의합니다.
                     </label>
                 </div>
 
@@ -295,7 +305,6 @@
                     <div class="section-title">결제수단</div>
                     <div class="payment-method">
                         <label><input type="radio" name="payment" checked> 신용카드</label>
-                        <label><input type="radio" name="payment"> 계좌이체</label>
                     </div>
                 </div>
 
@@ -356,7 +365,6 @@
             // 2. 데이터가 없다면 (잘못된 접근) 처리
             if(!checkin || !checkout) {
                 // 필요하다면 alert('올바르지 않은 접근입니다.'); history.back(); 등을 사용할 수 있습니다.
-                // 여기서는 데모를 위해 그냥 둡니다.
             }
 
             // 3. 숫자 포맷팅 함수 (10,000원 형태)
