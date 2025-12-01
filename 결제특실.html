@@ -405,8 +405,10 @@
                 } else {
                     const items = optionDetails.map(txt => `<li>${txt}</li>`).join('');
                     optionDetailContainer.innerHTML = `
-                        <span>${t.label_option_list}</span>
-                        <ul>${items}</ul>
+                        <div style="margin-top: 15px;">
+                            <span style="font-weight: bold;">${t.label_option_list}</span>
+                            <ul>${items}</ul>
+                        </div>
                     `;
                 }
             }
@@ -463,8 +465,6 @@
                 return;
             }
 
-            // alert(translations[currentLang].alert_done); // 실제 결제 로직으로 대체됨
-            
             // --- ★ 실제 결제 및 Supabase 트랜잭션 호출 로직이 들어갈 곳 ★ ---
             
             // 1. 폼 데이터 수집
@@ -498,13 +498,10 @@
             // 3. 결제 모듈 호출 (여기서는 생략)
             
             // 4. 결제 성공 가정 후 Supabase 트랜잭션 호출
-            // (실제 구현 시, 이 호출은 결제 모듈의 성공 콜백 내부에 있어야 합니다!)
-            
             // [데모용 트랜잭션 호출]
             // await finalizeBookingTransaction(roomId, checkInDate, checkOutDate, name, email, price); 
             
             alert("결제 모듈 호출 성공! (데모)");
-            // window.location.href = 'confirmation.html'; // 실제로는 확인 페이지로 이동
         }
     </script>
 </body>
