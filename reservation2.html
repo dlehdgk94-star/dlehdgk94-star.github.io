@@ -22,20 +22,14 @@
     .calendar-table { width: 100%; text-align: center; font-size: 13px; color: #888; }
     .calendar-table th { font-weight: 400; padding-bottom: 15px; color: #bbb; }
     
-    /* td 기본 스타일: in-range 연결을 위해 radius 제거 */
+    /* td 기본 스타일 */
     .calendar-table td { padding: 10px 0; cursor: pointer; width: 40px; height: 40px; border-radius: 0; } 
-    /* 호버 효과는 원형으로 */
     .calendar-table td:hover:not(.past-day):not(.selected-day) { color: #FF5000; font-weight: bold; background-color: #fff0e6; border-radius: 50%; }
     
     /* 날짜 상태 */
     .today { color: #FF5000 !important; font-weight: 800 !important; }
-    
-    /* 선택된 날짜 (체크인/아웃) */
     .selected-day { background-color: #FF5000 !important; color: white !important; font-weight: bold; border-radius: 50% !important; z-index: 1; position: relative; }
-    
-    /* 선택된 기간 (범위) */
     .in-range { background-color: #ffe8d9; color: #FF5000; }
-
     .past-day { color: #e0e0e0 !important; pointer-events: none; cursor: default; }
     
     /* 객실 리스트 스타일 */
@@ -52,7 +46,7 @@
     .btn-reserve { padding: 8px 25px; border: 1px solid #ccc; background: white; border-radius: 4px; font-size: 13px; cursor: pointer; transition: 0.2s; white-space: nowrap; display: inline-block; text-align: center; text-decoration: none; color: #333; }
     .btn-reserve:hover { border-color: #333; background-color: #f9f9f9; }
 
-    /* 예약 마감 스타일 (JS로 제어됨) */
+    /* 예약 마감 스타일 */
     .btn-soldout { background-color: #f0f0f0 !important; color: #aaa !important; border-color: #ddd !important; cursor: not-allowed !important; pointer-events: none; }
 
     /* [모바일 달력 팝업 스타일] */
@@ -61,8 +55,7 @@
         border: 1px solid #333; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; background: white; justify-content: space-between; font-weight: 500; cursor: pointer;
     }
     .section-guide::after { content: '\f073'; font-family: "Font Awesome 6 Free"; font-weight: 900; }
-    
-    .modal-buttons { display: none; } /* PC 숨김 */
+    .modal-buttons { display: none; } 
 
     /* [반응형 - 모바일] */
     @media (max-width: 768px) {
@@ -84,7 +77,6 @@
         .btn-cancel { background: white; border: 1px solid #ddd; color: #666; }
         .btn-confirm { background: #111; color: white; }
 
-        /* 객실 카드 모바일형 */
         .room-card { padding: 20px 0; position: relative; }
         .room-img { width: 90px; height: 90px; margin-right: 15px; border-radius: 12px; }
         .room-title { font-size: 15px; }
@@ -310,12 +302,10 @@
 
         <div class="space-y-1">
           <p>insta hotel mainbranch, Korea</p>
-          
           <p id="companyName">(주)호텔인스타</p>
           <p id="ceoName">대표자 : 이영환</p>
           <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
           <p id="address">수원시 영통구 영통로 94-6</p>
-          
           <p>Business License 176-24-01388 | Tel 031-203-4301</p>
         </div>
 
@@ -488,7 +478,7 @@
     // 체크인/체크아웃 변수
     let checkinDate = null;
     let checkoutDate = null;
-    let tempCheckinDate = null; // 모바일 모달용 임시 변수
+    let tempCheckinDate = null; 
 
     const monthYearEl = document.getElementById("current-month-year");
     const calendarBody = document.getElementById("calendar-body");
@@ -511,24 +501,22 @@
         return `${year}-${month}-${day}`;
     }
 
-    // [핵심] 재고 확인 및 예약 버튼 활성/비활성 처리
+    // [핵심] 재고 및 판매가능 여부 확인
     async function checkAvailability() {
         if (!checkinDate || !checkoutDate) return;
 
-        // 1. 조회할 날짜 범위 설정 (체크인 ~ 체크아웃 전날)
         const startDate = formatDateToYMD(checkinDate);
         const endDate = formatDateToYMD(checkoutDate);
         
         console.log(`재고 조회 시작: ${startDate} ~ ${endDate}`);
 
-        // 2. 슈파베이스 Inventory 테이블 조회
-        // 조건: 해당 날짜 구간에 재고(stock)가 0 이하인 방 찾기
+        // ★★★ 여기 수정됨: 재고가 0이거나(OR) is_available이 false인 경우를 찾음
         const { data: soldOutList, error } = await window.supabaseClient
             .from('inventory')
             .select('room_id')
             .gte('date', startDate)
             .lt('date', endDate) // 체크아웃 당일은 숙박하지 않으므로 제외
-            .lte('stock', 0);    // 재고 0 이하
+            .or('stock.lte.0,is_available.eq.false'); // 재고 0 이하 또는 판매불가
 
         if (error) {
             console.error("재고 조회 중 오류 발생:", error);
