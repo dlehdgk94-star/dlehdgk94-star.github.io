@@ -126,6 +126,17 @@
         .share-box:hover { background-color: #f9f9f9; }
         .share-box svg { width: 22px; height: 22px; stroke: #333; stroke-width: 1.5; }
     </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
+    const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
+    
+    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함 (이름 충돌 방지)
+    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
+    
+    console.log("홈페이지-슈파베이스 연결 성공!");
+</script>
 </head>
 <body class="bg-white text-slate-900 font-sans">
 
