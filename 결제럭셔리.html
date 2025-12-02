@@ -148,6 +148,25 @@
         }
         .total-price { color: #ff6900; font-size: 24px; }
 
+        /* [NEW] 선택한 옵션 리스트 스타일 */
+        .option-detail-list { 
+            margin-top: 5px; 
+            margin-bottom: 15px;
+            font-size: 13px; 
+            color: #666; 
+            background-color: #fafafa;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .option-detail-list ul { 
+            margin-top: 4px; 
+            padding-left: 15px; 
+            list-style: disc; 
+        }
+        .option-detail-list li {
+            margin-bottom: 2px;
+        }
+
         .payment-method label { 
             display: flex; 
             align-items: center; 
@@ -364,6 +383,9 @@
                         <span data-i18n="label_option">옵션(조식 등)</span>
                          <span id="summary-option-price">0원</span>
                     </div>
+
+                    <div id="option-detail-list" class="option-detail-list" style="display:none;"></div>
+
                     <div class="total-price-row">
                         <span data-i18n="label_total_price">총 결제금액</span>
                          <span class="total-price" id="summary-total-price">0원</span>
@@ -407,20 +429,20 @@
 
     <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
         <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
-          <div class="flex justify-center gap-4 text-lg"> 
-              <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank"><img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24"></a>
-              <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank"><img src="icons8-네이버-64.png" alt="Naver" width="24" height="24"></a>
-              <a href="http://pf.kakao.com/_xiITuG" target="_blank"><img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24"></a>
-              <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>        
-          </div>
-          <div class="space-y-1">
-            <p>insta hotel mainbranch, Korea</p>
-            <p id="companyName">(주)호텔인스타</p>
-            <p id="ceoName">대표자 : 이영환</p>
-            <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
-            <p id="address">수원시 영통구 영통로 94-6</p>
-            <p>Business License 176-24-01388 | Tel 031-203-4301</p>
-          </div>
+            <div class="flex justify-center gap-4 text-lg"> 
+                <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank"><img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24"></a>
+                <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank"><img src="icons8-네이버-64.png" alt="Naver" width="24" height="24"></a>
+                <a href="http://pf.kakao.com/_xiITuG" target="_blank"><img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24"></a>
+                <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>        
+            </div>
+            <div class="space-y-1">
+                <p>insta hotel mainbranch, Korea</p>
+                <p id="companyName">(주)호텔인스타</p>
+                <p id="ceoName">대표자 : 이영환</p>
+                <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
+                <p id="address">수원시 영통구 영통로 94-6</p>
+                <p>Business License 176-24-01388 | Tel 031-203-4301</p>
+            </div>
         </div>
     </section>
 
@@ -464,6 +486,8 @@
                 label_room_price: "객실 가격",
                 label_option: "옵션(조식 등)",
                 label_total_price: "총 결제금액",
+                
+                label_option_list: "선택한 옵션",
                 
                 sect_method: "결제수단",
                 label_credit_card: "신용카드",
@@ -515,6 +539,8 @@
                 label_option: "Options",
                 label_total_price: "Total Amount",
                 
+                label_option_list: "Selected Options",
+                
                 sect_method: "Payment Method",
                 label_credit_card: "Credit Card",
                 
@@ -565,6 +591,8 @@
                 label_option: "オプション",
                 label_total_price: "総決済金額",
                 
+                label_option_list: "選択したオプション",
+                
                 sect_method: "決済手段",
                 label_credit_card: "クレジットカード",
                 
@@ -614,6 +642,8 @@
                 label_room_price: "客房价格",
                 label_option: "选项",
                 label_total_price: "总支付金额",
+                
+                label_option_list: "已选择的选项",
                 
                 sect_method: "支付方式",
                 label_credit_card: "信用卡",
@@ -668,7 +698,6 @@
 
             const t = translations[currentLang];
             const unit = t.unit_won;
-
             const fmt = (n) => n.toLocaleString() + unit;
 
             if(checkin && checkout) {
@@ -680,6 +709,33 @@
             document.getElementById('summary-room-price').innerText = fmt(roomPrice);
             document.getElementById('summary-option-price').innerText = fmt(optionPrice);
             document.getElementById('summary-total-price').innerText = fmt(total);
+
+            // [NEW] 옵션 상세 리스트 표시 로직
+            const optionContainer = document.getElementById('option-detail-list');
+            const optionDetailsRaw = params.get('optionDetails');
+            let optionDetails = [];
+
+            if (optionDetailsRaw) {
+                try {
+                    optionDetails = JSON.parse(decodeURIComponent(optionDetailsRaw));
+                } catch (e) {
+                    console.error("옵션 파싱 에러", e);
+                }
+            }
+
+            if (optionDetails.length > 0) {
+                // 옵션이 있을 경우 표시
+                optionContainer.style.display = 'block';
+                const listHtml = optionDetails.map(item => `<li>${item}</li>`).join('');
+                optionContainer.innerHTML = `
+                    <div style="font-weight:bold; margin-bottom:5px;">${t.label_option_list}:</div>
+                    <ul>${listHtml}</ul>
+                `;
+            } else {
+                // 옵션이 없을 경우 숨김
+                optionContainer.style.display = 'none';
+                optionContainer.innerHTML = '';
+            }
         }
 
         window.onload = function() {
