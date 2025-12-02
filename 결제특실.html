@@ -6,28 +6,81 @@
     <title>Payment – Insta Hotel - mainbranch</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-
+    
     <style>
         /* [기본 스타일 설정] */
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f4f4f4; color: #333; }
         
-        .payment-container { max-width: 1200px; margin: 0 auto; padding: 100px 20px 60px; }
-        input[type="text"], input[type="email"], textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px; font-family: inherit; font-size: 14px; }
-        input[type="checkbox"], input[type="radio"] { margin-right: 5px; vertical-align: middle; accent-color: #ff6900; width: 18px; height: 18px; cursor: pointer; }
+        .payment-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 60px;
+        }
+
+        /* 폼 스타일 */
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        /* 라디오/체크박스 스타일 - 주황색 강조 */
+        input[type="checkbox"], input[type="radio"] {
+            margin-right: 5px;
+            vertical-align: middle;
+            accent-color: #ff6900;
+            width: 18px; 
+            height: 18px;
+            cursor: pointer;
+        }
+        
         label { vertical-align: middle; cursor: pointer; }
 
         /* 타이틀 & 그리드 */
-        .page-title { text-align: center; padding-bottom: 40px; font-size: 28px; font-weight: 700; color: #333; }
-        .checkout-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        .page-title {
+            text-align: center;
+            padding-bottom: 40px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+        }
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
 
         /* 카드 섹션 */
-        .section-card { background: white; padding: 30px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .section-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px; color: #222; }
+        .section-card {
+            background: white;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            color: #222;
+        }
 
         /* 상품 정보 */
         .product-info { display: flex; gap: 20px; }
-        .product-img { width: 120px; height: 120px; background-color: #eee; object-fit: cover; border-radius: 4px; }
+        .product-img {
+            width: 120px;
+            height: 120px;
+            background-color: #eee;
+            object-fit: cover;
+            border-radius: 4px;
+        }
         .product-details h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
         .product-details p { font-size: 14px; color: #666; margin-bottom: 5px; }
         .price { font-weight: bold; font-size: 18px; margin-top: 15px; color: #ff6900; }
@@ -37,38 +90,156 @@
         .input-half { width: 50%; }
 
         /* 안내 박스 */
-        .info-box { background-color: #fff0e6; border-left: 4px solid #ff6900; padding: 15px; margin-bottom: 20px; font-size: 13px; color: #555; line-height: 1.5; }
-        .notice-text { font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 10px; }
-        .confirm-check { display: flex; align-items: center; margin-top: 15px; margin-bottom: 10px; font-size: 14px; font-weight: 500; }
+        .info-box {
+            background-color: #fff0e6;
+            border-left: 4px solid #ff6900;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+        }
+        .notice-text {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .confirm-check {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 500;
+        }
 
         /* 테이블 */
-        .refund-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 15px; }
-        .refund-table th, .refund-table td { border: 1px solid #eee; padding: 12px; text-align: left; }
+        .refund-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        .refund-table th, .refund-table td {
+            border: 1px solid #eee;
+            padding: 12px;
+            text-align: left;
+        }
         .refund-table th { background-color: #f9f9f9; width: 60%; font-weight: 600; }
 
         /* 우측 결제 요약 */
-        .price-summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px; color: #555; }
-        .total-price-row { display: flex; justify-content: space-between; border-top: 2px solid #eee; padding-top: 20px; margin-top: 10px; font-weight: bold; font-size: 18px; align-items: center; }
+        .price-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+        .total-price-row {
+            display: flex;
+            justify-content: space-between;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            align-items: center;
+        }
         .total-price { color: #ff6900; font-size: 24px; }
 
-        .payment-method label { display: flex; align-items: center; margin-right: 15px; font-size: 14px; }
+        /* [NEW] 선택한 옵션 리스트 스타일 추가 */
+        .option-detail-list { 
+            margin-top: 5px; 
+            margin-bottom: 15px;
+            font-size: 13px; 
+            color: #666; 
+            background-color: #fafafa;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .option-detail-list ul { 
+            margin-top: 4px; 
+            padding-left: 15px; 
+            list-style: disc; 
+        }
+        .option-detail-list li {
+            margin-bottom: 2px;
+        }
+
+        .payment-method label { 
+            display: flex; 
+            align-items: center; 
+            margin-right: 15px; 
+            font-size: 14px; 
+        }
         .terms-list { list-style: none; margin-top: 10px; padding: 0; }
         .terms-list li { margin-bottom: 10px; font-size: 13px; color: #666; display: flex; justify-content: space-between; align-items: center; }
-        .terms-list li.main-check { font-weight: bold; color: #333; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .terms-list li.main-check {
+            font-weight: bold; color: #333; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;
+        }
         .term-link { color: #888; text-decoration: underline; font-size: 11px; cursor: pointer; }
 
-        .btn-submit { width: 100%; background-color: #ff6900; color: white; border: none; padding: 18px; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 4px; transition: background-color 0.2s; margin-top: 20px; }
+        .btn-submit {
+            width: 100%;
+            background-color: #ff6900;
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            margin-top: 20px;
+        }
         .btn-submit:hover { background-color: #e05e00; }
 
-        /* ✅ 선택한 옵션 리스트 스타일 */
-        .option-detail-list { margin-top: 8px; font-size: 13px; color: #666; line-height: 1.6; }
-        .option-detail-list ul { margin-top: 4px; padding-left: 18px; list-style: disc; }
-
         /* 팝업 모달 스타일 */
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
-        .modal-content { background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 600px; border-radius: 8px; position: relative; max-height: 90vh; overflow-y: auto; }
-        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; position: absolute; right: 20px; top: 10px; }
-        .close-btn:hover, .close-btn:focus { color: black; text-decoration: none; cursor: pointer; }
+        .modal {
+            display: none;
+            position: fixed; 
+            z-index: 100; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.5); 
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 10px;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
         @media (max-width: 768px) {
             .payment-container { padding-top: 80px; }
@@ -77,53 +248,56 @@
             .product-img { width: 80px; height: 80px; }
         }
     </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
-        const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
-        window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
-        console.log("홈페이지-슈파베이스 연결 성공!");
-    </script>
+<script>
+    const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
+    const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
+    
+    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함 (이름 충돌 방지)
+    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
+    
+    console.log("홈페이지-슈파베이스 연결 성공!");
+</script>
 </head>
 <body class="bg-[#f4f4f4] text-slate-900 font-sans">
 
     <header id="header" class="fixed top-0 left-0 right-0 z-30 text-white transition-colors duration-300 bg-[#ff6900] shadow-lg">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
-            <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                </svg>
-            </button>
-            <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md">
-                <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
-                <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
-            </a>
-            
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
-                <a href="about.html" class="hover:text-orange-200" data-i18n="nav_about">about</a>
-                <a href="rooms.html" class="hover:text-orange-200" data-i18n="nav_rooms">rooms</a>
-                <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>
-                <a href="reservation.html" class="hover:text-orange-200 underline underline-offset-4" data-i18n="nav_reservation">reservation</a>
-                <a href="instaspot.html" class="hover:text-orange-200">insta spot</a>
-                <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
-                <a href="contact.html" class="hover:text-orange-200" data-i18n="nav_contact">contact</a>
-            </nav>
+          <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+          <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md">
+            <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
+            <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
+          </a>
+          
+          <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
+            <a href="about.html" class="hover:text-orange-200" data-i18n="nav_about">about</a>
+            <a href="rooms.html" class="hover:text-orange-200" data-i18n="nav_rooms">rooms</a>
+            <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>
+            <a href="reservation.html" class="hover:text-orange-200 underline underline-offset-4" data-i18n="nav_reservation">reservation</a>
+            <a href="instaspot.html" class="hover:text-orange-200">insta spot</a>
+            <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
+            <a href="contact.html" class="hover:text-orange-200" data-i18n="nav_contact">contact</a>
+          </nav>
 
-            <div class="flex items-center relative drop-shadow-md">
-               <div class="flex items-center gap-1 cursor-pointer relative">
-                  <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                  </svg>
-                  <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                      <option value="ko">🇰🇷 한국어</option>
-                      <option value="en">🇺🇸 English</option>
-                      <option value="ja">🇯🇵 日本語</option>
-                      <option value="zh">🇨🇳 中文</option>
-                  </select>
-               </div>
-            </div>
+          <div class="flex items-center relative drop-shadow-md">
+             <div class="flex items-center gap-1 cursor-pointer relative">
+                <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+                <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
+                    <option value="ko">🇰🇷 한국어</option>
+                    <option value="en">🇺🇸 English</option>
+                    <option value="ja">🇯🇵 日本語</option>
+                    <option value="zh">🇨🇳 中文</option>
+                </select>
+             </div>
+          </div>
         </div>
     </header>
 
@@ -137,29 +311,45 @@
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_product">예약 상품 정보</div>
                     <div class="product-info">
-                        <img src="hero10.jpg" alt="객실 이미지" class="product-img">
+                        <img src="hero2.jpg" alt="객실 이미지" class="product-img">
                         <div class="product-details">
-                            <h3 data-i18n="room_name">특실 (Special)</h3>
+                            <h3 data-i18n="room_name">디럭스 (Deluxe)</h3>
                             <p><span data-i18n="label_schedule">일정</span>: <span id="display-nights">1박</span> (<span id="display-date-range">날짜 미선택</span>)</p>
-                            <p><span data-i18n="label_guests">인원</span>: 성인 2명 (최대 4명 무료)</p>
+                            <p><span data-i18n="label_guests">인원</span>: 성인 2명 (기본)</p>
                             <div class="price" id="display-room-price-info">0원</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="section-card">
-                    <div class="section-title" data-i18n="sect_booker">예약자 정보</div>
-                    <div class="input-row">
-                        <div class="input-half">
-                            <input type="text" id="input-name" placeholder="이름 (Name)">
-                        </div>
-                        <div class="input-half">
-                            <input type="text" id="input-phone" placeholder="연락처 (Phone)">
-                        </div>
-                    </div>
-                    <input type="email" id="input-email" placeholder="이메일 (E-mail)">
-                    <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
-                </div>
+    <div class="section-title" data-i18n="sect_booker">예약자 정보</div>
+    
+    <div class="input-row">
+        <div class="input-half">
+            <input type="text" id="input-name" placeholder="이름 (Name)">
+        </div>
+        <div class="input-half">
+            <input type="text" id="input-phone" placeholder="연락처 (Phone)">
+        </div>
+    </div>
+
+    <input type="email" id="input-email" placeholder="이메일 (E-mail)">
+    
+    <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;">
+        * 우리와 SNS 팔로우 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.
+    </div>
+
+    <div class="input-row">
+        <div class="input-half">
+            <input type="text" id="input-instagram" placeholder="인스타그램 (Instagram)">
+        </div>
+        <div class="input-half">
+            <input type="text" id="input-tiktok" placeholder="틱톡 (Tiktok)">
+        </div>
+    </div>
+    
+    <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
+</div>
 
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_extra">추가정보 입력</div>
@@ -206,14 +396,14 @@
                     </div>
                     <div class="price-summary-row">
                         <span data-i18n="label_option">옵션(조식 등)</span>
-                        <span id="summary-option-price">0원</span>
+                         <span id="summary-option-price">0원</span>
                     </div>
 
-                    <div id="option-detail-list" class="option-detail-list"></div>
+                    <div id="option-detail-list" class="option-detail-list" style="display:none;"></div>
 
                     <div class="total-price-row">
                         <span data-i18n="label_total_price">총 결제금액</span>
-                        <span class="total-price" id="summary-total-price">0원</span>
+                         <span class="total-price" id="summary-total-price">0원</span>
                     </div>
                 </div>
 
@@ -248,7 +438,7 @@
     <div id="termsModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
-            <img src="1.png" alt="개인정보 수집 및 이용 동의" style="width: 100%;">
+            <img src="약관보기.png" alt="개인정보 수집 및 이용 동의" style="width: 100%;">
         </div>
     </div>
 
@@ -272,58 +462,213 @@
     </section>
 
     <script>
-        // 다국어 데이터
         const translations = {
             ko: {
-                flag: "🇰🇷", unit_won: "원", unit_night: "박", alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.", alert_done: "결제가 완료되었습니다! (데모)",
+                flag: "🇰🇷",
+                unit_won: "원",
+                unit_night: "박",
+                alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
+                alert_done: "결제가 완료되었습니다! (데모)",
+                
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
-                page_title: "결제하기", sect_product: "예약 상품 정보", room_name: "특실 (Special)", label_schedule: "일정", label_guests: "인원",
-                sect_booker: "예약자 정보", ph_name: "이름 (Name)", ph_phone: "연락처 (Phone)", ph_email: "이메일 (E-mail)", ph_request: "요청사항 (Requests)",
-                sect_extra: "추가정보 입력", notice_confirm_email: "예약 확정은 이메일 알림을 받으셔야 완료됩니다.", label_about_res: "예약과 관련하여 •", notice_checkin: "insta hotel email (yhl5258@naver.com)을 받으셔야 예약 확정이 된 것입니다.<br>* 체크인 당일 현장에서 예약자 본인 확인이 진행됩니다.", label_checked: "확인했습니다.",
-                sect_refund: "취소/환불 규정에 대한 동의", th_8days: "이용 8일 전까지", td_free: "취소수수료 없음", th_7days: "이용 당일 ~ 이용 7일 전까지", td_no_refund: "환불불가능", label_agree_refund: "취소 및 환불 규정에 동의합니다.",
-                sect_total: "최종 결제금액", label_room_price: "객실 가격", label_option: "옵션(조식 등)", label_total_price: "총 결제금액",
-                label_option_list: "선택한 옵션", label_option_none: "선택한 옵션이 없습니다.",
-                sect_method: "결제수단", label_credit_card: "신용카드",
-                label_all_agree: "전체 동의", label_privacy: "개인정보 수집 및 이용 동의", btn_view_terms: "약관보기", label_condition: "구매조건 확인 및 결제진행 동의", btn_pay: "결제하기",
+                
+                page_title: "결제하기",
+                sect_product: "예약 상품 정보",
+                // 번역 수정: 디럭스
+                room_name: "디럭스 (Deluxe)",
+                label_schedule: "일정",
+                label_guests: "인원",
+                
+                sect_booker: "예약자 정보",
+                ph_name: "이름 (Name)",
+                ph_phone: "연락처 (Phone)",
+                ph_email: "이메일 (E-mail)",
+                ph_request: "요청사항 (Requests)",
+                
+                sect_extra: "추가정보 입력",
+                notice_confirm_email: "예약 확정은 이메일 알림을 받으셔야 완료됩니다.",
+                label_about_res: "예약과 관련하여 •",
+                notice_checkin: "insta hotel email (yhl5258@naver.com)을 받으셔야 예약 확정이 된 것입니다.<br>* 체크인 당일 현장에서 예약자 본인 확인이 진행됩니다.",
+                label_checked: "확인했습니다.",
+                
+                sect_refund: "취소/환불 규정에 대한 동의",
+                th_8days: "이용 8일 전까지",
+                td_free: "취소수수료 없음",
+                th_7days: "이용 당일 ~ 이용 7일 전까지",
+                td_no_refund: "환불불가능",
+                label_agree_refund: "취소 및 환불 규정에 동의합니다.",
+                
+                sect_total: "최종 결제금액",
+                label_room_price: "객실 가격",
+                label_option: "옵션(조식 등)",
+                label_total_price: "총 결제금액",
+                label_option_list: "선택한 옵션",
+                
+                sect_method: "결제수단",
+                label_credit_card: "신용카드",
+                
+                label_all_agree: "전체 동의",
+                label_privacy: "개인정보 수집 및 이용 동의",
+                btn_view_terms: "약관보기",
+                label_condition: "구매조건 확인 및 결제진행 동의",
+                btn_pay: "결제하기",
+                
                 company: "(주)호텔인스타", ceo: "대표자 : 이영환", biz: "통신판매업 신고번호: 2023-수원영통-1696호", addr: "수원시 영통구 영통로 94-6"
             },
             en: {
-                flag: "🇺🇸", unit_won: " KRW", unit_night: " nights", alert_agree: "You must agree to all terms to proceed.", alert_done: "Payment Completed! (Demo)",
+                flag: "🇺🇸",
+                unit_won: " KRW",
+                unit_night: " nights",
+                alert_agree: "You must agree to all terms to proceed.",
+                alert_done: "Payment Completed! (Demo)",
+                
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
-                page_title: "Payment", sect_product: "Booking Info", room_name: "Special Room", label_schedule: "Schedule", label_guests: "Guests",
-                sect_booker: "Guest Info", ph_name: "Name", ph_phone: "Phone Number", ph_email: "E-mail Address", ph_request: "Requests",
-                sect_extra: "Additional Info", notice_confirm_email: "Booking is confirmed only after receiving the email notification.", label_about_res: "About Reservation •", notice_checkin: "You must receive an email from insta hotel (yhl5258@naver.com) to confirm.<br>* ID verification required at check-in.", label_checked: "I have checked.",
-                sect_refund: "Cancellation & Refund Policy", th_8days: "Up to 8 days prior", td_free: "Free Cancellation", th_7days: "7 days prior ~ Day of stay", td_no_refund: "Non-refundable", label_agree_refund: "I agree to the policy.",
-                sect_total: "Payment Summary", label_room_price: "Room Price", label_option: "Options", label_total_price: "Total Amount",
-                label_option_list: "Selected options", label_option_none: "No options selected.",
-                sect_method: "Payment Method", label_credit_card: "Credit Card",
-                label_all_agree: "Agree to All", label_privacy: "Consent to Collection & Use of Personal Info", btn_view_terms: "View Terms", label_condition: "Confirm Order & Agree to Payment", btn_pay: "Pay Now",
+                
+                page_title: "Payment",
+                sect_product: "Booking Info",
+                // 번역 수정: Deluxe
+                room_name: "Deluxe",
+                label_schedule: "Schedule",
+                label_guests: "Guests",
+                
+                sect_booker: "Guest Info",
+                ph_name: "Name",
+                ph_phone: "Phone Number",
+                ph_email: "E-mail Address",
+                ph_request: "Requests",
+                
+                sect_extra: "Additional Info",
+                notice_confirm_email: "Booking is confirmed only after receiving the email notification.",
+                label_about_res: "About Reservation •",
+                notice_checkin: "You must receive an email from insta hotel (yhl5258@naver.com) to confirm.<br>* ID verification required at check-in.",
+                label_checked: "I have checked.",
+                
+                sect_refund: "Cancellation & Refund Policy",
+                th_8days: "Up to 8 days prior",
+                td_free: "Free Cancellation",
+                th_7days: "7 days prior ~ Day of stay",
+                td_no_refund: "Non-refundable",
+                label_agree_refund: "I agree to the policy.",
+                
+                sect_total: "Payment Summary",
+                label_room_price: "Room Price",
+                label_option: "Options",
+                label_total_price: "Total Amount",
+                label_option_list: "Selected Options",
+                
+                sect_method: "Payment Method",
+                label_credit_card: "Credit Card",
+                
+                label_all_agree: "Agree to All",
+                label_privacy: "Consent to Collection & Use of Personal Info",
+                btn_view_terms: "View Terms",
+                label_condition: "Confirm Order & Agree to Payment",
+                btn_pay: "Pay Now",
+                
                 company: "Insta Hotel Co., Ltd.", ceo: "CEO: Lee Young Hwan", biz: "Reg: 2023-Suwon Yeongtong-1696", addr: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si"
             },
             ja: {
-                flag: "🇯🇵", unit_won: " ウォン", unit_night: " 泊", alert_agree: "すべての規約に同意する必要があります。", alert_done: "決済が完了しました！(デモ)",
+                flag: "🇯🇵",
+                unit_won: " ウォン",
+                unit_night: " 泊",
+                alert_agree: "すべての規約に同意する必要があります。",
+                alert_done: "決済が完了しました！(デモ)",
+                
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
-                page_title: "決済", sect_product: "予約情報", room_name: "スペシャルルーム (Special)", label_schedule: "日程", label_guests: "人数",
-                sect_booker: "予約者情報", ph_name: "名前", ph_phone: "連絡先", ph_email: "メールアドレス", ph_request: "リクエスト",
-                sect_extra: "追加情報", notice_confirm_email: "予約確定はメール通知を受信した時点で完了します。", label_about_res: "予約について •", notice_checkin: "Insta Hotelのメール(yhl5258@naver.com)を受信すると予約確定となります。<br>* チェックイン時に本人確認が行われます。", label_checked: "確認しました。",
-                sect_refund: "キャンセル・払い戻し規定", th_8days: "利用8日前まで", td_free: "キャンセル料なし", th_7days: "利用7日前〜当日", td_no_refund: "払い戻し不可", label_agree_refund: "規定に同意します。",
-                sect_total: "決済金額", label_room_price: "客室価格", label_option: "オプション", label_total_price: "総決済金額",
-                label_option_list: "選択したオプション", label_option_none: "選択されたオプションはありません。",
-                sect_method: "決済手段", label_credit_card: "クレジットカード",
-                label_all_agree: "すべて同意する", label_privacy: "個人情報の収集および利用への同意", btn_view_terms: "約款を見る", label_condition: "注文内容確認および決済進行への同意", btn_pay: "決済する",
+                
+                page_title: "決済",
+                sect_product: "予約情報",
+                // 번역 수정: デラックス
+                room_name: "デラックス (Deluxe)",
+                label_schedule: "日程",
+                label_guests: "人数",
+                
+                sect_booker: "予約者情報",
+                ph_name: "名前",
+                ph_phone: "連絡先",
+                ph_email: "メールアドレス",
+                ph_request: "リクエスト",
+                
+                sect_extra: "追加情報",
+                notice_confirm_email: "予約確定はメール通知を受信した時点で完了します。",
+                label_about_res: "予約について •",
+                notice_checkin: "Insta Hotelのメール(yhl5258@naver.com)を受信すると予約確定となります。<br>* チェックイン時に本人確認が行われます。",
+                label_checked: "確認しました。",
+                
+                sect_refund: "キャンセル・払い戻し規定",
+                th_8days: "利用8日前まで",
+                td_free: "キャンセル料なし",
+                th_7days: "利用7日前〜当日",
+                td_no_refund: "払い戻し不可",
+                label_agree_refund: "規定に同意します。",
+                
+                sect_total: "決済金額",
+                label_room_price: "客室価格",
+                label_option: "オプション",
+                label_total_price: "総決済金額",
+                label_option_list: "選択したオプション",
+                
+                sect_method: "決済手段",
+                label_credit_card: "クレジットカード",
+                
+                label_all_agree: "すべて同意する",
+                label_privacy: "個人情報の収集および利用への同意",
+                btn_view_terms: "約款を見る",
+                label_condition: "注文内容確認および決済進行への同意",
+                btn_pay: "決済する",
+                
                 company: "インスタホテル株式会社", ceo: "代表者 : イ・ヨンファン", biz: "登録番号: 2023-水原霊通-1696", addr: "水原市霊通区霊通路94-6"
             },
             zh: {
-                flag: "🇨🇳", unit_won: " 韩元", unit_night: " 晚", alert_agree: "必须同意所有条款才能付款。", alert_done: "支付完成！(演示)",
+                flag: "🇨🇳",
+                unit_won: " 韩元",
+                unit_night: " 晚",
+                alert_agree: "必须同意所有条款才能付款。",
+                alert_done: "支付完成！(演示)",
+                
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
-                page_title: "支付", sect_product: "预订信息", room_name: "特别房 (Special)", label_schedule: "日程", label_guests: "人数",
-                sect_booker: "预订人信息", ph_name: "姓名", ph_phone: "联系方式", ph_email: "电子邮箱", ph_request: "特殊要求",
-                sect_extra: "附加信息", notice_confirm_email: "收到电子邮件通知后，预订即确认为完成。", label_about_res: "关于预订 •", notice_checkin: "收到 Insta Hotel 邮件 (yhl5258@naver.com) 即表示预订已确认。<br>* 入住时将进行本人身份验证。", label_checked: "已确认。",
-                sect_refund: "取消/退款规定", th_8days: "入住8天前", td_free: "无取消费用", th_7days: "入住7天前 ~ 当天", td_no_refund: "不可退款", label_agree_refund: "同意相关规定。",
-                sect_total: "最终支付金额", label_room_price: "客房价格", label_option: "选项", label_total_price: "总支付金额",
-                label_option_list: "已选择的选项", label_option_none: "未选择任何选项。",
-                sect_method: "支付方式", label_credit_card: "信用卡",
-                label_all_agree: "全部同意", label_privacy: "同意收集和使用个人信息", btn_view_terms: "查看条款", label_condition: "确认订单并同意支付", btn_pay: "支付",
+                
+                page_title: "支付",
+                sect_product: "预订信息",
+                // 번역 수정: 豪华房 (Deluxe)
+                room_name: "豪华房 (Deluxe)",
+                label_schedule: "日程",
+                label_guests: "人数",
+                
+                sect_booker: "预订人信息",
+                ph_name: "姓名",
+                ph_phone: "联系方式",
+                ph_email: "电子邮箱",
+                ph_request: "特殊要求",
+                
+                sect_extra: "附加信息",
+                notice_confirm_email: "收到电子邮件通知后，预订即确认为完成。",
+                label_about_res: "关于预订 •",
+                notice_checkin: "收到 Insta Hotel 邮件 (yhl5258@naver.com) 即表示预订已确认。<br>* 入住时将进行本人身份验证。",
+                label_checked: "已确认。",
+                
+                sect_refund: "取消/退款规定",
+                th_8days: "入住8天前",
+                td_free: "无取消费用",
+                th_7days: "入住7天前 ~ 当天",
+                td_no_refund: "不可退款",
+                label_agree_refund: "同意相关规定。",
+                
+                sect_total: "最终支付金额",
+                label_room_price: "客房价格",
+                label_option: "选项",
+                label_total_price: "总支付金额",
+                label_option_list: "已选择的选项",
+                
+                sect_method: "支付方式",
+                label_credit_card: "信用卡",
+                
+                label_all_agree: "全部同意",
+                label_privacy: "同意收集和使用个人信息",
+                btn_view_terms: "查看条款",
+                label_condition: "确认订单并同意支付",
+                btn_pay: "支付",
+                
                 company: "Insta Hotel有限公司", ceo: "代表：李永焕", biz: "注册号：2023-水原灵通-1696", addr: "水原市灵通区灵通路94-6"
             }
         };
@@ -338,13 +683,15 @@
 
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (t[key]) el.innerHTML = t[key];
+                if (t[key]) {
+                    el.innerHTML = t[key];
+                }
             });
 
             document.getElementById('input-name').placeholder = t.ph_name;
             document.getElementById('input-phone').placeholder = t.ph_phone;
             document.getElementById('input-email').placeholder = t.ph_email;
-            document.getElementById('input-request').placeholder = t.ph_request;
+            document.getElementById('input-request').placeholder = t.ph_request; // 요청사항 번역
 
             document.getElementById("companyName").innerText = t.company;
             document.getElementById("ceoName").innerText = t.ceo;
@@ -354,7 +701,6 @@
             renderPriceInfo();
         }
 
-        // ✅ 옵션 이름까지 포함해서 결제 정보 렌더링
         function renderPriceInfo() {
             const params = new URLSearchParams(window.location.search);
             
@@ -365,55 +711,47 @@
             const optionPrice = parseInt(params.get('optionPrice')) || 0;
             const total = parseInt(params.get('total')) || 0;
 
-            let optionDetails = [];
-            const optionDetailsRaw = params.get('optionDetails');
-
-            if (optionDetailsRaw) {
-                try {
-                    const decoded = decodeURIComponent(optionDetailsRaw);
-                    optionDetails = JSON.parse(decoded);
-                } catch (e1) {
-                    try {
-                        optionDetails = JSON.parse(optionDetailsRaw);
-                    } catch (e2) {
-                        console.error('optionDetails parse error:', e1, e2);
-                        optionDetails = [];
-                    }
-                }
-            }
-
             const t = translations[currentLang];
-            const fmt = (n) => n.toLocaleString() + t.unit_won;
+            const unit = t.unit_won;
 
-            if (checkin && checkout) {
+            const fmt = (n) => n.toLocaleString() + unit;
+
+            if(checkin && checkout) {
                 document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
             }
             document.getElementById('display-nights').innerText = nights + t.unit_night;
-
-            // 1. 가격 요약 업데이트
+            
             document.getElementById('display-room-price-info').innerText = fmt(roomPrice);
             document.getElementById('summary-room-price').innerText = fmt(roomPrice);
             document.getElementById('summary-option-price').innerText = fmt(optionPrice);
             document.getElementById('summary-total-price').innerText = fmt(total);
 
-            // 2. ✅ 옵션 상세 리스트 표시
-            const optionDetailContainer = document.getElementById('option-detail-list');
-            if (optionDetailContainer) {
-                if (!optionDetails || optionDetails.length === 0) {
-                    optionDetailContainer.innerHTML =
-                        `<span>${t.label_option_list}: ${t.label_option_none}</span>`;
-                } else {
-                    const items = optionDetails.map(txt => `<li>${txt}</li>`).join('');
-                    optionDetailContainer.innerHTML = `
-                        <div style="margin-top: 15px;">
-                            <span style="font-weight: bold;">${t.label_option_list}</span>
-                            <ul>${items}</ul>
-                        </div>
-                    `;
+            // [NEW] 옵션 상세 리스트 표시 로직 (URL에서 파싱하여 표시)
+            const optionContainer = document.getElementById('option-detail-list');
+            const optionDetailsRaw = params.get('optionDetails');
+            let optionDetails = [];
+
+            if (optionDetailsRaw) {
+                try {
+                    optionDetails = JSON.parse(decodeURIComponent(optionDetailsRaw));
+                } catch (e) {
+                    console.error("옵션 파싱 에러", e);
                 }
             }
 
-            console.log('optionDetails from URL:', optionDetails);
+            if (optionDetails.length > 0) {
+                // 옵션이 있을 경우 화면에 표시
+                optionContainer.style.display = 'block';
+                const listHtml = optionDetails.map(item => `<li>${item}</li>`).join('');
+                optionContainer.innerHTML = `
+                    <div style="font-weight:bold; margin-bottom:5px;">${t.label_option_list}:</div>
+                    <ul>${listHtml}</ul>
+                `;
+            } else {
+                // 옵션이 없을 경우 숨김
+                optionContainer.style.display = 'none';
+                optionContainer.innerHTML = '';
+            }
         }
 
         window.onload = function() {
@@ -427,7 +765,6 @@
             }
         };
 
-        // --- 동의 체크박스 로직 ---
         const chkAll = document.getElementById('chk-all');
         const subChks = document.querySelectorAll('.chk-sub');
 
@@ -442,18 +779,24 @@
             });
         });
 
-        // --- 약관 모달 로직 ---
         const modal = document.getElementById("termsModal");
 
-        function openModal() { modal.style.display = "flex"; }
-        function closeModal() { modal.style.display = "none"; }
-
-        window.onclick = function(event) {
-            if (event.target == modal) modal.style.display = "none";
+        function openModal() {
+            modal.style.display = "flex"; 
         }
 
-        // --- 결제 버튼 클릭 (데모) ---
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
         function requestPayment() {
+            // 1. 동의 체크 확인
             const isInfoChecked = document.getElementById('chk-info').checked;
             const isRefundChecked = document.getElementById('chk-refund').checked;
             const isTermsChecked = document.getElementById('chk-all').checked;
@@ -465,43 +808,24 @@
                 return;
             }
 
-            // --- ★ 실제 결제 및 Supabase 트랜잭션 호출 로직이 들어갈 곳 ★ ---
-            
-            // 1. 폼 데이터 수집
+            // 2. 폼 데이터 수집
             const guestData = {
                 name: document.getElementById('input-name').value.trim(),
                 phone: document.getElementById('input-phone').value.trim(),
                 email: document.getElementById('input-email').value.trim(),
+                instagram: document.getElementById('input-instagram').value.trim(),
+                tiktok: document.getElementById('input-tiktok').value.trim(),
                 request: document.getElementById('input-request').value.trim()
             };
 
+            // 3. 필수 입력값 검증 (이름, 전화번호, 이메일)
             if (!guestData.name || !guestData.phone || !guestData.email) {
-                 alert("예약자 정보를 모두 입력해주세요.");
-                 return;
+                alert("예약자 정보를 모두 입력해주세요.");
+                return;
             }
 
-            // 2. 예약 데이터 수집
-            const params = new URLSearchParams(window.location.search);
-            const bookingDetails = {
-                roomId: 6, // 특실 ID (6번으로 가정. 실제로는 URL에서 받아와야 함)
-                checkInDate: params.get('checkin'),
-                checkOutDate: params.get('checkout'),
-                totalPrice: parseInt(params.get('total')) || 0,
-                // options: params.get('optionDetails') // 옵션 이름은 이미 URL에 있음
-            };
-
-            if (bookingDetails.totalPrice === 0 || !bookingDetails.checkInDate) {
-                 alert("유효한 예약 정보가 없습니다. 다시 시도해주세요.");
-                 return;
-            }
-
-            // 3. 결제 모듈 호출 (여기서는 생략)
-            
-            // 4. 결제 성공 가정 후 Supabase 트랜잭션 호출
-            // [데모용 트랜잭션 호출]
-            // await finalizeBookingTransaction(roomId, checkInDate, checkOutDate, name, email, price); 
-            
-            alert("결제 모듈 호출 성공! (데모)");
+            // 4. 결제 성공 알림 (데모)
+            alert(translations[currentLang].alert_done);
         }
     </script>
 </body>
