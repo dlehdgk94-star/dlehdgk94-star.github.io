@@ -905,31 +905,49 @@
             document.getElementById('grand-total').innerText = grandTotal.toLocaleString();
         }
 
-        // --- [NEW] 결제 페이지로 이동하는 함수 ---
-        function goToPayment() {
-            const checkin = document.getElementById('checkin').value;
-            const checkout = document.getElementById('checkout').value;
-            const nights = document.getElementById('nights').innerText;
+       // [reservation.html 의 goToPayment 함수 교체]
+function goToPayment() {
+    const checkin = document.getElementById('checkin').value;
+    const checkout = document.getElementById('checkout').value;
+    const nights = document.getElementById('nights').innerText;
 
-            if(!checkin || !checkout) {
-                alert(translations[currentLang].msg_select_date);
-                return;
-            }
+    // 1. 날짜 유효성 검사
+    if (!checkin || !checkout) {
+        alert(translations[currentLang].msg_select_date);
+        return;
+    }
 
-            // 가격 재계산 (URL에 넘기기 위해 숫자 값 확보)
-            const roomPrice = calculateTotal(); 
-            let optionPrice = 0;
-            document.querySelectorAll('.option-checkbox:checked').forEach(box => {
-                optionPrice += parseInt(box.value);
-            });
-            const total = roomPrice + optionPrice;
+    // 2. 가격 계산
+    const roomPrice = calculateTotal();
+    let optionPrice = 0;
+    
+    // 3. 선택한 옵션의 '이름(메뉴명)'과 '가격' 수집 [추가된 로직]
+    let selectedOptionNames = [];
+    const checkedBoxes = document.querySelectorAll('.option-checkbox:checked');
 
-            // URL 파라미터 생성 (GET 방식)
-            const url = `결제스탠.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${total}`;
+    checkedBoxes.forEach(box => {
+        optionPrice += parseInt(box.value);
 
-            // 페이지 이동
-            window.location.href = url;
+        // 체크박스 바로 옆의 텍스트(메뉴명) 가져오기
+        const labelSpan = box.nextElementSibling;
+        if (labelSpan) {
+            // 줄바꿈(\n)을 공백으로 처리하여 깔끔하게 텍스트만 추출
+            let menuName = labelSpan.innerText.replace(/\n/g, ' ');
+            selectedOptionNames.push(menuName);
         }
+    });
+
+    const total = roomPrice + optionPrice;
+
+    // 4. 메뉴 리스트를 URL에 넣기 위해 인코딩 (JSON 문자열 변환 -> URI 인코딩)
+    const optionDetailsEncoded = encodeURIComponent(JSON.stringify(selectedOptionNames));
+
+    // 5. URL 생성 (결제스탠.html로 데이터 전송)
+    const url = `결제스탠.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${total}&optionDetails=${optionDetailsEncoded}`;
+
+    // 6. 페이지 이동
+    window.location.href = url;
+}
     </script>
 </body>
 </html>
