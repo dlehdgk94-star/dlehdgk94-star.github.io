@@ -1127,7 +1127,7 @@ function goToPayment() {
     const optionDetailsEncoded = encodeURIComponent(JSON.stringify(selectedOptionNames));
 
     // 5. URL 생성 (결제트윈.html로 데이터 전송)
-    const url = `결제트윈.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${total}&optionDetails=${optionDetailsEncoded}`;
+    const url = `paytwin.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${total}&optionDetails=${optionDetailsEncoded}`;
 
     // 6. 페이지 이동
     window.location.href = url;
