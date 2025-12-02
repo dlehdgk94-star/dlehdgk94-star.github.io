@@ -852,6 +852,10 @@
         }
 
         const params = new URLSearchParams(window.location.search);
+        
+        // [수정된 부분] roomId 처리: URL에 없으면 5(Twin)로 설정
+        const roomId = parseInt(params.get('roomId')) || 5;
+
         const checkin = params.get('checkin');
         const checkout = params.get('checkout');
         const roomPrice = parseInt(params.get('roomPrice')) || 0;
@@ -877,6 +881,7 @@
                         guest_email: email,
                         check_in: checkin,
                         check_out: checkout,
+                        room_id: roomId,  // [수정된 부분] room_id 저장 추가 (기본값 5)
                         room_price: roomPrice,
                         total_price: total,
                         selected_options: selectedOptionsArray,
