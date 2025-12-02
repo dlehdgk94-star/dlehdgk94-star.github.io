@@ -257,7 +257,7 @@
     // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함 (이름 충돌 방지)
     window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
     
-    console.log("홈페이지-슈파베이스 연결 성공!");
+    console.log("Homepage-Supabase Connection Success!");
 </script>
 </head>
 <body class="bg-[#f4f4f4] text-slate-900 font-sans">
@@ -335,7 +335,7 @@
 
     <input type="email" id="input-email" placeholder="이메일 (E-mail)">
     
-    <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;">
+    <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;" data-i18n="notice_sns">
         * 우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.
     </div>
 
@@ -358,8 +358,10 @@
                     </div>
                     <p class="notice-text">
                         <strong data-i18n="label_about_res">예약과 관련하여 •</strong><br>
-                        * <span data-i18n="notice_checkin">insta hotel email (yhl5258@naver.com)을 받으셔야 예약 확정이 된 것입니다.<br>
-                        * 체크인 당일 현장에서 예약자 본인 확인이 진행됩니다.</span>
+                        <span data-i18n="notice_checkin">
+                        * insta hotel email (yhl5258@naver.com)을 받으셔야 예약 확정이 된 것입니다.<br>
+                        * 체크인 당일 현장에서 예약자 본인 확인이 진행됩니다.
+                        </span>
                     </p>
                     
                     <label class="confirm-check">
@@ -469,6 +471,7 @@
                 unit_night: "박",
                 alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
                 alert_done: "결제가 완료되었습니다! (데모)",
+                alert_fill_info: "예약자 정보를 모두 입력해주세요.",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 
@@ -483,11 +486,14 @@
                 ph_phone: "연락처 (Phone)",
                 ph_email: "이메일 (E-mail)",
                 ph_request: "요청사항 (Requests)",
+                notice_sns: "* 우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.",
+                ph_instagram: "Instagram",
+                ph_tiktok: "Tiktok",
                 
                 sect_extra: "추가정보 입력",
                 notice_confirm_email: "예약 확정은 이메일 알림을 받으셔야 완료됩니다.",
                 label_about_res: "예약과 관련하여 •",
-                notice_checkin: "insta hotel email (yhl5258@naver.com)을 받으셔야 예약 확정이 된 것입니다.<br>* 체크인 당일 현장에서 예약자 본인 확인이 진행됩니다.",
+                notice_checkin: "* insta hotel email (yhl5258@naver.com)을 받으셔야 예약 확정이 된 것입니다.<br>* 체크인 당일 현장에서 예약자 본인 확인이 진행됩니다.",
                 label_checked: "확인했습니다.",
                 
                 sect_refund: "취소/환불 규정에 대한 동의",
@@ -521,6 +527,7 @@
                 unit_night: " nights",
                 alert_agree: "You must agree to all terms to proceed.",
                 alert_done: "Payment Completed! (Demo)",
+                alert_fill_info: "Please fill in all guest information.",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 
@@ -535,11 +542,14 @@
                 ph_phone: "Phone Number",
                 ph_email: "E-mail Address",
                 ph_request: "Requests",
+                notice_sns: "* Follow us on SNS to check your reservation information quickly and easily.",
+                ph_instagram: "Instagram",
+                ph_tiktok: "Tiktok",
                 
                 sect_extra: "Additional Info",
                 notice_confirm_email: "Booking is confirmed only after receiving the email notification.",
                 label_about_res: "About Reservation •",
-                notice_checkin: "You must receive an email from insta hotel (yhl5258@naver.com) to confirm.<br>* ID verification required at check-in.",
+                notice_checkin: "* You must receive an email from insta hotel (yhl5258@naver.com) to confirm.<br>* ID verification required at check-in.",
                 label_checked: "I have checked.",
                 
                 sect_refund: "Cancellation & Refund Policy",
@@ -573,6 +583,7 @@
                 unit_night: " 泊",
                 alert_agree: "すべての規約に同意する必要があります。",
                 alert_done: "決済が完了しました！(デモ)",
+                alert_fill_info: "予約者情報をすべて入力してください。",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 
@@ -587,11 +598,14 @@
                 ph_phone: "連絡先",
                 ph_email: "メールアドレス",
                 ph_request: "リクエスト",
+                notice_sns: "* SNSをフォローすると、予約情報を簡単かつ迅速に確認できます。",
+                ph_instagram: "Instagram (インスタグラム)",
+                ph_tiktok: "Tiktok (ティックトック)",
                 
                 sect_extra: "追加情報",
                 notice_confirm_email: "予約確定はメール通知を受信した時点で完了します。",
                 label_about_res: "予約について •",
-                notice_checkin: "Insta Hotelのメール(yhl5258@naver.com)を受信すると予約確定となります。<br>* チェックイン時に本人確認が行われます。",
+                notice_checkin: "* Insta Hotelのメール(yhl5258@naver.com)を受信すると予約確定となります。<br>* チェックイン時に本人確認が行われます。",
                 label_checked: "確認しました。",
                 
                 sect_refund: "キャンセル・払い戻し規定",
@@ -625,6 +639,7 @@
                 unit_night: " 晚",
                 alert_agree: "必须同意所有条款才能付款。",
                 alert_done: "支付完成！(演示)",
+                alert_fill_info: "请输入所有预订人信息。",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 
@@ -639,11 +654,14 @@
                 ph_phone: "联系方式",
                 ph_email: "电子邮箱",
                 ph_request: "特殊要求",
+                notice_sns: "* 关注我们的SNS，可以更方便快捷地查看预订信息。",
+                ph_instagram: "Instagram",
+                ph_tiktok: "Tiktok",
                 
                 sect_extra: "附加信息",
                 notice_confirm_email: "收到电子邮件通知后，预订即确认为完成。",
                 label_about_res: "关于预订 •",
-                notice_checkin: "收到 Insta Hotel 邮件 (yhl5258@naver.com) 即表示预订已确认。<br>* 入住时将进行本人身份验证。",
+                notice_checkin: "* 收到 Insta Hotel 邮件 (yhl5258@naver.com) 即表示预订已确认。<br>* 入住时将进行本人身份验证。",
                 label_checked: "已确认。",
                 
                 sect_refund: "取消/退款规定",
@@ -688,10 +706,13 @@
                 }
             });
 
+            // 플레이스홀더 번역 적용
             document.getElementById('input-name').placeholder = t.ph_name;
             document.getElementById('input-phone').placeholder = t.ph_phone;
             document.getElementById('input-email').placeholder = t.ph_email;
-            document.getElementById('input-request').placeholder = t.ph_request; // 요청사항 번역
+            document.getElementById('input-request').placeholder = t.ph_request;
+            document.getElementById('input-instagram').placeholder = t.ph_instagram;
+            document.getElementById('input-tiktok').placeholder = t.ph_tiktok;
 
             document.getElementById("companyName").innerText = t.company;
             document.getElementById("ceoName").innerText = t.ceo;
@@ -725,7 +746,7 @@
             document.getElementById('summary-option-price').innerText = fmt(optionPrice);
             document.getElementById('summary-total-price').innerText = fmt(total);
 
-            // [NEW] 옵션 상세 리스트 표시 로직
+            // 옵션 상세 리스트 표시 로직
             const optionContainer = document.getElementById('option-detail-list');
             const optionDetailsRaw = params.get('optionDetails');
             let optionDetails = [];
@@ -808,7 +829,6 @@
                 return;
             }
 
-            // ▼▼▼ [여기에 넣으시면 됩니다!] ▼▼▼
             // 2. 폼 데이터 수집
             const guestData = {
                 name: document.getElementById('input-name').value.trim(),
@@ -821,12 +841,13 @@
 
             // 3. 필수 입력값 검증 (이름, 전화번호, 이메일이 비어있으면 경고)
             if (!guestData.name || !guestData.phone || !guestData.email) {
-                alert("예약자 정보를 모두 입력해주세요.");
+                // 수정된 부분: 언어별 경고 메시지 사용
+                alert(translations[currentLang].alert_fill_info);
                 return;
             }
 
             // 데이터 확인용 로그 (개발자 도구 콘솔에서 확인 가능)
-            console.log("수집된 예약 데이터:", guestData);
+            console.log("Collected Guest Data:", guestData);
 
             // 4. 결제 완료 알림
             alert(translations[currentLang].alert_done);
