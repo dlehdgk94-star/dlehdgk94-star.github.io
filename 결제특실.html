@@ -148,7 +148,7 @@
         }
         .total-price { color: #ff6900; font-size: 24px; }
 
-        /* [NEW] 선택한 옵션 리스트 스타일 추가 */
+        /* 선택한 옵션 리스트 스타일 */
         .option-detail-list { 
             margin-top: 5px; 
             margin-bottom: 15px;
@@ -254,7 +254,7 @@
     const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
     const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
     
-    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함 (이름 충돌 방지)
+    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
     window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
     
     console.log("홈페이지-슈파베이스 연결 성공!");
@@ -448,7 +448,7 @@
                 <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank"><img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24"></a>
                 <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank"><img src="icons8-네이버-64.png" alt="Naver" width="24" height="24"></a>
                 <a href="http://pf.kakao.com/_xiITuG" target="_blank"><img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24"></a>
-                <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>        
+                <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>           
             </div>
             <div class="space-y-1">
                 <p>insta hotel mainbranch, Korea</p>
@@ -468,8 +468,9 @@
                 unit_won: "원",
                 unit_night: "박",
                 alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
-                alert_done: "결제가 완료되었습니다! (데모)",
+                alert_done: "예약이 완료되었습니다! (관리자 확인 후 메일이 발송됩니다)",
                 alert_fill_all: "예약자 정보를 모두 입력해주세요.",
+                alert_error: "예약 저장 중 오류가 발생했습니다. 다시 시도해주세요.",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 nav_breakfast: "breakfast", nav_instaspot: "insta spot", nav_lounge: "bluerain lounge",
@@ -528,8 +529,9 @@
                 unit_won: " KRW",
                 unit_night: " nights",
                 alert_agree: "You must agree to all terms to proceed.",
-                alert_done: "Payment Completed! (Demo)",
+                alert_done: "Booking Completed! (Email will be sent after confirmation)",
                 alert_fill_all: "Please fill in all guest information.",
+                alert_error: "An error occurred while saving the reservation. Please try again.",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 nav_breakfast: "breakfast", nav_instaspot: "insta spot", nav_lounge: "bluerain lounge",
@@ -588,8 +590,9 @@
                 unit_won: " ウォン",
                 unit_night: " 泊",
                 alert_agree: "すべての規約に同意する必要があります。",
-                alert_done: "決済が完了しました！(デモ)",
+                alert_done: "予約が完了しました！(確認後にメールが送信されます)",
                 alert_fill_all: "予約者情報をすべて入力してください。",
+                alert_error: "予約の保存中にエラーが発生しました。",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 nav_breakfast: "breakfast", nav_instaspot: "insta spot", nav_lounge: "bluerain lounge",
@@ -648,8 +651,9 @@
                 unit_won: " 韩元",
                 unit_night: " 晚",
                 alert_agree: "必须同意所有条款才能付款。",
-                alert_done: "支付完成！(演示)",
+                alert_done: "预订已完成！(确认后将发送邮件)",
                 alert_fill_all: "请填写所有预订人信息。",
+                alert_error: "保存预订时发生错误。",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 nav_breakfast: "breakfast", nav_instaspot: "insta spot", nav_lounge: "bluerain lounge",
@@ -752,7 +756,6 @@
                 document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
             }
             
-            // "1박" 또는 "1 night" 등으로 동적 변경
             if (nights > 0) {
                 document.getElementById('display-nights').innerText = nights + unitNight;
             }
@@ -789,7 +792,6 @@
         }
 
         window.onload = function() {
-            // 초기 로드시 언어 설정 적용 (기본 ko)
             updateLanguage('ko');
 
             const headerSelect = document.getElementById("header-lang-select");
@@ -830,37 +832,90 @@
             }
         }
 
-        function requestPayment() {
+        // [핵심] Supabase 저장 함수 (요청한 컬럼명 사용)
+        async function requestPayment() {
+            const t = translations[currentLang];
+
             // 1. 동의 체크 확인
             const isInfoChecked = document.getElementById('chk-info').checked;
             const isRefundChecked = document.getElementById('chk-refund').checked;
             const isTermsChecked = document.getElementById('chk-all').checked;
-
-            const t = translations[currentLang];
 
             if (!isInfoChecked || !isRefundChecked || !isTermsChecked) {
                 alert(t.alert_agree);
                 return;
             }
 
-            // 2. 폼 데이터 수집
-            const guestData = {
-                name: document.getElementById('input-name').value.trim(),
-                phone: document.getElementById('input-phone').value.trim(),
-                email: document.getElementById('input-email').value.trim(),
-                instagram: document.getElementById('input-instagram').value.trim(),
-                tiktok: document.getElementById('input-tiktok').value.trim(),
-                request: document.getElementById('input-request').value.trim()
-            };
+            // 2. 입력 데이터 수집
+            const guestName = document.getElementById('input-name').value.trim();
+            const guestPhone = document.getElementById('input-phone').value.trim();
+            const guestEmail = document.getElementById('input-email').value.trim();
+            const instagramId = document.getElementById('input-instagram').value.trim();
+            const tiktokId = document.getElementById('input-tiktok').value.trim();
+            const requestMsg = document.getElementById('input-request').value.trim();
 
-            // 3. 필수 입력값 검증
-            if (!guestData.name || !guestData.phone || !guestData.email) {
+            if (!guestName || !guestPhone || !guestEmail) {
                 alert(t.alert_fill_all);
                 return;
             }
 
-            // 4. 결제 성공 알림 (데모)
-            alert(t.alert_done);
+            // 3. URL 파라미터 가져오기
+            const params = new URLSearchParams(window.location.search);
+            const checkin = params.get('checkin');
+            const checkout = params.get('checkout');
+            const nights = parseInt(params.get('nights')) || 0;
+            const total = parseInt(params.get('total')) || 0;
+            const roomPrice = parseInt(params.get('roomPrice')) || 0; 
+            const optionDetailsRaw = params.get('optionDetails');
+            
+            let optionDetails = [];
+            if (optionDetailsRaw) {
+                try {
+                    optionDetails = JSON.parse(decodeURIComponent(optionDetailsRaw));
+                } catch (e) {
+                    console.error("옵션 파싱 에러", e);
+                }
+            }
+
+            // 4. Supabase 저장용 데이터 (요청한 컬럼명 매핑)
+            const bookingData = {
+                room_id: 6,                     // 특실 ID
+                guest_name: guestName,
+                guest_phone: guestPhone,
+                
+                guest_email: guestEmail,        // 요청 컬럼: 이메일
+                social_insta: instagramId,      // 요청 컬럼: 인스타
+                social_tiktok: tiktokId,        // 요청 컬럼: 틱톡
+                guest_request: requestMsg,      // 요청 컬럼: 요청사항
+                
+                check_in_date: checkin,
+                check_out_date: checkout,
+                nights: nights,
+                
+                room_price: roomPrice,          // 요청 컬럼: 객실가격
+                selected_options: optionDetails,// 요청 컬럼: 선택옵션 (JSON)
+                total_price: total,             // 요청 컬럼: 총금액
+                
+                status: 'confirmed'             // 요청 컬럼: 결제상태
+            };
+
+            // 5. Insert 실행
+            try {
+                const { data, error } = await window.supabaseClient
+                    .from('bookings')
+                    .insert([bookingData]);
+
+                if (error) {
+                    console.error('Supabase Error:', error);
+                    alert(t.alert_error + "\n" + error.message);
+                } else {
+                    alert(t.alert_done);
+                    window.location.href = 'index.html'; 
+                }
+            } catch (err) {
+                console.error('Unexpected Error:', err);
+                alert(t.alert_error);
+            }
         }
     </script>
 </body>
