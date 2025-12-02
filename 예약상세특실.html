@@ -12,10 +12,6 @@
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; color: #333; background-color: #fcfcfc; }
         
-        /* ----------------------------------------------------
-           [기존 예약 페이지 전용 Custom CSS] 
-           ---------------------------------------------------- */
-        
         /* 메인 레이아웃 */
         .reservation-container { max-width: 1200px; margin: 100px auto 40px; display: flex; gap: 50px; padding: 0 20px; align-items: flex-start; }
         
@@ -23,11 +19,7 @@
         @media (max-width: 768px) {
             .reservation-container { flex-direction: column; margin-top: 80px; }
             .left-column, .right-column { width: 100%; }
-            
-            /* 모바일에서 이미지 높이 축소 */
-            .main-image { 
-                height: 300px !important; 
-            }
+            .main-image { height: 300px !important; }
         }
         
         .left-column { flex: 1.5; }
@@ -35,7 +27,7 @@
         /* 메인 이미지 영역 */
         .main-image { 
             width: 100%; 
-            height: 500px; /* PC 기본 높이 */
+            height: 500px; 
             background-color: #ddd; 
             background-image: url('hero11.jpg'); 
             background-size: cover; 
@@ -45,180 +37,72 @@
             transition: background-image 0.3s ease-in-out;
         }
 
-        /* ---------------------------------------------------------
-           썸네일 영역 스타일 (스크롤 힌트 및 그라데이션)
-           --------------------------------------------------------- */
-        
-        /* 썸네일 전체를 감싸는 컨테이너 */
-        .thumbnail-wrapper {
-            position: relative;
-            margin-bottom: 40px; 
-        }
-
-        /* 오른쪽 그라데이션 효과 */
+        /* 썸네일 영역 스타일 */
+        .thumbnail-wrapper { position: relative; margin-bottom: 40px; }
         .thumbnail-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 25px; 
-            right: 0;
-            bottom: 5px; 
-            width: 40px; 
-            background: linear-gradient(to right, transparent, #fcfcfc); 
-            pointer-events: none; 
-            z-index: 10;
+            content: ''; position: absolute; top: 25px; right: 0; bottom: 5px; width: 40px; 
+            background: linear-gradient(to right, transparent, #fcfcfc); pointer-events: none; z-index: 10;
         }
-
-        /* 스크롤 힌트 텍스트 (깜빡임 효과) */
         .scroll-hint {
-            font-size: 11px;
-            color: #ff6900;
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-align: right;
-            padding-right: 5px;
-            display: none; /* PC 숨김 */
-            animation: blink 2s infinite;
+            font-size: 11px; color: #ff6900; font-weight: bold; margin-bottom: 5px; 
+            text-align: right; padding-right: 5px; display: none; animation: blink 2s infinite;
         }
+        @media (max-width: 768px) { .scroll-hint { display: block; } }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        /* 모바일에서만 힌트 텍스트 보이기 */
-        @media (max-width: 768px) {
-            .scroll-hint { display: block; }
-        }
-
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-
-        /* 썸네일 리스트 스타일 */
         .thumbnails { 
-            display: flex; 
-            gap: 10px; 
-            overflow-x: auto; 
-            padding-bottom: 5px; 
-            padding-right: 30px; 
-            
-            /* 스크롤바 숨기기 */
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; padding-right: 30px; 
+            -ms-overflow-style: none; scrollbar-width: none;
         }
-        .thumbnails::-webkit-scrollbar {
-            display: none;
-        }
+        .thumbnails::-webkit-scrollbar { display: none; }
 
         .thumb { 
-            width: 100px; 
-            height: 70px; 
-            background-color: #eee; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            background-size: cover; 
-            background-position: center; 
-            flex-shrink: 0; 
-            border: 2px solid transparent;
-            transition: 0.2s;
+            width: 100px; height: 70px; background-color: #eee; border-radius: 4px; cursor: pointer; 
+            background-size: cover; background-position: center; flex-shrink: 0; 
+            border: 2px solid transparent; transition: 0.2s;
         }
         .thumb:hover { border-color: #ff6900; opacity: 1; }
         
         .description-header { font-size: 14px; font-weight: bold; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: inline-block; }
         .description-text { font-size: 14px; line-height: 1.8; color: #555; }
 
-        /* 오른쪽: 예약 패널 (스크롤 시 고정) */
+        /* 오른쪽: 예약 패널 */
         .right-column { flex: 1; position: sticky; top: 100px; background: #fff; padding: 0; }
-        
         .room-title { font-size: 24px; font-weight: 700; margin-bottom: 30px; }
 
-        /* 커스텀 캘린더 스타일 */
+        /* 캘린더 스타일 */
         .calendar-wrapper { border: 1px solid #eee; padding: 20px; border-radius: 4px; margin-bottom: 20px; background: #fff; user-select: none; }
         .calendar-header { display: flex; justify-content: center; align-items: center; margin-bottom: 20px; font-size: 16px; font-weight: 700; }
         .calendar-header button { background: none; border: none; font-size: 18px; cursor: pointer; padding: 0 15px; color: #888; }
         .calendar-header button:hover { color: #333; }
-        
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 13px; gap: 5px; }
         .weekday { font-weight: bold; color: #888; margin-bottom: 10px; font-size: 12px; }
         .day { padding: 10px 0; cursor: pointer; border-radius: 4px; transition: 0.2s; }
         .day:hover:not(.disabled) { background-color: #f5f5f5; }
-        
         .day.disabled { color: #e0e0e0; cursor: default; pointer-events: none; } 
         .day.selected { background-color: #ff6900; color: white; font-weight: bold; } 
         .day.in-range { background-color: #fff0e6; color: #ff6900; } 
 
         .selected-info { font-size: 13px; color: #666; margin-bottom: 15px; text-align: center; }
-
         .price-summary { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #ff6900; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
 
-
         /* 옵션 박스 스타일 */
-        .option-select-box {
-            margin-bottom: 30px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background-color: #fff;
-            overflow: hidden; 
-            padding: 0; 
-        }
-
-        .option-header {
-            background-color: #f9f9f9;
-            padding: 15px 20px;
-            font-weight: bold;
-            font-size: 15px;
-            border-bottom: 1px solid #eee;
-            color: #333;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* 스크롤 영역 */
-        .option-scroll-area {
-            height: 300px; 
-            overflow-y: auto; 
-            padding: 15px 20px;
-        }
-
-        /* 스크롤바 디자인 */
+        .option-select-box { margin-bottom: 30px; border: 1px solid #ddd; border-radius: 6px; background-color: #fff; overflow: hidden; padding: 0; }
+        .option-header { background-color: #f9f9f9; padding: 15px 20px; font-weight: bold; font-size: 15px; border-bottom: 1px solid #eee; color: #333; display: flex; justify-content: space-between; align-items: center; }
+        .option-scroll-area { height: 300px; overflow-y: auto; padding: 15px 20px; }
         .option-scroll-area::-webkit-scrollbar { width: 6px; }
         .option-scroll-area::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 3px; }
         .option-scroll-area::-webkit-scrollbar-track { background-color: #f1f1f1; }
 
-        .category-title {
-            font-size: 13px;
-            color: #ff6900;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 8px;
-            border-bottom: 1px dashed #ddd;
-            padding-bottom: 5px;
-        }
+        .category-title { font-size: 13px; color: #ff6900; font-weight: bold; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px dashed #ddd; padding-bottom: 5px; }
         .category-title:first-child { margin-top: 0; }
 
-        .option-item {
-            display: flex;
-            justify-content: space-between; 
-            align-items: center;
-            padding: 10px 0;
-            cursor: pointer;
-            font-size: 14px;
-            color: #555;
-            transition: background 0.1s;
-            border-bottom: 1px solid #f9f9f9;
-        }
+        .option-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; cursor: pointer; font-size: 14px; color: #555; transition: background 0.1s; border-bottom: 1px solid #f9f9f9; }
         .option-item:last-child { border-bottom: none; }
         .option-item:hover { background-color: #fafafa; }
-
         .option-left { display: flex; align-items: flex-start; } 
-        .option-checkbox {
-            width: 18px; 
-            height: 18px; 
-            accent-color: #ff6900; 
-            margin-right: 12px;
-            cursor: pointer;
-            margin-top: 3px; 
-        }
+        .option-checkbox { width: 18px; height: 18px; accent-color: #ff6900; margin-right: 12px; cursor: pointer; margin-top: 3px; }
         .option-price-text { font-weight: 500; color: #333; white-space: nowrap; margin-left: 10px; }
-
 
         /* 총 합계 */
         .total-section { margin-top: 30px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
@@ -226,76 +110,25 @@
         .total-amount { font-size: 24px; font-weight: 700; color: #ff6900; }
 
         /* 하단 버튼 그룹 스타일 */
-        .action-container {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            height: 56px;
-        }
-        
-        .btn-reserve-final {
-            flex: 1.2;
-            background-color: #ff5a00;
-            color: white;
-            font-size: 18px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .action-container { display: flex; gap: 15px; margin-top: 20px; height: 56px; }
+        .btn-reserve-final { flex: 1.2; background-color: #ff5a00; color: white; font-size: 18px; font-weight: 500; border: none; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; }
         .btn-reserve-final:hover { background-color: #e04e00; }
-
-        .btn-group-right {
-            flex: 1.5;
-            display: flex;
-            border: 1px solid #ddd;
-            background-color: white;
-            align-items: center;
-        }
-
-        .like-box {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            cursor: pointer;
-            height: 100%;
-            border-right: 1px solid #eee;
-            font-size: 16px;
-            font-weight: 500;
-            color: #333;
-        }
+        .btn-group-right { flex: 1.5; display: flex; border: 1px solid #ddd; background-color: white; align-items: center; }
+        .like-box { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height: 100%; border-right: 1px solid #eee; font-size: 16px; font-weight: 500; color: #333; }
         .like-box:hover { background-color: #f9f9f9; }
         .like-box svg { width: 22px; height: 22px; fill: none; stroke: #333; stroke-width: 1.5; transition: 0.2s; }
         .like-box.liked svg { fill: #ff5a00; stroke: #ff5a00; } 
-
-        .share-box {
-            width: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            height: 100%;
-        }
+        .share-box { width: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; height: 100%; }
         .share-box:hover { background-color: #f9f9f9; }
         .share-box svg { width: 22px; height: 22px; stroke: #333; stroke-width: 1.5; }
-
     </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-    const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
-    const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
-    
-    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함 (이름 충돌 방지)
-    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
-    
-    console.log("홈페이지-슈파베이스 연결 성공!");
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
+        const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
+        window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
+        console.log("홈페이지-슈파베이스 연결 성공!");
+    </script>
 </head>
 <body class="bg-white text-slate-900 font-sans">
 
@@ -307,22 +140,22 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
           </button>
-    
+   
           <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md">
             <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
             <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
           </a>
-    
+   
           <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
             <a href="about.html" class="hover:text-orange-200" data-i18n="nav_about">about</a>
             <a href="rooms.html" class="hover:text-orange-200" data-i18n="nav_rooms">rooms</a>
-            <a <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>   
+            <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>    
             <a href="reservation.html" class="hover:text-orange-200 underline underline-offset-4" data-i18n="nav_reservation">reservation (예약)</a>
             <a href="instaspot.html" class="hover:text-orange-200">insta spot (관광&맛집&카페)</a>
             <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
             <a href="contact.html" class="hover:text-orange-200" data-i18n="nav_contact">contact</a>
           </nav>
-    
+   
           <div class="flex items-center relative drop-shadow-md">
              <div class="flex items-center gap-1 cursor-pointer relative">
                 <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
@@ -337,7 +170,7 @@
                 </select>
              </div>
           </div>
-    
+   
         </div>
     </header>
 
@@ -372,7 +205,7 @@
             <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
             <li><a href="contact.html" class="block hover:text-[#ff6900]" data-i18n="nav_contact">contact</a></li>
           </ul>
-    
+   
           <div class="mt-8 border-t pt-4">
               <p class="text-sm text-slate-400 mb-2">Language</p>
               <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
@@ -611,34 +444,34 @@
 
     <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
         <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
-          <div class="flex justify-center gap-4 text-lg"> 
-              <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank">
-                  <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
-              </a>
-              <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
-                  <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
-              </a>
-              <a href="http://pf.kakao.com/_xiITuG" target="_blank">
-                  <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
-              </a>
-              <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
-                  <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
-              </a>          
-          </div>
+            <div class="flex justify-center gap-4 text-lg"> 
+                <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank">
+                    <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
+                </a>
+                <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
+                    <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
+                </a>
+                <a href="http://pf.kakao.com/_xiITuG" target="_blank">
+                    <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
+                </a>
+                <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
+                    <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
+                </a>           
+            </div>
   
-          <div class="space-y-1">
-            <p>insta hotel mainbranch, Korea</p>
-            <p id="companyName">(주)호텔인스타</p>
-            <p id="ceoName">대표자 : 이영환</p>
-            <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
-            <p id="address">수원시 영통구 영통로 94-6</p>
-            <p>Business License 176-24-01388 | Tel 031-203-4301</p>
-          </div>
+            <div class="space-y-1">
+                <p>insta hotel mainbranch, Korea</p>
+                <p id="companyName">(주)호텔인스타</p>
+                <p id="ceoName">대표자 : 이영환</p>
+                <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
+                <p id="address">수원시 영통구 영통로 94-6</p>
+                <p>Business License 176-24-01388 | Tel 031-203-4301</p>
+            </div>
   
-          <div class="flex justify-center gap-4 pt-2">
-            <a href="#" class="hover:underline" id="terms">이용약관</a>
-            <a href="#" class="hover:underline" id="privacy">개인정보처리방침</a>
-          </div>
+            <div class="flex justify-center gap-4 pt-2">
+                <a href="#" class="hover:underline" id="terms">이용약관</a>
+                <a href="#" class="hover:underline" id="privacy">개인정보처리방침</a>
+            </div>
         </div>
     </section>
   
@@ -1086,6 +919,7 @@
             let grandTotal = roomPrice + optionPrice;
             document.getElementById('grand-total').innerText = grandTotal.toLocaleString();
         }
+
     // [수정된 goToPayment 함수]
     function goToPayment() {
         // 1. 날짜 및 박수 데이터 가져오기
@@ -1130,8 +964,8 @@
         const optionDetailsEncoded = encodeURIComponent(JSON.stringify(selectedOptionNames));
 
         // 5. URL 생성 (optionDetails 파라미터 추가됨)
-        // 주의: 결제 페이지 파일명이 '결제특실.html' 인지 꼭 확인하세요.
-        const url = `결제특실.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${grandTotal}&optionDetails=${optionDetailsEncoded}`;
+        // ★★★ [주의] 파일명을 'payment.html'로 수정했습니다. ★★★
+        const url = `payment.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${grandTotal}&optionDetails=${optionDetailsEncoded}`;
         
         // 6. 페이지 이동
         location.href = url;
