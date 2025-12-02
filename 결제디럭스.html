@@ -314,42 +314,42 @@
                         <img src="hero2.jpg" alt="객실 이미지" class="product-img">
                         <div class="product-details">
                             <h3 data-i18n="room_name">디럭스 (Deluxe)</h3>
-                            <p><span data-i18n="label_schedule">일정</span>: <span id="display-nights">1박</span> (<span id="display-date-range">날짜 미선택</span>)</p>
-                            <p><span data-i18n="label_guests">인원</span>: 성인 2명 (기본)</p>
+                            <p><span data-i18n="label_schedule">일정</span>: <span id="display-nights">1박</span> (<span id="display-date-range" data-i18n="text_no_date">날짜 미선택</span>)</p>
+                            <p><span data-i18n="label_guests">인원</span>: <span data-i18n="text_adults_default">성인 2명 (기본)</span></p>
                             <div class="price" id="display-room-price-info">0원</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="section-card">
-    <div class="section-title" data-i18n="sect_booker">예약자 정보</div>
-    
-    <div class="input-row">
-        <div class="input-half">
-            <input type="text" id="input-name" placeholder="이름 (Name)">
-        </div>
-        <div class="input-half">
-            <input type="text" id="input-phone" placeholder="연락처 (Phone)">
-        </div>
-    </div>
+                    <div class="section-title" data-i18n="sect_booker">예약자 정보</div>
+                    
+                    <div class="input-row">
+                        <div class="input-half">
+                            <input type="text" id="input-name" placeholder="이름 (Name)">
+                        </div>
+                        <div class="input-half">
+                            <input type="text" id="input-phone" placeholder="연락처 (Phone)">
+                        </div>
+                    </div>
 
-    <input type="email" id="input-email" placeholder="이메일 (E-mail)">
-    
-    <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;">
-        * 우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.
-    </div>
+                    <input type="email" id="input-email" placeholder="이메일 (E-mail)">
+                    
+                    <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;" data-i18n="notice_sns">
+                        * 우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.
+                    </div>
 
-    <div class="input-row">
-        <div class="input-half">
-            <input type="text" id="input-instagram" placeholder="Instagram">
-        </div>
-        <div class="input-half">
-            <input type="text" id="input-tiktok" placeholder="Tiktok">
-        </div>
-    </div>
-    
-    <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
-</div>
+                    <div class="input-row">
+                        <div class="input-half">
+                            <input type="text" id="input-instagram" placeholder="Instagram">
+                        </div>
+                        <div class="input-half">
+                            <input type="text" id="input-tiktok" placeholder="Tiktok">
+                        </div>
+                    </div>
+                    
+                    <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
+                </div>
 
 
                 <div class="section-card">
@@ -470,6 +470,7 @@
                 unit_night: "박",
                 alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
                 alert_done: "결제가 완료되었습니다! (데모)",
+                alert_fill_info: "예약자 정보를 모두 입력해주세요.",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 
@@ -478,12 +479,15 @@
                 room_name: "디럭스 (Deluxe)",
                 label_schedule: "일정",
                 label_guests: "인원",
+                text_no_date: "날짜 미선택",
+                text_adults_default: "성인 2명 (기본)",
                 
                 sect_booker: "예약자 정보",
                 ph_name: "이름 (Name)",
                 ph_phone: "연락처 (Phone)",
                 ph_email: "이메일 (E-mail)",
                 ph_request: "요청사항 (Requests)",
+                notice_sns: "* 우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.",
                 
                 sect_extra: "추가정보 입력",
                 notice_confirm_email: "예약 확정은 이메일 알림을 받으셔야 완료됩니다.",
@@ -521,6 +525,7 @@
                 unit_night: " nights",
                 alert_agree: "You must agree to all terms to proceed.",
                 alert_done: "Payment Completed! (Demo)",
+                alert_fill_info: "Please fill in all guest information.",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 
@@ -529,12 +534,15 @@
                 room_name: "Deluxe",
                 label_schedule: "Schedule",
                 label_guests: "Guests",
+                text_no_date: "Date not selected",
+                text_adults_default: "2 Adults (Standard)",
                 
                 sect_booker: "Guest Info",
                 ph_name: "Name",
                 ph_phone: "Phone Number",
                 ph_email: "E-mail Address",
                 ph_request: "Requests",
+                notice_sns: "* Follow us on SNS to check your reservation information quickly and easily.",
                 
                 sect_extra: "Additional Info",
                 notice_confirm_email: "Booking is confirmed only after receiving the email notification.",
@@ -572,6 +580,7 @@
                 unit_night: " 泊",
                 alert_agree: "すべての規約に同意する必要があります。",
                 alert_done: "決済が完了しました！(デモ)",
+                alert_fill_info: "予約者情報をすべて入力してください。",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 
@@ -580,12 +589,15 @@
                 room_name: "デラックス (Deluxe)",
                 label_schedule: "日程",
                 label_guests: "人数",
+                text_no_date: "日付未選択",
+                text_adults_default: "大人2名 (基本)",
                 
                 sect_booker: "予約者情報",
                 ph_name: "名前",
                 ph_phone: "連絡先",
                 ph_email: "メールアドレス",
                 ph_request: "リクエスト",
+                notice_sns: "* SNSをフォローすると、予約情報を簡単かつ迅速に確認できます。",
                 
                 sect_extra: "追加情報",
                 notice_confirm_email: "予約確定はメール通知を受信した時点で完了します。",
@@ -623,6 +635,7 @@
                 unit_night: " 晚",
                 alert_agree: "必须同意所有条款才能付款。",
                 alert_done: "支付完成！(演示)",
+                alert_fill_info: "请输入所有预订者信息。",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 
@@ -631,12 +644,15 @@
                 room_name: "豪华房 (Deluxe)",
                 label_schedule: "日程",
                 label_guests: "人数",
+                text_no_date: "未选择日期",
+                text_adults_default: "成人2名 (标准)",
                 
                 sect_booker: "预订人信息",
                 ph_name: "姓名",
                 ph_phone: "联系方式",
                 ph_email: "电子邮箱",
                 ph_request: "特殊要求",
+                notice_sns: "* 关注我们的SNS，您可以简单快速地确认预约信息。",
                 
                 sect_extra: "附加信息",
                 notice_confirm_email: "收到电子邮件通知后，预订即确认为完成。",
@@ -688,7 +704,7 @@
             document.getElementById('input-name').placeholder = t.ph_name;
             document.getElementById('input-phone').placeholder = t.ph_phone;
             document.getElementById('input-email').placeholder = t.ph_email;
-            document.getElementById('input-request').placeholder = t.ph_request; // 요청사항 번역
+            document.getElementById('input-request').placeholder = t.ph_request;
 
             document.getElementById("companyName").innerText = t.company;
             document.getElementById("ceoName").innerText = t.ceo;
@@ -715,7 +731,11 @@
 
             if(checkin && checkout) {
                 document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
+            } else {
+                // 파라미터가 없을 때도 번역된 기본 문구 출력
+                document.getElementById('display-date-range').innerText = t.text_no_date;
             }
+
             document.getElementById('display-nights').innerText = nights + t.unit_night;
             
             document.getElementById('display-room-price-info').innerText = fmt(roomPrice);
@@ -723,7 +743,7 @@
             document.getElementById('summary-option-price').innerText = fmt(optionPrice);
             document.getElementById('summary-total-price').innerText = fmt(total);
 
-            // [NEW] 옵션 상세 리스트 표시 로직 (URL에서 파싱하여 표시)
+            // [NEW] 옵션 상세 리스트 표시 로직
             const optionContainer = document.getElementById('option-detail-list');
             const optionDetailsRaw = params.get('optionDetails');
             let optionDetails = [];
@@ -737,7 +757,6 @@
             }
 
             if (optionDetails.length > 0) {
-                // 옵션이 있을 경우 화면에 표시
                 optionContainer.style.display = 'block';
                 const listHtml = optionDetails.map(item => `<li>${item}</li>`).join('');
                 optionContainer.innerHTML = `
@@ -745,7 +764,6 @@
                     <ul>${listHtml}</ul>
                 `;
             } else {
-                // 옵션이 없을 경우 숨김
                 optionContainer.style.display = 'none';
                 optionContainer.innerHTML = '';
             }
@@ -798,7 +816,8 @@
             const isRefundChecked = document.getElementById('chk-refund').checked;
             const isTermsChecked = document.getElementById('chk-all').checked;
 
-            const alertMsg = translations[currentLang].alert_agree;
+            const t = translations[currentLang];
+            const alertMsg = t.alert_agree;
 
             // 동의하지 않았으면 경고창 띄우고 함수 종료
             if (!isInfoChecked || !isRefundChecked || !isTermsChecked) {
@@ -806,7 +825,6 @@
                 return;
             }
 
-            // ▼▼▼ [여기에 넣으시면 됩니다!] ▼▼▼
             // 2. 폼 데이터 수집
             const guestData = {
                 name: document.getElementById('input-name').value.trim(),
@@ -819,15 +837,16 @@
 
             // 3. 필수 입력값 검증 (이름, 전화번호, 이메일이 비어있으면 경고)
             if (!guestData.name || !guestData.phone || !guestData.email) {
-                alert("예약자 정보를 모두 입력해주세요.");
+                // 경고창 메시지도 번역된 내용으로 출력
+                alert(t.alert_fill_info);
                 return;
             }
 
-            // 데이터 확인용 로그 (개발자 도구 콘솔에서 확인 가능)
+            // 데이터 확인용 로그
             console.log("수집된 예약 데이터:", guestData);
 
             // 4. 결제 완료 알림
-            alert(translations[currentLang].alert_done);
+            alert(t.alert_done);
         }
     </script>
 </body>
