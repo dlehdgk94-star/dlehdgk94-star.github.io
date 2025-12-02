@@ -248,17 +248,18 @@
             .product-img { width: 80px; height: 80px; }
         }
     </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-    const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
-    const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
-    
-    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함 (이름 충돌 방지)
-    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
-    
-    console.log("홈페이지-슈파베이스 연결 성공!");
-</script>
+    <script>
+        const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
+        const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
+        
+        // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
+        window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
+        
+        console.log("홈페이지-슈파베이스 연결 성공!");
+    </script>
 </head>
 <body class="bg-[#f4f4f4] text-slate-900 font-sans">
 
@@ -822,13 +823,14 @@
             }
         }
 
-        function requestPayment() {
+        // [수정됨] 실제 결제 및 데이터베이스 저장 함수
+        async function requestPayment() {
+            const t = translations[currentLang];
+
             // 1. 동의 체크 확인
             const isInfoChecked = document.getElementById('chk-info').checked;
             const isRefundChecked = document.getElementById('chk-refund').checked;
             const isTermsChecked = document.getElementById('chk-all').checked;
-
-            const t = translations[currentLang];
 
             if (!isInfoChecked || !isRefundChecked || !isTermsChecked) {
                 alert(t.alert_agree);
@@ -836,23 +838,82 @@
             }
 
             // 2. 폼 데이터 수집
-            const guestData = {
-                name: document.getElementById('input-name').value.trim(),
-                phone: document.getElementById('input-phone').value.trim(),
-                email: document.getElementById('input-email').value.trim(),
-                instagram: document.getElementById('input-instagram').value.trim(),
-                tiktok: document.getElementById('input-tiktok').value.trim(),
-                request: document.getElementById('input-request').value.trim()
-            };
+            const name = document.getElementById('input-name').value.trim();
+            const phone = document.getElementById('input-phone').value.trim();
+            const email = document.getElementById('input-email').value.trim();
+            const instagram = document.getElementById('input-instagram').value.trim();
+            const tiktok = document.getElementById('input-tiktok').value.trim();
+            const request = document.getElementById('input-request').value.trim();
 
-            // 3. 필수 입력값 검증 (이름, 전화번호, 이메일)
-            if (!guestData.name || !guestData.phone || !guestData.email) {
+            // 3. 필수 입력값 검증
+            if (!name || !phone || !email) {
                 alert(t.alert_fill_info);
                 return;
             }
 
-            // 4. 결제 성공 알림 (데모)
-            alert(t.alert_done);
+            // 4. URL 파라미터에서 예약 상세 정보 가져오기
+            const params = new URLSearchParams(window.location.search);
+            const checkin = params.get('checkin');
+            const checkout = params.get('checkout');
+            const roomPrice = params.get('roomPrice') ? parseInt(params.get('roomPrice')) : 0;
+            const total = params.get('total') ? parseInt(params.get('total')) : 0;
+            
+            // 옵션 정보 JSON 변환
+            let selectedOptions = [];
+            try {
+                const rawOptions = params.get('optionDetails');
+                if (rawOptions) {
+                    selectedOptions = JSON.parse(decodeURIComponent(rawOptions));
+                }
+            } catch (e) {
+                console.error("옵션 파싱 오류", e);
+            }
+
+            // [UX] 처리 중 상태 표시
+            const submitBtn = document.querySelector('.btn-submit');
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "Processing...";
+            submitBtn.disabled = true;
+
+            try {
+                // 5. Supabase bookings 테이블에 데이터 삽입
+                const { data, error } = await window.supabaseClient
+                    .from('bookings')
+                    .insert([
+                        {
+                            room_id: 3,                 // [요청사항] 프리미엄 ID = 3 고정
+                            guest_name: name,
+                            phone: phone,
+                            guest_email: email,
+                            social_insta: instagram,
+                            social_tiktok: tiktok,
+                            guest_request: request,
+                            check_in: checkin,          // YYYY-MM-DD 형식 권장
+                            check_out: checkout,
+                            room_price: roomPrice,
+                            total_price: total,
+                            selected_options: selectedOptions, // jsonb 배열 저장
+                            status: '결제완료'           // 초기 상태
+                        }
+                    ])
+                    .select();
+
+                if (error) {
+                    throw error;
+                }
+
+                // 6. 성공 처리
+                alert("예약이 성공적으로 완료되었습니다!");
+                window.location.href = 'index.html'; 
+
+            } catch (err) {
+                console.error('Booking Error:', err);
+                alert("예약 저장 중 오류가 발생했습니다.\n" + err.message);
+                
+                // 버튼 복구
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+            }
         }
     </script>
 </body>
