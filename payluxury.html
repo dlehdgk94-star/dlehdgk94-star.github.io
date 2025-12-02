@@ -194,6 +194,7 @@
             margin-top: 20px;
         }
         .btn-submit:hover { background-color: #e05e00; }
+        .btn-submit:disabled { background-color: #ccc; cursor: not-allowed; }
 
         /* 팝업 모달 스타일 */
         .modal {
@@ -431,7 +432,7 @@
                     </ul>
                 </div>
 
-                <button class="btn-submit" onclick="requestPayment()" data-i18n="btn_pay">결제하기</button>
+                <button id="btn-submit" class="btn-submit" onclick="requestPayment()" data-i18n="btn_pay">결제하기</button>
 
             </div>
         </div>
@@ -470,7 +471,8 @@
                 unit_won: "원",
                 unit_night: "박",
                 alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
-                alert_done: "결제가 완료되었습니다! (데모)",
+                alert_done: "결제가 완료되었습니다! 예약 확인 페이지로 이동합니다.",
+                alert_fail: "결제 처리 중 오류가 발생했습니다: ",
                 alert_fill_info: "예약자 정보를 모두 입력해주세요.",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
@@ -526,7 +528,8 @@
                 unit_won: " KRW",
                 unit_night: " nights",
                 alert_agree: "You must agree to all terms to proceed.",
-                alert_done: "Payment Completed! (Demo)",
+                alert_done: "Payment Completed! Redirecting...",
+                alert_fail: "Error processing payment: ",
                 alert_fill_info: "Please fill in all guest information.",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
@@ -582,7 +585,8 @@
                 unit_won: " ウォン",
                 unit_night: " 泊",
                 alert_agree: "すべての規約に同意する必要があります。",
-                alert_done: "決済が完了しました！(デモ)",
+                alert_done: "決済が完了しました！予約確認ページへ移動します。",
+                alert_fail: "決済処理中にエラーが発生しました: ",
                 alert_fill_info: "予約者情報をすべて入力してください。",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
@@ -638,7 +642,8 @@
                 unit_won: " 韩元",
                 unit_night: " 晚",
                 alert_agree: "必须同意所有条款才能付款。",
-                alert_done: "支付完成！(演示)",
+                alert_done: "支付完成！跳转至确认页面...",
+                alert_fail: "处理付款时出错: ",
                 alert_fill_info: "请输入所有预订人信息。",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
@@ -815,42 +820,100 @@
             }
         }
 
-        function requestPayment() {
+        // [핵심 변경] Supabase로 데이터 전송하는 함수 (비동기 처리)
+        async function requestPayment() {
             // 1. 체크박스 동의 확인
             const isInfoChecked = document.getElementById('chk-info').checked;
             const isRefundChecked = document.getElementById('chk-refund').checked;
             const isTermsChecked = document.getElementById('chk-all').checked;
 
-            const alertMsg = translations[currentLang].alert_agree;
+            const t = translations[currentLang];
 
             // 동의하지 않았으면 경고창 띄우고 함수 종료
             if (!isInfoChecked || !isRefundChecked || !isTermsChecked) {
-                alert(alertMsg);
+                alert(t.alert_agree);
                 return;
             }
 
-            // 2. 폼 데이터 수집
-            const guestData = {
-                name: document.getElementById('input-name').value.trim(),
+            // 2. URL 파라미터에서 예약 상세 정보 가져오기
+            const params = new URLSearchParams(window.location.search);
+            const checkin = params.get('checkin');
+            const checkout = params.get('checkout');
+            const roomPrice = parseInt(params.get('roomPrice')) || 0;
+            const total = parseInt(params.get('total')) || 0;
+            
+            // 옵션 JSON 처리
+            let selectedOptions = [];
+            const optionDetailsRaw = params.get('optionDetails');
+            if (optionDetailsRaw) {
+                try {
+                    selectedOptions = JSON.parse(decodeURIComponent(optionDetailsRaw));
+                } catch(e) {
+                    console.log("Option parsing error", e);
+                }
+            }
+
+            // 날짜 정보 유효성 검사 (없으면 예약 진행 불가)
+            if (!checkin || !checkout) {
+                alert("예약 날짜 정보가 없습니다. 다시 예약해주세요.");
+                return;
+            }
+
+            // 3. 폼 데이터 수집 및 DB 전송 포맷 맞추기
+            // Supabase 'bookings' 테이블 컬럼과 일치해야 함
+            const insertData = {
+                room_id: 4,  // 요청사항: Luxury ID는 4로 고정
+                guest_name: document.getElementById('input-name').value.trim(),
                 phone: document.getElementById('input-phone').value.trim(),
-                email: document.getElementById('input-email').value.trim(),
-                instagram: document.getElementById('input-instagram').value.trim(),
-                tiktok: document.getElementById('input-tiktok').value.trim(),
-                request: document.getElementById('input-request').value.trim()
+                guest_email: document.getElementById('input-email').value.trim(),
+                check_in: checkin,
+                check_out: checkout,
+                social_insta: document.getElementById('input-instagram').value.trim(),
+                social_tiktok: document.getElementById('input-tiktok').value.trim(),
+                guest_request: document.getElementById('input-request').value.trim(),
+                room_price: roomPrice,
+                selected_options: selectedOptions, // jsonb 타입
+                total_price: total,
+                status: 'confirmed' // 예약 확정 상태 (또는 paid)
             };
 
-            // 3. 필수 입력값 검증 (이름, 전화번호, 이메일이 비어있으면 경고)
-            if (!guestData.name || !guestData.phone || !guestData.email) {
-                // 수정된 부분: 언어별 경고 메시지 사용
-                alert(translations[currentLang].alert_fill_info);
+            // 4. 필수 입력값 검증 (이름, 전화번호, 이메일)
+            if (!insertData.guest_name || !insertData.phone || !insertData.guest_email) {
+                alert(t.alert_fill_info);
                 return;
             }
 
-            // 데이터 확인용 로그 (개발자 도구 콘솔에서 확인 가능)
-            console.log("Collected Guest Data:", guestData);
+            // 버튼 비활성화 (중복 클릭 방지)
+            const submitBtn = document.getElementById('btn-submit');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Processing...";
 
-            // 4. 결제 완료 알림
-            alert(translations[currentLang].alert_done);
+            try {
+                // Supabase에 데이터 삽입
+                const { data, error } = await window.supabaseClient
+                    .from('bookings')
+                    .insert([insertData])
+                    .select(); // 삽입 후 결과 반환
+
+                if (error) {
+                    throw error;
+                }
+
+                // 성공 시
+                console.log("Booking Success:", data);
+                alert(t.alert_done);
+                
+                // 메인 페이지 등으로 이동
+                window.location.href = 'index.html'; 
+
+            } catch (err) {
+                console.error("Booking Error:", err);
+                alert(t.alert_fail + err.message);
+                
+                // 에러 발생 시 버튼 다시 활성화
+                submitBtn.disabled = false;
+                submitBtn.innerText = t.btn_pay;
+            }
         }
     </script>
 </body>
