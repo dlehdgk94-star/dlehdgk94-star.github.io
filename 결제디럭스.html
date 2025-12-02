@@ -322,19 +322,35 @@
                 </div>
 
                 <div class="section-card">
-                    <div class="section-title" data-i18n="sect_booker">예약자 정보</div>
-                    <div class="input-row">
-                        <div class="input-half">
-                            <input type="text" id="input-name" placeholder="이름 (Name)">
-                        </div>
-                        <div class="input-half">
-                            <input type="text" id="input-phone" placeholder="연락처 (Phone)">
-                        </div>
-                    </div>
-                    <input type="email" id="input-email" placeholder="이메일 (E-mail)">
-                    
-                    <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
-                </div>
+    <div class="section-title" data-i18n="sect_booker">예약자 정보</div>
+    
+    <div class="input-row">
+        <div class="input-half">
+            <input type="text" id="input-name" placeholder="이름 (Name)">
+        </div>
+        <div class="input-half">
+            <input type="text" id="input-phone" placeholder="연락처 (Phone)">
+        </div>
+    </div>
+
+    <input type="email" id="input-email" placeholder="이메일 (E-mail)">
+    
+    <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;">
+        * 우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.
+    </div>
+
+    <div class="input-row">
+        <div class="input-half">
+            <input type="text" id="input-instagram" placeholder="Instagram">
+        </div>
+        <div class="input-half">
+            <input type="text" id="input-tiktok" placeholder="Tiktok">
+        </div>
+    </div>
+    
+    <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
+</div>
+
 
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_extra">추가정보 입력</div>
@@ -777,17 +793,40 @@
         }
 
         function requestPayment() {
+            // 1. 체크박스 동의 확인
             const isInfoChecked = document.getElementById('chk-info').checked;
             const isRefundChecked = document.getElementById('chk-refund').checked;
             const isTermsChecked = document.getElementById('chk-all').checked;
 
             const alertMsg = translations[currentLang].alert_agree;
 
+            // 동의하지 않았으면 경고창 띄우고 함수 종료
             if (!isInfoChecked || !isRefundChecked || !isTermsChecked) {
                 alert(alertMsg);
                 return;
             }
 
+            // ▼▼▼ [여기에 넣으시면 됩니다!] ▼▼▼
+            // 2. 폼 데이터 수집
+            const guestData = {
+                name: document.getElementById('input-name').value.trim(),
+                phone: document.getElementById('input-phone').value.trim(),
+                email: document.getElementById('input-email').value.trim(),
+                instagram: document.getElementById('input-instagram').value.trim(),
+                tiktok: document.getElementById('input-tiktok').value.trim(),
+                request: document.getElementById('input-request').value.trim()
+            };
+
+            // 3. 필수 입력값 검증 (이름, 전화번호, 이메일이 비어있으면 경고)
+            if (!guestData.name || !guestData.phone || !guestData.email) {
+                alert("예약자 정보를 모두 입력해주세요.");
+                return;
+            }
+
+            // 데이터 확인용 로그 (개발자 도구 콘솔에서 확인 가능)
+            console.log("수집된 예약 데이터:", guestData);
+
+            // 4. 결제 완료 알림
             alert(translations[currentLang].alert_done);
         }
     </script>
