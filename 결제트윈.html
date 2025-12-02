@@ -311,11 +311,11 @@
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_product">예약 상품 정보</div>
                     <div class="product-info">
-                        <img src="hero10.jpg" alt="객실 이미지" class="product-img">
+                        <img src="hero2.jpg" alt="객실 이미지" class="product-img">
                         <div class="product-details">
-                            <h3 data-i18n="room_name">트윈 (Twin)</h3>
+                            <h3 data-i18n="room_name">디럭스 (Deluxe)</h3>
                             <p><span data-i18n="label_schedule">일정</span>: <span id="display-nights">1박</span> (<span id="display-date-range">날짜 미선택</span>)</p>
-                            <p><span data-i18n="label_guests">인원</span>: 성인 2명 (최대 3명 무료)</p>
+                            <p><span data-i18n="label_guests">인원</span>: 성인 2명 (기본)</p>
                             <div class="price" id="display-room-price-info">0원</div>
                         </div>
                     </div>
@@ -332,6 +332,19 @@
                         </div>
                     </div>
                     <input type="email" id="input-email" placeholder="이메일 (E-mail)">
+                    
+                    <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;">
+                        * 우리와 SNS 팔로우 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-half">
+                            <input type="text" id="input-instagram" placeholder="인스타그램 (Instagram)">
+                        </div>
+                        <div class="input-half">
+                            <input type="text" id="input-tiktok" placeholder="틱톡 (Tiktok)">
+                        </div>
+                    </div>
                     
                     <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
                 </div>
@@ -459,7 +472,7 @@
                 
                 page_title: "결제하기",
                 sect_product: "예약 상품 정보",
-                room_name: "트윈 (Twin)",
+                room_name: "디럭스 (Deluxe)",
                 label_schedule: "일정",
                 label_guests: "인원",
                 
@@ -486,7 +499,6 @@
                 label_room_price: "객실 가격",
                 label_option: "옵션(조식 등)",
                 label_total_price: "총 결제금액",
-                
                 label_option_list: "선택한 옵션",
                 
                 sect_method: "결제수단",
@@ -511,7 +523,7 @@
                 
                 page_title: "Payment",
                 sect_product: "Booking Info",
-                room_name: "Twin Room",
+                room_name: "Deluxe",
                 label_schedule: "Schedule",
                 label_guests: "Guests",
                 
@@ -538,7 +550,6 @@
                 label_room_price: "Room Price",
                 label_option: "Options",
                 label_total_price: "Total Amount",
-                
                 label_option_list: "Selected Options",
                 
                 sect_method: "Payment Method",
@@ -563,7 +574,7 @@
                 
                 page_title: "決済",
                 sect_product: "予約情報",
-                room_name: "ツインルーム (Twin)",
+                room_name: "デラックス (Deluxe)",
                 label_schedule: "日程",
                 label_guests: "人数",
                 
@@ -590,7 +601,6 @@
                 label_room_price: "客室価格",
                 label_option: "オプション",
                 label_total_price: "総決済金額",
-                
                 label_option_list: "選択したオプション",
                 
                 sect_method: "決済手段",
@@ -615,7 +625,7 @@
                 
                 page_title: "支付",
                 sect_product: "预订信息",
-                room_name: "双床房 (Twin)",
+                room_name: "豪华房 (Deluxe)",
                 label_schedule: "日程",
                 label_guests: "人数",
                 
@@ -642,7 +652,6 @@
                 label_room_price: "客房价格",
                 label_option: "选项",
                 label_total_price: "总支付金额",
-                
                 label_option_list: "已选择的选项",
                 
                 sect_method: "支付方式",
@@ -698,6 +707,7 @@
 
             const t = translations[currentLang];
             const unit = t.unit_won;
+
             const fmt = (n) => n.toLocaleString() + unit;
 
             if(checkin && checkout) {
@@ -780,6 +790,7 @@
         }
 
         function requestPayment() {
+            // 1. 동의 체크 확인
             const isInfoChecked = document.getElementById('chk-info').checked;
             const isRefundChecked = document.getElementById('chk-refund').checked;
             const isTermsChecked = document.getElementById('chk-all').checked;
@@ -791,6 +802,23 @@
                 return;
             }
 
+            // 2. 폼 데이터 수집
+            const guestData = {
+                name: document.getElementById('input-name').value.trim(),
+                phone: document.getElementById('input-phone').value.trim(),
+                email: document.getElementById('input-email').value.trim(),
+                instagram: document.getElementById('input-instagram').value.trim(),
+                tiktok: document.getElementById('input-tiktok').value.trim(),
+                request: document.getElementById('input-request').value.trim()
+            };
+
+            // 3. 필수 입력값 검증 (이름, 전화번호, 이메일)
+            if (!guestData.name || !guestData.phone || !guestData.email) {
+                alert("예약자 정보를 모두 입력해주세요.");
+                return;
+            }
+
+            // 4. 결제 성공 알림 (데모)
             alert(translations[currentLang].alert_done);
         }
     </script>
