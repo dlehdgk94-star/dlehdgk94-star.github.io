@@ -1,0 +1,37 @@
+<section id="bluelounge" class="relative w-full h-[600px] flex items-center justify-center overflow-hidden bg-slate-900">
+    
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-[#0f172a] to-[#1e3a8a] opacity-90 z-0"></div>
+
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-pulse"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-pulse" style="animation-delay: 2s;"></div>
+
+    <div class="relative z-10 text-center px-4">
+        <span class="inline-block py-1 px-3 border border-blue-500/30 rounded-full bg-blue-500/10 text-blue-300 text-xs font-medium tracking-widest mb-6 backdrop-blur-sm">
+            COMING SOON
+        </span>
+
+        <h2 class="text-4xl md:text-6xl font-light text-white mb-4 tracking-tight">
+            BLUE <span class="font-bold text-blue-400">LOUNGE</span>
+        </h2>
+
+        <p class="text-slate-400 text-sm md:text-base max-w-lg mx-auto leading-relaxed mb-10">
+            감각적인 음악과 특별한 칵테일이 있는 공간.<br class="hidden md:block">
+            여러분의 밤을 더욱 특별하게 만들 공간을 준비하고 있습니다.
+        </p>
+
+        <div class="inline-flex items-center gap-2 text-slate-500 text-sm border-t border-slate-800 pt-6 mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin-slow"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m7.8 16.2-2.9 2.9"/><path d="M6 12H2"/><path d="m7.8 7.8-2.9-2.9"/></svg>
+            <span>Preparing for Grand Opening</span>
+        </div>
+    </div>
+</section>
+
+<style>
+    .animate-spin-slow {
+        animation: spin 8s linear infinite;
+    }
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+</style>
