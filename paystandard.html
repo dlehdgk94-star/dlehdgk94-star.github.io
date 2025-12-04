@@ -148,7 +148,7 @@
         }
         .total-price { color: #ff6900; font-size: 24px; }
 
-        /* [NEW] 선택한 옵션 리스트 스타일 추가 */
+        /* 선택한 옵션 리스트 스타일 */
         .option-detail-list { 
             margin-top: 5px; 
             margin-bottom: 15px;
@@ -264,7 +264,7 @@
 <body class="bg-[#f4f4f4] text-slate-900 font-sans">
 
     <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
+        <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
           
           <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
@@ -364,11 +364,11 @@
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_product">예약 상품 정보</div>
                     <div class="product-info">
-                        <img src="hero12.jpg" alt="객실 이미지" class="product-img">
+                        <img src="hero2.jpg" alt="객실 이미지" class="product-img">
                         <div class="product-details">
-                            <h3 data-i18n="room_name_std">스탠다드 (Standard)</h3>
+                            <h3 data-i18n="room_name">프리미엄 (Premium)</h3>
                             <p><span data-i18n="label_schedule">일정</span>: <span id="display-nights" data-i18n="text_1night">1박</span> (<span id="display-date-range" data-i18n="text_date_unselected">날짜 미선택</span>)</p>
-                            <p><span data-i18n="label_guests">인원</span>: <span data-i18n="text_capacity_std">성인 2명 (기본)</span></p>
+                            <p><span data-i18n="label_guests">인원</span>: <span data-i18n="text_guests_default">성인 2명 (기본)</span></p>
                             <div class="price" id="display-room-price-info">0원</div>
                         </div>
                     </div>
@@ -546,6 +546,9 @@
 
     const client = window.supabaseClient; 
 
+    /* --------------------------------------
+       2. 다국어 번역 데이터 (이미지 파일명 적용)
+    -------------------------------------- */
     const translations = {
         ko: {
             img: "kr.png", // 이미지 파일명
@@ -941,7 +944,7 @@
         const isTermsChecked = document.getElementById('chk-all').checked;
 
         const t = translations[currentLang];
-        const btn = document.getElementById('pay-button');
+        const btn = document.getElementById('btn-submit');
 
         if (!isInfoChecked || !isRefundChecked || !isTermsChecked) {
             alert(t.alert_agree);
@@ -1002,7 +1005,7 @@
         };
 
         try {
-            const { data, error } = await client
+            const { data, error } = await window.supabaseClient
                 .from('bookings') 
                 .insert([insertData])
                 .select();
