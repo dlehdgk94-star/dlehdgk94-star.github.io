@@ -24,41 +24,42 @@
 <body class="bg-white text-slate-900 font-sans">
 
   <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
+    <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
       
-      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none">
+      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
       </button>
 
-      <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center">
+      <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md z-20">
         <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
         <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
-        <a href="about.html" class="hover:text-orange-200">about</a>
-        <a href="rooms.html" class="hover:text-orange-200">rooms</a>
-        <a <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>
-        <a href="reservation.html" class="hover:text-orange-200">reservation (예약)</a>
-        <a href="instaspot.html" class="hover:text-orange-200">insta spot (관광&맛집&카페)</a>
-        <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
-        <a href="contact.html" class="hover:text-orange-200">contact</a>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
+        <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
+        <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
+        <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>
+        <a href="reservation.html" class="hover:text-orange-200 transition-colors">reservation (예약)</a>
+        <a href="instaspot.html" class="hover:text-orange-200 transition-colors">insta spot (관광&맛집&카페)</a>
+        <a href="#lounge" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
+        <a href="contact.html" class="hover:text-orange-200 transition-colors">contact</a>
       </nav>
 
-      <div class="flex items-center relative">
-         <div class="flex items-center gap-1 cursor-pointer relative">
-            <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
+      <div class="flex items-center relative drop-shadow-md z-20">
+         <div class="flex items-center gap-2 cursor-pointer relative group">
+            <img id="current-flag-icon" src="kr.png" alt="Korea" class="w-8 h-5 object-cover rounded shadow-sm border border-white/30 transition-transform group-hover:scale-110">
+            
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
 
-            <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                <option value="ko">🇰🇷 한국어</option>
-                <option value="en">🇺🇸 English</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="zh">🇨🇳 中文</option>
+            <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none text-slate-900">
+                <option value="ko" class="text-slate-900">🇰🇷 한국어</option>
+                <option value="en" class="text-slate-900">🇺🇸 English</option>
+                <option value="ja" class="text-slate-900">🇯🇵 日本語</option>
+                <option value="zh" class="text-slate-900">🇨🇳 中文</option>
             </select>
          </div>
       </div>
@@ -102,20 +103,20 @@
       </ul>
 
       <div class="mt-8 border-t pt-4">
-         <p class="text-sm text-slate-400 mb-2">Language</p>
-         <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
-             <option value="ko">Korean</option>
-             <option value="en">English</option>
-             <option value="ja">Japanese</option>
-             <option value="zh">Chinese</option>
-         </select>
+          <p class="text-sm text-slate-400 mb-2">Language</p>
+          <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
+              <option value="ko">Korean</option>
+              <option value="en">English</option>
+              <option value="ja">Japanese</option>
+              <option value="zh">Chinese</option>
+          </select>
       </div>
     </div>
   </nav>
 
   <main class="mx-auto max-w-6xl px-4 pb-20 pt-20 md:px-6 md:pt-24"> 
-  
     <section class="max-w-6xl mx-auto px-4 py-6 border-t border-slate-200">
+      
       <p class="text-xs text-orange-500 tracking-wide font-bold uppercase italic mb-1" id="room-type-sub">
         TYPE 3 / 인스타 럭셔리
       </p>
@@ -123,7 +124,7 @@
       <h2 class="text-xl md:text-4xl font-bold mb-4">Luxury Room</h2>
       
       <p class="text-sm font-bold text-slate-600 mb-6">
-       Free wi-fi, LG Air Conditioner, Air Purifier, Refrigerator, Full-body bath, Three Bed
+       Free wi-fi, LG Air Conditioner, Air Purifier, Refrigerator, Full-body bath, LED 65"TV
       </p>
 
       <div class="space-y-6">
@@ -172,9 +173,9 @@
         </section>
 
         <section class="mb-16">
-          <div class="overflow-hidden rounded-lg bg-slate-100 shadow-sm">
-            <img src="hero4.jpg" alt="Luxury Room detail" class="w-full h-auto object-cover" />
-          </div>
+            <div class="overflow-hidden rounded-lg bg-slate-100 shadow-sm">
+              <img src="hero4.jpg" alt="Luxury Room detail" class="w-full h-auto object-cover" />
+            </div>
         </section>
 
         <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
@@ -264,10 +265,11 @@
     -------------------------------------- */
     const translations = {
       ko: {
-        flag: "🇰🇷",
+        img: "kr.png", // 국기 이미지 추가
         
         "room-type-sub": "TYPE 3 / 인스타 럭셔리",
         
+        // 상세 설명 1 (Twin Room과 동일한 문구 사용)
         "desc-body-1": `
             <p>전 객실은 따뜻한 조명으로 아늑하고 따뜻한 분위기를 느끼며 쉴 수 있도록</p>
             <p>감성적인 인테리어로 준비되어 있습니다.</p>
@@ -276,6 +278,7 @@
             <p>조용한 분위기 속에서 편안한 숙박을 원하는 출장·여행 고객님께 특히 추천드립니다.</p>
         `,
 
+        // 상세 설명 2
         "desc-body-2": `
             <p>insta hotel의 모든 침대는 지친 여행길에 객실에서 편히 쉴 수 있도록</p>
             <p>국내 최고급 UMOS 침대를 사용하였으며,</p>
@@ -285,12 +288,13 @@
             <p class="text-slate-500 text-xs">We strive to provide comfort by using high-quality cotton bedding to enhance relaxation.</p>
         `,
 
+        // Footer
         companyName: "(주)호텔인스타", ceoName: "대표자 : 이영환", bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", address: "수원시 영통구 영통로 94-6",
         terms: "이용약관", privacy: "개인정보처리방침", inquiryBtn: "문의"
       },
 
       en: {
-        flag: "🇺🇸",
+        img: "usa.png",
         
         "room-type-sub": "TYPE 3 / INSTA LUXURY",
         
@@ -315,7 +319,7 @@
       },
 
       ja: {
-        flag: "🇯🇵",
+        img: "jp.png",
         
         "room-type-sub": "TYPE 3 / インスタ・ラグジュアリー",
         
@@ -341,7 +345,7 @@
       },
 
       zh: {
-        flag: "🇨🇳",
+        img: "cn.png",
         
         "room-type-sub": "TYPE 3 / INSTA 豪华房",
         
