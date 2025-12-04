@@ -194,6 +194,7 @@
             margin-top: 20px;
         }
         .btn-submit:hover { background-color: #e05e00; }
+        .btn-submit:disabled { background-color: #ccc; cursor: not-allowed; }
 
         /* 팝업 모달 스타일 */
         .modal {
@@ -262,44 +263,96 @@
 </head>
 <body class="bg-[#f4f4f4] text-slate-900 font-sans">
 
-    <header id="header" class="fixed top-0 left-0 right-0 z-30 text-white transition-colors duration-300 bg-[#ff6900] shadow-lg">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
-          <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
+    <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
+        <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
+          
+          <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
           </button>
-          <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md">
+    
+          <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md z-20">
             <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
             <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
           </a>
-          
-          <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
-            <a href="about.html" class="hover:text-orange-200" data-i18n="nav_about">about</a>
-            <a href="rooms.html" class="hover:text-orange-200" data-i18n="nav_rooms">rooms</a>
+    
+          <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
+            <a href="about.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_about">about</a>
+            <a href="rooms.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_rooms">rooms</a>
             <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_breakfast">breakfast</a>
-            <a href="reservation.html" class="hover:text-orange-200 underline underline-offset-4" data-i18n="nav_reservation">reservation</a>
-            <a href="instaspot.html" class="hover:text-orange-200" data-i18n="nav_instaspot">insta spot</a>
-            <a href="#lounge" class="hover:text-orange-200" data-i18n="nav_lounge">bluerain lounge</a>
-            <a href="contact.html" class="hover:text-orange-200" data-i18n="nav_contact">contact</a>
+            <a href="reservation.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_reservation">reservation</a>
+            <a href="instaspot.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_instaspot">insta spot</a>
+            <a href="#lounge" class="hover:text-orange-200 transition-colors" data-i18n="nav_lounge">bluerain lounge</a>
+            <a href="contact.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_contact">contact</a>
           </nav>
-
-          <div class="flex items-center relative drop-shadow-md">
-             <div class="flex items-center gap-1 cursor-pointer relative">
-                <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
+    
+          <div class="flex items-center relative drop-shadow-md z-20">
+             <div class="flex items-center gap-2 cursor-pointer relative group">
+                <img id="current-flag-icon" src="kr.png" alt="Korea" class="w-8 h-5 object-cover rounded shadow-sm border border-white/30 transition-transform group-hover:scale-110">
+                
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
-                <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                    <option value="ko">🇰🇷 한국어</option>
-                    <option value="en">🇺🇸 English</option>
-                    <option value="ja">🇯🇵 日本語</option>
-                    <option value="zh">🇨🇳 中文</option>
+    
+                <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none text-slate-900">
+                    <option value="ko" class="text-slate-900">🇰🇷 한국어</option>
+                    <option value="en" class="text-slate-900">🇺🇸 English</option>
+                    <option value="ja" class="text-slate-900">🇯🇵 日本語</option>
+                    <option value="zh" class="text-slate-900">🇨🇳 中文</option>
                 </select>
              </div>
           </div>
+    
         </div>
     </header>
+
+    <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity duration-300"></div>
+    
+    <nav id="mobile-drawer" class="fixed top-0 left-0 w-[75%] max-w-sm h-full z-50 bg-white shadow-xl text-slate-900 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="p-6">
+          <button id="mobile-menu-close-btn" class="absolute top-4 right-4 text-3xl font-light hover:text-[#ff6900]">&times;</button>
+          
+          <div class="mt-2 mb-8">
+            <span class="text-xl font-bold tracking-tight text-[#ff6900]">Insta hotel</span>
+          </div>
+          
+          <ul class="flex flex-col space-y-4 text-lg font-medium">
+            <li><a href="about.html" class="block hover:text-[#ff6900]">about</a></li>
+            
+            <li>
+                <div class="flex justify-between items-center cursor-pointer hover:text-[#ff6900]" id="rooms-toggle">
+                    <span>rooms</span> <span class="text-sm">▼</span>
+                </div>
+                <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Special</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Luxury</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Premium</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Deluxe</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Standard</a></li>
+                    <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
+                </ul>
+            </li>
+    
+            <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]">breakfast</a></li>
+            <li><a href="reservation.html" class="block hover:text-[#ff6900]">reservation (예약)</a></li>
+            <li><a href="instaspot.html" class="block hover:text-[#ff6900]">insta spot (관광&맛집&카페)</a></li>
+            <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
+            <li><a href="contact.html" class="block hover:text-[#ff6900]">contact</a></li>
+          </ul>
+    
+          <div class="mt-8 border-t pt-4">
+              <p class="text-sm text-slate-400 mb-2">Language</p>
+              <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
+                  <option value="ko">Korean</option>
+                  <option value="en">English</option>
+                  <option value="ja">Japanese</option>
+                  <option value="zh">Chinese</option>
+              </select>
+          </div>
+        </div>
+    </nav>
 
     <main class="payment-container">
         <h2 class="page-title" data-i18n="page_title">결제하기</h2>
@@ -313,43 +366,41 @@
                     <div class="product-info">
                         <img src="hero2.jpg" alt="객실 이미지" class="product-img">
                         <div class="product-details">
-                            <h3 data-i18n="room_name">특실 (Special)</h3>
+                            <h3 data-i18n="room_name">트윈 (Twin)</h3>
                             <p><span data-i18n="label_schedule">일정</span>: <span id="display-nights" data-i18n="text_1night">1박</span> (<span id="display-date-range" data-i18n="text_date_unselected">날짜 미선택</span>)</p>
-                            <p><span data-i18n="label_guests">인원</span>: <span data-i18n="text_capacity">성인 2명 (최대 4명 무료)</span></p>
+                            <p><span data-i18n="label_guests">인원</span>: <span data-i18n="text_capacity">성인 2명 (최대 3명 무료)</span></p>
                             <div class="price" id="display-room-price-info">0원</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="section-card">
-    <div class="section-title" data-i18n="sect_booker">예약자 정보</div>
-    
-    <div class="input-row">
-        <div class="input-half">
-            <input type="text" id="input-name" placeholder="이름 (Name)">
-        </div>
-        <div class="input-half">
-            <input type="text" id="input-phone" placeholder="연락처 (Phone)">
-        </div>
-    </div>
+                    <div class="section-title" data-i18n="sect_booker">예약자 정보</div>
+                    <div class="input-row">
+                        <div class="input-half">
+                            <input type="text" id="input-name" placeholder="이름 (Name)">
+                        </div>
+                        <div class="input-half">
+                            <input type="text" id="input-phone" placeholder="연락처 (Phone)">
+                        </div>
+                    </div>
+                    <input type="email" id="input-email" placeholder="이메일 (E-mail)">
+                    
+                    <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;">
+                        * <span data-i18n="msg_sns_follow">우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.</span>
+                    </div>
 
-    <input type="email" id="input-email" placeholder="이메일 (E-mail)">
-    
-    <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;">
-        * <span data-i18n="msg_sns_follow">우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.</span>
-    </div>
-
-    <div class="input-row">
-        <div class="input-half">
-            <input type="text" id="input-instagram" placeholder="Instagram">
-        </div>
-        <div class="input-half">
-            <input type="text" id="input-tiktok" placeholder="Tiktok">
-        </div>
-    </div>
-    
-    <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
-</div>
+                    <div class="input-row">
+                        <div class="input-half">
+                            <input type="text" id="input-instagram" placeholder="Instagram">
+                        </div>
+                        <div class="input-half">
+                            <input type="text" id="input-tiktok" placeholder="Tiktok">
+                        </div>
+                    </div>
+                    
+                    <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
+                </div>
 
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_extra">추가정보 입력</div>
@@ -429,7 +480,7 @@
                     </ul>
                 </div>
 
-                <button class="btn-submit" onclick="requestPayment()" data-i18n="btn_pay">결제하기</button>
+                <button id="pay-button" class="btn-submit" onclick="requestPayment()" data-i18n="btn_pay">결제하기</button>
 
             </div>
         </div>
@@ -448,7 +499,7 @@
                 <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank"><img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24"></a>
                 <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank"><img src="icons8-네이버-64.png" alt="Naver" width="24" height="24"></a>
                 <a href="http://pf.kakao.com/_xiITuG" target="_blank"><img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24"></a>
-                <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>           
+                <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>        
             </div>
             <div class="space-y-1">
                 <p>insta hotel mainbranch, Korea</p>
@@ -462,461 +513,514 @@
     </section>
 
     <script>
-        const translations = {
-            ko: {
-                flag: "🇰🇷",
-                unit_won: "원",
-                unit_night: "박",
-                alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
-                alert_done: "예약이 완료되었습니다! (관리자 확인 후 메일이 발송됩니다)",
-                alert_fill_all: "예약자 정보를 모두 입력해주세요.",
-                alert_error: "예약 저장 중 오류가 발생했습니다. 다시 시도해주세요.",
-                
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
-                nav_breakfast: "breakfast", nav_instaspot: "insta spot", nav_lounge: "bluerain lounge",
-                
-                page_title: "결제하기",
-                sect_product: "예약 상품 정보",
-                room_name: "특실 (Special)",
-                label_schedule: "일정",
-                label_guests: "인원",
-                text_1night: "1박",
-                text_date_unselected: "날짜 미선택",
-                text_capacity: "성인 2명 (최대 4명 무료)",
-                
-                sect_booker: "예약자 정보",
-                ph_name: "이름 (Name)",
-                ph_phone: "연락처 (Phone)",
-                ph_email: "이메일 (E-mail)",
-                ph_request: "요청사항 (Requests)",
-                msg_sns_follow: "우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.",
-                
-                sect_extra: "추가정보 입력",
-                notice_confirm_email: "예약 확정은 이메일 알림을 받으셔야 완료됩니다.",
-                label_about_res: "예약과 관련하여 •",
-                notice_checkin: "insta hotel email (yhl5258@naver.com)을 받으셔야 예약 확정이 된 것입니다.<br>* 체크인 당일 현장에서 예약자 본인 확인이 진행됩니다.",
-                label_checked: "확인했습니다.",
-                
-                sect_refund: "취소/환불 규정에 대한 동의",
-                th_8days: "이용 8일 전까지",
-                td_free: "취소수수료 없음",
-                th_7days: "이용 당일 ~ 이용 7일 전까지",
-                td_no_refund: "환불불가능",
-                label_agree_refund: "취소 및 환불 규정에 동의합니다.",
-                
-                sect_total: "최종 결제금액",
-                label_room_price: "객실 가격",
-                label_option: "옵션(조식 등)",
-                label_total_price: "총 결제금액",
-                label_option_list: "선택한 옵션",
-                
-                sect_method: "결제수단",
-                label_credit_card: "신용카드",
-                
-                label_all_agree: "전체 동의",
-                label_privacy: "개인정보 수집 및 이용 동의",
-                btn_view_terms: "약관보기",
-                label_condition: "구매조건 확인 및 결제진행 동의",
-                btn_pay: "결제하기",
-                
-                footer_company: "(주)호텔인스타", 
-                footer_ceo: "대표자 : 이영환", 
-                footer_biz: "통신판매업 신고번호: 2023-수원영통-1696호", 
-                footer_addr: "수원시 영통구 영통로 94-6"
-            },
-            en: {
-                flag: "🇺🇸",
-                unit_won: " KRW",
-                unit_night: " nights",
-                alert_agree: "You must agree to all terms to proceed.",
-                alert_done: "Booking Completed! (Email will be sent after confirmation)",
-                alert_fill_all: "Please fill in all guest information.",
-                alert_error: "An error occurred while saving the reservation. Please try again.",
-                
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
-                nav_breakfast: "breakfast", nav_instaspot: "insta spot", nav_lounge: "bluerain lounge",
-                
-                page_title: "Payment",
-                sect_product: "Booking Info",
-                room_name: "Special Room",
-                label_schedule: "Schedule",
-                label_guests: "Guests",
-                text_1night: "1 night",
-                text_date_unselected: "Date not selected",
-                text_capacity: "2 Adults (Max 4 Free)",
-                
-                sect_booker: "Guest Info",
-                ph_name: "Name",
-                ph_phone: "Phone Number",
-                ph_email: "E-mail Address",
-                ph_request: "Requests",
-                msg_sns_follow: "Follow us on SNS to check reservation info quickly and easily.",
-                
-                sect_extra: "Additional Info",
-                notice_confirm_email: "Booking is confirmed only after receiving the email notification.",
-                label_about_res: "About Reservation •",
-                notice_checkin: "You must receive an email from insta hotel (yhl5258@naver.com) to confirm.<br>* ID verification required at check-in.",
-                label_checked: "I have checked.",
-                
-                sect_refund: "Cancellation & Refund Policy",
-                th_8days: "Up to 8 days prior",
-                td_free: "Free Cancellation",
-                th_7days: "7 days prior ~ Day of stay",
-                td_no_refund: "Non-refundable",
-                label_agree_refund: "I agree to the policy.",
-                
-                sect_total: "Payment Summary",
-                label_room_price: "Room Price",
-                label_option: "Options",
-                label_total_price: "Total Amount",
-                label_option_list: "Selected Options",
-                
-                sect_method: "Payment Method",
-                label_credit_card: "Credit Card",
-                
-                label_all_agree: "Agree to All",
-                label_privacy: "Consent to Collection & Use of Personal Info",
-                btn_view_terms: "View Terms",
-                label_condition: "Confirm Order & Agree to Payment",
-                btn_pay: "Pay Now",
-                
-                footer_company: "Insta Hotel Co., Ltd.", 
-                footer_ceo: "CEO: Lee Young Hwan", 
-                footer_biz: "Reg: 2023-Suwon Yeongtong-1696", 
-                footer_addr: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si"
-            },
-            ja: {
-                flag: "🇯🇵",
-                unit_won: " ウォン",
-                unit_night: " 泊",
-                alert_agree: "すべての規約に同意する必要があります。",
-                alert_done: "予約が完了しました！(確認後にメールが送信されます)",
-                alert_fill_all: "予約者情報をすべて入力してください。",
-                alert_error: "予約の保存中にエラーが発生しました。",
-                
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
-                nav_breakfast: "breakfast", nav_instaspot: "insta spot", nav_lounge: "bluerain lounge",
-                
-                page_title: "決済",
-                sect_product: "予約情報",
-                room_name: "スペシャル (Special)",
-                label_schedule: "日程",
-                label_guests: "人数",
-                text_1night: "1泊",
-                text_date_unselected: "日付未選択",
-                text_capacity: "大人2名 (最大4名無料)",
-                
-                sect_booker: "予約者情報",
-                ph_name: "名前",
-                ph_phone: "連絡先",
-                ph_email: "メールアドレス",
-                ph_request: "リクエスト",
-                msg_sns_follow: "SNSをフォローすると、予約情報を簡単かつ迅速に確認できます。",
-                
-                sect_extra: "追加情報",
-                notice_confirm_email: "予約確定はメール通知を受信した時点で完了します。",
-                label_about_res: "予約について •",
-                notice_checkin: "Insta Hotelのメール(yhl5258@naver.com)を受信すると予約確定となります。<br>* チェックイン時に本人確認が行われます。",
-                label_checked: "確認しました。",
-                
-                sect_refund: "キャンセル・払い戻し規定",
-                th_8days: "利用8日前まで",
-                td_free: "キャンセル料なし",
-                th_7days: "利用7日前〜当日",
-                td_no_refund: "払い戻し不可",
-                label_agree_refund: "規定に同意します。",
-                
-                sect_total: "決済金額",
-                label_room_price: "客室価格",
-                label_option: "オプション",
-                label_total_price: "総決済金額",
-                label_option_list: "選択したオプション",
-                
-                sect_method: "決済手段",
-                label_credit_card: "クレジットカード",
-                
-                label_all_agree: "すべて同意する",
-                label_privacy: "個人情報の収集および利用への同意",
-                btn_view_terms: "約款を見る",
-                label_condition: "注文内容確認および決済進行への同意",
-                btn_pay: "決済する",
-                
-                footer_company: "インスタホテル株式会社", 
-                footer_ceo: "代表者 : イ・ヨンファン", 
-                footer_biz: "登録番号: 2023-水原霊通-1696", 
-                footer_addr: "水原市霊通区霊通路94-6"
-            },
-            zh: {
-                flag: "🇨🇳",
-                unit_won: " 韩元",
-                unit_night: " 晚",
-                alert_agree: "必须同意所有条款才能付款。",
-                alert_done: "预订已完成！(确认后将发送邮件)",
-                alert_fill_all: "请填写所有预订人信息。",
-                alert_error: "保存预订时发生错误。",
-                
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
-                nav_breakfast: "breakfast", nav_instaspot: "insta spot", nav_lounge: "bluerain lounge",
-                
-                page_title: "支付",
-                sect_product: "预订信息",
-                room_name: "特室 (Special)",
-                label_schedule: "日程",
-                label_guests: "人数",
-                text_1night: "1晚",
-                text_date_unselected: "未选择日期",
-                text_capacity: "成人2名 (最多4名免费)",
-                
-                sect_booker: "预订人信息",
-                ph_name: "姓名",
-                ph_phone: "联系方式",
-                ph_email: "电子邮箱",
-                ph_request: "特殊要求",
-                msg_sns_follow: "关注我们的SNS，即可轻松快速地确认预订信息。",
-                
-                sect_extra: "附加信息",
-                notice_confirm_email: "收到电子邮件通知后，预订即确认为完成。",
-                label_about_res: "关于预订 •",
-                notice_checkin: "收到 Insta Hotel 邮件 (yhl5258@naver.com) 即表示预订已确认。<br>* 入住时将进行本人身份验证。",
-                label_checked: "已确认。",
-                
-                sect_refund: "取消/退款规定",
-                th_8days: "入住8天前",
-                td_free: "无取消费用",
-                th_7days: "入住7天前 ~ 当天",
-                td_no_refund: "不可退款",
-                label_agree_refund: "同意相关规定。",
-                
-                sect_total: "最终支付金额",
-                label_room_price: "客房价格",
-                label_option: "选项",
-                label_total_price: "总支付金额",
-                label_option_list: "已选择的选项",
-                
-                sect_method: "支付方式",
-                label_credit_card: "信用卡",
-                
-                label_all_agree: "全部同意",
-                label_privacy: "同意收集和使用个人信息",
-                btn_view_terms: "查看条款",
-                label_condition: "确认订单并同意支付",
-                btn_pay: "支付",
-                
-                footer_company: "Insta Hotel有限公司", 
-                footer_ceo: "代表：李永焕", 
-                footer_biz: "注册号：2023-水原灵通-1696", 
-                footer_addr: "水原市灵通区灵通路94-6"
-            }
-        };
+    /* --------------------------------------
+       1. 모바일 메뉴 (Drawer) 열기/닫기
+    -------------------------------------- */
+    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+    const mobileDrawer = document.getElementById("mobile-drawer");
+    const drawerOverlay = document.getElementById("drawer-overlay");
+    const mobileCloseBtn = document.getElementById("mobile-menu-close-btn");
 
-        let currentLang = 'ko';
+    function openMenu() {
+        mobileDrawer.classList.remove("-translate-x-full");
+        drawerOverlay.classList.remove("hidden");
+        document.body.style.overflow = "hidden"; 
+    }
+    function closeMenu() {
+        mobileDrawer.classList.add("-translate-x-full");
+        drawerOverlay.classList.add("hidden");
+        document.body.style.overflow = ""; 
+    }
 
-        function updateLanguage(lang) {
-            currentLang = lang;
-            const t = translations[lang];
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMenu);
+    if (mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMenu);
+    if (drawerOverlay) drawerOverlay.addEventListener("click", closeMenu);
 
-            // 1. 국기 아이콘 업데이트
-            document.getElementById("current-flag-icon").textContent = t.flag;
+    const roomsToggle = document.getElementById("rooms-toggle");
+    const roomsSubmenu = document.getElementById("rooms-submenu");
+    if(roomsToggle && roomsSubmenu){
+        roomsToggle.addEventListener("click", () => {
+            roomsSubmenu.classList.toggle("hidden");
+        });
+    }
 
-            // 2. data-i18n 속성이 있는 모든 요소 업데이트
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (t[key]) {
-                    el.innerHTML = t[key];
-                }
-            });
-
-            // 3. placeholder 속성 업데이트 (input 태그)
-            document.getElementById('input-name').placeholder = t.ph_name;
-            document.getElementById('input-phone').placeholder = t.ph_phone;
-            document.getElementById('input-email').placeholder = t.ph_email;
-            document.getElementById('input-request').placeholder = t.ph_request;
-
-            // 4. 가격 정보 다시 렌더링 (단위 변경 반영)
-            renderPriceInfo();
+    /* --------------------------------------
+       2. 다국어 번역 데이터 (이미지 파일명 적용)
+    -------------------------------------- */
+    const translations = {
+        ko: {
+            img: "kr.png", // 이미지 파일명
+            flag: "🇰🇷",
+            unit_won: "원",
+            unit_night: "박",
+            alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
+            alert_done: "결제가 완료되었습니다! 예약 내역이 저장되었습니다.",
+            alert_error: "예약 처리 중 오류가 발생했습니다. 다시 시도해주세요.",
+            alert_fill_all: "예약자 정보를 모두 입력해주세요.",
+            btn_processing: "처리중...",
+            
+            nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+            nav_breakfast: "breakfast", nav_instaspot: "insta spot", nav_lounge: "bluerain lounge",
+            
+            page_title: "결제하기",
+            sect_product: "예약 상품 정보",
+            room_name: "트윈 (Twin)",
+            label_schedule: "일정",
+            label_guests: "인원",
+            text_1night: "1박",
+            text_date_unselected: "날짜 미선택",
+            text_capacity: "성인 2명 (최대 3명 무료)",
+            
+            sect_booker: "예약자 정보",
+            ph_name: "이름 (Name)",
+            ph_phone: "연락처 (Phone)",
+            ph_email: "이메일 (E-mail)",
+            ph_request: "요청사항 (Requests)",
+            msg_sns_follow: "우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.",
+            
+            sect_extra: "추가정보 입력",
+            notice_confirm_email: "예약 확정은 이메일 알림을 받으셔야 완료됩니다.",
+            label_about_res: "예약과 관련하여 •",
+            notice_checkin: "insta hotel email (yhl5258@naver.com)을 받으셔야 예약 확정이 된 것입니다.<br>* 체크인 당일 현장에서 예약자 본인 확인이 진행됩니다.",
+            label_checked: "확인했습니다.",
+            
+            sect_refund: "취소/환불 규정에 대한 동의",
+            th_8days: "이용 8일 전까지",
+            td_free: "취소수수료 없음",
+            th_7days: "이용 당일 ~ 이용 7일 전까지",
+            td_no_refund: "환불불가능",
+            label_agree_refund: "취소 및 환불 규정에 동의합니다.",
+            
+            sect_total: "최종 결제금액",
+            label_room_price: "객실 가격",
+            label_option: "옵션(조식 등)",
+            label_total_price: "총 결제금액",
+            label_option_list: "선택한 옵션",
+            
+            sect_method: "결제수단",
+            label_credit_card: "신용카드",
+            
+            label_all_agree: "전체 동의",
+            label_privacy: "개인정보 수집 및 이용 동의",
+            btn_view_terms: "약관보기",
+            label_condition: "구매조건 확인 및 결제진행 동의",
+            btn_pay: "결제하기",
+            
+            footer_company: "(주)호텔인스타", 
+            footer_ceo: "대표자 : 이영환", 
+            footer_biz: "통신판매업 신고번호: 2023-수원영통-1696호", 
+            footer_addr: "수원시 영통구 영통로 94-6"
+        },
+        en: {
+            img: "usa.png",
+            flag: "🇺🇸",
+            unit_won: " KRW",
+            unit_night: " nights",
+            alert_agree: "You must agree to all terms to proceed.",
+            alert_done: "Payment Completed! Reservation saved.",
+            alert_error: "An error occurred while processing. Please try again.",
+            alert_fill_all: "Please fill in all guest information.",
+            btn_processing: "Processing...",
+            
+            nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+            nav_breakfast: "breakfast", nav_instaspot: "insta spot", nav_lounge: "bluerain lounge",
+            
+            page_title: "Payment",
+            sect_product: "Booking Info",
+            room_name: "Twin",
+            label_schedule: "Schedule",
+            label_guests: "Guests",
+            text_1night: "1 night",
+            text_date_unselected: "Date not selected",
+            text_capacity: "2 Adults (Max 3 Free)",
+            
+            sect_booker: "Guest Info",
+            ph_name: "Name",
+            ph_phone: "Phone Number",
+            ph_email: "E-mail Address",
+            ph_request: "Requests",
+            msg_sns_follow: "Follow us on SNS to check reservation info quickly and easily.",
+            
+            sect_extra: "Additional Info",
+            notice_confirm_email: "Booking is confirmed only after receiving the email notification.",
+            label_about_res: "About Reservation •",
+            notice_checkin: "You must receive an email from insta hotel (yhl5258@naver.com) to confirm.<br>* ID verification required at check-in.",
+            label_checked: "I have checked.",
+            
+            sect_refund: "Cancellation & Refund Policy",
+            th_8days: "Up to 8 days prior",
+            td_free: "Free Cancellation",
+            th_7days: "7 days prior ~ Day of stay",
+            td_no_refund: "Non-refundable",
+            label_agree_refund: "I agree to the policy.",
+            
+            sect_total: "Payment Summary",
+            label_room_price: "Room Price",
+            label_option: "Options",
+            label_total_price: "Total Amount",
+            label_option_list: "Selected Options",
+            
+            sect_method: "Payment Method",
+            label_credit_card: "Credit Card",
+            
+            label_all_agree: "Agree to All",
+            label_privacy: "Consent to Collection & Use of Personal Info",
+            btn_view_terms: "View Terms",
+            label_condition: "Confirm Order & Agree to Payment",
+            btn_pay: "Pay Now",
+            
+            footer_company: "Insta Hotel Co., Ltd.", 
+            footer_ceo: "CEO: Lee Young Hwan", 
+            footer_biz: "Reg: 2023-Suwon Yeongtong-1696", 
+            footer_addr: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si"
+        },
+        ja: {
+            img: "jp.png",
+            flag: "🇯🇵",
+            unit_won: " ウォン",
+            unit_night: " 泊",
+            alert_agree: "すべての規約に同意する必要があります。",
+            alert_done: "決済が完了しました！予約が保存されました。",
+            alert_error: "処理中にエラーが発生しました。もう一度お試しください。",
+            alert_fill_all: "予約者情報をすべて入力してください。",
+            btn_processing: "処理中...",
+            
+            nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+            nav_breakfast: "breakfast", nav_instaspot: "insta spot", nav_lounge: "bluerain lounge",
+            
+            page_title: "決済",
+            sect_product: "予約情報",
+            room_name: "ツイン (Twin)",
+            label_schedule: "日程",
+            label_guests: "人数",
+            text_1night: "1泊",
+            text_date_unselected: "日付未選択",
+            text_capacity: "大人2名 (最大3名無料)",
+            
+            sect_booker: "予約者情報",
+            ph_name: "名前",
+            ph_phone: "連絡先",
+            ph_email: "メールアドレス",
+            ph_request: "リクエスト",
+            msg_sns_follow: "SNSをフォローすると、予約情報を簡単かつ迅速に確認できます。",
+            
+            sect_extra: "追加情報",
+            notice_confirm_email: "予約確定はメール通知を受信した時点で完了します。",
+            label_about_res: "予約について •",
+            notice_checkin: "Insta Hotelのメール(yhl5258@naver.com)を受信すると予約確定となります。<br>* チェックイン時に本人確認が行われます。",
+            label_checked: "確認しました。",
+            
+            sect_refund: "キャンセル・払い戻し規定",
+            th_8days: "利用8日前まで",
+            td_free: "キャンセル料なし",
+            th_7days: "利用7日前〜当日",
+            td_no_refund: "払い戻し不可",
+            label_agree_refund: "規定に同意します。",
+            
+            sect_total: "決済金額",
+            label_room_price: "客室価格",
+            label_option: "オプション",
+            label_total_price: "総決済金額",
+            label_option_list: "選択したオプション",
+            
+            sect_method: "決済手段",
+            label_credit_card: "クレジットカード",
+            
+            label_all_agree: "すべて同意する",
+            label_privacy: "個人情報の収集および利用への同意",
+            btn_view_terms: "約款を見る",
+            label_condition: "注文内容確認および決済進行への同意",
+            btn_pay: "決済する",
+            
+            footer_company: "インスタホテル株式会社", 
+            footer_ceo: "代表者 : イ・ヨンファン", 
+            footer_biz: "登録番号: 2023-水原霊通-1696", 
+            footer_addr: "水原市霊通区霊通路94-6"
+        },
+        zh: {
+            img: "cn.png",
+            flag: "🇨🇳",
+            unit_won: " 韩元",
+            unit_night: " 晚",
+            alert_agree: "必须同意所有条款才能付款。",
+            alert_done: "支付完成！预订已保存。",
+            alert_error: "处理过程中发生错误。请重试。",
+            alert_fill_all: "请填写所有预订人信息。",
+            btn_processing: "处理中...",
+            
+            nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+            nav_breakfast: "breakfast", nav_instaspot: "insta spot", nav_lounge: "bluerain lounge",
+            
+            page_title: "支付",
+            sect_product: "预订信息",
+            room_name: "双床房 (Twin)",
+            label_schedule: "日程",
+            label_guests: "人数",
+            text_1night: "1晚",
+            text_date_unselected: "未选择日期",
+            text_capacity: "成人2名 (最多3名免费)",
+            
+            sect_booker: "预订人信息",
+            ph_name: "姓名",
+            ph_phone: "联系方式",
+            ph_email: "电子邮箱",
+            ph_request: "特殊要求",
+            msg_sns_follow: "关注我们的SNS，即可轻松快速地确认预订信息。",
+            
+            sect_extra: "附加信息",
+            notice_confirm_email: "收到电子邮件通知后，预订即确认为完成。",
+            label_about_res: "关于预订 •",
+            notice_checkin: "收到 Insta Hotel 邮件 (yhl5258@naver.com) 即表示预订已确认。<br>* 入住时将进行本人身份验证。",
+            label_checked: "已确认。",
+            
+            sect_refund: "取消/退款规定",
+            th_8days: "入住8天前",
+            td_free: "无取消费用",
+            th_7days: "入住7天前 ~ 当天",
+            td_no_refund: "不可退款",
+            label_agree_refund: "同意相关规定。",
+            
+            sect_total: "最终支付金额",
+            label_room_price: "客房价格",
+            label_option: "选项",
+            label_total_price: "总支付金额",
+            label_option_list: "已选择的选项",
+            
+            sect_method: "支付方式",
+            label_credit_card: "信用卡",
+            
+            label_all_agree: "全部同意",
+            label_privacy: "同意收集和使用个人信息",
+            btn_view_terms: "查看条款",
+            label_condition: "确认订单并同意支付",
+            btn_pay: "支付",
+            
+            footer_company: "Insta Hotel有限公司", 
+            footer_ceo: "代表：李永焕", 
+            footer_biz: "注册号：2023-水原灵通-1696", 
+            footer_addr: "水原市灵通区灵通路94-6"
         }
+    };
 
-        function renderPriceInfo() {
-            const params = new URLSearchParams(window.location.search);
-            
-            const checkin = params.get('checkin') || "";
-            const checkout = params.get('checkout') || "";
-            const nights = params.get('nights') || '0';
-            const roomPrice = parseInt(params.get('roomPrice')) || 0;
-            const optionPrice = parseInt(params.get('optionPrice')) || 0;
-            const total = parseInt(params.get('total')) || 0;
+    let currentLang = 'ko';
 
-            const t = translations[currentLang];
-            const unit = t.unit_won;
-            const unitNight = t.unit_night;
+    function updateLanguage(lang) {
+        currentLang = lang;
+        const t = translations[lang];
 
-            const fmt = (n) => n.toLocaleString() + unit;
+        // 1. 상단 국기 아이콘 변경 (이미지 src 수정)
+        const currentFlagIcon = document.getElementById("current-flag-icon");
+        if(currentFlagIcon && t.img) currentFlagIcon.src = t.img;
 
-            if(checkin && checkout) {
-                document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) {
+                el.innerHTML = t[key];
             }
-            
-            if (nights > 0) {
-                document.getElementById('display-nights').innerText = nights + unitNight;
-            }
-            
-            document.getElementById('display-room-price-info').innerText = fmt(roomPrice);
-            document.getElementById('summary-room-price').innerText = fmt(roomPrice);
-            document.getElementById('summary-option-price').innerText = fmt(optionPrice);
-            document.getElementById('summary-total-price').innerText = fmt(total);
-
-            // [옵션 상세 리스트 표시 로직]
-            const optionContainer = document.getElementById('option-detail-list');
-            const optionDetailsRaw = params.get('optionDetails');
-            let optionDetails = [];
-
-            if (optionDetailsRaw) {
-                try {
-                    optionDetails = JSON.parse(decodeURIComponent(optionDetailsRaw));
-                } catch (e) {
-                    console.error("옵션 파싱 에러", e);
-                }
-            }
-
-            if (optionDetails.length > 0) {
-                optionContainer.style.display = 'block';
-                const listHtml = optionDetails.map(item => `<li>${item}</li>`).join('');
-                optionContainer.innerHTML = `
-                    <div style="font-weight:bold; margin-bottom:5px;">${t.label_option_list}:</div>
-                    <ul>${listHtml}</ul>
-                `;
-            } else {
-                optionContainer.style.display = 'none';
-                optionContainer.innerHTML = '';
-            }
-        }
-
-        window.onload = function() {
-            updateLanguage('ko');
-
-            const headerSelect = document.getElementById("header-lang-select");
-            if(headerSelect) {
-                headerSelect.addEventListener("change", (e) => {
-                    updateLanguage(e.target.value);
-                });
-            }
-        };
-
-        const chkAll = document.getElementById('chk-all');
-        const subChks = document.querySelectorAll('.chk-sub');
-
-        chkAll.addEventListener('change', function() {
-            subChks.forEach(chk => chk.checked = this.checked);
         });
 
-        subChks.forEach(chk => {
-            chk.addEventListener('change', function() {
-                const allChecked = Array.from(subChks).every(c => c.checked);
-                chkAll.checked = allChecked;
-            });
-        });
+        document.getElementById('input-name').placeholder = t.ph_name;
+        document.getElementById('input-phone').placeholder = t.ph_phone;
+        document.getElementById('input-email').placeholder = t.ph_email;
+        document.getElementById('input-request').placeholder = t.ph_request;
 
-        const modal = document.getElementById("termsModal");
+        renderPriceInfo();
+    }
 
-        function openModal() {
-            modal.style.display = "flex"; 
+    function renderPriceInfo() {
+        const params = new URLSearchParams(window.location.search);
+        
+        const checkin = params.get('checkin') || "";
+        const checkout = params.get('checkout') || "";
+        const nights = params.get('nights') || '0';
+        const roomPrice = parseInt(params.get('roomPrice')) || 0;
+        const optionPrice = parseInt(params.get('optionPrice')) || 0;
+        const total = parseInt(params.get('total')) || 0;
+
+        const t = translations[currentLang];
+        const unit = t.unit_won;
+        const unitNight = t.unit_night;
+        const fmt = (n) => n.toLocaleString() + unit;
+
+        if(checkin && checkout) {
+            document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
+        } else {
+            document.getElementById('display-date-range').innerText = t.text_date_unselected;
+        }
+        
+        if (nights > 0) {
+            document.getElementById('display-nights').innerText = nights + unitNight;
+        }
+        
+        document.getElementById('display-room-price-info').innerText = fmt(roomPrice);
+        document.getElementById('summary-room-price').innerText = fmt(roomPrice);
+        document.getElementById('summary-option-price').innerText = fmt(optionPrice);
+        document.getElementById('summary-total-price').innerText = fmt(total);
+
+        const optionContainer = document.getElementById('option-detail-list');
+        const optionDetailsRaw = params.get('optionDetails');
+        let optionDetails = [];
+
+        if (optionDetailsRaw) {
+            try {
+                optionDetails = JSON.parse(decodeURIComponent(optionDetailsRaw));
+            } catch (e) {
+                console.error("옵션 파싱 에러", e);
+            }
         }
 
-        function closeModal() {
+        if (optionDetails.length > 0) {
+            optionContainer.style.display = 'block';
+            const listHtml = optionDetails.map(item => `<li>${item}</li>`).join('');
+            optionContainer.innerHTML = `
+                <div style="font-weight:bold; margin-bottom:5px;">${t.label_option_list}:</div>
+                <ul>${listHtml}</ul>
+            `;
+        } else {
+            optionContainer.style.display = 'none';
+            optionContainer.innerHTML = '';
+        }
+    }
+
+    window.onload = function() {
+        updateLanguage('ko');
+        const headerSelect = document.getElementById("header-lang-select");
+        const drawerSelect = document.getElementById("drawer-lang-select");
+
+        // 헤더 투명 셀렉트 박스 이벤트
+        if(headerSelect) {
+            headerSelect.addEventListener("change", (e) => {
+                const lang = e.target.value;
+                if(drawerSelect) drawerSelect.value = lang; 
+                updateLanguage(lang);
+            });
+        }
+
+        // 드로어 메뉴 셀렉트 박스 이벤트
+        if(drawerSelect) {
+            drawerSelect.addEventListener("change", (e) => {
+                const lang = e.target.value;
+                if(headerSelect) headerSelect.value = lang; 
+                updateLanguage(lang);
+            });
+        }
+    };
+
+    const chkAll = document.getElementById('chk-all');
+    const subChks = document.querySelectorAll('.chk-sub');
+
+    chkAll.addEventListener('change', function() {
+        subChks.forEach(chk => chk.checked = this.checked);
+    });
+
+    subChks.forEach(chk => {
+        chk.addEventListener('change', function() {
+            const allChecked = Array.from(subChks).every(c => c.checked);
+            chkAll.checked = allChecked;
+        });
+    });
+
+    const modal = document.getElementById("termsModal");
+
+    function openModal() {
+        modal.style.display = "flex"; 
+    }
+
+    function closeModal() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
             modal.style.display = "none";
         }
+    }
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
+    async function requestPayment() {
+        const isInfoChecked = document.getElementById('chk-info').checked;
+        const isRefundChecked = document.getElementById('chk-refund').checked;
+        const isTermsChecked = document.getElementById('chk-all').checked;
+
+        const t = translations[currentLang];
+        const btn = document.getElementById('btn-submit');
+
+        if (!isInfoChecked || !isRefundChecked || !isTermsChecked) {
+            alert(t.alert_agree);
+            return;
         }
 
-        // [핵심] Supabase 저장 함수 (요청한 컬럼명 사용)
-        async function requestPayment() {
-            const t = translations[currentLang];
+        const name = document.getElementById('input-name').value.trim();
+        const phone = document.getElementById('input-phone').value.trim();
+        const email = document.getElementById('input-email').value.trim();
+        const insta = document.getElementById('input-instagram').value.trim();
+        const tiktok = document.getElementById('input-tiktok').value.trim();
+        const requestMsg = document.getElementById('input-request').value.trim();
 
-            // 1. 동의 체크 확인
-            const isInfoChecked = document.getElementById('chk-info').checked;
-            const isRefundChecked = document.getElementById('chk-refund').checked;
-            const isTermsChecked = document.getElementById('chk-all').checked;
+        if (!name || !phone || !email) {
+            alert(t.alert_fill_all);
+            return;
+        }
 
-            if (!isInfoChecked || !isRefundChecked || !isTermsChecked) {
-                alert(t.alert_agree);
-                return;
-            }
+        const params = new URLSearchParams(window.location.search);
+        
+        // [수정된 부분] roomId 처리: URL에 없으면 5(Twin)로 설정
+        const roomId = parseInt(params.get('roomId')) || 5;
 
-            // 2. 입력 데이터 수집
-            const guestName = document.getElementById('input-name').value.trim();
-            const guestPhone = document.getElementById('input-phone').value.trim();
-            const guestEmail = document.getElementById('input-email').value.trim();
-            const instagramId = document.getElementById('input-instagram').value.trim();
-            const tiktokId = document.getElementById('input-tiktok').value.trim();
-            const requestMsg = document.getElementById('input-request').value.trim();
-
-            if (!guestName || !guestPhone || !guestEmail) {
-                alert(t.alert_fill_all);
-                return;
-            }
-
-            // 3. URL 파라미터 가져오기
-            const params = new URLSearchParams(window.location.search);
-            const checkin = params.get('checkin');
-            const checkout = params.get('checkout');
-            const nights = parseInt(params.get('nights')) || 0;
-            const total = parseInt(params.get('total')) || 0;
-            const roomPrice = parseInt(params.get('roomPrice')) || 0; 
-            const optionDetailsRaw = params.get('optionDetails');
-            
-            let optionDetails = [];
-            if (optionDetailsRaw) {
-                try {
-                    optionDetails = JSON.parse(decodeURIComponent(optionDetailsRaw));
-                } catch (e) {
-                    console.error("옵션 파싱 에러", e);
-                }
-            }
-
-            // 4. Supabase 저장용 데이터 (요청한 컬럼명 매핑)
-            const bookingData = {
-                room_id: 6,                     // 특실 ID
-                guest_name: guestName,
-                guest_phone: guestPhone,
-                
-                guest_email: guestEmail,        // 요청 컬럼: 이메일
-                social_insta: instagramId,      // 요청 컬럼: 인스타
-                social_tiktok: tiktokId,        // 요청 컬럼: 틱톡
-                guest_request: requestMsg,      // 요청 컬럼: 요청사항
-                
-                check_in_date: checkin,
-                check_out_date: checkout,
-                nights: nights,
-                
-                room_price: roomPrice,          // 요청 컬럼: 객실가격
-                selected_options: optionDetails,// 요청 컬럼: 선택옵션 (JSON)
-                total_price: total,             // 요청 컬럼: 총금액
-                
-                status: 'confirmed'             // 요청 컬럼: 결제상태
-            };
-
-            // 5. Insert 실행
+        const checkin = params.get('checkin');
+        const checkout = params.get('checkout');
+        const roomPrice = parseInt(params.get('roomPrice')) || 0;
+        const total = parseInt(params.get('total')) || 0;
+        
+        let selectedOptionsArray = [];
+        const optionDetailsRaw = params.get('optionDetails');
+        if (optionDetailsRaw) {
             try {
-                const { data, error } = await window.supabaseClient
-                    .from('bookings')
-                    .insert([bookingData]);
-
-                if (error) {
-                    console.error('Supabase Error:', error);
-                    alert(t.alert_error + "\n" + error.message);
-                } else {
-                    alert(t.alert_done);
-                    window.location.href = 'index.html'; 
-                }
-            } catch (err) {
-                console.error('Unexpected Error:', err);
-                alert(t.alert_error);
+                selectedOptionsArray = JSON.parse(decodeURIComponent(optionDetailsRaw));
+            } catch (e) {
+                console.error("옵션 파싱 오류", e);
             }
         }
+
+        // 버튼 비활성화 (중복 클릭 방지)
+        btn.disabled = true;
+        btn.innerText = t.btn_processing;
+
+        // 저장할 데이터 객체 생성
+        const insertData = {
+            room_id: roomId, 
+            guest_name: name,
+            phone: phone,
+            guest_email: email,
+            social_insta: insta,
+            social_tiktok: tiktok,
+            guest_request: requestMsg,
+            check_in: checkin,
+            check_out: checkout,
+            room_price: roomPrice,
+            selected_options: selectedOptionsArray, 
+            total_price: total,
+            status: '결제완료' 
+        };
+
+        try {
+            const { data, error } = await window.supabaseClient
+                .from('bookings') 
+                .insert([insertData])
+                .select();
+
+            if (error) {
+                throw error;
+            } else {
+                alert(t.alert_done);
+                window.location.href = 'index.html'; 
+            }
+        } catch (err) {
+            console.error('Booking Error:', err);
+            alert(t.alert_error + "\nDetail: " + err.message);
+            btn.disabled = false;
+            btn.innerText = t.btn_pay; // 버튼 원래대로 복구
+        }
+    }
     </script>
 </body>
 </html>
