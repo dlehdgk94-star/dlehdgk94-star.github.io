@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; font-family: 'Poppins', sans-serif; }
     
     /* 🔥 무한 슬라이드 애니메이션 */
     @keyframes slideInfinite {
@@ -32,10 +32,10 @@
 </head>
 <body class="bg-white text-slate-900 font-sans">
 
-  <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
+  <header id="header" class="fixed top-0 left-0 right-0 z-30 transition-colors duration-300 bg-transparent text-white">
+    <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
       
-      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
+      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
@@ -46,7 +46,7 @@
         <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
+      <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
         <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
         <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
         <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>
@@ -261,7 +261,21 @@
 
   <script>
     /* --------------------------------------
-       1. 모바일 메뉴 (Drawer) 열기/닫기
+       🔥 [추가됨] 1. 헤더 스크롤 색상 변경 로직 (메인페이지와 동일)
+    -------------------------------------- */
+    const header = document.getElementById("header");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 20) {
+        header.classList.add("bg-[#ff6900]", "shadow-md");
+        header.classList.remove("bg-transparent");
+      } else {
+        header.classList.remove("bg-[#ff6900]", "shadow-md");
+        header.classList.add("bg-transparent");
+      }
+    });
+
+    /* --------------------------------------
+       2. 모바일 메뉴 (Drawer) 열기/닫기
     -------------------------------------- */
     const mobileMenuBtn = document.getElementById("mobile-menu-btn");
     const mobileDrawer = document.getElementById("mobile-drawer");
@@ -292,7 +306,7 @@
     }
 
     /* --------------------------------------
-       2. 다국어 번역 데이터 (이미지 파일명 적용)
+       3. 다국어 번역 데이터 (이미지 파일명 적용)
     -------------------------------------- */
     const translations = {
       ko: {
