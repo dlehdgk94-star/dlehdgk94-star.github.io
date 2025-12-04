@@ -132,80 +132,85 @@
 </head>
 <body class="bg-white text-slate-900 font-sans">
 
-    <header id="header" class="fixed top-0 left-0 right-0 z-30 text-white transition-colors duration-300 bg-[#ff6900] shadow-lg">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
-            
-          <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
+    <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
+        <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
+          
+          <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
           </button>
-   
-          <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md">
+    
+          <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md z-20">
             <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
             <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
           </a>
-   
-          <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
-            <a href="about.html" class="hover:text-orange-200" data-i18n="nav_about">about</a>
-            <a href="rooms.html" class="hover:text-orange-200" data-i18n="nav_rooms">rooms</a>
-            <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>    
-            <a href="reservation.html" class="hover:text-orange-200 underline underline-offset-4" data-i18n="nav_reservation">reservation (예약)</a>
-            <a href="instaspot.html" class="hover:text-orange-200">insta spot (관광&맛집&카페)</a>
-            <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
-            <a href="contact.html" class="hover:text-orange-200" data-i18n="nav_contact">contact</a>
+    
+          <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
+            <a href="about.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_about">about</a>
+            <a href="rooms.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_rooms">rooms</a>
+            <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>
+            <a href="reservation.html" class="hover:text-orange-200 transition-colors underline underline-offset-4" data-i18n="nav_reservation">reservation (예약)</a>
+            <a href="instaspot.html" class="hover:text-orange-200 transition-colors">insta spot (관광&맛집&카페)</a>
+            <a href="#lounge" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
+            <a href="contact.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_contact">contact</a>
           </nav>
-   
-          <div class="flex items-center relative drop-shadow-md">
-             <div class="flex items-center gap-1 cursor-pointer relative">
-                <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
+    
+          <div class="flex items-center relative drop-shadow-md z-20">
+             <div class="flex items-center gap-2 cursor-pointer relative group">
+                <img id="current-flag-icon" src="kr.png" alt="Korea" class="w-8 h-5 object-cover rounded shadow-sm border border-white/30 transition-transform group-hover:scale-110">
+                
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
-                <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                    <option value="ko">🇰🇷 한국어</option>
-                    <option value="en">🇺🇸 English</option>
-                    <option value="ja">🇯🇵 日本語</option>
-                    <option value="zh">🇨🇳 中文</option>
+    
+                <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none text-slate-900">
+                    <option value="ko" class="text-slate-900">🇰🇷 한국어</option>
+                    <option value="en" class="text-slate-900">🇺🇸 English</option>
+                    <option value="ja" class="text-slate-900">🇯🇵 日本語</option>
+                    <option value="zh" class="text-slate-900">🇨🇳 中文</option>
                 </select>
              </div>
           </div>
-   
+    
         </div>
     </header>
 
     <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity duration-300"></div>
-        
+    
     <nav id="mobile-drawer" class="fixed top-0 left-0 w-[75%] max-w-sm h-full z-50 bg-white shadow-xl text-slate-900 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
         <div class="p-6">
           <button id="mobile-menu-close-btn" class="absolute top-4 right-4 text-3xl font-light hover:text-[#ff6900]">&times;</button>
+          
           <div class="mt-2 mb-8">
             <span class="text-xl font-bold tracking-tight text-[#ff6900]">Insta hotel</span>
           </div>
+          
           <ul class="flex flex-col space-y-4 text-lg font-medium">
             <li><a href="about.html" class="block hover:text-[#ff6900]" data-i18n="nav_about">about</a></li>
+            
             <li>
                 <div class="flex justify-between items-center cursor-pointer hover:text-[#ff6900]" id="rooms-toggle">
                     <span data-i18n="nav_rooms">rooms</span> <span class="text-sm">▼</span>
                 </div>
                 <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
-                     <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
                     <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Special</a></li>
                     <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Luxury</a></li>
                     <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Premium</a></li>
                     <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Deluxe</a></li>
                     <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Standard</a></li>
-                    <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Long Stay</a></li>
+                    <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
                 </ul>
             </li>
-            
+    
             <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]">breakfast</a></li>
             <li><a href="reservation.html" class="block hover:text-[#ff6900] text-[#ff6900]" data-i18n="nav_reservation">reservation (예약)</a></li>
             <li><a href="instaspot.html" class="block hover:text-[#ff6900]">insta spot (관광&맛집&카페)</a></li>
-            <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
+            <li><a href="#lounge" class="block hover:text-[#ff6900]" data-i18n="nav_lounge">bluerain lounge</a></li>
             <li><a href="contact.html" class="block hover:text-[#ff6900]" data-i18n="nav_contact">contact</a></li>
           </ul>
-   
+    
           <div class="mt-8 border-t pt-4">
               <p class="text-sm text-slate-400 mb-2">Language</p>
               <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
@@ -456,7 +461,7 @@
                 </a>
                 <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
                     <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
-                </a>           
+                </a>            
             </div>
   
             <div class="space-y-1">
@@ -495,8 +500,7 @@
             this.classList.add('liked');
         });
 
-        // --- 공통 스크립트 ---
-        const header = document.getElementById("header");
+        // --- 공통 스크립트 (모바일 메뉴 등) ---
         const mobileMenuBtn = document.getElementById("mobile-menu-btn");
         const mobileDrawer = document.getElementById("mobile-drawer");
         const drawerOverlay = document.getElementById("drawer-overlay");
@@ -504,13 +508,13 @@
         const roomsToggle = document.getElementById("rooms-toggle");
         const roomsSubmenu = document.getElementById("rooms-submenu");
 
+        // 스크롤 시 헤더 배경 변경 로직 (원래 있었으나, 새 디자인에서는 기본적으로 배경색이 있으므로 유지해도 무방)
+        /* const header = document.getElementById("header");
         window.addEventListener("scroll", () => {
-            if (window.scrollY > 50) {
-                header.classList.add("bg-[#ff6900]", "shadow-lg");
-            } else {
-                header.classList.add("bg-[#ff6900]", "shadow-lg"); 
-            }
+            // 새 헤더는 항상 오렌지색 배경을 가지므로 이 로직은 필수적이지 않으나, 
+            // 그림자 효과 등을 위해 남겨둘 수 있습니다.
         });
+        */
 
         function openMenu() {
             mobileDrawer.classList.remove("-translate-x-full");
@@ -536,8 +540,9 @@
         const translations = {
             ko: {
                 flag: "🇰🇷",
+                img: "kr.png", // [추가됨] 이미지 플래그 파일명
                 // 네비게이션
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 // 상세정보 및 메인
                 scroll_hint: "← 옆으로 밀어서 더 보기",
                 desc_header: "상세정보",
@@ -572,7 +577,8 @@
             },
             en: {
                 flag: "🇺🇸",
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+                img: "usa.png", // [추가됨] 이미지 플래그 파일명
+                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 scroll_hint: "← Swipe to see more",
                 desc_header: "Details",
                 desc_p1: "[Special Room]<br>Insta Hotel is a space where you can capture comfort and sensibility at a glance.<br>The softly lit rooms with warm wood tones provide a comfortable atmosphere for a break during your trip.",
@@ -604,7 +610,8 @@
             },
             ja: {
                 flag: "🇯🇵",
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+                img: "jp.png", // [추가됨] 이미지 플래그 파일명
+                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 scroll_hint: "← スワイプしてもっと見る",
                 desc_header: "詳細情報",
                 desc_p1: "[スペシャルルーム]<br>インスタホテルは、快適さと感性を一目で感じられる空間です。<br>ほのかな照明と温かみのあるウッドトーンの客室は、旅や日常の中で一休みできる快適な雰囲気を提供します。",
@@ -636,7 +643,8 @@
             },
             zh: {
                 flag: "🇨🇳",
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+                img: "cn.png", // [추가됨] 이미지 플래그 파일명
+                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 scroll_hint: "← 滑动查看更多",
                 desc_header: "详细信息",
                 desc_p1: "[特别房]<br>Insta Hotel 是一个可以一眼容纳舒适和感性的空间。<br>隐隐的灯光和温暖的木色调客房，为您提供旅行和日常生活中可以暂时休息的舒适氛围。",
@@ -679,8 +687,10 @@
             currentLang = lang; // 전역 변수 업데이트
             const t = translations[lang] || translations.ko;
             
-            // 1. 플래그 아이콘 업데이트
-            if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
+            // 1. [변경됨] 플래그 이미지 업데이트 (src 변경)
+            if(currentFlagIcon && t.img) {
+                currentFlagIcon.src = t.img;
+            }
 
             // 2. ID를 사용하는 요소 업데이트 (Footer 등)
             const textIds = [
