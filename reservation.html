@@ -32,42 +32,43 @@
 </head>
 <body class="bg-white text-slate-900 font-sans">
 
-  <header id="header" class="fixed top-0 left-0 right-0 z-30 text-white transition-colors duration-300 bg-transparent">
+  <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
       
-      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
+      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
       </button>
 
-      <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md">
+      <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md z-20">
         <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
         <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
-        <a href="about.html" class="hover:text-orange-200">about</a>
-        <a href="rooms.html" class="hover:text-orange-200">rooms</a>
-        <a <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>
-        <a href="reservation.html" class="hover:text-orange-200">reservation (예약)</a>
-        <a href="instaspot.html" class="hover:text-orange-200">insta spot (관광&맛집&카페)</a>
-        <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
-        <a href="contact.html" class="hover:text-orange-200">contact</a>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
+        <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
+        <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
+        <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>
+        <a href="reservation.html" class="hover:text-orange-200 transition-colors">reservation (예약)</a>
+        <a href="instaspot.html" class="hover:text-orange-200 transition-colors">insta spot (관광&맛집&카페)</a>
+        <a href="#lounge" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
+        <a href="contact.html" class="hover:text-orange-200 transition-colors">contact</a>
       </nav>
 
-      <div class="flex items-center relative drop-shadow-md">
-         <div class="flex items-center gap-1 cursor-pointer relative">
-            <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
+      <div class="flex items-center relative drop-shadow-md z-20">
+         <div class="flex items-center gap-2 cursor-pointer relative group">
+            <img id="current-flag-icon" src="kr.png" alt="Korea" class="w-8 h-5 object-cover rounded shadow-sm border border-white/30 transition-transform group-hover:scale-110">
+            
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
 
-            <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                <option value="ko">🇰🇷 한국어</option>
-                <option value="en">🇺🇸 English</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="zh">🇨🇳 中文</option>
+            <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none text-slate-900">
+                <option value="ko" class="text-slate-900">🇰🇷 한국어</option>
+                <option value="en" class="text-slate-900">🇺🇸 English</option>
+                <option value="ja" class="text-slate-900">🇯🇵 日本語</option>
+                <option value="zh" class="text-slate-900">🇨🇳 中文</option>
             </select>
          </div>
       </div>
@@ -163,7 +164,7 @@
           <p>• 예약하기 버튼을 누르시면 편하게 예약가능하십니다.</p>
         </div>
         <div class="flex md:justify-end items-center">
-          <a href="reservation2.html" class="w-full md:w-56 py-3 bg-[#ff6900] text-white text-sm font-semibold rounded-full shadow-md hover:bg-orange-500 transition duration-300 text-center flex justify-center items-center">
+          <a href="reservation2.html" class="w-full md:w-56 py-3 bg-[#ff6900] text-white text-sm font-semibold rounded-full shadow-md hover:bg-orange-500 transition duration-300 text-center flex justify-center items-center" id="btn-reserve">
     예약하기
 </a>
         </div>
@@ -200,13 +201,13 @@
           <img src="hero5.jpg" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 3" />
           <img src="조식.jpg"   class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 4" />
           <img src="hero2.jpg"  class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 5" />
-          <img src="조식.png"  class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 6" />
+          <img src="조식.png"   class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 6" />
           <img src="hero7.jpg" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 1 copy" />
           <img src="hero8.png" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 2 copy" />
           <img src="hero5.jpg" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 3 copy" />
           <img src="조식.jpg"   class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 4 copy" />
           <img src="hero2.jpg"  class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 5 copy" />
-          <img src="조식.png"  class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 6 copy" />
+          <img src="조식.png"   class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 6 copy" />
         </div>
       </div>
     </section>
@@ -260,22 +261,8 @@
 
   <script>
     /* --------------------------------------
-       1. 헤더 스크롤 효과 & 모바일 메뉴
+       1. 모바일 메뉴 (Drawer) 열기/닫기
     -------------------------------------- */
-    const header = document.getElementById("header");
-    
-    // 스크롤 시 배경색 변경
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 50) {
-        header.classList.add("bg-[#ff6900]", "shadow-lg");
-        header.classList.remove("bg-transparent");
-      } else {
-        header.classList.remove("bg-[#ff6900]", "shadow-lg");
-        header.classList.add("bg-transparent");
-      }
-    });
-
-    // 모바일 메뉴 제어
     const mobileMenuBtn = document.getElementById("mobile-menu-btn");
     const mobileDrawer = document.getElementById("mobile-drawer");
     const drawerOverlay = document.getElementById("drawer-overlay");
@@ -296,7 +283,6 @@
     if (mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMenu);
     if (drawerOverlay) drawerOverlay.addEventListener("click", closeMenu);
 
-    // 모바일 하위 메뉴 토글
     const roomsToggle = document.getElementById("rooms-toggle");
     const roomsSubmenu = document.getElementById("rooms-submenu");
     if(roomsToggle && roomsSubmenu){
@@ -306,20 +292,19 @@
     }
 
     /* --------------------------------------
-       2. 다국어 번역 데이터 (한국어 부분만)
+       2. 다국어 번역 데이터 (이미지 파일명 적용)
     -------------------------------------- */
     const translations = {
       ko: {
+        img: "kr.png", // 이미지 파일명
         flag: "🇰🇷",
         
-        // 예약 상단 알림
         "res-notice-group": `
           <p>• 예약 및 호텔 이용 관련 : yhl5258@naver.com</p>
-          <p>• 제휴사이트(아고다, 트립닷컴, 부킹닷컴, 익스피디아 등)에서 예약부탁드립니다.</p>
+          <p>• 예약하기 버튼을 누르시면 편하게 예약가능하십니다.</p>
         `,
         "btn-reserve": "예약하기",
 
-        // 장기 숙박
         "long-stay-label": "장기숙박 관련 안내",
         "long-stay-title": "인스타호텔 장기 투숙 안내 (Long-term stay announcement)",
         "long-stay-desc": `
@@ -337,12 +322,12 @@
           <p>▶ 문의 : 카카오톡 플러스친구 [인스타호텔] / 인스타그램 @instahotel_mainbranch / 전화 031-203-4301</p>
         `,
 
-        // Footer
         companyName: "(주)호텔인스타", ceoName: "대표자 : 이영환", bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", address: "수원시 영통구 영통로 94-6",
         terms: "이용약관", privacy: "개인정보처리방침", inquiryBtn: "문의"
       },
 
       en: {
+        img: "usa.png",
         flag: "🇺🇸",
 
         "res-notice-group": `
@@ -373,6 +358,7 @@
       },
 
       ja: {
+        img: "jp.png",
         flag: "🇯🇵",
 
         "res-notice-group": `
@@ -403,6 +389,7 @@
       },
 
       zh: {
+        img: "cn.png",
         flag: "🇨🇳",
 
         "res-notice-group": `
@@ -440,8 +427,10 @@
     function updateLanguage(lang) {
         const t = translations[lang] || translations.ko;
 
-        // 1. 상단 국기 아이콘 변경
-        if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
+        // 1. 상단 국기 아이콘 변경 (이미지 src 수정)
+        if(currentFlagIcon && t.img) {
+            currentFlagIcon.src = t.img;
+        }
 
         // 2. 텍스트 업데이트
         const textIds = [
@@ -480,4 +469,3 @@
 
 </body>
 </html>
-
