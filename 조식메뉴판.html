@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="google-site-verification" content="fsXjRMcfj7Jm3Vswe92wB_Tf7mTOIy7_CckNERtv_wY" />
   <meta name="naver-site-verification" content="507ad30f2472ed24be95dd772ab1cf49e5f32c51" />
-  <title>Insta Hotel - Main</title>
+  <title>Insta Hotel - Breakfast</title>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Insta Hotel - MainBranch">
-  <meta property="og:description" content="인스타 호텔에 오신 것을 환영합니다.">
+  <meta property="og:title" content="Insta Hotel - Breakfast Menu">
+  <meta property="og:description" content="인스타 호텔 조식 & 룸서비스 메뉴입니다.">
   <meta property="og:image" content="https://dlehdgk94-star.github.io/hero7.jpg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     html { scroll-behavior: smooth; font-family: 'Poppins', sans-serif; }
     /* 메뉴 카드 스타일 */
@@ -26,7 +26,7 @@
     const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
     const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
     
-    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함 (이름 충돌 방지)
+    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
     window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
     
     console.log("홈페이지-슈파베이스 연결 성공!");
@@ -35,42 +35,43 @@
 
 <body class="text-slate-900 bg-white">
 
-  <header id="header" class="fixed top-0 left-0 right-0 z-30 transition-colors duration-300 bg-[#ff6900] shadow-md text-white">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between h-14 relative">
+  <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
+    <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
       
-      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
+      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
       </button>
 
-      <a href="#" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md">
+      <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md z-20">
         <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
         <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
-        <a href="about.html" id="nav-about" class="hover:text-orange-200 transition-colors">about</a>
-        <a href="rooms.html" id="nav-rooms" class="hover:text-orange-200 transition-colors">rooms</a>
-        <a href="조식메뉴판.html" id="nav-breakfast" class="hover:text-orange-200 transition-colors">breakfast</a>
-        <a href="reservation.html" id="nav-reservation" class="hover:text-orange-200 transition-colors">reservation (예약)</a>
-        <a href="instaspot.html" id="nav-instaspot" class="hover:text-orange-200 transition-colors">insta spot (관광&맛집&카페)</a>
-        <a href="#lounge" id="nav-lounge" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
-        <a href="contact.html" id="nav-contact" class="hover:text-orange-200 transition-colors">contact</a>
+      <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
+        <a href="about.html" class="hover:text-orange-200 transition-colors" data-translate="nav_about">about</a>
+        <a href="rooms.html" class="hover:text-orange-200 transition-colors" data-translate="nav_rooms">rooms</a>
+        <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors" data-translate="nav_breakfast">breakfast</a>
+        <a href="reservation.html" class="hover:text-orange-200 transition-colors" data-translate="nav_reservation">reservation (예약)</a>
+        <a href="instaspot.html" class="hover:text-orange-200 transition-colors" data-translate="nav_instaspot">insta spot (관광&맛집&카페)</a>
+        <a href="#lounge" class="hover:text-orange-200 transition-colors" data-translate="nav_lounge">bluerain lounge</a>
+        <a href="contact.html" class="hover:text-orange-200 transition-colors" data-translate="nav_contact">contact</a>
       </nav>
 
-      <div class="flex items-center relative drop-shadow-md">
-         <div class="flex items-center gap-1 cursor-pointer relative">
-            <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
+      <div class="flex items-center relative drop-shadow-md z-20">
+         <div class="flex items-center gap-2 cursor-pointer relative group">
+            <img id="current-flag-icon" src="kr.png" alt="Korea" class="w-8 h-5 object-cover rounded shadow-sm border border-white/30 transition-transform group-hover:scale-110">
+            
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
 
-            <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                <option value="ko">🇰🇷 한국어</option>
-                <option value="en">🇺🇸 English</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="zh">🇨🇳 中文</option>
+            <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none text-slate-900">
+                <option value="ko" class="text-slate-900">🇰🇷 한국어</option>
+                <option value="en" class="text-slate-900">🇺🇸 English</option>
+                <option value="ja" class="text-slate-900">🇯🇵 日本語</option>
+                <option value="zh" class="text-slate-900">🇨🇳 中文</option>
             </select>
          </div>
       </div>
@@ -81,19 +82,19 @@
   <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity duration-300"></div>
   
   <nav id="mobile-drawer" class="fixed top-0 left-0 w-[75%] max-w-sm h-full z-50 bg-white shadow-xl text-slate-900 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
-    <div class="p-6 h-full flex flex-col">
+    <div class="p-6">
       <button id="mobile-menu-close-btn" class="absolute top-4 right-4 text-3xl font-light hover:text-[#ff6900]">&times;</button>
       
       <div class="mt-2 mb-8">
         <span class="text-xl font-bold tracking-tight text-[#ff6900]">Insta hotel</span>
       </div>
       
-      <ul class="flex flex-col space-y-4 text-lg font-medium flex-grow">
-        <li><a href="about.html" id="mob-about" class="block hover:text-[#ff6900]">about</a></li>
+      <ul class="flex flex-col space-y-4 text-lg font-medium">
+        <li><a href="about.html" class="block hover:text-[#ff6900]" data-translate="nav_about">about</a></li>
         
         <li>
             <div class="flex justify-between items-center cursor-pointer hover:text-[#ff6900]" id="rooms-toggle">
-                <span id="mob-rooms">rooms</span> <span class="text-sm">▼</span>
+                <span data-translate="nav_rooms">rooms</span> <span class="text-sm">▼</span>
             </div>
             <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
                 <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
@@ -106,21 +107,21 @@
             </ul>
         </li>
 
-        <li><a href="조식메뉴판.html" id="mob-breakfast" class="block hover:text-[#ff6900]">breakfast</a></li>
-        <li><a href="reservation.html" id="mob-reservation" class="block hover:text-[#ff6900]">reservation (예약)</a></li>
-        <li><a href="instaspot.html" id="mob-instaspot" class="block hover:text-[#ff6900]">insta spot (관광&맛집&카페)</a></li>
-        <li><a href="#lounge" id="mob-lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
-        <li><a href="contact.html" id="mob-contact" class="block hover:text-[#ff6900]">contact</a></li>
+        <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]" data-translate="nav_breakfast">breakfast</a></li>
+        <li><a href="reservation.html" class="block hover:text-[#ff6900]" data-translate="nav_reservation">reservation (예약)</a></li>
+        <li><a href="instaspot.html" class="block hover:text-[#ff6900]" data-translate="nav_instaspot">insta spot (관광&맛집&카페)</a></li>
+        <li><a href="#lounge" class="block hover:text-[#ff6900]" data-translate="nav_lounge">bluerain lounge</a></li>
+        <li><a href="contact.html" class="block hover:text-[#ff6900]" data-translate="nav_contact">contact</a></li>
       </ul>
 
       <div class="mt-8 border-t pt-4">
-         <p class="text-sm text-slate-400 mb-2">Language</p>
-         <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
-             <option value="ko">Korean</option>
-             <option value="en">English</option>
-             <option value="ja">Japanese</option>
-             <option value="zh">Chinese</option>
-         </select>
+          <p class="text-sm text-slate-400 mb-2">Language</p>
+          <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
+              <option value="ko">Korean</option>
+              <option value="en">English</option>
+              <option value="ja">Japanese</option>
+              <option value="zh">Chinese</option>
+          </select>
       </div>
     </div>
   </nav>
@@ -522,21 +523,21 @@
     -------------------------------------- */
     const translations = {
       ko: { 
-          flag: "🇰🇷",
-          
-          /* 헤더 메뉴 */
-          about: "about",
-          rooms: "rooms",
-          breakfast: "breakfast",
-          reservation: "reservation (예약)",
-          instaspot: "insta spot (관광&맛집&카페)",
-          lounge: "bluerain lounge",
-          contact: "contact",
+          img: "kr.png", // 헤더용 국기 이미지
 
-          /* 배달 안내 (수정된 키값: notice-text) */
+          /* 헤더 메뉴 (data-translate 키) */
+          nav_about: "about", 
+          nav_rooms: "rooms", 
+          nav_breakfast: "breakfast", 
+          nav_reservation: "reservation (예약)", 
+          nav_instaspot: "insta spot (관광&맛집&카페)", 
+          nav_lounge: "bluerain lounge", 
+          nav_contact: "contact",
+
+          /* 배달 안내 */
           "notice-text": "아침 7시~8시 객실 문 앞 배달, 벨로 안내드립니다.<br>준비된 조식을 받아 객실에서 편하게 즐겨주세요.",
 
-          /* 메뉴 번역 (타이틀은 HTML 태그 포함하여 디자인 유지) */
+          /* 메뉴 번역 */
           "menu-title-a1": "햄치즈 크라상 샌드위치<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Croissant Sandwich</span>",
           "menu-desc-a1": "겹겹이 고소한 크라상에 신선한 토마토와 짭조름한 햄, 치즈를 넣은 크라상의 베스트 플레이버 샌드위치<br>Layered buttery croissant with fresh tomato, savory ham, and cheese.",
 
@@ -584,18 +585,18 @@
           inquiryBtn: "문의" 
       },
       en: { 
-          flag: "🇺🇸",
+          img: "usa.png",
 
           /* 헤더 메뉴 */
-          about: "about",
-          rooms: "rooms",
-          breakfast: "breakfast",
-          reservation: "reservation",
-          instaspot: "insta spot (Tour & Cafe)",
-          lounge: "bluerain lounge",
-          contact: "contact",
+          nav_about: "about", 
+          nav_rooms: "rooms", 
+          nav_breakfast: "breakfast", 
+          nav_reservation: "reservation", 
+          nav_instaspot: "insta spot (Tour & Cafe)", 
+          nav_lounge: "bluerain lounge", 
+          nav_contact: "contact",
 
-          /* 배달 안내 (수정된 키값: notice-text) */
+          /* 배달 안내 */
           "notice-text": "Breakfast is delivered to your door between 7:00 and 8:00 AM.<br>We will ring the bell. Please enjoy your meal in the comfort of your room.",
 
           /* 메뉴 번역 */
@@ -645,18 +646,18 @@
           inquiryBtn: "Contact" 
       },
       ja: { 
-          flag: "🇯🇵",
+          img: "jp.png",
 
           /* 헤더 메뉴 */
-          about: "about (ホテル紹介)",
-          rooms: "rooms",
-          breakfast: "breakfast (朝食)",
-          reservation: "reservation (予約)",
-          instaspot: "insta spot (観光&グルメ)",
-          lounge: "bluerain lounge",
-          contact: "contact",
+          nav_about: "about (ホテル紹介)", 
+          nav_rooms: "rooms", 
+          nav_breakfast: "breakfast (朝食)", 
+          nav_reservation: "reservation (予約)", 
+          nav_instaspot: "insta spot (観光&グルメ)", 
+          nav_lounge: "bluerain lounge", 
+          nav_contact: "contact",
 
-          /* 배달 안내 (수정된 키값: notice-text) */
+          /* 배달 안내 */
           "notice-text": "朝7時～8時の間に客室の前までお届けし、ベルでお知らせします。<br>客室でごゆっくり朝食をお楽しみください。",
 
           /* 메뉴 번역 */
@@ -706,18 +707,18 @@
           inquiryBtn: "お問い合わせ" 
       },
       zh: { 
-          flag: "🇨🇳",
+          img: "cn.png",
 
           /* 헤더 메뉴 */
-          about: "about (酒店介绍)",
-          rooms: "rooms",
-          breakfast: "breakfast (早餐)",
-          reservation: "reservation (预订)",
-          instaspot: "insta spot (旅游&美食)",
-          lounge: "bluerain lounge",
-          contact: "contact",
+          nav_about: "about (酒店介绍)", 
+          nav_rooms: "rooms", 
+          nav_breakfast: "breakfast (早餐)", 
+          nav_reservation: "reservation (预订)", 
+          nav_instaspot: "insta spot (旅游&美食)", 
+          nav_lounge: "bluerain lounge", 
+          nav_contact: "contact",
 
-          /* 배달 안내 (수정된 키값: notice-text) */
+          /* 배달 안내 */
           "notice-text": "早餐于7:00~8:00送到客房门口并按铃通知。<br>请在客房内舒适地享用为您准备的早餐。",
 
           /* 메뉴 번역 */
@@ -775,17 +776,16 @@
     function updateLanguage(lang) {
         const t = translations[lang] || translations.ko;
 
-        // 1. 국기 변경
-        if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
+        // 1. 국기 이미지 변경
+        if(currentFlagIcon && t.img) currentFlagIcon.src = t.img;
 
         // 2. 텍스트 변경
-        // (1) 일반 텍스트 요소들 (ID가 있는 모든 요소 자동 업데이트)
-        // 기존 ID 목록 + 새로 추가된 Notice (key값 수정됨: notice-text) + 메뉴 ID들
+        // (1) 일반 ID 텍스트 요소들
         const textIds = [
             "btnMore", "companyName", "ceoName", "bizNumber", "address",
             "termsLink", "privacyLink", "inquiryBtn", 
-            "notice-text", // 여기 ID를 notice-text로 수정
-            // 메뉴 타이틀 및 설명 ID 목록
+            "notice-text",
+            // 메뉴 ID들
             "menu-title-a1", "menu-desc-a1",
             "menu-title-b2", "menu-desc-b2",
             "menu-title-c3", "menu-desc-c3",
@@ -802,29 +802,14 @@
         textIds.forEach(id => {
             const el = document.getElementById(id);
             if(el && t[id]) {
-                // innerHTML을 사용하여 <br>, <span> 태그 등을 유지
                 el.innerHTML = t[id];
             }
         });
 
-        // (2) 헤더 메뉴 & 모바일 메뉴 변경
-        // 맵핑: [데이터키, 데스크탑ID, 모바일ID]
-        const menuItems = [
-            { key: "about",       desktop: "nav-about",       mobile: "mob-about" },
-            { key: "rooms",       desktop: "nav-rooms",       mobile: "mob-rooms" },
-            { key: "breakfast",   desktop: "nav-breakfast",   mobile: "mob-breakfast" },
-            { key: "reservation", desktop: "nav-reservation", mobile: "mob-reservation" },
-            { key: "instaspot",   desktop: "nav-instaspot",   mobile: "mob-instaspot" },
-            { key: "lounge",      desktop: "nav-lounge",      mobile: "mob-lounge" },
-            { key: "contact",     desktop: "nav-contact",     mobile: "mob-contact" },
-        ];
-
-        menuItems.forEach(item => {
-            const dEl = document.getElementById(item.desktop); // 데스크탑 메뉴
-            const mEl = document.getElementById(item.mobile);  // 모바일 메뉴
-            
-            if (dEl && t[item.key]) dEl.textContent = t[item.key];
-            if (mEl && t[item.key]) mEl.textContent = t[item.key];
+        // (2) 네비게이션 메뉴 (data-translate 속성 이용)
+        document.querySelectorAll("[data-translate]").forEach(el => {
+            const key = el.getAttribute("data-translate");
+            if(t[key]) el.textContent = t[key];
         });
     }
 
