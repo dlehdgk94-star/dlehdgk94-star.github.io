@@ -325,7 +325,7 @@
 
       <div class="flex items-center relative drop-shadow-md z-20">
          <div class="flex items-center gap-2 cursor-pointer relative group">
-            <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
+            <img id="current-flag-icon" src="kr.png" alt="flag" class="w-8 h-5 shadow-sm rounded-sm object-cover border border-slate-200">
             
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -709,7 +709,7 @@
         // --- 다국어 번역 데이터 ---
         const translations = {
             ko: {
-                flag: "🇰🇷",
+                flag: "kr.png",
                 // 네비게이션
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 // 상세정보 및 메인
@@ -745,7 +745,7 @@
                 menu_N14: "[N14] 커피 - 아메리카노<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
             },
             en: {
-                flag: "🇺🇸",
+                flag: "usa.png",
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 scroll_hint: "← Swipe to see more",
                 desc_header: "Details",
@@ -777,7 +777,7 @@
                 menu_N14: "[N14] Coffee - Americano",
             },
             ja: {
-                flag: "🇯🇵",
+                flag: "jp.png",
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 scroll_hint: "← スワイプしてもっと見る",
                 desc_header: "詳細情報",
@@ -809,7 +809,7 @@
                 menu_N14: "[N14] コーヒー - アメリカーノ<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
             },
             zh: {
-                flag: "🇨🇳",
+                flag: "cn.png",
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
                 scroll_hint: "← 滑动查看更多",
                 desc_header: "详细信息",
@@ -853,8 +853,8 @@
             currentLang = lang; // 전역 변수 업데이트
             const t = translations[lang] || translations.ko;
             
-            // 1. 플래그 아이콘 업데이트
-            if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
+            // 1. 플래그 아이콘 업데이트 (이미지 주소 src 변경)
+            if(currentFlagIcon) currentFlagIcon.src = t.flag;
 
             // 2. ID를 사용하는 요소 업데이트 (Footer 등)
             const textIds = [
@@ -1094,49 +1094,48 @@
             document.getElementById('grand-total').innerText = grandTotal.toLocaleString();
         }
 
-       // [reservation.html 의 goToPayment 함수 교체]
-function goToPayment() {
-    const checkin = document.getElementById('checkin').value;
-    const checkout = document.getElementById('checkout').value;
-    const nights = document.getElementById('nights').innerText;
+        function goToPayment() {
+            const checkin = document.getElementById('checkin').value;
+            const checkout = document.getElementById('checkout').value;
+            const nights = document.getElementById('nights').innerText;
 
-    // 1. 날짜 유효성 검사
-    if (!checkin || !checkout) {
-        alert(translations[currentLang].msg_select_date);
-        return;
-    }
+            // 1. 날짜 유효성 검사
+            if (!checkin || !checkout) {
+                alert(translations[currentLang].msg_select_date);
+                return;
+            }
 
-    // 2. 가격 계산
-    const roomPrice = calculateTotal();
-    let optionPrice = 0;
-    
-    // 3. 선택한 옵션의 '이름(메뉴명)'과 '가격' 수집 [추가된 로직]
-    let selectedOptionNames = [];
-    const checkedBoxes = document.querySelectorAll('.option-checkbox:checked');
+            // 2. 가격 계산
+            const roomPrice = calculateTotal();
+            let optionPrice = 0;
+            
+            // 3. 선택한 옵션의 '이름(메뉴명)'과 '가격' 수집
+            let selectedOptionNames = [];
+            const checkedBoxes = document.querySelectorAll('.option-checkbox:checked');
 
-    checkedBoxes.forEach(box => {
-        optionPrice += parseInt(box.value);
+            checkedBoxes.forEach(box => {
+                optionPrice += parseInt(box.value);
 
-        // 체크박스 바로 옆의 텍스트(메뉴명) 가져오기
-        const labelSpan = box.nextElementSibling;
-        if (labelSpan) {
-            // 줄바꿈(\n)을 공백으로 처리하여 깔끔하게 텍스트만 추출
-            let menuName = labelSpan.innerText.replace(/\n/g, ' ');
-            selectedOptionNames.push(menuName);
+                // 체크박스 바로 옆의 텍스트(메뉴명) 가져오기
+                const labelSpan = box.nextElementSibling;
+                if (labelSpan) {
+                    // 줄바꿈(\n)을 공백으로 처리하여 깔끔하게 텍스트만 추출
+                    let menuName = labelSpan.innerText.replace(/\n/g, ' ');
+                    selectedOptionNames.push(menuName);
+                }
+            });
+
+            const total = roomPrice + optionPrice;
+
+            // 4. 메뉴 리스트를 URL에 넣기 위해 인코딩 (JSON 문자열 변환 -> URI 인코딩)
+            const optionDetailsEncoded = encodeURIComponent(JSON.stringify(selectedOptionNames));
+
+            // 5. URL 생성 (결제트윈.html로 데이터 전송)
+            const url = `paytwin.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${total}&optionDetails=${optionDetailsEncoded}`;
+
+            // 6. 페이지 이동
+            window.location.href = url;
         }
-    });
-
-    const total = roomPrice + optionPrice;
-
-    // 4. 메뉴 리스트를 URL에 넣기 위해 인코딩 (JSON 문자열 변환 -> URI 인코딩)
-    const optionDetailsEncoded = encodeURIComponent(JSON.stringify(selectedOptionNames));
-
-    // 5. URL 생성 (결제트윈.html로 데이터 전송)
-    const url = `paytwin.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${total}&optionDetails=${optionDetailsEncoded}`;
-
-    // 6. 페이지 이동
-    window.location.href = url;
-}
     </script>
 </body>
 </html>
