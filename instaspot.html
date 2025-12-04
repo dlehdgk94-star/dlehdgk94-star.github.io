@@ -25,41 +25,42 @@
 <body class="bg-white text-slate-900 font-sans">
 
   <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative h-14">
+    <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
       
-      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none">
+      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
       </button>
 
-      <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center">
+      <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md z-20">
         <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
         <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
-        <a href="about.html" class="hover:text-orange-200">about</a>
-        <a href="rooms.html" class="hover:text-orange-200">rooms</a>
-        <a <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>
-        <a href="reservation.html" class="hover:text-orange-200">reservation (예약)</a>
-        <a href="instaspot.html" class="font-bold text-white border-b-2 border-white pb-0.5">insta spot (관광&맛집&카페)</a>
-        <a href="#lounge" class="hover:text-orange-200">bluerain lounge</a>
-        <a href="contact.html" class="hover:text-orange-200">contact</a>
+      <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
+        <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
+        <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
+        <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>
+        <a href="reservation.html" class="hover:text-orange-200 transition-colors">reservation (예약)</a>
+        <a href="instaspot.html" class="font-bold border-b-2 border-white pb-0.5">insta spot (관광&맛집&카페)</a>
+        <a href="#lounge" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
+        <a href="contact.html" class="hover:text-orange-200 transition-colors">contact</a>
       </nav>
 
-      <div class="flex items-center relative">
-         <div class="flex items-center gap-1 cursor-pointer relative">
-            <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
+      <div class="flex items-center relative drop-shadow-md z-20">
+         <div class="flex items-center gap-2 cursor-pointer relative group">
+            <img id="current-flag-icon" src="kr.png" alt="Korea" class="w-8 h-5 object-cover rounded shadow-sm border border-white/30 transition-transform group-hover:scale-110">
+            
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
 
-            <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
-                <option value="ko">🇰🇷 한국어</option>
-                <option value="en">🇺🇸 English</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="zh">🇨🇳 中文</option>
+            <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none text-slate-900">
+                <option value="ko" class="text-slate-900">🇰🇷 한국어</option>
+                <option value="en" class="text-slate-900">🇺🇸 English</option>
+                <option value="ja" class="text-slate-900">🇯🇵 日本語</option>
+                <option value="zh" class="text-slate-900">🇨🇳 中文</option>
             </select>
          </div>
       </div>
@@ -103,13 +104,13 @@
       </ul>
 
       <div class="mt-8 border-t pt-4">
-         <p class="text-sm text-slate-400 mb-2">Language</p>
-         <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
-             <option value="ko">Korean</option>
-             <option value="en">English</option>
-             <option value="ja">Japanese</option>
-             <option value="zh">Chinese</option>
-         </select>
+          <p class="text-sm text-slate-400 mb-2">Language</p>
+          <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
+              <option value="ko">Korean</option>
+              <option value="en">English</option>
+              <option value="ja">Japanese</option>
+              <option value="zh">Chinese</option>
+          </select>
       </div>
     </div>
   </nav>
@@ -192,8 +193,7 @@
 
                         <h2 id="spot3Title" class="font-bold text-2xl md:text-3xl mb-4 leading-tight">여행의 즐거움을 더하는 주변 맛집 탐방</h2>
                         <p id="spot3Desc" class="text-gray-600 text-sm leading-7 mb-8 font-light">
-                            호텔 주변에는 꼭 들러봐야 할 인기 메뉴부터 분위기 좋은 식당까지 다양한 선택지가 있습니다.
-                            든든한 식사부터 가볍게 즐기는 맥주 한 잔까지. 맛있는 음식과 함께 오늘 하루를 기분 좋게 마무리해보세요.
+                            호텔 주변에는 꼭 들러봐야 할 인기 메뉴부터 분위기 좋은 식당까지 다양한 선택지가 있습니다. 든든한 식사부터 가볍게 즐기는 맥주 한 잔까지. 맛있는 음식과 함께 오늘 하루를 기분 좋게 마무리해보세요.
                         </p>
                     </div>
                 </div>
@@ -281,9 +281,10 @@
     }
 
     /* 2. 다국어 번역 데이터 (Header/Footer + Main Content) */
+    // 스크립트 수정: Flag 이미지를 처리하도록 img 속성 추가
     const translations = {
       ko: {
-        flag: "🇰🇷",
+        img: "kr.png", // 국기 이미지
         // Header & Footer
         companyName: "(주)호텔인스타", ceoName: "대표자 : 이영환", bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", address: "수원시 영통구 영통로 94-6",
         terms: "이용약관", privacy: "개인정보처리방침", inquiryBtn: "문의",
@@ -304,7 +305,7 @@
         spot3Desc: "호텔 주변에는 꼭 들러봐야 할 인기 메뉴부터 분위기 좋은 식당까지 다양한 선택지가 있습니다. 든든한 식사부터 가볍게 즐기는 맥주 한 잔까지. 맛있는 음식과 함께 오늘 하루를 기분 좋게 마무리해보세요."
       },
       en: {
-        flag: "🇺🇸",
+        img: "usa.png",
         companyName: "Insta Hotel Co., Ltd.", ceoName: "CEO: Lee Young Hwan", bizNumber: "Registration: 2023-Suwon Yeongtong-1696", address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si",
         terms: "Terms of Use", privacy: "Privacy Policy", inquiryBtn: "Contact",
 
@@ -323,7 +324,7 @@
         spot3Desc: "There are various choices around the hotel, from must-visit popular menus to restaurants with great atmosphere. From a hearty meal to a light beer. Finish your day happily with delicious food."
       },
       ja: {
-        flag: "🇯🇵",
+        img: "jp.png",
         companyName: "インスタホテル株式会社", ceoName: "代表者 : イ・ヨンファン", bizNumber: "登録番号: 2023-水原霊通-1696", address: "水原市霊通区霊通路94-6",
         terms: "利用規約", privacy: "個人情報処理方針", inquiryBtn: "お問い合わせ",
 
@@ -342,7 +343,7 @@
         spot3Desc: "ホテルの周辺には、必ず立ち寄るべき人気メニューから雰囲気の良い食堂まで、多様な選択肢があります。心強い食事から軽く楽しむビール一杯まで。美味しい料理と共に今日一日を気分良く締めくくってください。"
       },
       zh: {
-        flag: "🇨🇳",
+        img: "cn.png",
         companyName: "Insta Hotel有限公司", ceoName: "代表：李永焕", bizNumber: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6",
         terms: "使用条款", privacy: "隐私政策", inquiryBtn: "咨询",
 
@@ -369,8 +370,10 @@
     function updateLanguage(lang) {
         const t = translations[lang] || translations.ko;
 
-        // 1. 상단 국기 아이콘 변경
-        if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
+        // 1. 상단 국기 아이콘 변경 (이미지 src 교체 방식으로 변경됨)
+        if(currentFlagIcon && t.img) {
+            currentFlagIcon.src = t.img;
+        }
 
         // 2. 텍스트 업데이트 (모든 번역 대상 ID)
         const textIds = [
