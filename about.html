@@ -15,7 +15,7 @@
     const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
     const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
     
-    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함 (이름 충돌 방지)
+    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
     window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
     
     console.log("홈페이지-슈파베이스 연결 성공!");
@@ -94,7 +94,6 @@
                 <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
             </ul>
         </li>
-
 
         <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]">breakfast</a></li>
         <li><a href="reservation.html" class="block hover:text-[#ff6900]">reservation (예약)</a></li>
@@ -241,12 +240,12 @@
     }
 
     /* --------------------------------------
-       2. 다국어 번역 데이터 (About 페이지용)
+       2. 다국어 번역 데이터 (이미지 파일명 적용)
     -------------------------------------- */
     
     const translations = {
       ko: {
-        flag: "🇰🇷",
+        img: "kr.png", // 이미지 파일명
         
         "about-text-1": `
             <p>insta는 “붙이는 것” 그리고 “연결”하는 공간입니다.</p>
@@ -268,7 +267,7 @@
       },
 
       en: {
-        flag: "🇺🇸",
+        img: "usa.png", // usa.png 사용
         
         "about-text-1": `
             <p>insta is a place and the action of where and how things stick together.</p>
@@ -289,7 +288,7 @@
       },
 
       ja: {
-        flag: "🇯🇵",
+        img: "jp.png", // jp.png 사용
         
         "about-text-1": `
             <p>instaは「貼る（inst）」そして「繋ぐ」空間です。</p>
@@ -310,7 +309,7 @@
       },
 
       zh: {
-        flag: "🇨🇳",
+        img: "cn.png", // cn.png 사용
         
         "about-text-1": `
             <p>insta是一个“连接”与“结合”的空间。</p>
@@ -338,8 +337,10 @@
     function updateLanguage(lang) {
         const t = translations[lang] || translations.ko;
 
-        // 1. 상단 국기 아이콘 변경
-        if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
+        // 1. 상단 국기 아이콘 변경 (이미지 src 수정)
+        if(currentFlagIcon && t.img) {
+            currentFlagIcon.src = t.img;
+        }
 
         // 2. 텍스트 업데이트 (ID 매칭 방식)
         const textIds = [
