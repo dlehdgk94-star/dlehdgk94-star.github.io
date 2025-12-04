@@ -55,7 +55,7 @@
 <body class="text-slate-900 bg-white">
 
   <header id="header" class="fixed top-0 left-0 right-0 z-30 transition-colors duration-300 bg-transparent text-white">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between h-14 relative">
+    <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
       
       <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
@@ -63,12 +63,12 @@
         </svg>
       </button>
 
-      <a href="#" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md">
+      <a href="#" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md z-20">
         <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
         <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md">
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
         <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
         <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
         <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast</a>
@@ -78,7 +78,7 @@
         <a href="contact.html" class="hover:text-orange-200 transition-colors">contact</a>
       </nav>
 
-      <div class="flex items-center relative drop-shadow-md">
+      <div class="flex items-center relative drop-shadow-md z-20">
          <div class="flex items-center gap-1 cursor-pointer relative">
             <span id="current-flag-icon" class="text-2xl shadow-sm rounded-sm leading-none pt-1">🇰🇷</span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
@@ -451,6 +451,7 @@
   </script>
 </body>
 </html>
+
 
 
 
