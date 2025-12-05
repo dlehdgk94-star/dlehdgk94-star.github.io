@@ -132,7 +132,6 @@
     const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
     const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
     
-    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
     window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
     
     console.log("홈페이지-슈파베이스 연결 성공!");
@@ -277,7 +276,10 @@
 
             <div class="price-summary">
                 <span id="date-range-text" data-i18n="msg_select_date">날짜를 선택해주세요</span>
-                <span><span id="nights">0</span><span data-i18n="label_nights">박</span> <span id="total">0</span><span class="currency-unit" data-i18n="label_won">원</span></span>
+                <span>
+                    <span id="nights">0</span><span data-i18n="label_nights">박</span> 
+                    <span class="currency-symbol" style="margin-left: 5px;"></span><span id="total">0</span><span class="currency-unit" data-i18n="label_won">원</span>
+                </span>
             </div>
 
             <div class="option-select-box">
@@ -639,7 +641,7 @@
                 room_title: "标准间",
                 checkin_label: "入住", checkout_label: "退房",
                 msg_select_date: "请选择日期",
-                label_nights: "晚", label_total: "总计", label_won: "元",
+                label_nights: "晚", label_total: "总计", label_won: "", // 중국어는 단위(元) 생략, ¥ 기호만 사용
                 opt_header: "早餐·客房服务", opt_sub: "请勾选您想要的菜单",
                 btn_reserve: "立即预订",
                 companyName: "Insta Hotel有限公司", ceoName: "代表：李永焕", bizNumber: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6",
@@ -1020,7 +1022,7 @@
                     } else if(currentLang === 'zh') {
                         displayPrice = Math.round(converted).toLocaleString();
                         symbol = "+¥";
-                        unit = "元";
+                        unit = ""; // 중국어도 단위(元) 생략
                     } else if(currentLang === 'ja') {
                         displayPrice = Math.round(converted).toLocaleString();
                         symbol = "+";
