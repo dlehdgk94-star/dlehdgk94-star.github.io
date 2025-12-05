@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation – Insta Hotel - mainbranch</title>
+    <title>Reservation – Insta Hotel - Luxury</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -12,10 +12,6 @@
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; color: #333; background-color: #fcfcfc; }
         
-        /* ----------------------------------------------------
-           [기존 예약 페이지 전용 Custom CSS 유지] 
-           ---------------------------------------------------- */
-        
         /* 메인 레이아웃 */
         .reservation-container { max-width: 1200px; margin: 100px auto 40px; display: flex; gap: 50px; padding: 0 20px; align-items: flex-start; }
         
@@ -23,11 +19,7 @@
         @media (max-width: 768px) {
             .reservation-container { flex-direction: column; margin-top: 80px; }
             .left-column, .right-column { width: 100%; }
-            
-            /* 모바일에서 이미지 높이 축소 */
-            .main-image { 
-                height: 300px !important; 
-            }
+            .main-image { height: 300px !important; }
         }
         
         .left-column { flex: 1.5; }
@@ -35,9 +27,9 @@
         /* 메인 이미지 영역 */
         .main-image { 
             width: 100%; 
-            height: 500px; /* PC 기본 높이 */
+            height: 500px; 
             background-color: #ddd; 
-            background-image: url('hero11.jpg'); 
+            background-image: url('hero1.jpg'); 
             background-size: cover; 
             background-position: center; 
             border-radius: 4px; 
@@ -45,88 +37,40 @@
             transition: background-image 0.3s ease-in-out;
         }
 
-        /* ---------------------------------------------------------
-           썸네일 영역 스타일 (스크롤 힌트 및 그라데이션)
-           --------------------------------------------------------- */
-        
-        /* 썸네일 전체를 감싸는 컨테이너 */
-        .thumbnail-wrapper {
-            position: relative;
-            margin-bottom: 40px; 
-        }
-
-        /* 오른쪽 그라데이션 효과 */
+        /* 썸네일 영역 스타일 */
+        .thumbnail-wrapper { position: relative; margin-bottom: 40px; }
         .thumbnail-wrapper::after {
             content: '';
-            position: absolute;
-            top: 25px; 
-            right: 0;
-            bottom: 5px; 
-            width: 40px; 
+            position: absolute; top: 25px; right: 0; bottom: 5px; width: 40px; 
             background: linear-gradient(to right, transparent, #fcfcfc); 
-            pointer-events: none; 
-            z-index: 10;
+            pointer-events: none; z-index: 10;
         }
 
-        /* 스크롤 힌트 텍스트 (깜빡임 효과) */
         .scroll-hint {
-            font-size: 11px;
-            color: #ff6900;
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-align: right;
-            padding-right: 5px;
-            display: none; /* PC 숨김 */
-            animation: blink 2s infinite;
+            font-size: 11px; color: #ff6900; font-weight: bold; margin-bottom: 5px;
+            text-align: right; padding-right: 5px; display: none; animation: blink 2s infinite;
         }
+        @media (max-width: 768px) { .scroll-hint { display: block; } }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        /* 모바일에서만 힌트 텍스트 보이기 */
-        @media (max-width: 768px) {
-            .scroll-hint { display: block; }
-        }
-
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-
-        /* 썸네일 리스트 스타일 */
         .thumbnails { 
-            display: flex; 
-            gap: 10px; 
-            overflow-x: auto; 
-            padding-bottom: 5px; 
-            padding-right: 30px; 
-            
-            /* 스크롤바 숨기기 */
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; padding-right: 30px; 
+            -ms-overflow-style: none; scrollbar-width: none;
         }
-        .thumbnails::-webkit-scrollbar {
-            display: none;
-        }
+        .thumbnails::-webkit-scrollbar { display: none; }
 
         .thumb { 
-            width: 100px; 
-            height: 70px; 
-            background-color: #eee; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            background-size: cover; 
-            background-position: center; 
-            flex-shrink: 0; 
-            border: 2px solid transparent;
-            transition: 0.2s;
+            width: 100px; height: 70px; background-color: #eee; border-radius: 4px; 
+            cursor: pointer; background-size: cover; background-position: center; flex-shrink: 0; 
+            border: 2px solid transparent; transition: 0.2s;
         }
         .thumb:hover { border-color: #ff6900; opacity: 1; }
         
         .description-header { font-size: 14px; font-weight: bold; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: inline-block; }
         .description-text { font-size: 14px; line-height: 1.8; color: #555; }
 
-        /* 오른쪽: 예약 패널 (스크롤 시 고정) */
+        /* 오른쪽: 예약 패널 */
         .right-column { flex: 1; position: sticky; top: 100px; background: #fff; padding: 0; }
-        
         .room-title { font-size: 24px; font-weight: 700; margin-bottom: 30px; }
 
         /* 커스텀 캘린더 스타일 */
@@ -139,86 +83,30 @@
         .weekday { font-weight: bold; color: #888; margin-bottom: 10px; font-size: 12px; }
         .day { padding: 10px 0; cursor: pointer; border-radius: 4px; transition: 0.2s; }
         .day:hover:not(.disabled) { background-color: #f5f5f5; }
-        
         .day.disabled { color: #e0e0e0; cursor: default; pointer-events: none; } 
         .day.selected { background-color: #ff6900; color: white; font-weight: bold; } 
         .day.in-range { background-color: #fff0e6; color: #ff6900; } 
 
         .selected-info { font-size: 13px; color: #666; margin-bottom: 15px; text-align: center; }
-
         .price-summary { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #ff6900; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
 
-
         /* 옵션 박스 스타일 */
-        .option-select-box {
-            margin-bottom: 30px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background-color: #fff;
-            overflow: hidden; 
-            padding: 0; 
-        }
-
-        .option-header {
-            background-color: #f9f9f9;
-            padding: 15px 20px;
-            font-weight: bold;
-            font-size: 15px;
-            border-bottom: 1px solid #eee;
-            color: #333;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* 스크롤 영역 */
-        .option-scroll-area {
-            height: 300px; 
-            overflow-y: auto; 
-            padding: 15px 20px;
-        }
-
-        /* 스크롤바 디자인 */
+        .option-select-box { margin-bottom: 30px; border: 1px solid #ddd; border-radius: 6px; background-color: #fff; overflow: hidden; padding: 0; }
+        .option-header { background-color: #f9f9f9; padding: 15px 20px; font-weight: bold; font-size: 15px; border-bottom: 1px solid #eee; color: #333; display: flex; justify-content: space-between; align-items: center; }
+        .option-scroll-area { height: 300px; overflow-y: auto; padding: 15px 20px; }
         .option-scroll-area::-webkit-scrollbar { width: 6px; }
         .option-scroll-area::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 3px; }
         .option-scroll-area::-webkit-scrollbar-track { background-color: #f1f1f1; }
 
-        .category-title {
-            font-size: 13px;
-            color: #ff6900;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 8px;
-            border-bottom: 1px dashed #ddd;
-            padding-bottom: 5px;
-        }
+        .category-title { font-size: 13px; color: #ff6900; font-weight: bold; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px dashed #ddd; padding-bottom: 5px; }
         .category-title:first-child { margin-top: 0; }
 
-        .option-item {
-            display: flex;
-            justify-content: space-between; 
-            align-items: center;
-            padding: 10px 0;
-            cursor: pointer;
-            font-size: 14px;
-            color: #555;
-            transition: background 0.1s;
-            border-bottom: 1px solid #f9f9f9;
-        }
+        .option-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; cursor: pointer; font-size: 14px; color: #555; transition: background 0.1s; border-bottom: 1px solid #f9f9f9; }
         .option-item:last-child { border-bottom: none; }
         .option-item:hover { background-color: #fafafa; }
-
         .option-left { display: flex; align-items: flex-start; } 
-        .option-checkbox {
-            width: 18px; 
-            height: 18px; 
-            accent-color: #ff6900; 
-            margin-right: 12px;
-            cursor: pointer;
-            margin-top: 3px; 
-        }
+        .option-checkbox { width: 18px; height: 18px; accent-color: #ff6900; margin-right: 12px; cursor: pointer; margin-top: 3px; }
         .option-price-text { font-weight: 500; color: #333; white-space: nowrap; margin-left: 10px; }
-
 
         /* 총 합계 */
         .total-section { margin-top: 30px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
@@ -226,76 +114,29 @@
         .total-amount { font-size: 24px; font-weight: 700; color: #ff6900; }
 
         /* 하단 버튼 그룹 스타일 */
-        .action-container {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            height: 56px;
-        }
-        
-        .btn-reserve-final {
-            flex: 1.2;
-            background-color: #ff5a00;
-            color: white;
-            font-size: 18px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .action-container { display: flex; gap: 15px; margin-top: 20px; height: 56px; }
+        .btn-reserve-final { flex: 1.2; background-color: #ff5a00; color: white; font-size: 18px; font-weight: 500; border: none; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; }
         .btn-reserve-final:hover { background-color: #e04e00; }
-
-        .btn-group-right {
-            flex: 1.5;
-            display: flex;
-            border: 1px solid #ddd;
-            background-color: white;
-            align-items: center;
-        }
-
-        .like-box {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            cursor: pointer;
-            height: 100%;
-            border-right: 1px solid #eee;
-            font-size: 16px;
-            font-weight: 500;
-            color: #333;
-        }
+        .btn-group-right { flex: 1.5; display: flex; border: 1px solid #ddd; background-color: white; align-items: center; }
+        .like-box { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height: 100%; border-right: 1px solid #eee; font-size: 16px; font-weight: 500; color: #333; }
         .like-box:hover { background-color: #f9f9f9; }
         .like-box svg { width: 22px; height: 22px; fill: none; stroke: #333; stroke-width: 1.5; transition: 0.2s; }
         .like-box.liked svg { fill: #ff5a00; stroke: #ff5a00; } 
-
-        .share-box {
-            width: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            height: 100%;
-        }
+        .share-box { width: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; height: 100%; }
         .share-box:hover { background-color: #f9f9f9; }
         .share-box svg { width: 22px; height: 22px; stroke: #333; stroke-width: 1.5; }
-
     </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-    const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
-    const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
-    
-    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함 (이름 충돌 방지)
-    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
-    
-    console.log("홈페이지-슈파베이스 연결 성공!");
-</script>
+    <script>
+        const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
+        const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
+        
+        window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
+        
+        console.log("홈페이지-슈파베이스 연결 성공!");
+    </script>
 </head>
 <body class="bg-white text-slate-900 font-sans">
 
@@ -314,13 +155,13 @@
       </a>
 
       <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
-        <a href="about.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_about">about</a>
-        <a href="rooms.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_rooms">rooms</a>
-        <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast(조식)</a>
-        <a href="reservation.html" class="hover:text-orange-200 transition-colors underline underline-offset-4" data-i18n="nav_reservation">reservation(예약)</a>
-        <a href="instaspot.html" class="hover:text-orange-200 transition-colors">tour&food&cafe(관광&맛집&카페)</a>
-        <a href="#lounge" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
-        <a href="contact.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_contact">contact</a>
+          <a href="about.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_about">about</a>
+          <a href="rooms.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_rooms">rooms</a>
+          <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast(조식)</a>
+          <a href="reservation.html" class="hover:text-orange-200 transition-colors underline underline-offset-4" data-i18n="nav_reservation">reservation(예약)</a>
+          <a href="instaspot.html" class="hover:text-orange-200 transition-colors">tour&food&cafe(관광&맛집&카페)</a>
+          <a href="#lounge" class="hover:text-orange-200 transition-colors" data-i18n="nav_lounge">bluerain lounge</a>
+          <a href="contact.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_contact">contact</a>
       </nav>
 
       <div class="flex items-center relative drop-shadow-md z-20">
@@ -342,6 +183,7 @@
 
     </div>
   </header>
+
   <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity duration-300"></div>
   
   <nav id="mobile-drawer" class="fixed top-0 left-0 w-[75%] max-w-sm h-full z-50 bg-white shadow-xl text-slate-900 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
@@ -373,7 +215,7 @@
         <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]">breakfast(조식)</a></li>
         <li><a href="reservation.html" class="block hover:text-[#ff6900] text-[#ff6900]" data-i18n="nav_reservation">reservation(예약)</a></li>
         <li><a href="instaspot.html" class="block hover:text-[#ff6900]">tour&food&cafe(관광&맛집&카페)</a></li>
-        <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
+        <li><a href="#lounge" class="block hover:text-[#ff6900]" data-i18n="nav_lounge">bluerain lounge</a></li>
         <li><a href="contact.html" class="block hover:text-[#ff6900]" data-i18n="nav_contact">contact</a></li>
       </ul>
 
@@ -388,7 +230,8 @@
       </div>
     </div>
   </nav>
-  <main class="reservation-container">
+
+    <main class="reservation-container">
        <div class="left-column">
             <div class="main-image" id="main-photo" style="background-image: url('hero1.jpg');"></div>
             
@@ -413,9 +256,9 @@
                 <p data-i18n="desc_p2">객실마다 다른 감성의 공간 연출로 <br>고요한 밤의 분위기를 자연스럽게 느낄 수 있도록 구성했습니다.</p>
                 <p data-i18n="desc_p3">투숙객에게는 편안한 휴식이 될 수 있도록 모든 객실에 Free wi-fi, 편리한 주차 등이 제공됩니다.</p>
             </div>
-        </div>
+       </div>
 
-        <div class="right-column">
+       <div class="right-column">
             <h2 class="room-title" data-i18n="room_title">럭셔리</h2>
 
             <div class="calendar-wrapper">
@@ -438,7 +281,10 @@
 
             <div class="price-summary">
                 <span id="date-range-text" data-i18n="msg_select_date">날짜를 선택해주세요</span>
-                <span><span id="nights">0</span><span data-i18n="label_nights">박</span> <span id="total">0</span><span class="currency-unit" data-i18n="label_won">원</span></span>
+                <span>
+                    <span id="nights">0</span><span data-i18n="label_nights">박</span> 
+                    <span class="currency-symbol" style="margin-left: 5px;"></span><span id="total">0</span><span class="currency-unit" data-i18n="label_won">원</span>
+                </span>
             </div>
 
             <div class="option-select-box">
@@ -580,7 +426,7 @@
 
             <div class="total-section">
                 <span class="total-label" data-i18n="total_label">총 합계</span>
-                <span class="total-amount"><span id="grand-total">0</span><span class="currency-unit" data-i18n="label_won">원</span></span>
+                <span class="total-amount"><span class="currency-symbol"></span><span id="grand-total">0</span><span class="currency-unit" data-i18n="label_won">원</span></span>
             </div>
 
             <div class="action-container">
@@ -608,7 +454,7 @@
                 </div>
             </div>
 
-        </div>
+       </div>
     </main>
 
 
@@ -626,7 +472,7 @@
               </a>
               <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
                   <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
-              </a>          
+              </a>            
           </div>
   
           <div class="space-y-1">
@@ -674,10 +520,6 @@
         const roomsToggle = document.getElementById("rooms-toggle");
         const roomsSubmenu = document.getElementById("rooms-submenu");
 
-        // [헤더 색상 고정 - 스크롤 상관없이]
-        // 기존 코드에서는 스크롤 시 색상이 변했으나, 홈페이지 스타일(주황색)을 유지하기 위해 항상 활성화 상태로 둡니다.
-        // 필요하다면 아래 이벤트 리스너를 제거해도 되지만, 안전을 위해 그대로 둡니다.
-
         function openMenu() {
             mobileDrawer.classList.remove("-translate-x-full");
             drawerOverlay.classList.remove("hidden");
@@ -698,12 +540,11 @@
             });
         }
 
-        // --- 다국어 번역 데이터 (이미지 경로 추가됨) ---
+        // --- 다국어 번역 데이터 ---
         const translations = {
             ko: {
-                flag: "🇰🇷",
-                img: "kr.png", // 이미지 추가
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+                flag: "kr.png",
+                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 scroll_hint: "← 옆으로 밀어서 더 보기",
                 desc_header: "상세정보",
                 desc_p1: "[럭셔리]<br>insta hotel은 편안함과 감성을 한눈에 담을 수 있는 공간입니다.<br>은은한 조명과 따뜻한 우드 톤의 객실은 여행과 일상 속에서 잠시 쉬어갈 수 있는 편안한 분위기를 제공합니다.",
@@ -733,9 +574,8 @@
                 menu_N14: "[N14] 커피 - 아메리카노<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
             },
             en: {
-                flag: "🇺🇸",
-                img: "usa.png", // 이미지 추가
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+                flag: "usa.png",
+                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 scroll_hint: "← Swipe to see more",
                 desc_header: "Details",
                 desc_p1: "[Luxury]<br>Insta Hotel is a space where you can capture comfort and sensibility at a glance.<br>The softly lit rooms with warm wood tones provide a comfortable atmosphere for a break during your trip.",
@@ -744,7 +584,7 @@
                 room_title: "Luxury",
                 checkin_label: "Check-in", checkout_label: "Check-out",
                 msg_select_date: "Please select dates",
-                label_nights: "nights", label_total: "Total", label_won: "KRW",
+                label_nights: "nights", label_total: "Total", label_won: "",
                 opt_header: "Breakfast/Room Service", opt_sub: "Please check desired menu",
                 btn_reserve: "Book Now",
                 companyName: "Insta Hotel Co., Ltd.", ceoName: "CEO: Lee Young Hwan", bizNumber: "Registration: 2023-Suwon Yeongtong-1696", address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si",
@@ -765,9 +605,8 @@
                 menu_N14: "[N14] Coffee - Americano",
             },
             ja: {
-                flag: "🇯🇵",
-                img: "jp.png", // 이미지 추가
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+                flag: "jp.png",
+                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 scroll_hint: "← スワイプしてもっと見る",
                 desc_header: "詳細情報",
                 desc_p1: "[ラグジュアリー]<br>インスタホテルは、快適さと感性を一目で感じられる空間です。<br>ほのかな照明と温かみのあるウッドトーンの客室は、旅や日常の中で一休みできる快適な雰囲気を提供します。",
@@ -776,7 +615,7 @@
                 room_title: "ラグジュアリー",
                 checkin_label: "チェックイン", checkout_label: "チェックアウト",
                 msg_select_date: "日付を選択してください",
-                label_nights: "泊", label_total: "合計", label_won: "ウォン",
+                label_nights: "泊", label_total: "合計", label_won: "円",
                 opt_header: "朝食・ルームサービス", opt_sub: "ご希望のメニューをチェックしてください",
                 btn_reserve: "予約する",
                 companyName: "インスタホテル株式会社", ceoName: "代表者 : イ・ヨンファン", bizNumber: "登録番号: 2023-水原霊通-1696", address: "水原市霊通区霊通路94-6",
@@ -797,9 +636,8 @@
                 menu_N14: "[N14] コーヒー - アメリカーノ<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
             },
             zh: {
-                flag: "🇨🇳",
-                img: "cn.png", // 이미지 추가
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_contact: "contact",
+                flag: "cn.png",
+                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "蓝雨休息室", nav_contact: "contact",
                 scroll_hint: "← 滑动查看更多",
                 desc_header: "详细信息",
                 desc_p1: "[豪华房]<br>Insta Hotel 是一个可以一眼容纳舒适和感性的空间。<br>隐隐的灯光和温暖的木色调客房，为您提供旅行和日常生活中可以暂时休息的舒适氛围。",
@@ -808,7 +646,7 @@
                 room_title: "豪华房",
                 checkin_label: "入住", checkout_label: "退房",
                 msg_select_date: "请选择日期",
-                label_nights: "晚", label_total: "总计", label_won: "韩元",
+                label_nights: "晚", label_total: "总计", label_won: "", // 중국어는 단위(元) 생략, ¥ 기호만 사용
                 opt_header: "早餐·客房服务", opt_sub: "请勾选您想要的菜单",
                 btn_reserve: "立即预订",
                 companyName: "Insta Hotel有限公司", ceoName: "代表：李永焕", bizNumber: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6",
@@ -826,53 +664,81 @@
                 menu_K11: "[K11] 牛奶 (300ml)<br><span style='font-size:11px; color:#888;'>Milk</span>",
                 menu_L12: "[L12] 香蕉牛奶 (240ml)<br><span style='font-size:11px; color:#888;'>Banana Milk</span>",
                 menu_M13: "[M13] 橙汁 (350ml)<br><span style='font-size:11px; color:#888;'>Orange Juice</span>",
-                menu_N14: "[N14] 咖啡 - 美式咖啡<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
+                menu_N14: "[N14] コーヒー - アメリカーノ<br><span style='font-size:11px; color:#888;'>Coffee - Americano</span>",
             }
         };
         
-        // 현재 선택된 언어 (기본값: 한국어)
         let currentLang = 'ko';
+        let currentRoomData = null; // Supabase에서 가져온 방 데이터 저장
 
         const headerSelect = document.getElementById("header-lang-select");
         const drawerSelect = document.getElementById("drawer-lang-select");
         const currentFlagIcon = document.getElementById("current-flag-icon");
 
+        // [DB] 방 정보 가져오기 
+        // 럭셔리 룸 ID = 4번으로 수정 완료
+        async function fetchRoomData() {
+            const { data, error } = await window.supabaseClient
+                .from('rooms')
+                .select('*')
+                .eq('id', 4) // ★ 럭셔리 룸 ID 4번 적용됨
+                .single();
+
+            if (error) {
+                console.error("룸 정보를 가져오지 못했습니다.", error);
+                return;
+            }
+            currentRoomData = data;
+            console.log("DB 데이터 로드 완료 (럭셔리, ID: 4):", currentRoomData);
+            calculateTotalWrapper(); // 데이터 로드 후 계산 갱신
+        }
+
         function updateLanguage(lang) {
-            currentLang = lang; // 전역 변수 업데이트
+            currentLang = lang;
             const t = translations[lang] || translations.ko;
             
-            // 1. 플래그 아이콘 업데이트 (이미지 src 변경으로 수정됨)
-            if(currentFlagIcon && t.img) {
-                currentFlagIcon.src = t.img;
-            }
+            // 1. 플래그 & 텍스트 업데이트
+            if(currentFlagIcon && t.flag) currentFlagIcon.src = t.flag;
 
-            // 2. ID를 사용하는 요소 업데이트 (Footer 등)
-            const textIds = [
-                "companyName", "ceoName", "bizNumber", "address",
-                "terms", "privacy", "inquiryBtn"
-            ];
+            const textIds = ["companyName", "ceoName", "bizNumber", "address", "terms", "privacy", "inquiryBtn"];
             textIds.forEach(id => {
                 const el = document.getElementById(id);
                 if(el && t[id]) el.innerText = t[id];
             });
 
-            // 3. data-i18n 속성을 사용하는 모든 요소 업데이트
             const elements = document.querySelectorAll('[data-i18n]');
             elements.forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (t[key]) {
-                    el.innerHTML = t[key]; // HTML 태그(br 등) 포함을 위해 innerHTML 사용
-                }
+                if (t[key]) el.innerHTML = t[key];
             });
 
-            // 4. 화폐 단위(원/KRW 등) 업데이트 (class="currency-unit")
-            const currencyUnits = document.querySelectorAll('.currency-unit');
-            currencyUnits.forEach(el => {
+            // 2. 화폐 단위 및 심볼 업데이트
+            updateCurrencyDisplay();
+
+            // 3. 캘린더 다시 그리기 (요일 언어)
+            renderCalendar(currentYear, currentMonth);
+
+            // 4. 가격 재계산
+            calculateTotalWrapper();
+        }
+
+        // 화폐 기호 및 단위 업데이트 함수
+        function updateCurrencyDisplay() {
+            const t = translations[currentLang] || translations.ko;
+            
+            // "원", "円" 등 뒤에 붙는 단위
+            document.querySelectorAll('.currency-unit').forEach(el => {
                 el.innerText = t.label_won;
             });
 
-            // 5. 캘린더 다시 그리기 (요일 언어 변경을 위해)
-            renderCalendar(currentYear, currentMonth);
+            // "$", "¥" 등 앞에 붙는 심볼
+            let symbol = "";
+            if (currentLang === 'en') symbol = "$";
+            else if (currentLang === 'zh') symbol = "¥";
+            
+            document.querySelectorAll('.currency-symbol').forEach(el => {
+                el.innerText = symbol;
+            });
         }
 
         if(headerSelect) {
@@ -907,7 +773,6 @@
             const calendarBody = document.getElementById('calendar-body');
             const monthTitle = document.getElementById('current-month');
             
-            // 달력 헤더 (연/월 표시 - 영어권은 순서 변경)
             if (currentLang === 'en') {
                 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
                 monthTitle.innerText = `${monthNames[month]} ${year}`;
@@ -917,7 +782,6 @@
             
             calendarBody.innerHTML = "";
 
-            // 요일 배열 (언어별)
             let weekdays = ['일', '월', '화', '수', '목', '금', '토'];
             if (currentLang === 'en') weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             if (currentLang === 'ja') weekdays = ['日', '月', '火', '水', '木', '金', '土'];
@@ -1032,8 +896,20 @@
 
         renderCalendar(currentYear, currentMonth);
 
-        // --- 가격 계산 로직 ---
+        // --- 가격 계산 로직 (DB 연동 + 환율 적용) ---
+        
+        // 옵션(샌드위치 등)은 DB에 없으므로, 대략적인 환율을 적용해 계산합니다.
+        function getOptionExchangeRate(lang) {
+             // 기준: 1000원 당 얼마인지 (단순 예시)
+             if (lang === 'en') return 0.00075; // 1000원 -> 0.75달러
+             if (lang === 'ja') return 0.11;    // 1000원 -> 110엔
+             if (lang === 'zh') return 0.0053;  // 1000원 -> 5.3위안
+             return 1; // 한국어
+        }
+
         function calculateTotal() {
+            if (!currentRoomData) return 0; // DB 로딩 전이면 0 리턴
+
             const checkinInput = document.getElementById('checkin').value;
             const checkoutInput = document.getElementById('checkout').value;
             
@@ -1046,84 +922,171 @@
             let currentDate = new Date(startDate);
             let nightCount = 0;
 
+            // [언어별 컬럼 선택]
+            let colWeekday = "default_price";
+            let colWeekend = "weekend_price";
+
+            if (currentLang === 'en') {
+                colWeekday = "default_price_usd";
+                colWeekend = "weekend_price_usd";
+            } else if (currentLang === 'ja') {
+                colWeekday = "default_price_jpy";
+                colWeekend = "weekend_price_jpy";
+            } else if (currentLang === 'zh') {
+                colWeekday = "default_price_cny";
+                colWeekend = "weekend_price_cny";
+            }
+
             while (currentDate < endDate) {
-                const dayOfWeek = currentDate.getDay(); 
+                const dayOfWeek = currentDate.getDay(); // 0(일) ~ 6(토)
+                let dailyPrice = 0;
+
+                // 토요일(6)은 주말 가격, 나머지는 평일 가격 적용
                 if (dayOfWeek === 6) { 
-                    totalPrice += 140000; 
+                    dailyPrice = currentRoomData[colWeekend] || 0;
                 } else {
-                    totalPrice += 115000; 
+                    dailyPrice = currentRoomData[colWeekday] || 0;
                 }
+                
+                totalPrice += dailyPrice;
                 currentDate.setDate(currentDate.getDate() + 1);
                 nightCount++;
             }
 
             document.getElementById('nights').innerText = nightCount;
-            document.getElementById('total').innerText = totalPrice.toLocaleString();
+            
+            // 금액 포맷팅 (달러는 소수점 2자리)
+            if(currentLang === 'en') {
+                document.getElementById('total').innerText = totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else {
+                document.getElementById('total').innerText = totalPrice.toLocaleString();
+            }
+
             document.getElementById('date-range-text').innerText = `${checkinInput} ~ ${checkoutInput}`;
 
             return totalPrice;
         }
 
-        // 체크박스 중복 계산 로직 (화면 표시용)
+        // 체크박스 중복 계산 로직 (옵션 가격도 환율 적용)
         function calculateTotalWrapper() {
             let roomPrice = calculateTotal();
-            let optionPrice = 0;
+            let optionTotalKRW = 0;
             
             const checkboxes = document.querySelectorAll('.option-checkbox:checked');
-            
             checkboxes.forEach((box) => {
-                optionPrice += parseInt(box.value);
+                optionTotalKRW += parseInt(box.value);
             });
 
+            // 옵션 가격 환산
+            let optionPrice = 0;
+            const rate = getOptionExchangeRate(currentLang);
+            
+            if (currentLang === 'ko') {
+                optionPrice = optionTotalKRW;
+            } else {
+                // 외국어인 경우 비율 곱하기
+                optionPrice = optionTotalKRW * rate; 
+            }
+
             let grandTotal = roomPrice + optionPrice;
-            document.getElementById('grand-total').innerText = grandTotal.toLocaleString();
+            
+            // 옵션 가격 텍스트 업데이트 (UI)
+            updateOptionPricesUI(rate);
+
+            // 최종 금액 표시
+            if(currentLang === 'en') {
+                document.getElementById('grand-total').innerText = grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else {
+                // 일본어/원화는 반올림
+                document.getElementById('grand-total').innerText = Math.round(grandTotal).toLocaleString();
+            }
         }
 
-        // [수정된 goToPayment 함수]
+        // 옵션 목록의 가격 표시 텍스트(예: +7300원)를 현재 환율로 바꿔서 보여줌
+        function updateOptionPricesUI(rate) {
+            const t = translations[currentLang] || translations.ko;
+            const optionItems = document.querySelectorAll('.option-item');
+            
+            optionItems.forEach(item => {
+                const checkbox = item.querySelector('.option-checkbox');
+                const priceTextEl = item.querySelector('.option-price-text');
+                const krwValue = parseInt(checkbox.value);
+                
+                let displayPrice = 0;
+                let symbol = "";
+                let unit = t.label_won;
+
+                if(currentLang === 'ko') {
+                    displayPrice = krwValue.toLocaleString();
+                } else {
+                    let converted = krwValue * rate;
+                    if(currentLang === 'en') {
+                        displayPrice = converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        symbol = "+$";
+                        unit = "";
+                    } else if(currentLang === 'zh') {
+                        displayPrice = Math.round(converted).toLocaleString();
+                        symbol = "+¥";
+                        unit = ""; // 중국어도 단위(元) 생략
+                    } else if(currentLang === 'ja') {
+                        displayPrice = Math.round(converted).toLocaleString();
+                        symbol = "+";
+                        unit = "円";
+                    }
+                }
+                
+                priceTextEl.innerHTML = `${symbol}${displayPrice}<span class="currency-unit">${unit}</span>`;
+            });
+        }
+
         function goToPayment() {
-            // 1. 날짜 및 박수 데이터 가져오기
             const checkin = document.getElementById('checkin').value;
             const checkout = document.getElementById('checkout').value;
             const nights = document.getElementById('nights').innerText;
 
-            // 2. 유효성 검사
-            if(!checkin || !checkout) {
-                // 현재 언어 설정에 맞는 경고 메시지 출력
-                alert(translations[currentLang].msg_select_date);
+            if (!checkin || !checkout) {
+                const t = translations[currentLang] || translations.ko;
+                alert(t.msg_select_date);
                 return;
             }
 
-            // 3. 가격 계산
-            const roomPrice = calculateTotal(); 
-            let optionPrice = 0;
-            
-            // 4. 선택한 옵션의 '이름(메뉴명)'과 '가격' 가져오기
-            let selectedOptionNames = [];
+            // 계산된 최종 값들
+            let roomPrice = calculateTotal(); // 현재 통화 기준
+            let optionTotalKRW = 0;
             const checkedBoxes = document.querySelectorAll('.option-checkbox:checked');
-            
-            checkedBoxes.forEach(box => {
-                optionPrice += parseInt(box.value); // 가격 더하기
+            let selectedOptionNames = [];
 
-                // 체크박스 옆의 텍스트(메뉴명) 가져오기
-                const labelSpan = box.nextElementSibling; 
+            checkedBoxes.forEach(box => {
+                optionTotalKRW += parseInt(box.value);
+                const labelSpan = box.nextElementSibling;
                 if (labelSpan) {
-                    // 줄바꿈(\n)을 공백으로 변경하여 깔끔하게 저장
+                    // 줄바꿈 문자 등을 공백으로 치환
                     let menuName = labelSpan.innerText.replace(/\n/g, ' ');
                     selectedOptionNames.push(menuName);
                 }
             });
 
-            const total = roomPrice + optionPrice;
+            const rate = getOptionExchangeRate(currentLang);
+            let optionPrice = (currentLang === 'ko') ? optionTotalKRW : (optionTotalKRW * rate);
+            
+            // 소수점 정리
+            if(currentLang !== 'en') {
+                roomPrice = Math.round(roomPrice);
+                optionPrice = Math.round(optionPrice);
+            }
 
-            // 5. 메뉴 리스트를 URL에 넣기 위해 인코딩
+            const total = roomPrice + optionPrice;
             const optionDetailsEncoded = encodeURIComponent(JSON.stringify(selectedOptionNames));
 
-            // 6. URL 생성 (optionDetails 파라미터 추가)
-            const url = `payluxury.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${total}&optionDetails=${optionDetailsEncoded}`;
+            // 결제 페이지로 이동 (currency 정보도 함께 넘김)
+            // 럭셔리 페이지이므로 payluxury.html로 이동
+            const url = `payluxury.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${total}&optionDetails=${optionDetailsEncoded}&currency=${currentLang}`;
 
-            // 7. 페이지 이동
             window.location.href = url;
         }
+
+        // 초기 데이터 로드
+        fetchRoomData();
     </script>
 </body>
 </html>
