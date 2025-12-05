@@ -2,43 +2,53 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="fsXjRMcfj7Jm3Vswe92wB_Tf7mTOIy7_CckNERtv_wY" />
+  <meta name="naver-site-verification" content="507ad30f2472ed24be95dd772ab1cf49e5f32c51" />
   <title>Insta Hotel - Breakfast</title>
-  
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Insta Hotel - Breakfast Menu">
+  <meta property="og:description" content="인스타 호텔 조식 & 룸서비스 메뉴입니다.">
+  <meta property="og:image" content="https://dlehdgk94-star.github.io/hero7.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
   <style>
     html { scroll-behavior: smooth; font-family: 'Poppins', sans-serif; }
-    .menu-card { background-color: #fffbf0; border-radius: 1.5rem; }
+    /* 메뉴 카드 스타일 */
+    .menu-card {
+        background-color: #fffbf0; /* 연한 노란색 배경 */
+        border-radius: 1.5rem; /* 둥근 모서리 */
+    }
   </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script>
-    // 1. Supabase 클라이언트 설정
-    const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co';
-    // 제공해주신 anon public key 사용
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5YXNpaGN6YXFzYWNlbmtsaG5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzNjY5MTIsImV4cCI6MjA3OTk0MjkxMn0.E1J5qEgl79Ato3upXJSL0OyrgsOw6gJbNHo88AWdct0';
+<script>
+    const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
+    const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
     
-    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-    console.log("홈페이지-슈파베이스 연결 설정 완료");
-  </script>
+    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
+    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
+    
+    console.log("홈페이지-슈파베이스 연결 성공!");
+</script>
 </head>
 
 <body class="text-slate-900 bg-white">
 
   <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
     <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
+      
       <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
       </button>
+
       <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md z-20">
         <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
         <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
       </a>
+
       <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
         <a href="about.html" class="hover:text-orange-200 transition-colors" data-translate="nav_about">about</a>
         <a href="rooms.html" class="hover:text-orange-200 transition-colors" data-translate="nav_rooms">rooms</a>
@@ -48,32 +58,40 @@
         <a href="#lounge" class="hover:text-orange-200 transition-colors" data-translate="nav_lounge">bluerain lounge</a>
         <a href="contact.html" class="hover:text-orange-200 transition-colors" data-translate="nav_contact">contact</a>
       </nav>
+
       <div class="flex items-center relative drop-shadow-md z-20">
          <div class="flex items-center gap-2 cursor-pointer relative group">
             <img id="current-flag-icon" src="kr.png" alt="Korea" class="w-8 h-5 object-cover rounded shadow-sm border border-white/30 transition-transform group-hover:scale-110">
+            
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
+
             <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none text-slate-900">
-                <option value="ko">🇰🇷 한국어</option>
-                <option value="en">🇺🇸 English</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="zh">🇨🇳 中文</option>
+                <option value="ko" class="text-slate-900">🇰🇷 한국어</option>
+                <option value="en" class="text-slate-900">🇺🇸 English</option>
+                <option value="ja" class="text-slate-900">🇯🇵 日本語</option>
+                <option value="zh" class="text-slate-900">🇨🇳 中文</option>
             </select>
          </div>
       </div>
+
     </div>
   </header>
 
   <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity duration-300"></div>
+  
   <nav id="mobile-drawer" class="fixed top-0 left-0 w-[75%] max-w-sm h-full z-50 bg-white shadow-xl text-slate-900 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
     <div class="p-6">
       <button id="mobile-menu-close-btn" class="absolute top-4 right-4 text-3xl font-light hover:text-[#ff6900]">&times;</button>
+      
       <div class="mt-2 mb-8">
         <span class="text-xl font-bold tracking-tight text-[#ff6900]">Insta hotel</span>
       </div>
+      
       <ul class="flex flex-col space-y-4 text-lg font-medium">
         <li><a href="about.html" class="block hover:text-[#ff6900]" data-translate="nav_about">about</a></li>
+        
         <li>
             <div class="flex justify-between items-center cursor-pointer hover:text-[#ff6900]" id="rooms-toggle">
                 <span data-translate="nav_rooms">rooms</span> <span class="text-sm">▼</span>
@@ -81,14 +99,21 @@
             <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
                 <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
                 <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Special</a></li>
-                </ul>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Luxury</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Premium</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Deluxe</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Standard</a></li>
+                <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
+            </ul>
         </li>
+
         <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]" data-translate="nav_breakfast">breakfast(조식)</a></li>
         <li><a href="reservation.html" class="block hover:text-[#ff6900]" data-translate="nav_reservation">reservation(예약)</a></li>
-        <li><a href="instaspot.html" class="block hover:text-[#ff6900]" data-translate="nav_instaspot">tour&food&cafe</a></li>
+        <li><a href="instaspot.html" class="block hover:text-[#ff6900]" data-translate="nav_instaspot">tour&food&cafe(관광&맛집&카페)</a></li>
         <li><a href="#lounge" class="block hover:text-[#ff6900]" data-translate="nav_lounge">bluerain lounge</a></li>
         <li><a href="contact.html" class="block hover:text-[#ff6900]" data-translate="nav_contact">contact</a></li>
       </ul>
+
       <div class="mt-8 border-t pt-4">
           <p class="text-sm text-slate-400 mb-2">Language</p>
           <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
@@ -112,135 +137,329 @@
         </p>
       </div>
 
-      <div id="food-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="col-span-2 text-center py-10 text-slate-400">Loading Menu...</div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="햄치즈크라상.png" alt="Ham & Cheese Croissant" class="w-full h-40 object-contain rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 id="menu-title-a1" class="font-bold text-lg text-slate-800 leading-tight">
+                햄치즈 크라상 샌드위치<br><span class="text-sm font-semibold text-slate-600">Ham & Cheese Croissant Sandwich</span>
+            </h3>
+            <p id="menu-desc-a1" class="text-xs text-slate-500 leading-relaxed">
+              겹겹이 고소한 크라상에 신선한 토마토와 짭조름한 햄, 치즈를 넣은 크라상의 베스트 플레이버 샌드위치<br>
+              Layered buttery croissant with fresh tomato, savory ham, and cheese.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Eggs, Milk, Wheat, Soy, Tomato, Pork, Beef
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 7,300</span>
+              <span class="font-bold text-slate-900">No. A 1</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="브라운햄에그샌드위치.jpg" alt="Brown Ham & Egg Sandwich" class="w-full h-40 object-contain rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 id="menu-title-b2" class="font-bold text-lg text-slate-800 leading-tight">
+                브라운 햄에그 샌드위치<br><span class="text-sm font-semibold text-slate-600">Brown Ham & Egg Sandwich</span>
+            </h3>
+            <p id="menu-desc-b2" class="text-xs text-slate-500 leading-relaxed">
+              곡물이 가득담긴 브라운식빵에 햄, 에그슬라이스, 신선한 야채를 올린 든든 샌드위치<br>
+              Hearty sandwich with ham, egg slices & fresh vegetables on multigrain brown bread.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Eggs, Milk, Soy, Wheat, Pork, Tomato
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 8,200</span>
+              <span class="font-bold text-slate-900">No. B 2</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="햄치즈샌드위치.jpg" alt="Ham & Cheese Sandwich" class="w-full h-40 object-contain rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 id="menu-title-c3" class="font-bold text-lg text-slate-800 leading-tight">
+                햄&치즈 샌드위치<br><span class="text-sm font-semibold text-slate-600">Ham & Cheese Sandwich</span>
+            </h3>
+            <p id="menu-desc-c3" class="text-xs text-slate-500 leading-relaxed">
+              부드러운 브라운식빵에 신선한 야채와 햄&치즈가 들어간 샌드위치<br>
+              Sandwich with ham & cheese and fresh vegetables on soft brown bread.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Eggs, Milk, Soy, Wheat, Tomato, Pork, Beef
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 8,200</span>
+              <span class="font-bold text-slate-900">No. C 3</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="런치샌드위치.jpg" alt="Lunch Sandwich" class="w-full h-40 object-contain rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 id="menu-title-d4" class="font-bold text-lg text-slate-800 leading-tight">
+                런치샌드위치<br><span class="text-sm font-semibold text-slate-600">Lunch Sandwich</span>
+            </h3>
+            <p id="menu-desc-d4" class="text-xs text-slate-500 leading-relaxed">
+              부드러운 페스츄리 식빵에 신선한 야채와 햄&치즈가 들어간 샌드위치<br>
+              Pastry Sandwich with Savory Ham & Cheese.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Wheat, Milk, Tomato, Soy, Eggs, Pork
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 8,600</span>
+              <span class="font-bold text-slate-900">No. D 4</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="칠리크랩.jpg" alt="Chili Crab Sandwich" class="w-full h-40 object-contain rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 id="menu-title-e5" class="font-bold text-lg text-slate-800 leading-tight">
+                칠리크랩샌드위치<br><span class="text-sm font-semibold text-slate-600">Chili Crab Sandwich</span>
+            </h3>
+            <p id="menu-desc-e5" class="text-xs text-slate-500 leading-relaxed">
+              고소한 크런치빵에 매콤한 사천소스로 버무린 게맛살 내용물과 아삭한 채소를 더한 매콤한 샌드위치<br>
+              Spicy Crab Stick Sandwich with Sichuan Sauce & Fresh Vegetables.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Wheat, Milk, Tomato, Soy, Eggs, Crab
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 8,200</span>
+              <span class="font-bold text-slate-900">No. E 5</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="미니버거.jpg" alt="Fresh Mini Burger" class="w-full h-40 object-contain rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 id="menu-title-f6" class="font-bold text-lg text-slate-800 leading-tight">
+                fresh한입쏙미니버거<br><span class="text-sm font-semibold text-slate-600">Fresh Mini Burger</span>
+            </h3>
+            <p id="menu-desc-f6" class="text-xs text-slate-500 leading-relaxed">
+              부드러운 모닝롤빵에 불고기맛 버거패티와 아삭한 프리레터스, 다양한 야채가 어우러진 미니버거 샌드위치<br>
+              Mini Burger Sandwich with Bulgogi Patty, Crispy Frisee & Fresh Vegetables.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Wheat, Soy, Tomato, Milk, Eggs, Pork, Beef
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 8,900</span>
+              <span class="font-bold text-slate-900">No. F 6</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="치킨에그샐러드.jpg" alt="Chicken Egg Salad" class="w-full h-40 object-contain rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 id="menu-title-g7" class="font-bold text-lg text-slate-800 leading-tight">
+                단백질 듬뿍 치킨 에그샐러드<br><span class="text-sm font-semibold text-slate-600">Protein-packed Chicken Egg Salad</span>
+            </h3>
+            <p id="menu-desc-g7" class="text-xs text-slate-500 leading-relaxed">
+              단백질이 풍부한 로스트 치킨과 계란 내용물을 듬뿍 담아 더욱 건강한 샐러드<br>
+              Healthy salad with protein-rich roasted chicken and plenty of egg.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Milk, Soy, Chicken, Tomato, Eggs
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 9,300</span>
+              <span class="font-bold text-slate-900">No. G 7</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="치킨샐러드.jpg" alt="Crispy Chicken Salad" class="w-full h-40 object-contain rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 id="menu-title-h8" class="font-bold text-lg text-slate-800 leading-tight">
+                크리스피 치킨 샐러드<br><span class="text-sm font-semibold text-slate-600">Crispy Chicken Salad</span>
+            </h3>
+            <p id="menu-desc-h8" class="text-xs text-slate-500 leading-relaxed">
+              부드럽고 바삭하게 튀긴 치킨커틀릿에 건강한 병아리콩, 옥수수가 어우러진 샐러드<br>
+              Crispy Chicken Cutlet Salad with Chickpeas & Sweet Corn.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Chicken, Wheat, Soy, Milk, Tomato
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 9,300</span>
+              <span class="font-bold text-slate-900">No. H 8</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <img src="치킨리코타.jpg" alt="Cranberry Chicken Ricotta" class="w-full h-40 object-contain rounded-xl shadow-sm zoomable-image cursor-pointer">
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 id="menu-title-i9" class="font-bold text-lg text-slate-800 leading-tight">
+                크랜베리 치킨 리코타 샐러드<br><span class="text-sm font-semibold text-slate-600">Cranberry Chicken Ricotta Salad</span>
+            </h3>
+            <p id="menu-desc-i9" class="text-xs text-slate-500 leading-relaxed">
+              고소한 리코타치즈와 구운 치킨, 크랜베리가 어우러진 샐러드<br>
+              Salad with creamy ricotta, roasted chicken & cranberries.
+            </p>
+            <div class="text-[10px] text-slate-400 pt-1">
+              Allergy Info: Milk, Tomato, Eggs, Soy, Chicken
+            </div>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+              <span class="font-bold text-[#ff6900]">KRW 9,600</span>
+              <span class="font-bold text-slate-900">No. I 9</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
+            <div class="w-full sm:w-40 flex-shrink-0">
+              <img src="에그샐러드샌드위치1.jpg" alt="Egg Salad Sandwich" class="w-full h-40 object-contain rounded-xl shadow-sm zoomable-image cursor-pointer">
+            </div>
+            <div class="flex-1 space-y-2">
+              <h3 id="menu-title-j10" class="font-bold text-lg text-slate-800 leading-tight">
+                에그샐러드샌드위치<br><span class="text-sm font-semibold text-slate-600">Egg Salad Sandwich</span>
+              </h3>
+              <p id="menu-desc-j10" class="text-xs text-slate-500 leading-relaxed">
+                부드러운 식빵에 고소하면서도 새콤달콤한 계란샐러드와 햄, 당근 등 신선한 야채를 듬뿍 넣은 샌드위치<br>
+                Soft bread sandwich with egg salad, ham & fresh vegetables.
+              </p>
+              <div class="text-[10px] text-slate-400 pt-1">
+                Allergy Info: Eggs, Milk, Soy, Wheat, Pork, Chicken
+              </div>
+              <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
+                <span class="font-bold text-[#ff6900]">KRW 8,200</span>
+                <span class="font-bold text-slate-900">No. J 10</span>
+              </div>
+            </div>
+          </div>
+
       </div>
 
-      <div id="drink-grid" class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div class="menu-card p-5 flex flex-col items-center text-center shadow-sm">
+            <img src="우유.jpg" alt="Milk" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
+            <h3 id="menu-title-k11" class="font-bold text-slate-800">우유 . Milk (300ml)</h3>
+            <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
+                <span class="font-bold text-[#ff6900]">KRW 2,000</span>
+                <span class="font-semibold text-slate-700">No. K 11</span>
+            </div>
         </div>
+
+        <div class="menu-card p-5 flex flex-col items-center text-center shadow-sm">
+            <img src="바나나우유.jpg" alt="Banana Milk" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
+            <h3 id="menu-title-l12" class="font-bold text-slate-800">바나나 우유 . Banana Milk</h3>
+            <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
+                <span class="font-bold text-[#ff6900]">KRW 2,000</span>
+                <span class="font-semibold text-slate-700">No. L 12</span>
+            </div>
+        </div>
+
+        <div class="menu-card p-5 flex flex-col items-center text-center shadow-sm">
+            <img src="오렌지주스.jpg" alt="Orange Juice" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
+            <h3 id="menu-title-m13" class="font-bold text-slate-800">오렌지 주스 . Orange juice</h3>
+            <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
+                <span class="font-bold text-[#ff6900]">KRW 2,400</span>
+                <span class="font-semibold text-slate-700">No. M 13</span>
+            </div>
+        </div>
+
+        <div class="menu-card p-5 flex flex-col items-center text-center shadow-sm">
+            <img src="커피.jpg" alt="Americano" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
+            <h3 id="menu-title-n14" class="font-bold text-slate-800">커피 - 아메리카노 . Americano</h3>
+            <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
+                <span class="font-bold text-[#ff6900]">KRW 2,500</span>
+                <span class="font-semibold text-slate-700">No. N 14</span>
+            </div>
+        </div>
+
+      </div>
 
     </div>
   </section>
 
   <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-100">
     <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-500">
-        <div class="space-y-1.5 leading-relaxed font-light">
-           <p>insta hotel mainbranch, Korea</p>
-           <p><span id="companyName">(주)호텔인스타</span> | <span id="ceoName">대표자 : 이영환</span></p>
-           <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
-           <p id="address">수원시 영통구 영통로 94-6</p>
-           <p>Business License 176-24-01388 | Tel 031-203-4301</p>
-        </div>
+      
+      <div class="flex justify-center gap-4 mb-6">
+        <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank" class="hover:opacity-75 transition-opacity">
+            <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
+        </a>
+        <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank" class="hover:opacity-75 transition-opacity">
+            <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
+        </a>
+        <a href="http://pf.kakao.com/_xiITuG" target="_blank" class="hover:opacity-75 transition-opacity">
+            <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
+        </a>
+        <a href="https://www.facebook.com/VIPdesign2020" target="_blank" class="hover:opacity-75 transition-opacity">
+            <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
+        </a>
+      </div>
+
+      <div class="space-y-1.5 leading-relaxed font-light">
+        <p>insta hotel mainbranch, Korea</p>
+        
+        <p>
+            <span id="companyName">(주)호텔인스타</span>
+            <span class="mx-1">|</span>
+            <span id="ceoName">대표자 : 이영환</span>
+        </p>
+
+        <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
+        <p id="address">수원시 영통구 영통로 94-6</p>
+        <p>Business License 176-24-01388 <span class="mx-1">|</span> Tel 031-203-4301</p>
+      </div>
+
+      <div class="flex justify-center gap-8 mt-8 text-slate-400">
+        <a href="#" id="termsLink" class="hover:text-slate-600">이용약관</a>
+        <a href="#" id="privacyLink" class="hover:text-slate-600 font-medium">개인정보처리방침</a>
+      </div>
+
     </div>
   </section>
-  
-  <a href="http://pf.kakao.com/_xiITuG" target="_blank" class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#FFEB00] text-black px-4 py-2 rounded-full shadow-lg font-bold">
-    <span id="inquiryBtn">문의</span>
+
+  <a href="http://pf.kakao.com/_xiITuG" target="_blank"
+    class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#FFEB00] text-black px-4 py-2 rounded-full shadow-lg hover:bg-yellow-400 transition-colors font-bold">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+      <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
+    </svg>
+    <span id="inquiryBtn" class="text-lg">문의</span>
   </a>
 
   <div id="image-modal" class="fixed inset-0 z-[9999] hidden bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm cursor-pointer">
     <button id="modal-close" class="absolute top-6 right-6 text-white text-5xl font-light hover:text-gray-300 focus:outline-none">&times;</button>
-    <img id="modal-img" src="" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl" onclick="event.stopPropagation()">
+    <img id="modal-img" src="" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl transition-transform duration-300" onclick="event.stopPropagation()">
   </div>
 
   <script>
-    /* 전역 변수 설정 */
-    let currentLang = 'ko';
-    let menuData = []; // DB에서 가져온 메뉴 데이터를 저장
-
     /* --------------------------------------
-       1. Supabase 데이터 가져오기 및 렌더링
-    -------------------------------------- */
-    async function fetchAndRenderMenu() {
-        // DB의 'menu' 테이블에서 모든 데이터 가져오기
-        const { data, error } = await window.supabaseClient
-            .from('menu')
-            .select('*')
-            .order('id', { ascending: true });
-
-        if (error) {
-            console.error('Error fetching menu:', error);
-            document.getElementById('food-grid').innerHTML = '<p class="text-red-500">메뉴를 불러오는데 실패했습니다.</p>';
-            return;
-        }
-
-        menuData = data; // 전역 변수에 저장 (언어 변경 시 재사용)
-        renderMenuByLanguage(currentLang); // 화면에 그리기
-    }
-
-    // 메뉴를 HTML로 그려주는 함수
-    function renderMenuByLanguage(lang) {
-        const foodContainer = document.getElementById('food-grid');
-        const drinkContainer = document.getElementById('drink-grid');
-        
-        // 초기화
-        foodContainer.innerHTML = '';
-        drinkContainer.innerHTML = '';
-
-        // 데이터 반복문
-        menuData.forEach(item => {
-            // 언어별 텍스트 설정 (DB 컬럼 매칭)
-            let name, desc;
-            if (lang === 'en') {
-                name = item.name_en; desc = item.desc_en;
-            } else if (lang === 'ja' || lang === 'zh') {
-                // 일본어/중국어 컬럼이 DB에 없으면 영어로 대체 (필요 시 DB에 추가)
-                name = item.name_en; desc = item.desc_en; 
-            } else {
-                name = item.name_ko; desc = item.desc_ko;
-            }
-
-            // 서브 텍스트 (한국어일 땐 영어를 밑에 작게 표시)
-            const subName = (lang === 'ko') ? `<span class="text-sm font-semibold text-slate-600 block">${item.name_en}</span>` : '';
-            const subDesc = (lang === 'ko') ? `<br>${item.desc_en}` : '';
-
-            // HTML 생성
-            let html = '';
-            
-            if (item.category === 'food') {
-                html = `
-                <div class="menu-card p-6 flex flex-col sm:flex-row gap-6 shadow-sm">
-                  <div class="w-full sm:w-40 flex-shrink-0">
-                    <img src="${item.img_url}" alt="${item.name_en}" class="w-full h-40 object-contain rounded-xl shadow-sm zoomable-image cursor-pointer">
-                  </div>
-                  <div class="flex-1 space-y-2">
-                    <h3 class="font-bold text-lg text-slate-800 leading-tight">
-                        ${name} ${subName}
-                    </h3>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                      ${desc} ${subDesc}
-                    </p>
-                    <div class="text-[10px] text-slate-400 pt-1">
-                      Allergy Info: ${item.allergy || '-'}
-                    </div>
-                    <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
-                      <span class="font-bold text-[#ff6900]">KRW ${item.price.toLocaleString()}</span>
-                      <span class="font-bold text-slate-900">No. ${item.no_label}</span>
-                    </div>
-                  </div>
-                </div>`;
-                foodContainer.innerHTML += html;
-
-            } else if (item.category === 'drink') {
-                html = `
-                <div class="menu-card p-5 flex flex-col items-center text-center shadow-sm">
-                    <img src="${item.img_url}" alt="${item.name_en}" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
-                    <h3 class="font-bold text-slate-800">${name}</h3>
-                    <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
-                        <span class="font-bold text-[#ff6900]">KRW ${item.price.toLocaleString()}</span>
-                        <span class="font-semibold text-slate-700">No. ${item.no_label}</span>
-                    </div>
-                </div>`;
-                drinkContainer.innerHTML += html;
-            }
-        });
-
-        // 줌 기능 이벤트 리스너 재등록 (동적으로 생성된 요소이므로)
-        attachZoomEvents();
-    }
-
-    /* --------------------------------------
-       2. UI/UX 스크립트 (모바일 메뉴, 모달 등)
+       1. 모바일 메뉴 (Drawer)
     -------------------------------------- */
     const mobileMenuBtn = document.getElementById("mobile-menu-btn");
     const mobileDrawer = document.getElementById("mobile-drawer");
@@ -270,21 +489,21 @@
         });
     }
 
-    // 이미지 확대 기능 (함수로 분리)
+    /* --------------------------------------
+       2. 이미지 확대 (Lightbox) 기능
+    -------------------------------------- */
     const modal = document.getElementById('image-modal');
     const modalImg = document.getElementById('modal-img');
     const modalCloseBtn = document.getElementById('modal-close');
+    const zoomableImages = document.querySelectorAll('.zoomable-image'); 
 
-    function attachZoomEvents() {
-        const zoomableImages = document.querySelectorAll('.zoomable-image'); 
-        zoomableImages.forEach(img => {
-            img.addEventListener('click', function() {
-                modalImg.src = this.src; 
-                modal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; 
-            });
+    zoomableImages.forEach(img => {
+        img.addEventListener('click', function() {
+            modalImg.src = this.src; 
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; 
         });
-    }
+    });
 
     function closeModal() {
         modal.classList.add('hidden');
@@ -300,62 +519,315 @@
     }
 
     /* --------------------------------------
-       3. 다국어 번역 및 초기화
+       3. 다국어 번역 로직
     -------------------------------------- */
     const translations = {
       ko: { 
-          img: "kr.png",
-          nav_about: "about", nav_rooms: "rooms", nav_breakfast: "breakfast", nav_reservation: "reservation (예약)",
-          nav_instaspot: "insta spot (관광&맛집&카페)", nav_lounge: "bluerain lounge", nav_contact: "contact",
+          img: "kr.png", // 헤더용 국기 이미지
+
+          /* 헤더 메뉴 (data-translate 키) */
+          nav_about: "about", 
+          nav_rooms: "rooms", 
+          nav_breakfast: "breakfast", 
+          nav_reservation: "reservation (예약)", 
+          nav_instaspot: "insta spot (관광&맛집&카페)", 
+          nav_lounge: "bluerain lounge", 
+          nav_contact: "contact",
+
+          /* 배달 안내 */
           "notice-text": "아침 7시~8시 객실 문 앞 배달, 벨로 안내드립니다.<br>준비된 조식을 받아 객실에서 편하게 즐겨주세요.",
-          companyName: "(주)호텔인스타", ceoName: "대표자 : 이영환", bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호",
-          address: "수원시 영통구 영통로 94-6", inquiryBtn: "문의"
+
+          /* 메뉴 번역 */
+          "menu-title-a1": "햄치즈 크라상 샌드위치<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Croissant Sandwich</span>",
+          "menu-desc-a1": "겹겹이 고소한 크라상에 신선한 토마토와 짭조름한 햄, 치즈를 넣은 크라상의 베스트 플레이버 샌드위치<br>Layered buttery croissant with fresh tomato, savory ham, and cheese.",
+
+          "menu-title-b2": "브라운 햄에그 샌드위치<br><span class='text-sm font-semibold text-slate-600'>Brown Ham & Egg Sandwich</span>",
+          "menu-desc-b2": "곡물이 가득담긴 브라운식빵에 햄, 에그슬라이스, 신선한 야채를 올린 든든 샌드위치<br>Hearty sandwich with ham, egg slices & fresh vegetables on multigrain brown bread.",
+
+          "menu-title-c3": "햄&치즈 샌드위치<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Sandwich</span>",
+          "menu-desc-c3": "부드러운 브라운식빵에 신선한 야채와 햄&치즈가 들어간 샌드위치<br>Sandwich with ham & cheese and fresh vegetables on soft brown bread.",
+
+          "menu-title-d4": "런치샌드위치<br><span class='text-sm font-semibold text-slate-600'>Lunch Sandwich</span>",
+          "menu-desc-d4": "부드러운 페스츄리 식빵에 신선한 야채와 햄&치즈가 들어간 샌드위치<br>Pastry Sandwich with Savory Ham & Cheese.",
+
+          "menu-title-e5": "칠리크랩샌드위치<br><span class='text-sm font-semibold text-slate-600'>Chili Crab Sandwich</span>",
+          "menu-desc-e5": "고소한 크런치빵에 매콤한 사천소스로 버무린 게맛살 내용물과 아삭한 채소를 더한 매콤한 샌드위치<br>Spicy Crab Stick Sandwich with Sichuan Sauce & Fresh Vegetables.",
+
+          "menu-title-f6": "fresh한입쏙미니버거<br><span class='text-sm font-semibold text-slate-600'>Fresh Mini Burger</span>",
+          "menu-desc-f6": "부드러운 모닝롤빵에 불고기맛 버거패티와 아삭한 프리레터스, 다양한 야채가 어우러진 미니버거 샌드위치<br>Mini Burger Sandwich with Bulgogi Patty, Crispy Frisee & Fresh Vegetables.",
+
+          "menu-title-g7": "단백질 듬뿍 치킨 에그샐러드<br><span class='text-sm font-semibold text-slate-600'>Protein-packed Chicken Egg Salad</span>",
+          "menu-desc-g7": "단백질이 풍부한 로스트 치킨과 계란 내용물을 듬뿍 담아 더욱 건강한 샐러드<br>Healthy salad with protein-rich roasted chicken and plenty of egg.",
+
+          "menu-title-h8": "크리스피 치킨 샐러드<br><span class='text-sm font-semibold text-slate-600'>Crispy Chicken Salad</span>",
+          "menu-desc-h8": "부드럽고 바삭하게 튀긴 치킨커틀릿에 건강한 병아리콩, 옥수수가 어우러진 샐러드<br>Crispy Chicken Cutlet Salad with Chickpeas & Sweet Corn.",
+
+          "menu-title-i9": "크랜베리 치킨 리코타 샐러드<br><span class='text-sm font-semibold text-slate-600'>Cranberry Chicken Ricotta Salad</span>",
+          "menu-desc-i9": "고소한 리코타치즈와 구운 치킨, 크랜베리가 어우러진 샐러드<br>Salad with creamy ricotta, roasted chicken & cranberries.",
+
+          "menu-title-j10": "에그샐러드샌드위치<br><span class='text-sm font-semibold text-slate-600'>Egg Salad Sandwich</span>",
+          "menu-desc-j10": "부드러운 식빵에 고소하면서도 새콤달콤한 계란샐러드와 햄, 당근 등 신선한 야채를 듬뿍 넣은 샌드위치<br>Soft bread sandwich with egg salad, ham & fresh vegetables.",
+
+          "menu-title-k11": "우유 . Milk (300ml)",
+          "menu-title-l12": "바나나 우유 . Banana Milk",
+          "menu-title-m13": "오렌지 주스 . Orange juice",
+          "menu-title-n14": "커피 - 아메리카노 . Americano",
+
+
+          /* 하단 정보 */
+          btnMore: "더보기", 
+          companyName: "(주)호텔인스타", 
+          ceoName: "대표자 : 이영환", 
+          bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", 
+          address: "수원시 영통구 영통로 94-6", 
+          termsLink: "이용약관", 
+          privacyLink: "개인정보처리방침", 
+          inquiryBtn: "문의" 
       },
       en: { 
           img: "usa.png",
-          nav_about: "about", nav_rooms: "rooms", nav_breakfast: "breakfast", nav_reservation: "reservation",
-          nav_instaspot: "insta spot (Tour & Cafe)", nav_lounge: "bluerain lounge", nav_contact: "contact",
+
+          /* 헤더 메뉴 */
+          nav_about: "about", 
+          nav_rooms: "rooms", 
+          nav_breakfast: "breakfast", 
+          nav_reservation: "reservation", 
+          nav_instaspot: "insta spot (Tour & Cafe)", 
+          nav_lounge: "bluerain lounge", 
+          nav_contact: "contact",
+
+          /* 배달 안내 */
           "notice-text": "Breakfast is delivered to your door between 7:00 and 8:00 AM.<br>We will ring the bell. Please enjoy your meal in the comfort of your room.",
-          companyName: "Insta Hotel Co., Ltd.", ceoName: "CEO: Lee Young Hwan", bizNumber: "Registration: 2023-Suwon Yeongtong-1696",
-          address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si", inquiryBtn: "Contact"
+
+          /* 메뉴 번역 */
+          "menu-title-a1": "Ham & Cheese Croissant Sandwich",
+          "menu-desc-a1": "Layered buttery croissant with fresh tomato, savory ham, and cheese.",
+
+          "menu-title-b2": "Brown Ham & Egg Sandwich",
+          "menu-desc-b2": "Hearty sandwich with ham, egg slices & fresh vegetables on multigrain brown bread.",
+
+          "menu-title-c3": "Ham & Cheese Sandwich",
+          "menu-desc-c3": "Sandwich with ham & cheese and fresh vegetables on soft brown bread.",
+
+          "menu-title-d4": "Lunch Sandwich",
+          "menu-desc-d4": "Pastry Sandwich with Savory Ham & Cheese.",
+
+          "menu-title-e5": "Chili Crab Sandwich",
+          "menu-desc-e5": "Spicy Crab Stick Sandwich with Sichuan Sauce & Fresh Vegetables.",
+
+          "menu-title-f6": "Fresh Mini Burger",
+          "menu-desc-f6": "Mini Burger Sandwich with Bulgogi Patty, Crispy Frisee & Fresh Vegetables.",
+
+          "menu-title-g7": "Protein-packed Chicken Egg Salad",
+          "menu-desc-g7": "Healthy salad with protein-rich roasted chicken and plenty of egg.",
+
+          "menu-title-h8": "Crispy Chicken Salad",
+          "menu-desc-h8": "Crispy Chicken Cutlet Salad with Chickpeas & Sweet Corn.",
+
+          "menu-title-i9": "Cranberry Chicken Ricotta Salad",
+          "menu-desc-i9": "Salad with creamy ricotta, roasted chicken & cranberries.",
+
+          "menu-title-j10": "Egg Salad Sandwich",
+          "menu-desc-j10": "Soft bread sandwich with egg salad, ham & fresh vegetables.",
+
+          "menu-title-k11": "Milk (300ml)",
+          "menu-title-l12": "Banana Milk",
+          "menu-title-m13": "Orange juice",
+          "menu-title-n14": "Americano",
+
+          /* 하단 정보 */
+          btnMore: "View more", 
+          companyName: "Insta Hotel Co., Ltd.", 
+          ceoName: "CEO: Lee Young Hwan", 
+          bizNumber: "Registration: 2023-Suwon Yeongtong-1696", 
+          address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si", 
+          termsLink: "Terms of Use", 
+          privacyLink: "Privacy Policy", 
+          inquiryBtn: "Contact" 
       },
-      // 일본어, 중국어 등 필요한 만큼 추가...
+      ja: { 
+          img: "jp.png",
+
+          /* 헤더 메뉴 */
+          nav_about: "about (ホテル紹介)", 
+          nav_rooms: "rooms", 
+          nav_breakfast: "breakfast (朝食)", 
+          nav_reservation: "reservation (予約)", 
+          nav_instaspot: "insta spot (観光&グルメ)", 
+          nav_lounge: "bluerain lounge", 
+          nav_contact: "contact",
+
+          /* 배달 안내 */
+          "notice-text": "朝7時～8時の間に客室の前までお届けし、ベルでお知らせします。<br>客室でごゆっくり朝食をお楽しみください。",
+
+          /* 메뉴 번역 */
+          "menu-title-a1": "ハムチーズクロワッサンサンド<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Croissant Sandwich</span>",
+          "menu-desc-a1": "香ばしいクロワッサンに新鮮なトマト、ハム、チーズを挟んだベストセラーサンドイッチ。<br>Layered buttery croissant with fresh tomato, savory ham, and cheese.",
+
+          "menu-title-b2": "ブラウンハムエッグサンド<br><span class='text-sm font-semibold text-slate-600'>Brown Ham & Egg Sandwich</span>",
+          "menu-desc-b2": "穀物たっぷりのブラウンパンにハム、卵スライス、新鮮な野菜をのせたボリューム満点サンド。<br>Hearty sandwich with ham, egg slices & fresh vegetables on multigrain brown bread.",
+
+          "menu-title-c3": "ハム＆チーズサンドイッチ<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Sandwich</span>",
+          "menu-desc-c3": "柔らかいブラウンパンに新鮮な野菜とハム＆チーズが入ったサンドイッチ。<br>Sandwich with ham & cheese and fresh vegetables on soft brown bread.",
+
+          "menu-title-d4": "ランチサンドイッチ<br><span class='text-sm font-semibold text-slate-600'>Lunch Sandwich</span>",
+          "menu-desc-d4": "柔らかいペストリー食パンに新鮮な野菜とハム＆チーズが入ったサンドイッチ。<br>Pastry Sandwich with Savory Ham & Cheese.",
+
+          "menu-title-e5": "チリクラブサンドイッチ<br><span class='text-sm font-semibold text-slate-600'>Chili Crab Sandwich</span>",
+          "menu-desc-e5": "香ばしいクランチパンにピリ辛四川ソースで和えたカニカマとシャキシャキ野菜を加えたサンドイッチ。<br>Spicy Crab Stick Sandwich with Sichuan Sauce & Fresh Vegetables.",
+
+          "menu-title-f6": "フレッシュ一口ミニバーガー<br><span class='text-sm font-semibold text-slate-600'>Fresh Mini Burger</span>",
+          "menu-desc-f6": "柔らかいモーニングロールにプルコギ味のパティとシャキシャキレタス、様々な野菜が調和したミニバーガー。<br>Mini Burger Sandwich with Bulgogi Patty, Crispy Frisee & Fresh Vegetables.",
+
+          "menu-title-g7": "高タンパクチキンエッグサラダ<br><span class='text-sm font-semibold text-slate-600'>Protein-packed Chicken Egg Salad</span>",
+          "menu-desc-g7": "タンパク質豊富なローストチキンと卵をたっぷり入れたヘルシーなサラダ。<br>Healthy salad with protein-rich roasted chicken and plenty of egg.",
+
+          "menu-title-h8": "クリスピーチキンサラダ<br><span class='text-sm font-semibold text-slate-600'>Crispy Chicken Salad</span>",
+          "menu-desc-h8": "柔らかくサクサクに揚げたチキンカツに健康的なひよこ豆、コーンが調和したサラダ。<br>Crispy Chicken Cutlet Salad with Chickpeas & Sweet Corn.",
+
+          "menu-title-i9": "クランベリーチキンリコッタサラダ<br><span class='text-sm font-semibold text-slate-600'>Cranberry Chicken Ricotta Salad</span>",
+          "menu-desc-i9": "香ばしいリコッタチーズとローストチキン、クランベリーが調和したサラダ。<br>Salad with creamy ricotta, roasted chicken & cranberries.",
+
+          "menu-title-j10": "エッグサラダサンドイッチ<br><span class='text-sm font-semibold text-slate-600'>Egg Salad Sandwich</span>",
+          "menu-desc-j10": "柔らかい食パンに香ばしく甘酸っぱい卵サラダとハム、ニンジンなど新鮮な野菜をたっぷり入れたサンドイッチ。<br>Soft bread sandwich with egg salad, ham & fresh vegetables.",
+
+          "menu-title-k11": "牛乳 (300ml)",
+          "menu-title-l12": "バナナ牛乳",
+          "menu-title-m13": "オレンジジュース",
+          "menu-title-n14": "コーヒー (アメリカーノ)",
+
+          /* 하단 정보 */
+          btnMore: "もっと見る", 
+          companyName: "インスタホテル株式会社", 
+          ceoName: "代表者 : イ・ヨンファン", 
+          bizNumber: "通信販売業申告番号: 2023-水原ヨントン-1696号", 
+          address: "水原市 永東区 永東路 94-6", 
+          termsLink: "利用規約", 
+          privacyLink: "個人情報処理方針", 
+          inquiryBtn: "お問い合わせ" 
+      },
+      zh: { 
+          img: "cn.png",
+
+          /* 헤더 메뉴 */
+          nav_about: "about (酒店介绍)", 
+          nav_rooms: "rooms", 
+          nav_breakfast: "breakfast (早餐)", 
+          nav_reservation: "reservation (预订)", 
+          nav_instaspot: "insta spot (旅游&美食)", 
+          nav_lounge: "bluerain lounge", 
+          nav_contact: "contact",
+
+          /* 배달 안내 */
+          "notice-text": "早餐于7:00~8:00送到客房门口并按铃通知。<br>请在客房内舒适地享用为您准备的早餐。",
+
+          /* 메뉴 번역 */
+          "menu-title-a1": "火腿芝士牛角包三明治<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Croissant Sandwich</span>",
+          "menu-desc-a1": "层层酥脆的牛角包搭配新鲜番茄、咸香火腿和芝士的最佳风味三明治。<br>Layered buttery croissant with fresh tomato, savory ham, and cheese.",
+
+          "menu-title-b2": "棕色火腿蛋三明治<br><span class='text-sm font-semibold text-slate-600'>Brown Ham & Egg Sandwich</span>",
+          "menu-desc-b2": "富含谷物的棕色面包上放有火腿、鸡蛋片和新鲜蔬菜的丰盛三明治。<br>Hearty sandwich with ham, egg slices & fresh vegetables on multigrain brown bread.",
+
+          "menu-title-c3": "火腿&芝士三明治<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Sandwich</span>",
+          "menu-desc-c3": "柔软的棕色面包中加入新鲜蔬菜和火腿&芝士的三明治。<br>Sandwich with ham & cheese and fresh vegetables on soft brown bread.",
+
+          "menu-title-d4": "午餐三明治<br><span class='text-sm font-semibold text-slate-600'>Lunch Sandwich</span>",
+          "menu-desc-d4": "柔软的酥皮面包中加入新鲜蔬菜和火腿&芝士的三明治。<br>Pastry Sandwich with Savory Ham & Cheese.",
+
+          "menu-title-e5": "辣椒蟹肉三明治<br><span class='text-sm font-semibold text-slate-600'>Chili Crab Sandwich</span>",
+          "menu-desc-e5": "香脆面包搭配香辣四川酱拌蟹肉和脆爽蔬菜的香辣三明治。<br>Spicy Crab Stick Sandwich with Sichuan Sauce & Fresh Vegetables.",
+
+          "menu-title-f6": "Fresh一口迷你汉堡<br><span class='text-sm font-semibold text-slate-600'>Fresh Mini Burger</span>",
+          "menu-desc-f6": "柔软的餐包搭配烤肉味肉饼、脆生菜和各种蔬菜的迷你汉堡三明治。<br>Mini Burger Sandwich with Bulgogi Patty, Crispy Frisee & Fresh Vegetables.",
+
+          "menu-title-g7": "高蛋白鸡肉鸡蛋沙拉<br><span class='text-sm font-semibold text-slate-600'>Protein-packed Chicken Egg Salad</span>",
+          "menu-desc-g7": "富含蛋白质的烤鸡肉和鸡蛋，更加健康的沙拉。<br>Healthy salad with protein-rich roasted chicken and plenty of egg.",
+
+          "menu-title-h8": "脆皮鸡肉沙拉<br><span class='text-sm font-semibold text-slate-600'>Crispy Chicken Salad</span>",
+          "menu-desc-h8": "外酥里嫩的炸鸡排搭配健康的鹰嘴豆和玉米的沙拉。<br>Crispy Chicken Cutlet Salad with Chickpeas & Sweet Corn.",
+
+          "menu-title-i9": "蔓越莓鸡肉瑞可塔沙拉<br><span class='text-sm font-semibold text-slate-600'>Cranberry Chicken Ricotta Salad</span>",
+          "menu-desc-i9": "香浓的瑞可塔芝士搭配烤鸡肉和蔓越莓的沙拉。<br>Salad with creamy ricotta, roasted chicken & cranberries.",
+
+          "menu-title-j10": "鸡蛋沙拉三明治<br><span class='text-sm font-semibold text-slate-600'>Egg Salad Sandwich</span>",
+          "menu-desc-j10": "柔软的吐司中加入香浓酸甜的鸡蛋沙拉和火腿、胡萝卜等大量新鲜蔬菜的三明治。<br>Soft bread sandwich with egg salad, ham & fresh vegetables.",
+
+          "menu-title-k11": "牛奶 (300ml)",
+          "menu-title-l12": "香蕉牛奶",
+          "menu-title-m13": "橙汁",
+          "menu-title-n14": "咖啡 (美式)",
+
+          /* 하단 정보 */
+          btnMore: "查看更多", 
+          companyName: "Insta Hotel有限公司", 
+          ceoName: "代表：李永焕", 
+          bizNumber: "通信销售业申报编号：2023-水原灵通-1696号", 
+          address: "水原市 灵通区 灵通路94-6", 
+          termsLink: "使用条款", 
+          privacyLink: "隐私政策", 
+          inquiryBtn: "咨询" 
+      },
     };
 
     const headerSelect = document.getElementById("header-lang-select");
+    const drawerSelect = document.getElementById("drawer-lang-select");
     const currentFlagIcon = document.getElementById("current-flag-icon");
 
     function updateLanguage(lang) {
-        currentLang = lang; // 전역 변수 업데이트
         const t = translations[lang] || translations.ko;
 
-        // 1. 국기 이미지 및 정적 텍스트 변경
+        // 1. 국기 이미지 변경
         if(currentFlagIcon && t.img) currentFlagIcon.src = t.img;
+
+        // 2. 텍스트 변경
+        // (1) 일반 ID 텍스트 요소들
+        const textIds = [
+            "btnMore", "companyName", "ceoName", "bizNumber", "address",
+            "termsLink", "privacyLink", "inquiryBtn", 
+            "notice-text",
+            // 메뉴 ID들
+            "menu-title-a1", "menu-desc-a1",
+            "menu-title-b2", "menu-desc-b2",
+            "menu-title-c3", "menu-desc-c3",
+            "menu-title-d4", "menu-desc-d4",
+            "menu-title-e5", "menu-desc-e5",
+            "menu-title-f6", "menu-desc-f6",
+            "menu-title-g7", "menu-desc-g7",
+            "menu-title-h8", "menu-desc-h8",
+            "menu-title-i9", "menu-desc-i9",
+            "menu-title-j10", "menu-desc-j10",
+            "menu-title-k11", "menu-title-l12", "menu-title-m13", "menu-title-n14"
+        ];
         
-        const textIds = ["companyName", "ceoName", "bizNumber", "address", "inquiryBtn", "notice-text"];
         textIds.forEach(id => {
             const el = document.getElementById(id);
-            if(el && t[id]) el.innerHTML = t[id];
+            if(el && t[id]) {
+                el.innerHTML = t[id];
+            }
         });
 
+        // (2) 네비게이션 메뉴 (data-translate 속성 이용)
         document.querySelectorAll("[data-translate]").forEach(el => {
             const key = el.getAttribute("data-translate");
             if(t[key]) el.textContent = t[key];
         });
-
-        // 2. 메뉴 다시 그리기 (언어에 맞춰서)
-        renderMenuByLanguage(lang);
     }
 
     if(headerSelect) {
         headerSelect.addEventListener("change", (e) => {
-            updateLanguage(e.target.value);
+            const lang = e.target.value;
+            if(drawerSelect) drawerSelect.value = lang;
+            updateLanguage(lang);
         });
     }
 
-    // 페이지 로드 시 실행
-    fetchAndRenderMenu();
-
+    if(drawerSelect) {
+        drawerSelect.addEventListener("change", (e) => {
+            const lang = e.target.value;
+            if(headerSelect) headerSelect.value = lang;
+            updateLanguage(lang);
+        });
+    }
   </script>
 </body>
 </html>
