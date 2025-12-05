@@ -548,7 +548,6 @@
         ko: {
             img: "kr.png", // 이미지 파일명
             flag: "🇰🇷",
-            unit_won: "원",
             unit_night: "박",
             alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
             alert_done: "결제가 완료되었습니다! 예약 내역이 저장되었습니다.",
@@ -610,7 +609,6 @@
         en: {
             img: "usa.png",
             flag: "🇺🇸",
-            unit_won: " KRW",
             unit_night: " nights",
             alert_agree: "You must agree to all terms to proceed.",
             alert_done: "Reservation Completed! Details saved.",
@@ -672,7 +670,6 @@
         ja: {
             img: "jp.png",
             flag: "🇯🇵",
-            unit_won: " ウォン",
             unit_night: " 泊",
             alert_agree: "すべての規約に同意する必要があります。",
             alert_done: "予約が完了しました！詳細が保存されました。",
@@ -734,7 +731,6 @@
         zh: {
             img: "cn.png",
             flag: "🇨🇳",
-            unit_won: " 韩元",
             unit_night: " 晚",
             alert_agree: "必须同意所有条款才能付款。",
             alert_done: "预订完成！详情已保存。",
@@ -804,6 +800,12 @@
         // 1. 상단 국기 아이콘 변경 (이미지 src 수정)
         const currentFlagIcon = document.getElementById("current-flag-icon");
         if(currentFlagIcon && t.img) currentFlagIcon.src = t.img;
+        
+        // 셀렉트 박스 값 동기화
+        const headerSelect = document.getElementById("header-lang-select");
+        const drawerSelect = document.getElementById("drawer-lang-select");
+        if(headerSelect) headerSelect.value = lang;
+        if(drawerSelect) drawerSelect.value = lang;
 
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
@@ -820,21 +822,38 @@
         renderPriceInfo();
     }
 
+    // [NEW] 화폐 포맷팅 함수 (달러 소수점 등 처리)
+    function formatPrice(price, lang) {
+        if (lang === 'en') {
+             // 영어(달러): 앞 $ + 소수점 2자리 (예: $100.00)
+             return '$' + Number(price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        } else if (lang === 'zh') {
+             // 중국어(위안): 앞 ¥ (예: ¥100)
+             return '¥' + Math.round(price).toLocaleString();
+        } else if (lang === 'ja') {
+             // 일본어(엔): 뒤 円 (예: 100円)
+             return Math.round(price).toLocaleString() + '円'; 
+        } else {
+             // 한국어(원): 뒤 원 (예: 100원)
+             return Math.round(price).toLocaleString() + '원';
+        }
+    }
+
     function renderPriceInfo() {
         const params = new URLSearchParams(window.location.search);
         
         const checkin = params.get('checkin') || "";
         const checkout = params.get('checkout') || "";
         const nights = params.get('nights') || '0';
-        const roomPrice = parseInt(params.get('roomPrice')) || 0;
-        const optionPrice = parseInt(params.get('optionPrice')) || 0;
-        const total = parseInt(params.get('total')) || 0;
+        
+        // 가격 정보는 숫자형태로 가져옴 (parseFloat로 달러 소수점 대응)
+        const roomPrice = parseFloat(params.get('roomPrice')) || 0;
+        const optionPrice = parseFloat(params.get('optionPrice')) || 0;
+        const total = parseFloat(params.get('total')) || 0;
 
         const t = translations[currentLang];
-        const unit = t.unit_won;
-        const unitNight = t.unit_night;
-        const fmt = (n) => n.toLocaleString() + unit;
-
+        
+        // 일정 표시
         if(checkin && checkout) {
             document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
         } else {
@@ -842,13 +861,14 @@
         }
         
         if (nights > 0) {
-            document.getElementById('display-nights').innerText = nights + unitNight;
+            document.getElementById('display-nights').innerText = nights + t.unit_night;
         }
         
-        document.getElementById('display-room-price-info').innerText = fmt(roomPrice);
-        document.getElementById('summary-room-price').innerText = fmt(roomPrice);
-        document.getElementById('summary-option-price').innerText = fmt(optionPrice);
-        document.getElementById('summary-total-price').innerText = fmt(total);
+        // [NEW] formatPrice 함수 사용하여 각 항목 표시
+        document.getElementById('display-room-price-info').innerText = formatPrice(roomPrice, currentLang);
+        document.getElementById('summary-room-price').innerText = formatPrice(roomPrice, currentLang);
+        document.getElementById('summary-option-price').innerText = formatPrice(optionPrice, currentLang);
+        document.getElementById('summary-total-price').innerText = formatPrice(total, currentLang);
 
         const optionContainer = document.getElementById('option-detail-list');
         const optionDetailsRaw = params.get('optionDetails');
@@ -876,7 +896,16 @@
     }
 
     window.onload = function() {
-        updateLanguage('ko');
+        // [NEW] URL에서 currency 파라미터 확인하여 언어 설정
+        const params = new URLSearchParams(window.location.search);
+        const urlLang = params.get('currency');
+        
+        if (urlLang && translations[urlLang]) {
+            updateLanguage(urlLang);
+        } else {
+            updateLanguage('ko'); // 기본값
+        }
+        
         const headerSelect = document.getElementById("header-lang-select");
         const drawerSelect = document.getElementById("drawer-lang-select");
 
@@ -960,8 +989,9 @@
 
         const checkin = params.get('checkin');
         const checkout = params.get('checkout');
-        const roomPrice = parseInt(params.get('roomPrice')) || 0;
-        const total = parseInt(params.get('total')) || 0;
+        // 가격 저장은 숫자 그대로 (DB엔 숫자로 들어감)
+        const roomPrice = parseFloat(params.get('roomPrice')) || 0;
+        const total = parseFloat(params.get('total')) || 0;
         
         let selectedOptionsArray = [];
         const optionDetailsRaw = params.get('optionDetails');
@@ -983,7 +1013,7 @@
                         guest_email: email,
                         check_in: checkin,
                         check_out: checkout,
-                        room_id: roomId,  // [수정된 부분] room_id 저장 추가 (기본값 5)
+                        room_id: roomId,  // room_id 저장 추가
                         room_price: roomPrice,
                         total_price: total,
                         selected_options: selectedOptionsArray,
