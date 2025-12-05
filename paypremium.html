@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment – Insta Hotel - mainbranch</title>
+    <title>Payment – Insta Hotel - Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -12,11 +12,11 @@
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f4f4f4; color: #333; }
         
-        /* 결제 페이지 컨테이너 스타일 (기존 유지) */
+        /* 결제 페이지 컨테이너 스타일 */
         .payment-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 100px 20px 60px; /* 헤더 높이 고려하여 상단 패딩 유지 */
+            padding: 100px 20px 60px;
         }
 
         /* 폼 스타일 */
@@ -256,10 +256,9 @@
         const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
         const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
         
-        // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
         window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
         
-        console.log("홈페이지-슈파베이스 연결 성공!");
+        console.log("결제페이지-슈파베이스 연결 성공!");
     </script>
 </head>
 <body class="bg-[#f4f4f4] text-slate-900 font-sans">
@@ -365,7 +364,7 @@
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_product">예약 상품 정보</div>
                     <div class="product-info">
-                        <img src="hero2.jpg" alt="객실 이미지" class="product-img">
+                        <img src="프리미엄1.png" alt="객실 이미지" class="product-img">
                         <div class="product-details">
                             <h3 data-i18n="room_name">프리미엄 (Premium)</h3>
                             <p><span data-i18n="label_schedule">일정</span>: <span id="display-nights">1박</span> (<span id="display-date-range">날짜 미선택</span>)</p>
@@ -517,7 +516,7 @@
 
     <script>
         /* --------------------------------------
-           1. 모바일 메뉴 (Drawer) 열기/닫기 (추가됨)
+           1. 모바일 메뉴 (Drawer) 열기/닫기
         -------------------------------------- */
         const mobileMenuBtn = document.getElementById("mobile-menu-btn");
         const mobileDrawer = document.getElementById("mobile-drawer");
@@ -553,8 +552,7 @@
         const translations = {
             ko: {
                 flag: "🇰🇷",
-                img: "kr.png", // 이미지 파일명 추가
-                unit_won: "원",
+                img: "kr.png",
                 unit_night: "박",
                 
                 alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
@@ -565,7 +563,7 @@
                 
                 page_title: "결제하기",
                 sect_product: "예약 상품 정보",
-                room_name: "디럭스 (Deluxe)",
+                room_name: "프리미엄 (Premium)",
                 label_schedule: "일정",
                 text_date_unselected: "날짜 미선택",
                 label_guests: "인원",
@@ -613,8 +611,7 @@
             },
             en: {
                 flag: "🇺🇸",
-                img: "usa.png", // 이미지 파일명 추가
-                unit_won: " KRW",
+                img: "usa.png",
                 unit_night: " nights",
                 
                 alert_agree: "You must agree to all terms to proceed.",
@@ -673,8 +670,7 @@
             },
             ja: {
                 flag: "🇯🇵",
-                img: "jp.png", // 이미지 파일명 추가
-                unit_won: " ウォン",
+                img: "jp.png",
                 unit_night: " 泊",
                 
                 alert_agree: "すべての規約に同意する必要があります。",
@@ -733,8 +729,7 @@
             },
             zh: {
                 flag: "🇨🇳",
-                img: "cn.png", // 이미지 파일명 추가
-                unit_won: " 韩元",
+                img: "cn.png",
                 unit_night: " 晚",
                 
                 alert_agree: "必须同意所有条款才能付款。",
@@ -800,9 +795,8 @@
 
         function updateLanguage(lang) {
             currentLang = lang;
-            const t = translations[lang];
+            const t = translations[lang] || translations.ko;
 
-            // [수정됨] 이모지 대신 이미지 소스 변경
             if(currentFlagIcon && t.img) {
                 currentFlagIcon.src = t.img;
             }
@@ -831,19 +825,30 @@
             renderPriceInfo();
         }
 
+        // [화폐 단위 포맷팅 함수]
+        function formatMoney(amount, lang) {
+            const num = parseFloat(amount);
+            if (lang === 'en') {
+                return '$' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else if (lang === 'ja') {
+                return '¥' + Math.round(num).toLocaleString();
+            } else if (lang === 'zh') {
+                return '¥' + Math.round(num).toLocaleString();
+            } else {
+                return Math.round(num).toLocaleString() + '원';
+            }
+        }
+
         function renderPriceInfo() {
             const params = new URLSearchParams(window.location.search);
-            const t = translations[currentLang];
+            const t = translations[currentLang] || translations.ko;
             
             const checkin = params.get('checkin') || "";
             const checkout = params.get('checkout') || "";
             const nights = params.get('nights') || '0';
-            const roomPrice = parseInt(params.get('roomPrice')) || 0;
-            const optionPrice = parseInt(params.get('optionPrice')) || 0;
-            const total = parseInt(params.get('total')) || 0;
-
-            const unit = t.unit_won;
-            const fmt = (n) => n.toLocaleString() + unit;
+            const roomPrice = params.get('roomPrice') ? parseFloat(params.get('roomPrice')) : 0;
+            const optionPrice = params.get('optionPrice') ? parseFloat(params.get('optionPrice')) : 0;
+            const total = params.get('total') ? parseFloat(params.get('total')) : 0;
 
             if(checkin && checkout) {
                 document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
@@ -852,10 +857,11 @@
             }
             document.getElementById('display-nights').innerText = nights + t.unit_night;
             
-            document.getElementById('display-room-price-info').innerText = fmt(roomPrice);
-            document.getElementById('summary-room-price').innerText = fmt(roomPrice);
-            document.getElementById('summary-option-price').innerText = fmt(optionPrice);
-            document.getElementById('summary-total-price').innerText = fmt(total);
+            // 화폐 단위 적용하여 출력
+            document.getElementById('display-room-price-info').innerText = formatMoney(roomPrice, currentLang);
+            document.getElementById('summary-room-price').innerText = formatMoney(roomPrice, currentLang);
+            document.getElementById('summary-option-price').innerText = formatMoney(optionPrice, currentLang);
+            document.getElementById('summary-total-price').innerText = formatMoney(total, currentLang);
 
             // 옵션 상세 리스트 표시
             const optionContainer = document.getElementById('option-detail-list');
@@ -884,7 +890,12 @@
         }
 
         window.onload = function() {
-            renderPriceInfo();
+            // URL에서 currency 파라미터 가져오기 (기본값 ko)
+            const params = new URLSearchParams(window.location.search);
+            const langFromUrl = params.get('currency') || 'ko';
+            
+            // 초기 언어 설정
+            updateLanguage(langFromUrl);
 
             // 헤더 투명 셀렉트 박스 이벤트
             if(headerSelect) {
@@ -930,7 +941,7 @@
             }
         }
 
-        // [수정됨] 실제 결제 및 데이터베이스 저장 함수
+        // 실제 결제 및 데이터베이스 저장 함수
         async function requestPayment() {
             const t = translations[currentLang];
 
@@ -962,8 +973,8 @@
             const params = new URLSearchParams(window.location.search);
             const checkin = params.get('checkin');
             const checkout = params.get('checkout');
-            const roomPrice = params.get('roomPrice') ? parseInt(params.get('roomPrice')) : 0;
-            const total = params.get('total') ? parseInt(params.get('total')) : 0;
+            const roomPrice = params.get('roomPrice') ? parseFloat(params.get('roomPrice')) : 0;
+            const total = params.get('total') ? parseFloat(params.get('total')) : 0;
             
             // 옵션 정보 JSON 변환
             let selectedOptions = [];
@@ -988,19 +999,20 @@
                     .from('bookings')
                     .insert([
                         {
-                            room_id: 3,                 // [요청사항] 프리미엄 ID = 3 고정
+                            room_id: 3,                 // 프리미엄 ID = 3
                             guest_name: name,
                             phone: phone,
                             guest_email: email,
                             social_insta: instagram,
                             social_tiktok: tiktok,
                             guest_request: request,
-                            check_in: checkin,          // YYYY-MM-DD 형식 권장
+                            check_in: checkin,
                             check_out: checkout,
                             room_price: roomPrice,
                             total_price: total,
-                            selected_options: selectedOptions, // jsonb 배열 저장
-                            status: '결제완료'            // 초기 상태
+                            currency: currentLang,       // 결제 당시 통화(언어) 정보 저장
+                            selected_options: selectedOptions, 
+                            status: '결제완료'
                         }
                     ])
                     .select();
