@@ -335,7 +335,7 @@
     <span id="inquiryBtn" class="text-lg">문의</span>
   </a>
 
-  <script>
+ <script>
     // ------------------------------------
     // 1. 헤더/모바일 메뉴 기능
     // ------------------------------------
@@ -372,7 +372,7 @@
     // ------------------------------------
     const translations = {
       ko: {
-        img: "kr.png", // 이미지 추가
+        img: "kr.png",
         flag: "🇰🇷",
         "benefit-title": "Insta Hotel 예약 혜택",
         "benefit-desc": "* 홈페이지 예약 시, 다양한 혜택을 함께 이용하실 수 있습니다 :)",
@@ -436,19 +436,13 @@
     function updateLanguage(lang) {
         const t = translations[lang] || translations.ko;
         
-        // 이미지 태그 src 변경
         if(currentFlagIcon && t.img) currentFlagIcon.src = t.img;
 
         const textIds = [
             "benefit-title", "benefit-desc", "display-text-mobile", "btn-cancel", "btn-confirm",
-            "room1-title", "room1-cap",
-            "room2-title", "room2-cap",
-            "room3-title", "room3-cap",
-            "room4-title", "room4-cap",
-            "room5-title", "room5-cap",
-            "room6-title", "room6-cap",
-            "companyName", "ceoName", "bizNumber", "address",
-            "terms", "privacy", "inquiryBtn"
+            "room1-title", "room1-cap", "room2-title", "room2-cap", "room3-title", "room3-cap",
+            "room4-title", "room4-cap", "room5-title", "room5-cap", "room6-title", "room6-cap",
+            "companyName", "ceoName", "bizNumber", "address", "terms", "privacy", "inquiryBtn"
         ];
         
         textIds.forEach(id => {
@@ -456,7 +450,6 @@
             if(el && t[id]) el.innerHTML = t[id];
         });
 
-        // 예약 버튼 텍스트 일괄 변경 (마감된 버튼은 제외)
         const reserveBtns = document.querySelectorAll(".dynamic-reserve-btn");
         reserveBtns.forEach(btn => {
             if(!btn.classList.contains('btn-soldout')) {
@@ -464,7 +457,7 @@
             }
         });
         updateMobileText();
-        // 언어 변경 시에도 가격 표시 업데이트
+        // ★ 언어가 바뀌면 가격표도 다시 계산
         updateDisplayPrices();
     }
 
@@ -484,13 +477,12 @@
     }
     
     // ------------------------------------
-    // 3. 달력 기능 및 슈파베이스 재고 확인 로직
+    // 3. 달력 기능 및 DB 가격/재고 연동
     // ------------------------------------
     let date = new Date(); 
     let currentYear = date.getFullYear();
     let currentMonth = date.getMonth(); 
     
-    // 체크인/체크아웃 변수
     let checkinDate = null;
     let checkoutDate = null;
     let tempCheckinDate = null; 
@@ -500,83 +492,123 @@
     const displayTextMobile = document.getElementById("display-text-mobile");
     const calendarModal = document.getElementById("calendar-modal");
 
-    // ============================================
-    // [추가] 객실 금액 설정 (평일/주말)
-    // ============================================
-    const roomPrices = {
-        1: { weekday: 85000, weekend: 110000 }, // 스탠다드
-        2: { weekday: 95000, weekend: 120000 }, // 디럭스
-        3: { weekday: 105000, weekend: 130000 }, // 프리미엄
-        4: { weekday: 115000, weekend: 140000 }, // 럭셔리
-        5: { weekday: 130000, weekend: 160000 }, // 트윈
-        6: { weekday: 150000, weekend: 190000 }  // 특실
-    };
+    // ★ [중요] DB에서 가져온 가격 데이터를 저장할 전역 변수
+    let globalRoomData = {}; 
 
-    // 가격 계산 및 표시 함수
+    // ★ DB에서 최신 가격 정보 가져오기
+    async function fetchRoomPrices() {
+        const { data, error } = await window.supabaseClient
+            .from('rooms')
+            .select('*');
+
+        if (error) {
+            console.error("가격 정보를 가져오지 못했습니다:", error);
+            return;
+        }
+
+        // 가져온 데이터를 ID별로 저장
+        data.forEach(room => {
+            globalRoomData[room.id] = room;
+        });
+
+        console.log("DB 가격 로드 완료:", globalRoomData);
+        updateDisplayPrices(); // 데이터 로드 후 가격 표시 업데이트
+    }
+
+    // ★ 가격 계산 및 표시 함수 (언어별 통화 적용)
     function updateDisplayPrices() {
-        // 1. 기간 설정 (선택 안함 -> 오늘, 체크인만 -> 당일 1박, 체크인&아웃 -> 기간)
-        let startDate, endDate, nightCount;
+        // 데이터가 아직 안 왔으면 대기
+        if (Object.keys(globalRoomData).length === 0) return;
 
+        // 1. 기간 설정
+        let startDate, endDate, nightCount;
         if (checkinDate && checkoutDate) {
             startDate = new Date(checkinDate);
             endDate = new Date(checkoutDate);
         } else if (checkinDate) {
             startDate = new Date(checkinDate);
             endDate = new Date(checkinDate);
-            endDate.setDate(startDate.getDate() + 1); // 1박으로 계산
+            endDate.setDate(startDate.getDate() + 1);
         } else {
-            // 날짜 선택 안함 -> 오늘 날짜 기준 1박
             startDate = new Date();
             startDate.setHours(0,0,0,0);
             endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 1);
         }
 
-        // 박수 계산
         const diffTime = Math.abs(endDate - startDate);
         nightCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
-        // 2. 각 객실별 금액 계산
+        // 2. 현재 언어 설정 확인
+        const lang = headerSelect ? headerSelect.value : 'ko';
+        
+        // 언어별 컬럼명 및 기호 설정
+        let currencySymbol = "원";
+        let symbolPosition = "suffix"; // 'prefix'(앞) or 'suffix'(뒤)
+        let colWeekday = "default_price"; // 평일 컬럼
+        let colWeekend = "weekend_price"; // 주말 컬럼
+
+        if (lang === 'en') {
+            currencySymbol = "$";
+            symbolPosition = "prefix";
+            colWeekday = "default_price_usd";
+            colWeekend = "weekend_price_usd";
+        } else if (lang === 'ja') {
+            currencySymbol = "円";
+            symbolPosition = "suffix";
+            colWeekday = "default_price_jpy";
+            colWeekend = "weekend_price_jpy";
+        } else if (lang === 'zh') {
+            currencySymbol = "¥";
+            symbolPosition = "prefix";
+            colWeekday = "default_price_cny";
+            colWeekend = "weekend_price_cny";
+        }
+
+        // 3. 각 객실별 금액 계산
         const roomCards = document.querySelectorAll('.room-card');
         
         roomCards.forEach(card => {
             const roomId = card.getAttribute('data-room-id');
-            const priceInfo = roomPrices[roomId];
+            const roomInfo = globalRoomData[roomId];
             
-            if (!priceInfo) return;
+            if (!roomInfo) return;
 
             let totalPrice = 0;
             let loopDate = new Date(startDate);
 
-            // 시작일부터 종료일 전날까지 반복 (숙박일수만큼)
             for (let i = 0; i < nightCount; i++) {
                 const dayOfWeek = loopDate.getDay(); // 0(일)~6(토)
-                
-                // 토요일(6)이면 주말요금, 그 외(일~금) 평일요금
+                // 토요일(6)이면 주말요금, 그 외 평일요금
                 if (dayOfWeek === 6) {
-                    totalPrice += priceInfo.weekend;
+                    totalPrice += roomInfo[colWeekend] || 0;
                 } else {
-                    totalPrice += priceInfo.weekday;
+                    totalPrice += roomInfo[colWeekday] || 0;
                 }
-                
-                // 다음 날짜로 이동
                 loopDate.setDate(loopDate.getDate() + 1);
             }
 
-            // 3. 화면 업데이트
+            // 4. 화면 업데이트
             const priceEl = card.querySelector('.room-price');
-            // 숫자 포맷팅 (콤마)
             const formattedPrice = totalPrice.toLocaleString();
             
-            // 박수 표시 (1박일 땐 "(1박)", 아니면 "(N박 합계)")
-            let nightText = ` (${nightCount}박)`;
-            if (nightCount === 1) nightText = ""; // 1박은 굳이 표시 안하거나 " (1박)"으로 표시 가능
+            let finalPriceText = "";
+            if (symbolPosition === "prefix") {
+                finalPriceText = `${currencySymbol}${formattedPrice}`; // $100
+            } else {
+                finalPriceText = `${formattedPrice}${currencySymbol}`; // 10,000원
+            }
 
-            // 다국어 대응 (간단하게) - 상세 텍스트는 한국어 위주로 하되 필요시 확장
-            priceEl.innerHTML = `${formattedPrice}원<span class="price-detail text-sm font-normal text-gray-500">${nightText}</span>`;
+            let nightText = ` (${nightCount}박)`;
+            if (lang === 'en') nightText = ` (${nightCount} nights)`;
+            else if (lang === 'ja') nightText = ` (${nightCount}泊)`;
+            else if (lang === 'zh') nightText = ` (${nightCount}晚)`;
+
+            if (nightCount === 1) nightText = ""; 
+
+            priceEl.innerHTML = `${finalPriceText}<span class="price-detail text-sm font-normal text-gray-500">${nightText}</span>`;
         });
     }
-
 
     function toDateString(dateObj) {
         if (!dateObj) return '';
@@ -586,7 +618,6 @@
         return `${year}년 ${month}월 ${day}일`;
     }
     
-    // 날짜를 YYYY-MM-DD 포맷으로 변환 (슈파베이스 조회용)
     function formatDateToYMD(dateObj) {
         const year = dateObj.getFullYear();
         const month = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -594,7 +625,6 @@
         return `${year}-${month}-${day}`;
     }
 
-    // [핵심] 재고 및 판매가능 여부 확인
     async function checkAvailability() {
         if (!checkinDate || !checkoutDate) return;
 
@@ -603,24 +633,21 @@
         
         console.log(`재고 조회 시작: ${startDate} ~ ${endDate}`);
 
-        // ★★★ 여기 수정됨: 재고가 0이거나(OR) is_available이 false인 경우를 찾음
         const { data: soldOutList, error } = await window.supabaseClient
             .from('inventory')
             .select('room_id')
             .gte('date', startDate)
-            .lt('date', endDate) // 체크아웃 당일은 숙박하지 않으므로 제외
-            .or('stock.lte.0,is_available.eq.false'); // 재고 0 이하 또는 판매불가
+            .lt('date', endDate) 
+            .or('stock.lte.0,is_available.eq.false'); 
 
         if (error) {
             console.error("재고 조회 중 오류 발생:", error);
             return;
         }
 
-        // 3. 마감된 방 ID 목록 추출 (중복 제거)
         const soldOutRoomIds = [...new Set(soldOutList.map(item => item.room_id))];
         console.log("마감된 방 ID 목록:", soldOutRoomIds);
 
-        // 4. 화면의 버튼 상태 업데이트
         const allRoomCards = document.querySelectorAll('.room-card');
         
         allRoomCards.forEach(card => {
@@ -630,21 +657,21 @@
             const t = translations[lang] || translations.ko;
 
             if (soldOutRoomIds.includes(roomId)) {
-                // [마감 처리]
                 btn.textContent = "예약 마감";
+                if(lang === 'en') btn.textContent = "Sold Out";
+                else if(lang === 'ja') btn.textContent = "満室";
+                else if(lang === 'zh') btn.textContent = "已售完";
+
                 btn.classList.add('btn-soldout');
-                btn.removeAttribute("href"); // 링크 제거
-                btn.onclick = (e) => e.preventDefault(); // 클릭 방지
+                btn.removeAttribute("href"); 
+                btn.onclick = (e) => e.preventDefault(); 
             } else {
-                // [예약 가능 처리 - 복구]
                 btn.textContent = t["reserve-btn"] || "예약";
                 btn.classList.remove('btn-soldout');
-                
-                // data-href에 저장해둔 링크 복구
                 if(btn.dataset.href) {
                     btn.setAttribute("href", btn.dataset.href);
                 }
-                btn.onclick = null; // 클릭 이벤트 핸들러 제거 (기본 링크 동작)
+                btn.onclick = null; 
             }
         });
     }
@@ -686,7 +713,6 @@
                 checkoutDate = null;
             }
             renderCalendar();
-            // 모달 닫을 때 가격 업데이트
             updateDisplayPrices();
         }
         calendarModal.classList.remove("active");
@@ -696,7 +722,6 @@
         if (checkinDate && checkoutDate) {
             updateMobileText();
             closeModal();
-            // 모바일에서도 확인 버튼 누르면 재고 조회 실행
             checkAvailability();
             updateDisplayPrices();
         } else {
@@ -736,21 +761,17 @@
                     const dateStamp = new Date(currentYear, currentMonth, dateCount);
                     dateStamp.setHours(0, 0, 0, 0);
                     
-                    // 과거 날짜
                     if (dateStamp < today) {
                         cell.classList.add("past-day");
                     } 
-                    // 오늘
                     else if (dateStamp.getTime() === today.getTime()) {
                         cell.classList.add("today");
                         addClickEvent(cell, dateStamp);
                     } 
-                    // 미래
                     else {
                         addClickEvent(cell, dateStamp);
                     }
                     
-                    // 선택 상태 및 범위 표시
                     if (checkinDate && dateStamp.getTime() === checkinDate.getTime()) {
                         cell.classList.add("selected-day");
                     }
@@ -774,27 +795,20 @@
     function addClickEvent(cell, dateStamp) {
         cell.addEventListener("click", function() {
             if (!checkinDate || (checkinDate && checkoutDate)) {
-                // 1. 처음 선택하거나 이미 둘 다 선택된 상태 -> 새로운 체크인
                 checkinDate = dateStamp;
                 checkoutDate = null;
-                // 체크인만 찍었을 때도 가격 업데이트 (해당일 1박 가격)
                 updateDisplayPrices();
             } else if (checkinDate && !checkoutDate) {
-                // 2. 체크인만 있는 상태 -> 체크아웃 선택
                 if (dateStamp.getTime() === checkinDate.getTime()) {
                     checkinDate = null;
                     checkoutDate = null;
-                    updateDisplayPrices(); // 취소시 오늘 날짜 기준으로 복귀
+                    updateDisplayPrices();
                 }
                 else if (dateStamp < checkinDate) {
-                    // 이전 날짜 선택 시 체크인 변경
                     checkinDate = dateStamp;
-                    updateDisplayPrices(); // 변경된 체크인 기준 1박 가격
+                    updateDisplayPrices();
                 } else {
-                    // 이후 날짜 선택 시 체크아웃 설정 완료!
                     checkoutDate = dateStamp;
-                    
-                    // ★ 체크아웃까지 선택되었으므로 즉시 재고 확인 및 가격 계산 실행
                     checkAvailability();
                     updateDisplayPrices();
                 }
@@ -820,9 +834,9 @@
         renderCalendar();
     }
 
-    // 초기 로드시 달력 렌더링 및 가격 초기화(오늘 기준)
+    // 초기 실행
     renderCalendar();
-    updateDisplayPrices();
+    fetchRoomPrices(); // ★ DB에서 가격표 불러오기 시작
   </script>
 </body>
 </html>
