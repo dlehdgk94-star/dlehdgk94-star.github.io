@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment – Insta Hotel - mainbranch</title>
+    <title>Payment – Insta Hotel - Standard</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -336,7 +336,7 @@
             </li>
     
             <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]">breakfast(조식)</a></li>
-            <li><a href="reservation.html" class="block hover:text-[#ff6900]">tour&food&cafe(예약)</a></li>
+            <li><a href="reservation.html" class="block hover:text-[#ff6900]">reservation(예약)</a></li>
             <li><a href="instaspot.html" class="block hover:text-[#ff6900]">tour&food&cafe(관광&맛집&카페)</a></li>
             <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
             <li><a href="contact.html" class="block hover:text-[#ff6900]">contact</a></li>
@@ -551,9 +551,8 @@
     -------------------------------------- */
     const translations = {
         ko: {
-            img: "kr.png", // 이미지 파일명
+            img: "kr.png",
             flag: "🇰🇷",
-            unit_won: "원",
             unit_night: "박",
             alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
             alert_done: "결제가 완료되었습니다! 예약 내역이 저장되었습니다.",
@@ -566,12 +565,12 @@
             
             page_title: "결제하기",
             sect_product: "예약 상품 정보",
-            room_name_std: "스탠다드 (Standard)",
+            room_name: "스탠다드 (Standard)",
             label_schedule: "일정",
             label_guests: "인원",
             text_1night: "1박",
             text_date_unselected: "날짜 미선택",
-            text_capacity_std: "성인 2명 (기본)",
+            text_guests_default: "성인 2명 (기본)",
             
             sect_booker: "예약자 정보",
             ph_name: "이름 (Name)",
@@ -616,7 +615,6 @@
         en: {
             img: "usa.png",
             flag: "🇺🇸",
-            unit_won: " KRW",
             unit_night: " nights",
             alert_agree: "You must agree to all terms to proceed.",
             alert_done: "Payment Completed! Reservation saved.",
@@ -629,12 +627,12 @@
             
             page_title: "Payment",
             sect_product: "Booking Info",
-            room_name_std: "Standard",
+            room_name: "Standard",
             label_schedule: "Schedule",
             label_guests: "Guests",
             text_1night: "1 night",
             text_date_unselected: "Date not selected",
-            text_capacity_std: "2 Adults (Standard)",
+            text_guests_default: "2 Adults (Standard)",
             
             sect_booker: "Guest Info",
             ph_name: "Name",
@@ -679,7 +677,6 @@
         ja: {
             img: "jp.png",
             flag: "🇯🇵",
-            unit_won: " ウォン",
             unit_night: " 泊",
             alert_agree: "すべての規約に同意する必要があります。",
             alert_done: "決済が完了しました！予約が保存されました。",
@@ -692,12 +689,12 @@
             
             page_title: "決済",
             sect_product: "予約情報",
-            room_name_std: "スタンダード (Standard)",
+            room_name: "スタンダード (Standard)",
             label_schedule: "日程",
             label_guests: "人数",
             text_1night: "1泊",
             text_date_unselected: "日付未選択",
-            text_capacity_std: "大人2名 (基本)",
+            text_guests_default: "大人2名 (基本)",
             
             sect_booker: "予約者情報",
             ph_name: "名前",
@@ -742,7 +739,6 @@
         zh: {
             img: "cn.png",
             flag: "🇨🇳",
-            unit_won: " 韩元",
             unit_night: " 晚",
             alert_agree: "必须同意所有条款才能付款。",
             alert_done: "支付完成！预订已保存。",
@@ -755,12 +751,12 @@
             
             page_title: "支付",
             sect_product: "预订信息",
-            room_name_std: "标准房 (Standard)",
+            room_name: "标准房 (Standard)",
             label_schedule: "日程",
             label_guests: "人数",
             text_1night: "1晚",
             text_date_unselected: "未选择日期",
-            text_capacity_std: "成人2名 (标准)",
+            text_guests_default: "成人2名 (标准)",
             
             sect_booker: "预订人信息",
             ph_name: "姓名",
@@ -827,6 +823,12 @@
         document.getElementById('input-request').placeholder = t.ph_request;
 
         renderPriceInfo();
+        
+        // 헤더 셀렉트박스 동기화
+        const headerSelect = document.getElementById("header-lang-select");
+        if(headerSelect) headerSelect.value = lang;
+        const drawerSelect = document.getElementById("drawer-lang-select");
+        if(drawerSelect) drawerSelect.value = lang;
     }
 
     function renderPriceInfo() {
@@ -835,14 +837,42 @@
         const checkin = params.get('checkin') || "";
         const checkout = params.get('checkout') || "";
         const nights = params.get('nights') || '0';
-        const roomPrice = parseInt(params.get('roomPrice')) || 0;
-        const optionPrice = parseInt(params.get('optionPrice')) || 0;
-        const total = parseInt(params.get('total')) || 0;
+        
+        // URL에서 값 읽어오기 (float로 파싱)
+        const roomPrice = parseFloat(params.get('roomPrice')) || 0;
+        const optionPrice = parseFloat(params.get('optionPrice')) || 0;
+        const total = parseFloat(params.get('total')) || 0;
 
         const t = translations[currentLang];
-        const unit = t.unit_won;
         const unitNight = t.unit_night;
-        const fmt = (n) => n.toLocaleString() + unit;
+
+        // [화폐 단위 포맷팅 로직]
+        let symbol = "";
+        let unit = "";
+        
+        if(currentLang === 'en') {
+            symbol = "$";
+            unit = "";
+        } else if(currentLang === 'zh') {
+            symbol = "¥";
+            unit = "";
+        } else if(currentLang === 'ja') {
+            symbol = "";
+            unit = "円";
+        } else {
+            symbol = "";
+            unit = "원";
+        }
+
+        const fmt = (n) => {
+            if(currentLang === 'en') {
+                 // 달러는 소수점 2자리
+                 return symbol + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + unit;
+            } else {
+                 // 나머지는 소수점 없이 반올림
+                 return symbol + Math.round(n).toLocaleString() + unit;
+            }
+        };
 
         if(checkin && checkout) {
             document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
@@ -885,7 +915,12 @@
     }
 
     window.onload = function() {
-        updateLanguage('ko');
+        const params = new URLSearchParams(window.location.search);
+        // URL에서 currency 파라미터를 읽어서 초기 언어 설정 (없으면 'ko')
+        const urlLang = params.get('currency') || 'ko';
+        
+        updateLanguage(urlLang);
+        
         const headerSelect = document.getElementById("header-lang-select");
         const drawerSelect = document.getElementById("drawer-lang-select");
 
@@ -944,7 +979,7 @@
         const isTermsChecked = document.getElementById('chk-all').checked;
 
         const t = translations[currentLang];
-        const btn = document.getElementById('btn-submit');
+        const btn = document.getElementById('pay-button');
 
         if (!isInfoChecked || !isRefundChecked || !isTermsChecked) {
             alert(t.alert_agree);
@@ -965,13 +1000,14 @@
 
         const params = new URLSearchParams(window.location.search);
         
-        // [수정된 부분] roomId 처리: URL에 없으면 5(Twin)로 설정
-        const roomId = parseInt(params.get('roomId')) || 5;
+        // [수정] 스탠다드 룸이므로 기본 ID를 1로 설정 (URL에 roomId가 있으면 그걸 사용)
+        const roomId = parseInt(params.get('roomId')) || 1;
 
         const checkin = params.get('checkin');
         const checkout = params.get('checkout');
-        const roomPrice = parseInt(params.get('roomPrice')) || 0;
-        const total = parseInt(params.get('total')) || 0;
+        // 금액은 DB 저장용으로 숫자 그대로 사용
+        const roomPrice = parseFloat(params.get('roomPrice')) || 0;
+        const total = parseFloat(params.get('total')) || 0;
         
         let selectedOptionsArray = [];
         const optionDetailsRaw = params.get('optionDetails');
@@ -1026,4 +1062,3 @@
     </script>
 </body>
 </html>
-
