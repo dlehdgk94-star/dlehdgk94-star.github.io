@@ -457,7 +457,6 @@
             }
         });
         updateMobileText();
-        // ★ 언어가 바뀌면 가격표도 다시 계산
         updateDisplayPrices();
     }
 
@@ -492,10 +491,8 @@
     const displayTextMobile = document.getElementById("display-text-mobile");
     const calendarModal = document.getElementById("calendar-modal");
 
-    // ★ [중요] DB에서 가져온 가격 데이터를 저장할 전역 변수
     let globalRoomData = {}; 
 
-    // ★ DB에서 최신 가격 정보 가져오기
     async function fetchRoomPrices() {
         const { data, error } = await window.supabaseClient
             .from('rooms')
@@ -506,18 +503,16 @@
             return;
         }
 
-        // 가져온 데이터를 ID별로 저장
         data.forEach(room => {
             globalRoomData[room.id] = room;
         });
 
         console.log("DB 가격 로드 완료:", globalRoomData);
-        updateDisplayPrices(); // 데이터 로드 후 가격 표시 업데이트
+        updateDisplayPrices();
     }
 
-    // ★ 가격 계산 및 표시 함수 (언어별 통화 적용)
+    // ★ 가격 표시 함수 (여기가 수정되었습니다)
     function updateDisplayPrices() {
-        // 데이터가 아직 안 왔으면 대기
         if (Object.keys(globalRoomData).length === 0) return;
 
         // 1. 기간 설정
@@ -542,11 +537,10 @@
         // 2. 현재 언어 설정 확인
         const lang = headerSelect ? headerSelect.value : 'ko';
         
-        // 언어별 컬럼명 및 기호 설정
         let currencySymbol = "원";
-        let symbolPosition = "suffix"; // 'prefix'(앞) or 'suffix'(뒤)
-        let colWeekday = "default_price"; // 평일 컬럼
-        let colWeekend = "weekend_price"; // 주말 컬럼
+        let symbolPosition = "suffix"; 
+        let colWeekday = "default_price"; 
+        let colWeekend = "weekend_price"; 
 
         if (lang === 'en') {
             currencySymbol = "$";
@@ -578,8 +572,7 @@
             let loopDate = new Date(startDate);
 
             for (let i = 0; i < nightCount; i++) {
-                const dayOfWeek = loopDate.getDay(); // 0(일)~6(토)
-                // 토요일(6)이면 주말요금, 그 외 평일요금
+                const dayOfWeek = loopDate.getDay(); 
                 if (dayOfWeek === 6) {
                     totalPrice += roomInfo[colWeekend] || 0;
                 } else {
@@ -590,13 +583,20 @@
 
             // 4. 화면 업데이트
             const priceEl = card.querySelector('.room-price');
-            const formattedPrice = totalPrice.toLocaleString();
+            
+            // ★ 수정: 영어(en)일 때만 .00 붙이기
+            let formattedPrice;
+            if (lang === 'en') {
+                formattedPrice = totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else {
+                formattedPrice = totalPrice.toLocaleString();
+            }
             
             let finalPriceText = "";
             if (symbolPosition === "prefix") {
-                finalPriceText = `${currencySymbol}${formattedPrice}`; // $100
+                finalPriceText = `${currencySymbol}${formattedPrice}`; 
             } else {
-                finalPriceText = `${formattedPrice}${currencySymbol}`; // 10,000원
+                finalPriceText = `${formattedPrice}${currencySymbol}`; 
             }
 
             let nightText = ` (${nightCount}박)`;
@@ -834,9 +834,8 @@
         renderCalendar();
     }
 
-    // 초기 실행
     renderCalendar();
-    fetchRoomPrices(); // ★ DB에서 가격표 불러오기 시작
+    fetchRoomPrices(); 
   </script>
 </body>
 </html>
