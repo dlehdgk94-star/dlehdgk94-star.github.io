@@ -38,6 +38,79 @@
         animation: infinite-scroll 40s linear infinite;
       }
     }
+
+    /* --------------------------------------------------------
+       [NEW] 올인원 채팅 위젯 스타일
+    -------------------------------------------------------- */
+    .chat-widget-container {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        z-index: 9999;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* 메인 버튼 (말풍선 아이콘) */
+    .chat-main-btn {
+        width: 60px;
+        height: 60px;
+        background-color: #333; /* 버튼 색상 (검정) */
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        cursor: pointer;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        transition: transform 0.3s;
+    }
+
+    /* 버튼 눌렀을 때 회전 효과 */
+    .chat-widget-container.active .chat-main-btn {
+        transform: rotate(45deg);
+        background-color: #555;
+    }
+
+    /* 숨겨진 메뉴들 */
+    .chat-options {
+        display: none; /* 기본적으로 숨김 */
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 15px;
+        align-items: flex-end;
+    }
+
+    /* 활성화되면 보임 */
+    .chat-widget-container.active .chat-options {
+        display: flex;
+        animation: fadeInUp 0.3s ease-in-out;
+    }
+
+    /* 개별 메뉴 버튼 스타일 */
+    .chat-option-item {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 25px;
+        font-weight: bold;
+        font-size: 14px;
+        box-shadow: 1px 1px 8px rgba(0,0,0,0.2);
+        transition: transform 0.2s;
+        white-space: nowrap; /* 줄바꿈 방지 */
+    }
+
+    .chat-option-item:hover {
+        transform: scale(1.05);
+    }
+
+    /* 애니메이션 효과 */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -277,14 +350,39 @@
     </div>
   </section>
 
-  <a href="http://pf.kakao.com/_xiITuG" target="_blank"
-    class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#FFEB00] text-black px-4 py-2 rounded-full shadow-lg hover:bg-yellow-400 transition-colors font-bold">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-      <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
-    </svg>
-    <span id="inquiryBtn" class="text-lg">문의</span>
-  </a>
+  <div class="chat-widget-container" id="chatWidget">
+    <div class="chat-options">
+        
+        <a href="https://ig.me/m/instahotel_mainbranch" target="_blank" class="chat-option-item" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+            <span>Instagram DM</span>
+        </a>
 
+        <a href="https://wa.me/821012345678" target="_blank" class="chat-option-item" style="background-color: #25D366;">
+            <span>WhatsApp (ENG)</span>
+        </a>
+
+        <a href="http://pf.kakao.com/_xiITuG" target="_blank" class="chat-option-item" style="background-color: #FEE500; color: #3c1e1e;">
+            <span>KakaoTalk (KOR)</span>
+        </a>
+    </div>
+
+    <div class="chat-main-btn" onclick="toggleChatWidget()">💬</div>
+  </div>
+
+  <script>
+    function toggleChatWidget() {
+        var widget = document.getElementById('chatWidget');
+        widget.classList.toggle('active');
+        
+        // 버튼 아이콘 변경 (말풍선 <-> X)
+        var btn = widget.querySelector('.chat-main-btn');
+        if (widget.classList.contains('active')) {
+            btn.innerHTML = '✕'; 
+        } else {
+            btn.innerHTML = '💬'; 
+        }
+    }
+  </script>
   <script>
     /* --------------------------------------
        1. 헤더 스크롤 색상 변경
@@ -363,7 +461,7 @@
     -------------------------------------- */
     const translations = {
       ko: { 
-          img: "kr.png", // 이미지 파일명 추가
+          img: "kr.png",
           btnMore: "더보기", 
           companyName: "(주)호텔인스타", 
           ceoName: "대표자 : 이영환", 
@@ -415,7 +513,7 @@
     function updateLanguage(lang) {
         const t = translations[lang] || translations.ko;
 
-        // 1. 국기 이미지 변경 (기존 textContent 대신 src 변경)
+        // 1. 국기 이미지 변경
         if(currentFlagIcon) {
             currentFlagIcon.src = t.img;
             currentFlagIcon.alt = lang;
@@ -455,6 +553,7 @@
   </script>
 </body>
 </html>
+
 
 
 
