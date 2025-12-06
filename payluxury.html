@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment – Insta Hotel - mainbranch</title>
+    <title>Payment – Insta Hotel - Luxury</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -12,11 +12,11 @@
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f4f4f4; color: #333; }
         
-        /* 컨테이너 */
+        /* 결제 페이지 컨테이너 스타일 */
         .payment-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 100px 20px 60px; /* 헤더 높이 고려 */
+            padding: 100px 20px 60px;
         }
 
         /* 폼 스타일 */
@@ -250,17 +250,18 @@
             .product-img { width: 80px; height: 80px; }
         }
     </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-    const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
-    const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
-    
-    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
-    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
-    
-    console.log("Payment Page - Supabase Connection Success!");
-</script>
+    <script>
+        const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
+        const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
+        
+        // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
+        window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
+        
+        console.log("Payment Page - Supabase Connection Success!");
+    </script>
 </head>
 <body class="bg-[#f4f4f4] text-slate-900 font-sans">
 
@@ -376,34 +377,34 @@
                 </div>
 
                 <div class="section-card">
-    <div class="section-title" data-i18n="sect_booker">예약자 정보</div>
-    
-    <div class="input-row">
-        <div class="input-half">
-            <input type="text" id="input-name" placeholder="이름 (Name)">
-        </div>
-        <div class="input-half">
-            <input type="text" id="input-phone" placeholder="연락처 (Phone)">
-        </div>
-    </div>
+                    <div class="section-title" data-i18n="sect_booker">예약자 정보</div>
+                    
+                    <div class="input-row">
+                        <div class="input-half">
+                            <input type="text" id="input-name" placeholder="이름 (Name)">
+                        </div>
+                        <div class="input-half">
+                            <input type="text" id="input-phone" placeholder="연락처 (Phone)">
+                        </div>
+                    </div>
 
-    <input type="email" id="input-email" placeholder="이메일 (E-mail)">
-    
-    <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;" data-i18n="notice_sns">
-        * 우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.
-    </div>
+                    <input type="email" id="input-email" placeholder="이메일 (E-mail)">
+                    
+                    <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;" data-i18n="notice_sns">
+                        * 우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.
+                    </div>
 
-    <div class="input-row">
-        <div class="input-half">
-            <input type="text" id="input-instagram" placeholder="Instagram">
-        </div>
-        <div class="input-half">
-            <input type="text" id="input-tiktok" placeholder="Tiktok">
-        </div>
-    </div>
-    
-    <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
-</div>
+                    <div class="input-row">
+                        <div class="input-half">
+                            <input type="text" id="input-instagram" placeholder="Instagram">
+                        </div>
+                        <div class="input-half">
+                            <input type="text" id="input-tiktok" placeholder="Tiktok">
+                        </div>
+                    </div>
+                    
+                    <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
+                </div>
 
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_extra">추가정보 입력</div>
@@ -802,7 +803,7 @@
 
         function updateLanguage(lang) {
             currentLang = lang;
-            const t = translations[lang];
+            const t = translations[lang] || translations.ko;
 
             // 1. 국기 이미지 업데이트
             if(currentFlagIcon && t.img) {
@@ -899,32 +900,39 @@
             }
         }
 
+        // ====================================================================
+        // [중요] 페이지 로드 및 언어 변경 감지 로직
+        // 다른 언어 선택 시 '예약상세럭셔리.html'로 리다이렉트
+        // ====================================================================
         window.onload = function() {
-            // URL 파라미터에서 언어 설정 가져오기
             const params = new URLSearchParams(window.location.search);
-            const passedLang = params.get('currency'); 
+            // URL에서 currency 파라미터 가져오기 (기본값 ko)
+            const urlLang = params.get('currency') || 'ko';
             
-            // 예약 페이지에서 넘어온 언어가 있으면 그걸로 설정, 없으면 기본(ko)
-            if(passedLang && translations[passedLang]) {
-                updateLanguage(passedLang);
-            } else {
-                updateLanguage('ko');
+            // 초기 언어 설정
+            updateLanguage(urlLang);
+
+            // 언어 변경 처리 함수
+            function handleLanguageChange(e) {
+                const selectedLang = e.target.value;
+                // 처음 들어온 언어(urlLang)와 다른 언어를 선택했다면
+                if (selectedLang !== urlLang) {
+                    // 예약 상세 페이지로 리다이렉트 (Luxury 룸)
+                    window.location.href = '예약상세럭셔리.html';
+                } else {
+                    // 같은 언어라면 단순 화면 갱신
+                    updateLanguage(selectedLang);
+                }
             }
 
             // 헤더 언어 선택 이벤트
             if(headerSelect) {
-                headerSelect.addEventListener("change", (e) => {
-                    const lang = e.target.value;
-                    updateLanguage(lang);
-                });
+                headerSelect.addEventListener("change", handleLanguageChange);
             }
             
-            // 드로어 언어 선택 이벤트
+            // 모바일 드로어 언어 선택 이벤트
             if(drawerSelect) {
-                drawerSelect.addEventListener("change", (e) => {
-                    const lang = e.target.value;
-                    updateLanguage(lang);
-                });
+                drawerSelect.addEventListener("change", handleLanguageChange);
             }
         };
 
