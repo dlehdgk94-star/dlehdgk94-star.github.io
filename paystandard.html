@@ -252,15 +252,13 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-    // [업데이트] Supabase 연결 정보 변경
     const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
     const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
-    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5YXNpaGN6YXFzYWNlbmtsaG5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzNjY5MTIsImV4cCI6MjA3OTk0MjkxMn0.E1J5qEgl79Ato3upXJSL0OyrgsOw6gJbNHo88AWdct0'
     
     // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
-    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey)
+    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
     
-    console.log("홈페이지-슈파베이스 연결 성공! (Project: " + supabaseUrl + ")");
+    console.log("홈페이지-슈파베이스 연결 성공!");
 </script>
 </head>
 <body class="bg-[#f4f4f4] text-slate-900 font-sans">
@@ -290,7 +288,7 @@
           </nav>
     
           <div class="flex items-center relative drop-shadow-md z-20">
-              <div class="flex items-center gap-2 cursor-pointer relative group">
+             <div class="flex items-center gap-2 cursor-pointer relative group">
                 <img id="current-flag-icon" src="kr.png" alt="Korea" class="w-8 h-5 object-cover rounded shadow-sm border border-white/30 transition-transform group-hover:scale-110">
                 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
@@ -804,23 +802,14 @@
 
     let currentLang = 'ko';
 
-    // [환율 설정] 기준은 1 KRW (원화)
-    const exchangeRates = {
-        ko: 1,
-        en: 1 / 1450, // 약 1450원 = 1달러
-        ja: 0.11,     // 약 100원 = 11엔 (100엔=900원 가정)
-        zh: 1 / 195   // 약 195원 = 1위안
-    };
-
     function updateLanguage(lang) {
         currentLang = lang;
         const t = translations[lang];
 
-        // 1. 상단 국기 아이콘 변경
+        // 1. 상단 국기 아이콘 변경 (이미지 src 수정)
         const currentFlagIcon = document.getElementById("current-flag-icon");
         if(currentFlagIcon && t.img) currentFlagIcon.src = t.img;
 
-        // 2. 텍스트 번역
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (t[key]) {
@@ -833,7 +822,6 @@
         document.getElementById('input-email').placeholder = t.ph_email;
         document.getElementById('input-request').placeholder = t.ph_request;
 
-        // 3. 가격 정보 업데이트 (언어에 따른 환율 적용)
         renderPriceInfo();
         
         // 헤더 셀렉트박스 동기화
@@ -850,18 +838,17 @@
         const checkout = params.get('checkout') || "";
         const nights = params.get('nights') || '0';
         
-        // [중요] URL에서 가져오는 값은 항상 '원화(KRW)' 기준입니다.
-        const roomPriceKRW = parseFloat(params.get('roomPrice')) || 0;
-        const optionPriceKRW = parseFloat(params.get('optionPrice')) || 0;
-        const totalKRW = parseFloat(params.get('total')) || 0;
+        // URL에서 값 읽어오기 (float로 파싱)
+        const roomPrice = parseFloat(params.get('roomPrice')) || 0;
+        const optionPrice = parseFloat(params.get('optionPrice')) || 0;
+        const total = parseFloat(params.get('total')) || 0;
 
         const t = translations[currentLang];
         const unitNight = t.unit_night;
 
-        // [화폐 단위 포맷팅 로직 수정]
+        // [화폐 단위 포맷팅 로직]
         let symbol = "";
         let unit = "";
-        let rate = exchangeRates[currentLang] || 1;
         
         if(currentLang === 'en') {
             symbol = "$";
@@ -877,22 +864,16 @@
             unit = "원";
         }
 
-        // 금액 변환 계산 함수
-        const calcPrice = (krw) => {
-            return krw * rate;
-        };
-
         const fmt = (n) => {
-            if(currentLang === 'en' || currentLang === 'zh') {
-                 // 달러, 위안화는 소수점 2자리까지
+            if(currentLang === 'en') {
+                 // 달러는 소수점 2자리
                  return symbol + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + unit;
             } else {
-                 // 원화, 엔화는 소수점 없이 반올림
+                 // 나머지는 소수점 없이 반올림
                  return symbol + Math.round(n).toLocaleString() + unit;
             }
         };
 
-        // 날짜 표시
         if(checkin && checkout) {
             document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
         } else {
@@ -903,13 +884,11 @@
             document.getElementById('display-nights').innerText = nights + unitNight;
         }
         
-        // [화면에 변환된 금액 표시]
-        document.getElementById('display-room-price-info').innerText = fmt(calcPrice(roomPriceKRW));
-        document.getElementById('summary-room-price').innerText = fmt(calcPrice(roomPriceKRW));
-        document.getElementById('summary-option-price').innerText = fmt(calcPrice(optionPriceKRW));
-        document.getElementById('summary-total-price').innerText = fmt(calcPrice(totalKRW));
+        document.getElementById('display-room-price-info').innerText = fmt(roomPrice);
+        document.getElementById('summary-room-price').innerText = fmt(roomPrice);
+        document.getElementById('summary-option-price').innerText = fmt(optionPrice);
+        document.getElementById('summary-total-price').innerText = fmt(total);
 
-        // 옵션 리스트 표시
         const optionContainer = document.getElementById('option-detail-list');
         const optionDetailsRaw = params.get('optionDetails');
         let optionDetails = [];
@@ -1021,14 +1000,14 @@
 
         const params = new URLSearchParams(window.location.search);
         
+        // [수정] 스탠다드 룸이므로 기본 ID를 1로 설정 (URL에 roomId가 있으면 그걸 사용)
         const roomId = parseInt(params.get('roomId')) || 1;
+
         const checkin = params.get('checkin');
         const checkout = params.get('checkout');
-        
-        // [중요] DB에는 '원화(KRW)' 기준으로 저장합니다.
-        // 그래야 나중에 관리자 페이지(파트너센터)에서 정산 금액이 꼬이지 않습니다.
-        const roomPriceKRW = parseFloat(params.get('roomPrice')) || 0;
-        const totalKRW = parseFloat(params.get('total')) || 0;
+        // 금액은 DB 저장용으로 숫자 그대로 사용
+        const roomPrice = parseFloat(params.get('roomPrice')) || 0;
+        const total = parseFloat(params.get('total')) || 0;
         
         let selectedOptionsArray = [];
         const optionDetailsRaw = params.get('optionDetails');
@@ -1055,9 +1034,9 @@
             guest_request: requestMsg,
             check_in: checkin,
             check_out: checkout,
-            room_price: roomPriceKRW, // 원화 금액 저장
+            room_price: roomPrice,
             selected_options: selectedOptionsArray, 
-            total_price: totalKRW,    // 원화 금액 저장
+            total_price: total,
             status: '결제완료' 
         };
 
