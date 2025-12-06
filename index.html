@@ -40,44 +40,48 @@
     }
 
     /* --------------------------------------------------------
-       [NEW] 올인원 채팅 위젯 스타일
+       [수정됨] 올인원 채팅 위젯 스타일 (오렌지색 & 작게)
     -------------------------------------------------------- */
     .chat-widget-container {
         position: fixed;
-        bottom: 25px;
-        right: 25px;
+        bottom: 20px;
+        right: 20px;
         z-index: 9999;
         font-family: 'Poppins', sans-serif;
     }
 
     /* 메인 버튼 (말풍선 아이콘) */
     .chat-main-btn {
-        width: 60px;
-        height: 60px;
-        background-color: #333; /* 버튼 색상 (검정) */
+        width: 50px;  /* 크기 축소 (60 -> 50) */
+        height: 50px; /* 크기 축소 (60 -> 50) */
+        
+        background-color: #ff6900; /* 검정 -> 오렌지색 변경 */
+        
         color: white;
         border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 30px;
+        
+        font-size: 24px; /* 아이콘 크기 축소 */
+        
         cursor: pointer;
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
         transition: transform 0.3s;
     }
 
-    /* 버튼 눌렀을 때 회전 효과 */
+    /* 버튼 눌렀을 때 효과 */
     .chat-widget-container.active .chat-main-btn {
         transform: rotate(45deg);
-        background-color: #555;
+        background-color: #e65100; /* 클릭 시 더 진한 오렌지 */
     }
 
     /* 숨겨진 메뉴들 */
     .chat-options {
         display: none; /* 기본적으로 숨김 */
         flex-direction: column;
-        gap: 12px;
-        margin-bottom: 15px;
+        gap: 10px;
+        margin-bottom: 12px;
         align-items: flex-end;
     }
 
@@ -93,13 +97,13 @@
         align-items: center;
         text-decoration: none;
         color: white;
-        padding: 10px 16px;
-        border-radius: 25px;
+        padding: 8px 14px; /* 패딩 축소 (슬림하게) */
+        border-radius: 20px;
         font-weight: bold;
-        font-size: 14px;
+        font-size: 13px; /* 글씨 크기 축소 */
         box-shadow: 1px 1px 8px rgba(0,0,0,0.2);
         transition: transform 0.2s;
-        white-space: nowrap; /* 줄바꿈 방지 */
+        white-space: nowrap; 
     }
 
     .chat-option-item:hover {
@@ -553,7 +557,6 @@
   </script>
 </body>
 </html>
-
 
 
 
