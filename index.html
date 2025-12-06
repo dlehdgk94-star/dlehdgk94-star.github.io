@@ -52,10 +52,10 @@
 
     /* 메인 버튼 (말풍선 아이콘) */
     .chat-main-btn {
-        width: 50px;  /* 크기 축소 (60 -> 50) */
-        height: 50px; /* 크기 축소 (60 -> 50) */
+        width: 50px;  /* 크기 50px */
+        height: 50px; /* 크기 50px */
         
-        background-color: #ff6900; /* 검정 -> 오렌지색 변경 */
+        background-color: #ff6900; /* 오렌지색 */
         
         color: white;
         border-radius: 50%;
@@ -63,7 +63,7 @@
         justify-content: center;
         align-items: center;
         
-        font-size: 24px; /* 아이콘 크기 축소 */
+        font-size: 24px;
         
         cursor: pointer;
         box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
@@ -73,12 +73,12 @@
     /* 버튼 눌렀을 때 효과 */
     .chat-widget-container.active .chat-main-btn {
         transform: rotate(45deg);
-        background-color: #e65100; /* 클릭 시 더 진한 오렌지 */
+        background-color: #e65100; 
     }
 
     /* 숨겨진 메뉴들 */
     .chat-options {
-        display: none; /* 기본적으로 숨김 */
+        display: none; 
         flex-direction: column;
         gap: 10px;
         margin-bottom: 12px;
@@ -97,10 +97,10 @@
         align-items: center;
         text-decoration: none;
         color: white;
-        padding: 8px 14px; /* 패딩 축소 (슬림하게) */
+        padding: 8px 14px; 
         border-radius: 20px;
         font-weight: bold;
-        font-size: 13px; /* 글씨 크기 축소 */
+        font-size: 13px;
         box-shadow: 1px 1px 8px rgba(0,0,0,0.2);
         transition: transform 0.2s;
         white-space: nowrap; 
@@ -357,6 +357,10 @@
   <div class="chat-widget-container" id="chatWidget">
     <div class="chat-options">
         
+        <a href="reservation.html" class="chat-option-item" style="background-color: #1a1a1a; color: white; border: 2px solid #ff6900;">
+            <span>📅 실시간 예약하기 (Book Now)</span>
+        </a>
+
         <a href="https://ig.me/m/instahotel_mainbranch" target="_blank" class="chat-option-item" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
             <span>Instagram DM</span>
         </a>
