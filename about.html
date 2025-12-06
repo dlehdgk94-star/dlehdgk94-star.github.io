@@ -2,59 +2,207 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <meta name="google-site-verification" content="fsXjRMcfj7Jm3Vswe92wB_Tf7mTOIy7_CckNERtv_wY" />
+  <meta name="naver-site-verification" content="507ad30f2472ed24be95dd772ab1cf49e5f32c51" />
+  <title>Insta Hotel - Main</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Insta Hotel - MainBranch">
+  <meta property="og:description" content="인스타 호텔에 오신 것을 환영합니다.">
+  <meta property="og:image" content="https://dlehdgk94-star.github.io/hero7.jpg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About – Insta Hotel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; font-family: 'Poppins', sans-serif; }
+    
+    /* 오렌지 섹션 스트라이프 배경 */
+    .stripe-bg {
+      background-image: repeating-linear-gradient(
+        135deg,
+        rgba(255,255,255,0.5) 0,
+        rgba(255,255,255,0.5) 1px,
+        transparent 1px,
+        transparent 18px
+      );
+    }
+
+    /* 모바일(768px 이하) 무한 스크롤 애니메이션 */
+    @media (max-width: 768px) {
+      @keyframes infinite-scroll {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+      }
+      .mobile-scroll-only {
+        display: flex;
+        width: max-content;
+        animation: infinite-scroll 40s linear infinite;
+      }
+    }
+
+    /* --------------------------------------------------------
+       [1] 중앙 하단 플로팅 예약 버튼 스타일 (NEW)
+    -------------------------------------------------------- */
+    .floating-book-btn {
+        position: fixed;
+        bottom: 30px; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        z-index: 9990; /* 채팅 버튼보다는 아래 레이어 */
+        
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        
+        background-color: #111; /* 고급스러운 검정 배경 */
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px; /* 둥근 알약 모양 */
+        border: 2px solid #ff6900; /* 브랜드 컬러 테두리 */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        
+        width: auto;
+        min-width: 260px; 
+        justify-content: center;
+    }
+
+    .floating-book-btn:hover {
+        transform: translateX(-50%) translateY(-5px); 
+        box-shadow: 0 8px 25px rgba(255, 105, 0, 0.4); 
+        background-color: #000;
+    }
+
+    .book-text-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        line-height: 1.2;
+    }
+    
+    .book-title { font-weight: bold; font-size: 16px; color: #fff; }
+    .book-sub { font-size: 11px; color: #ff6900; font-weight: 600; }
+    .book-arrow { font-size: 18px; color: #ccc; margin-left: auto;}
+
+    /* 모바일 스타일 조정 */
+    @media (max-width: 768px) {
+        .floating-book-btn {
+            bottom: 25px; 
+            min-width: auto;
+            width: 65%; /* 화면의 65% 차지 */
+            padding: 10px 20px;
+            left: 40%; /* 채팅 버튼과 안 겹치게 살짝 왼쪽으로 치우침 */
+        }
+        .book-title { font-size: 14px; }
+    }
+
+    /* --------------------------------------------------------
+       [2] 우측 하단 채팅 위젯 스타일
+    -------------------------------------------------------- */
+    .chat-widget-container {
+        position: fixed;
+        bottom: 25px;
+        right: 20px;
+        z-index: 9999; /* 제일 위에 뜸 */
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .chat-main-btn {
+        width: 50px;  
+        height: 50px; 
+        background-color: #ff6900; 
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        transition: transform 0.3s;
+    }
+
+    .chat-widget-container.active .chat-main-btn {
+        transform: rotate(45deg);
+        background-color: #e65100; 
+    }
+
+    .chat-options {
+        display: none; 
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 12px;
+        align-items: flex-end;
+    }
+
+    .chat-widget-container.active .chat-options {
+        display: flex;
+        animation: fadeInUp 0.3s ease-in-out;
+    }
+
+    .chat-option-item {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: white;
+        padding: 8px 14px; 
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 13px;
+        box-shadow: 1px 1px 8px rgba(0,0,0,0.2);
+        transition: transform 0.2s;
+        white-space: nowrap; 
+    }
+
+    .chat-option-item:hover { transform: scale(1.05); }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
     const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
     const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
-    
-    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
     window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
-    
     console.log("홈페이지-슈파베이스 연결 성공!");
 </script>
 </head>
-<body class="bg-white text-slate-900 font-sans">
 
-<header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
+<body class="text-slate-900 bg-white">
+
+  <header id="header" class="fixed top-0 left-0 right-0 z-30 transition-colors duration-300 bg-transparent text-white">
     <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
       
-      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
+      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
       </button>
 
-      <a href="index.html" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md z-20">
+      <a href="#" class="absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0 md:flex items-center drop-shadow-md z-20">
         <span class="text-2xl font-bold tracking-tight md:hidden">Insta hotel</span>
         <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
       </a>
 
       <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
-  <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
-  <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
-  <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast(조식)</a>
-  <a href="reservation.html" class="hover:text-orange-200 transition-colors">reservation(예약)</a>
-  <a href="instaspot.html" class="hover:text-orange-200 transition-colors">tour&food&cafe(관광&맛집&카페)</a>
-  <a href="#lounge" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
-  <a href="contact.html" class="hover:text-orange-200 transition-colors">contact</a>
-</nav>
+        <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
+        <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
+        <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast(조식)</a>
+        <a href="reservation.html" class="hover:text-orange-200 transition-colors">reservation(예약)</a>
+        <a href="instaspot.html" class="hover:text-orange-200 transition-colors">tour&food&cafe(관광&맛집&카페)</a>
+        <a href="#" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
+        <a href="contact.html" class="hover:text-orange-200 transition-colors">contact</a>
+      </nav>
 
       <div class="flex items-center relative drop-shadow-md z-20">
          <div class="flex items-center gap-2 cursor-pointer relative group">
             <img id="current-flag-icon" src="kr.png" alt="Korea" class="w-8 h-5 object-cover rounded shadow-sm border border-white/30 transition-transform group-hover:scale-110">
-            
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
-
             <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none text-slate-900">
                 <option value="ko" class="text-slate-900">🇰🇷 한국어</option>
                 <option value="en" class="text-slate-900">🇺🇸 English</option>
@@ -63,23 +211,19 @@
             </select>
          </div>
       </div>
-
     </div>
- </header>
+  </header>
 
   <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity duration-300"></div>
   
   <nav id="mobile-drawer" class="fixed top-0 left-0 w-[75%] max-w-sm h-full z-50 bg-white shadow-xl text-slate-900 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
-    <div class="p-6">
+    <div class="p-6 h-full flex flex-col">
       <button id="mobile-menu-close-btn" class="absolute top-4 right-4 text-3xl font-light hover:text-[#ff6900]">&times;</button>
-      
       <div class="mt-2 mb-8">
         <span class="text-xl font-bold tracking-tight text-[#ff6900]">Insta hotel</span>
       </div>
-      
-      <ul class="flex flex-col space-y-4 text-lg font-medium">
-        <li><a href="about.html" class="block hover:text-[#ff6900] text-[#ff6900]">about</a></li>
-        
+      <ul class="flex flex-col space-y-4 text-lg font-medium flex-grow">
+        <li><a href="about.html" class="block hover:text-[#ff6900]">about</a></li>
         <li>
             <div class="flex justify-between items-center cursor-pointer hover:text-[#ff6900]" id="rooms-toggle">
                 <span>rooms</span> <span class="text-sm">▼</span>
@@ -94,123 +238,191 @@
                 <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
             </ul>
         </li>
-
         <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]">breakfast(조식)</a></li>
         <li><a href="reservation.html" class="block hover:text-[#ff6900]">reservation(예약)</a></li>
         <li><a href="instaspot.html" class="block hover:text-[#ff6900]">tour&food&cafe(관광&맛집&카페)</a></li>
         <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
         <li><a href="contact.html" class="block hover:text-[#ff6900]">contact</a></li>
       </ul>
-
       <div class="mt-8 border-t pt-4">
-          <p class="text-sm text-slate-400 mb-2">Language</p>
-          <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
-              <option value="ko">Korean</option>
-              <option value="en">English</option>
-              <option value="ja">Japanese</option>
-              <option value="zh">Chinese</option>
-          </select>
+         <p class="text-sm text-slate-400 mb-2">Language</p>
+         <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
+             <option value="ko">Korean</option>
+             <option value="en">English</option>
+             <option value="ja">Japanese</option>
+             <option value="zh">Chinese</option>
+         </select>
       </div>
     </div>
   </nav>
 
-  <main class="mx-auto max-w-6xl px-4 pb-20 pt-20 md:px-6 md:pt-24">
-    
-    <section class="relative bg-white py-12 md:py-24">
-      <div class="max-w-6xl mx-auto px-4">
-        
-        <h2 class="text-4xl md:text-5xl font-semibold italic mb-12" style="color:#ff6900;">
-          about
-        </h2>
+  <section id="hero" class="relative h-[65vh] md:h-screen min-h-[400px] overflow-hidden bg-gray-900">
+    <img src="hero1.jpg" class="slide absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-[1500ms]" />
+    <img src="hero2.jpg" class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms]" />
+    <img src="hero3.jpg" class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms]" />
+    <img src="hero4.jpg" class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms]" />
+    <div class="absolute inset-0 bg-black/20"></div>
+    <div class="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-10">
+        <span class="w-1.5 h-1.5 rounded-full bg-white opacity-100 dot"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-white opacity-50 dot"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-white opacity-50 dot"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-white opacity-50 dot"></span>
+    </div>
+  </section>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-
-          <div class="leading-relaxed text-[15px] md:text-[16px] text-slate-700 space-y-8">
-            
-            <div id="about-text-1">
-                <p>insta는 “붙이는 것” 그리고 “연결”하는 공간입니다.</p>
-                <p>서로의 사람, 사람과 동네, 사람과 문화, 동네와 문화 등<br>두 가지 대상이 서로 부딪히고, 교류해볼 수 있는 곳이 insta입니다.</p>
-            </div>
-
-            <div id="about-text-2">
-                <p>insta의 철학은 다양성을 기반으로 요즘의 문화를 조화롭게 담는 공간을 만드는 것입니다.</p>
-                <p>다양성이라는 가치를 존중하고, 보헤미안들이 한 곳에 모여 예술을 말하는 공간입니다.</p>
-            </div>
-
-            <div id="about-text-3">
-                <p>insta에서는 여러 색채들을 한데 버무리고, 공유하고, 경험하며<br>교류가 이루어지는 것을 지향합니다.</p>
-                <p>insta가 생각하는 색깔 중에 가장 중요한 가치는 ‘우연히도’ 일어난다고 생각합니다.</p>
-                <p>많은 사람들에 의해 insta에서 새로운 경험을 하게 되고,<br>그런 “우연히”가 모여 여러 색깔을 찾는 공간입니다.</p>
-            </div>
-
-          </div>
-
-          <div>
-            <img src="hero7.jpg"
-                 class="w-full h-auto object-cover rounded shadow-md"
-                 alt="about image">
-          </div>
-
+  <section id="about-inner" class="relative text-white py-3 md:py-14 overflow-hidden" style="background-color: #ff6900">
+    <div class="absolute inset-0 stripe-bg opacity-60 pointer-events-none"></div>
+    <div class="relative w-full overflow-hidden md:max-w-6xl md:mx-auto md:px-4 md:overflow-visible">
+      <div class="mobile-scroll-only flex items-center gap-8 md:animate-none md:flex-wrap md:justify-center md:gap-6 md:w-full">
+        <div class="hidden md:contents text-sm font-medium whitespace-nowrap md:text-3xl md:leading-relaxed">
+            <span>People</span><img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Village</span><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Local Artist</span><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Food</span><img src="https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Suwon-Insta Music</span><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Tourist</span><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Book</span><img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Culture, Play</span>
         </div>
-
-        <div class="mt-16">
-          <div class="w-full h-[5px] bg-slate-100 bg-repeat-x opacity-60 rounded-full"></div>
-        </div>
-
-      </div>
-    </section>
-
-    <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200 mt-10">
-      <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
-        <div class="flex justify-center gap-4 text-lg"> 
-            <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank">
-                <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
-            </a>
-            <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
-                <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
-            </a>
-            <a href="http://pf.kakao.com/_xiITuG" target="_blank">
-                <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
-            </a>
-            <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
-                <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
-            </a>        
-        </div>
-
-        <div class="space-y-1">
-          <p>insta hotel mainbranch, Korea</p>
-          
-          <p id="companyName">(주)호텔인스타</p>
-          <p id="ceoName">대표자 : 이영환</p>
-          <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
-          <p id="address">수원시 영통구 영통로 94-6</p>
-          
-          <p>Business License 176-24-01388 | Tel 031-203-4301</p>
-        </div>
-
-        <div class="flex justify-center gap-4 pt-2">
-          <a href="#" class="hover:underline" id="terms">이용약관</a>
-          <a href="#" class="hover:underline" id="privacy">개인정보처리방침</a>
+        <div class="flex md:hidden items-center gap-3 text-sm font-medium whitespace-nowrap">
+            <span>People</span><img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=200&auto=format&fit=crop" class="w-6 h-6 rounded-full object-cover border-2 border-white/80" />
+            <span>Village</span><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=200&auto=format&fit=crop" class="w-6 h-6 rounded-full object-cover border-2 border-white/80" />
+            <span>Local Artist</span><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=200&auto=format&fit=crop" class="w-6 h-6 rounded-full object-cover border-2 border-white/80" />
+            <span>Food</span><img src="https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?q=80&w=200&auto=format&fit=crop" class="w-6 h-6 rounded-full object-cover border-2 border-white/80" />
+            <span>Suwon-Insta Music</span><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=200&auto=format&fit=crop" class="w-6 h-6 rounded-full object-cover border-2 border-white/80" />
+            <span>Tourist</span><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=200&auto=format&fit=crop" class="w-6 h-6 rounded-full object-cover border-2 border-white/80" />
+            <span>Book</span><img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=200&auto=format&fit=crop" class="w-6 h-6 rounded-full object-cover border-2 border-white/80" />
+            <span>Culture, Play</span>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <a 
-    href="http://pf.kakao.com/_xiITuG"
-    target="_blank"
-    class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#FFEB00] text-black px-4 py-2 rounded-full shadow-lg hover:bg-yellow-400 transition-colors font-bold"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-      <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
-    </svg>
-    <span id="inquiryBtn" class="text-lg">문의</span>
+  <section id="building" class="bg-white">
+    <img src="hero6.jpg" alt="building" class="w-full h-[50vh] md:h-[720px] object-cover" />
+  </section>
+
+  <section id="intro-text" class="py-10 bg-white">
+    <div class="max-w-xl mx-auto px-6 text-center">
+      <p class="text-sm md:text-xl text-slate-800 italic font-serif leading-relaxed">
+        insta is a group of people that aspire to<br />
+        ‘insta’ people, society, culture, and art together.
+      </p>
+    </div>
+  </section>
+
+  <section id="instagram" class="pb-16 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <p class="mb-4">
+        <span class="font-bold text-lg">Insta Hotel Instagram</span>
+        <span class="ml-1 text-sm text-slate-500">@instahotel_mainbranch</span>
+      </p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-8">
+        <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=600&auto=format&fit=crop" alt="" class="w-full aspect-square object-cover" />
+        <img src="https://images.unsplash.com/photo-1520256862855-398228c41684?q=80&w=601&auto=format&fit=crop" alt="" class="w-full aspect-square object-cover" />
+        <img src="hero8.png" alt="" class="w-full aspect-square object-cover" />
+        <img src="hero2.jpg" alt="" class="w-full aspect-square object-cover" />
+        <img src="hero14.png" alt="" class="w-full aspect-square object-cover" />
+        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=605&auto=format&fit=crop" alt="" class="w-full aspect-square object-cover" />
+        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=606&auto=format&fit=crop" alt="" class="w-full aspect-square object-cover" />
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=607&auto=format&fit=crop" alt="" class="w-full aspect-square object-cover" />
+      </div>
+      <div class="text-center">
+        <button id="btnMore" class="px-8 py-3 border border-slate-300 text-xs text-slate-500 bg-white hover:bg-slate-50 uppercase tracking-widest">
+          View More
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-100">
+    <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-500">
+      <div class="flex justify-center gap-4 mb-6">
+        <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank" class="hover:opacity-75 transition-opacity">
+            <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
+        </a>
+        <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank" class="hover:opacity-75 transition-opacity">
+            <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
+        </a>
+        <a href="http://pf.kakao.com/_xiITuG" target="_blank" class="hover:opacity-75 transition-opacity">
+            <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
+        </a>
+        <a href="https://www.facebook.com/VIPdesign2020" target="_blank" class="hover:opacity-75 transition-opacity">
+            <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
+        </a>
+      </div>
+      <div class="space-y-1.5 leading-relaxed font-light">
+        <p>insta hotel mainbranch, Korea</p>
+        <p>
+            <span id="companyName">(주)호텔인스타</span>
+            <span class="mx-1">|</span>
+            <span id="ceoName">대표자 : 이영환</span>
+        </p>
+        <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
+        <p id="address">수원시 영통구 영통로 94-6</p>
+        <p>Business License 176-24-01388 <span class="mx-1">|</span> Tel 031-203-4301</p>
+      </div>
+      <div class="flex justify-center gap-8 mt-8 text-slate-400">
+        <a href="#" id="termsLink" class="hover:text-slate-600">이용약관</a>
+        <a href="#" id="privacyLink" class="hover:text-slate-600 font-medium">개인정보처리방침</a>
+      </div>
+    </div>
+  </section>
+
+  <a href="reservation.html" class="floating-book-btn">
+    <span class="book-icon" style="font-size:20px;">📅</span>
+    <div class="book-text-group">
+        <span class="book-title">최저가 예약 (Best Price)</span>
+        <span class="book-sub">Official Site Guarantee</span>
+    </div>
+    <span class="book-arrow">➔</span>
   </a>
 
+  <div class="chat-widget-container" id="chatWidget">
+    <div class="chat-options">
+        
+        <a href="https://ig.me/m/instahotel_mainbranch" target="_blank" class="chat-option-item" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+            <span>Instagram DM</span>
+        </a>
+
+        <a href="https://wa.me/821042077372" target="_blank" class="chat-option-item" style="background-color: #25D366;">
+            <span>WhatsApp (ENG)</span>
+        </a>
+
+        <a href="http://pf.kakao.com/_xiITuG" target="_blank" class="chat-option-item" style="background-color: #FEE500; color: #3c1e1e;">
+            <span>KakaoTalk (KOR)</span>
+        </a>
+    </div>
+    <div class="chat-main-btn" onclick="toggleChatWidget()">💬</div>
+  </div>
+
   <script>
-    /* --------------------------------------
-       1. 모바일 메뉴 (Drawer) 열기/닫기
-    -------------------------------------- */
+    function toggleChatWidget() {
+        var widget = document.getElementById('chatWidget');
+        widget.classList.toggle('active');
+        var btn = widget.querySelector('.chat-main-btn');
+        if (widget.classList.contains('active')) {
+            btn.innerHTML = '✕'; 
+        } else {
+            btn.innerHTML = '💬'; 
+        }
+    }
+  </script>
+
+  <script>
+    /* 헤더 스크롤 색상 */
+    const header = document.getElementById("header");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 20) {
+        header.classList.add("bg-[#ff6900]", "shadow-md");
+        header.classList.remove("bg-transparent");
+      } else {
+        header.classList.remove("bg-[#ff6900]", "shadow-md");
+        header.classList.add("bg-transparent");
+      }
+    });
+
+    /* 모바일 메뉴 */
     const mobileMenuBtn = document.getElementById("mobile-menu-btn");
     const mobileDrawer = document.getElementById("mobile-drawer");
     const drawerOverlay = document.getElementById("drawer-overlay");
@@ -227,9 +439,9 @@
         document.body.style.overflow = ""; 
     }
 
-    if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMenu);
-    if (mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMenu);
-    if (drawerOverlay) drawerOverlay.addEventListener("click", closeMenu);
+    if(mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMenu);
+    if(mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMenu);
+    if(drawerOverlay) drawerOverlay.addEventListener("click", closeMenu);
 
     const roomsToggle = document.getElementById("rooms-toggle");
     const roomsSubmenu = document.getElementById("rooms-submenu");
@@ -239,95 +451,77 @@
         });
     }
 
-    /* --------------------------------------
-       2. 다국어 번역 데이터 (이미지 파일명 적용)
-    -------------------------------------- */
-    
+    /* 슬라이더 */
+    let index = 0;
+    const slides = document.querySelectorAll(".slide");
+    const dots = document.querySelectorAll(".dot");
+
+    function updateDots() {
+      dots.forEach((dot, i) => {
+        if(i === index) {
+            dot.classList.remove('opacity-50');
+            dot.classList.add('opacity-100');
+        } else {
+            dot.classList.remove('opacity-100');
+            dot.classList.add('opacity-50');
+        }
+      });
+    }
+
+    function showNextSlide() {
+      slides[index].style.opacity = 0;
+      index = (index + 1) % slides.length;
+      slides[index].style.opacity = 1;
+      updateDots();
+    }
+    setInterval(showNextSlide, 4000);
+
+    /* 다국어 번역 */
     const translations = {
-      ko: {
-        img: "kr.png", // 이미지 파일명
-        
-        "about-text-1": `
-            <p>insta는 “붙이는 것” 그리고 “연결”하는 공간입니다.</p>
-            <p>서로의 사람, 사람과 동네, 사람과 문화, 동네와 문화 등<br>두 가지 대상이 서로 부딪히고, 교류해볼 수 있는 곳이 insta입니다.</p>
-        `,
-        "about-text-2": `
-            <p>insta의 철학은 다양성을 기반으로 요즘의 문화를 조화롭게 담는 공간을 만드는 것입니다.</p>
-            <p>다양성이라는 가치를 존중하고, 보헤미안들이 한 곳에 모여 예술을 말하는 공간입니다.</p>
-        `,
-        "about-text-3": `
-            <p>insta에서는 여러 색채들을 한데 버무리고, 공유하고, 경험하며<br>교류가 이루어지는 것을 지향합니다.</p>
-            <p>insta가 생각하는 색깔 중에 가장 중요한 가치는 ‘우연히도’ 일어난다고 생각합니다.</p>
-            <p>많은 사람들에 의해 insta에서 새로운 경험을 하게 되고,<br>그런 “우연히”가 모여 여러 색깔을 찾는 공간입니다.</p>
-        `,
-
-        // Footer
-        companyName: "(주)호텔인스타", ceoName: "대표자 : 이영환", bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", address: "수원시 영통구 영통로 94-6",
-        terms: "이용약관", privacy: "개인정보처리방침", inquiryBtn: "문의"
+      ko: { 
+          img: "kr.png",
+          btnMore: "더보기", 
+          companyName: "(주)호텔인스타", 
+          ceoName: "대표자 : 이영환", 
+          bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", 
+          address: "수원시 영통구 영통로 94-6", 
+          termsLink: "이용약관", 
+          privacyLink: "개인정보처리방침", 
+          inquiryBtn: "문의" 
       },
-
-      en: {
-        img: "usa.png", // usa.png 사용
-        
-        "about-text-1": `
-            <p>insta is a place and the action of where and how things stick together.</p>
-            <p>Two different entities, whether it be people with people, people with community, people with art, culture, or even with community, insta encourages interaction and provides a platform for such connections.</p>
-        `,
-        "about-text-2": `
-            <p>insta’s philosophy is to create a space that harmoniously embraces modern culture, based on diversity, a place where everyone can be respected.</p>
-            <p>A place where the value of difference exists, a place for bohemians, a place where art and history coexist.</p>
-        `,
-        "about-text-3": `
-            <p>insta encourages sharing, overlaying, and expressing the many different colors of life.</p>
-            <p>insta believes that “collisions” are the most valuable experiences in life.</p>
-            <p>Finding oneself through new experiences. A space where such "coincidences" gather to find various colors.</p>
-        `,
-
-        companyName: "Insta Hotel Co., Ltd.", ceoName: "CEO: Lee Young Hwan", bizNumber: "Registration: 2023-Suwon Yeongtong-1696", address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si",
-        terms: "Terms of Use", privacy: "Privacy Policy", inquiryBtn: "Contact"
+      en: { 
+          img: "usa.png", 
+          btnMore: "View more", 
+          companyName: "Insta Hotel Co., Ltd.", 
+          ceoName: "CEO: Lee Young Hwan", 
+          bizNumber: "Registration: 2023-Suwon Yeongtong-1696", 
+          address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si", 
+          termsLink: "Terms of Use", 
+          privacyLink: "Privacy Policy", 
+          inquiryBtn: "Contact" 
       },
-
-      ja: {
-        img: "jp.png", // jp.png 사용
-        
-        "about-text-1": `
-            <p>instaは「貼る（inst）」そして「繋ぐ」空間です。</p>
-            <p>人、地域、文化など、2つの対象が互いにぶつかり合い、交流できる場所がinstaです。</p>
-        `,
-        "about-text-2": `
-            <p>instaの哲学は、多様性を基盤に現代の文化を調和よく取り入れた空間を作ることです。</p>
-            <p>多様性という価値を尊重し、ボヘミアンたちが一堂に会して芸術を語る場所です。</p>
-        `,
-        "about-text-3": `
-            <p>instaでは、様々な色彩を混ぜ合わせ、共有し、経験しながら交流が行われることを目指しています。</p>
-            <p>instaが考える色の中で最も重要な価値は「偶然にも」起こると考えています。</p>
-            <p>多くの人々によってinstaで新しい経験をするようになり、そのような「偶然」が集まって様々な色を見つける空間です。</p>
-        `,
-
-        companyName: "インスタホテル株式会社", ceoName: "代表者 : イ・ヨンファン", bizNumber: "登録番号: 2023-水原霊通-1696", address: "水原市霊通区霊通路94-6",
-        terms: "利用規約", privacy: "個人情報処理方針", inquiryBtn: "お問い合わせ"
+      ja: { 
+          img: "jp.png", 
+          btnMore: "もっと見る", 
+          companyName: "インスタホテル株式会社", 
+          ceoName: "代表者 : イ・ヨンファン", 
+          bizNumber: "通信販売業申告番号: 2023-水原ヨントン-1696号", 
+          address: "水原市 永東区 永東路 94-6", 
+          termsLink: "利用規約", 
+          privacyLink: "個人情報処理方針", 
+          inquiryBtn: "お問い合わせ" 
       },
-
-      zh: {
-        img: "cn.png", // cn.png 사용
-        
-        "about-text-1": `
-            <p>insta是一个“连接”与“结合”的空间。</p>
-            <p>人与人、人与社区、人与文化、社区与文化等，两种不同的主体在这里碰撞与交流，这就是insta。</p>
-        `,
-        "about-text-2": `
-            <p>insta的哲学是以多样性为基础，打造一个和谐容纳现代文化的空间。</p>
-            <p>这是一个尊重多样性价值、让波西米亚人聚集在一起谈论艺术的空间。</p>
-        `,
-        "about-text-3": `
-            <p>在insta，我们致力于融合、分享和体验各种色彩，并促进交流。</p>
-            <p>insta认为色彩中最重要的价值在于“偶然”发生。</p>
-            <p>许多人在insta获得新的体验，正是这些“偶然”聚集在一起，形成了寻找多彩自我的空间。</p>
-        `,
-
-        companyName: "Insta Hotel有限公司", ceoName: "代表：李永焕", bizNumber: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6",
-        terms: "使用条款", privacy: "隐私政策", inquiryBtn: "咨询"
-      }
+      zh: { 
+          img: "cn.png", 
+          btnMore: "查看更多", 
+          companyName: "Insta Hotel有限公司", 
+          ceoName: "代表：李永焕", 
+          bizNumber: "通信销售业申报编号：2023-水原灵通-1696号", 
+          address: "水原市 灵通区 灵通路94-6", 
+          termsLink: "使用条款", 
+          privacyLink: "隐私政策", 
+          inquiryBtn: "咨询" 
+      },
     };
 
     const headerSelect = document.getElementById("header-lang-select");
@@ -336,45 +530,36 @@
 
     function updateLanguage(lang) {
         const t = translations[lang] || translations.ko;
-
-        // 1. 상단 국기 아이콘 변경 (이미지 src 수정)
-        if(currentFlagIcon && t.img) {
+        if(currentFlagIcon) {
             currentFlagIcon.src = t.img;
+            currentFlagIcon.alt = lang;
         }
-
-        // 2. 텍스트 업데이트 (ID 매칭 방식)
         const textIds = [
-            "about-text-1", "about-text-2", "about-text-3",
-            "companyName", "ceoName", "bizNumber", "address",
-            "terms", "privacy", "inquiryBtn"
+            "btnMore", "companyName", "ceoName", "bizNumber", "address",
+            "termsLink", "privacyLink", "inquiryBtn"
         ];
-
         textIds.forEach(id => {
             const el = document.getElementById(id);
             if(el && t[id]) {
-                el.innerHTML = t[id];
+                el.textContent = t[id];
             }
         });
     }
 
-    // 헤더 투명 셀렉트 박스 이벤트
     if(headerSelect) {
         headerSelect.addEventListener("change", (e) => {
             const lang = e.target.value;
-            if(drawerSelect) drawerSelect.value = lang; 
+            if(drawerSelect) drawerSelect.value = lang;
             updateLanguage(lang);
         });
     }
-
-    // 드로어 메뉴 셀렉트 박스 이벤트
     if(drawerSelect) {
         drawerSelect.addEventListener("change", (e) => {
             const lang = e.target.value;
-            if(headerSelect) headerSelect.value = lang; 
+            if(headerSelect) headerSelect.value = lang;
             updateLanguage(lang);
         });
     }
   </script>
-
 </body>
 </html>
