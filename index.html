@@ -40,80 +40,93 @@
     }
 
     /* --------------------------------------------------------
-       [수정됨] 별도 분리된 최저가 예약 플로팅 버튼 (얇고 간결하게 수정)
+       [1] 중앙 하단 플로팅 예약 버튼 스타일 (NEW)
     -------------------------------------------------------- */
-    .booking-floating-btn {
+    .floating-book-btn {
         position: fixed;
-        bottom: 25px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 9999;
-        
-        background-color: #333; /* 검은색 배경으로 변경하여 오렌지 테두리 강조 */
-        color: white;
-        text-decoration: none;
+        bottom: 30px; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        z-index: 9990; /* 채팅 버튼보다는 아래 레이어 */
         
         display: flex;
         align-items: center;
+        gap: 15px;
+        
+        background-color: #111; /* 고급스러운 검정 배경 */
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px; /* 둥근 알약 모양 */
+        border: 2px solid #ff6900; /* 브랜드 컬러 테두리 */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        
+        width: auto;
+        min-width: 260px; 
         justify-content: center;
-        flex-direction: column; /* 텍스트 두 줄로 배치 */
-        gap: 2px; /* 두 줄 사이 간격 */
-        
-        padding: 8px 20px; /* 패딩을 줄여서 얇게 만듦 */
-        border-radius: 50px;
-        border: 2px solid #ff6900; /* 오렌지색 테두리 추가 */
-        
-        font-size: 14px; /* 전체 폰트 크기 약간 축소 */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        transition: transform 0.2s, box-shadow 0.2s;
-        /* pulse 애니메이션은 제거하여 심플하게 유지 */
     }
 
-    .booking-floating-btn:hover {
-        transform: translateX(-50%) scale(1.05);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-        background-color: #ff6900; /* 호버 시 오렌지색 배경 */
-        color: white;
+    .floating-book-btn:hover {
+        transform: translateX(-50%) translateY(-5px); 
+        box-shadow: 0 8px 25px rgba(255, 105, 0, 0.4); 
+        background-color: #000;
+    }
+
+    .book-text-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        line-height: 1.2;
+    }
+    
+    .book-title { font-weight: bold; font-size: 16px; color: #fff; }
+    .book-sub { font-size: 11px; color: #ff6900; font-weight: 600; }
+    .book-arrow { font-size: 18px; color: #ccc; margin-left: auto;}
+
+    /* 모바일 스타일 조정 */
+    @media (max-width: 768px) {
+        .floating-book-btn {
+            bottom: 25px; 
+            min-width: auto;
+            width: 65%; /* 화면의 65% 차지 */
+            padding: 10px 20px;
+            left: 40%; /* 채팅 버튼과 안 겹치게 살짝 왼쪽으로 치우침 */
+        }
+        .book-title { font-size: 14px; }
     }
 
     /* --------------------------------------------------------
-       올인원 채팅 위젯 스타일 (오렌지색 & 작게)
+       [2] 우측 하단 채팅 위젯 스타일
     -------------------------------------------------------- */
     .chat-widget-container {
         position: fixed;
-        bottom: 20px;
+        bottom: 25px;
         right: 20px;
-        z-index: 9998; 
+        z-index: 9999; /* 제일 위에 뜸 */
         font-family: 'Poppins', sans-serif;
     }
 
-    /* 메인 버튼 (말풍선 아이콘) */
     .chat-main-btn {
         width: 50px;  
         height: 50px; 
-        
         background-color: #ff6900; 
-        
         color: white;
         border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
-        
         font-size: 24px;
-        
         cursor: pointer;
         box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
         transition: transform 0.3s;
     }
 
-    /* 버튼 눌렀을 때 효과 */
     .chat-widget-container.active .chat-main-btn {
         transform: rotate(45deg);
         background-color: #e65100; 
     }
 
-    /* 숨겨진 메뉴들 */
     .chat-options {
         display: none; 
         flex-direction: column;
@@ -122,13 +135,11 @@
         align-items: flex-end;
     }
 
-    /* 활성화되면 보임 */
     .chat-widget-container.active .chat-options {
         display: flex;
         animation: fadeInUp 0.3s ease-in-out;
     }
 
-    /* 개별 메뉴 버튼 스타일 */
     .chat-option-item {
         display: flex;
         align-items: center;
@@ -143,11 +154,8 @@
         white-space: nowrap; 
     }
 
-    .chat-option-item:hover {
-        transform: scale(1.05);
-    }
+    .chat-option-item:hover { transform: scale(1.05); }
 
-    /* 애니메이션 효과 */
     @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
@@ -158,10 +166,7 @@
 <script>
     const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
     const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
-    
-    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함 (이름 충돌 방지)
     window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
-    
     console.log("홈페이지-슈파베이스 연결 성공!");
 </script>
 </head>
@@ -183,23 +188,21 @@
       </a>
 
       <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
-  <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
-  <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
-  <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast(조식)</a>
-  <a href="reservation.html" class="hover:text-orange-200 transition-colors">reservation(예약)</a>
-  <a href="instaspot.html" class="hover:text-orange-200 transition-colors">tour&food&cafe(관광&맛집&카페)</a>
-  <a href="#" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
-  <a href="contact.html" class="hover:text-orange-200 transition-colors">contact</a>
-</nav>
+        <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
+        <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
+        <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast(조식)</a>
+        <a href="reservation.html" class="hover:text-orange-200 transition-colors">reservation(예약)</a>
+        <a href="instaspot.html" class="hover:text-orange-200 transition-colors">tour&food&cafe(관광&맛집&카페)</a>
+        <a href="#" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
+        <a href="contact.html" class="hover:text-orange-200 transition-colors">contact</a>
+      </nav>
 
       <div class="flex items-center relative drop-shadow-md z-20">
          <div class="flex items-center gap-2 cursor-pointer relative group">
             <img id="current-flag-icon" src="kr.png" alt="Korea" class="w-8 h-5 object-cover rounded shadow-sm border border-white/30 transition-transform group-hover:scale-110">
-            
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white opacity-90">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
-
             <select id="header-lang-select" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none text-slate-900">
                 <option value="ko" class="text-slate-900">🇰🇷 한국어</option>
                 <option value="en" class="text-slate-900">🇺🇸 English</option>
@@ -208,23 +211,19 @@
             </select>
          </div>
       </div>
-
     </div>
   </header>
 
   <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity duration-300"></div>
-   
+  
   <nav id="mobile-drawer" class="fixed top-0 left-0 w-[75%] max-w-sm h-full z-50 bg-white shadow-xl text-slate-900 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
     <div class="p-6 h-full flex flex-col">
       <button id="mobile-menu-close-btn" class="absolute top-4 right-4 text-3xl font-light hover:text-[#ff6900]">&times;</button>
-      
       <div class="mt-2 mb-8">
         <span class="text-xl font-bold tracking-tight text-[#ff6900]">Insta hotel</span>
       </div>
-      
       <ul class="flex flex-col space-y-4 text-lg font-medium flex-grow">
         <li><a href="about.html" class="block hover:text-[#ff6900]">about</a></li>
-        
         <li>
             <div class="flex justify-between items-center cursor-pointer hover:text-[#ff6900]" id="rooms-toggle">
                 <span>rooms</span> <span class="text-sm">▼</span>
@@ -239,14 +238,12 @@
                 <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
             </ul>
         </li>
-
         <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]">breakfast(조식)</a></li>
         <li><a href="reservation.html" class="block hover:text-[#ff6900]">reservation(예약)</a></li>
         <li><a href="instaspot.html" class="block hover:text-[#ff6900]">tour&food&cafe(관광&맛집&카페)</a></li>
         <li><a href="#lounge" class="block hover:text-[#ff6900]">bluerain lounge</a></li>
         <li><a href="contact.html" class="block hover:text-[#ff6900]">contact</a></li>
       </ul>
-
       <div class="mt-8 border-t pt-4">
          <p class="text-sm text-slate-400 mb-2">Language</p>
          <select id="drawer-lang-select" class="w-full p-2 border rounded text-slate-700 bg-slate-50 outline-none">
@@ -264,9 +261,7 @@
     <img src="hero2.jpg" class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms]" />
     <img src="hero3.jpg" class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms]" />
     <img src="hero4.jpg" class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms]" />
-
     <div class="absolute inset-0 bg-black/20"></div>
-    
     <div class="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-10">
         <span class="w-1.5 h-1.5 rounded-full bg-white opacity-100 dot"></span>
         <span class="w-1.5 h-1.5 rounded-full bg-white opacity-50 dot"></span>
@@ -277,27 +272,18 @@
 
   <section id="about-inner" class="relative text-white py-3 md:py-14 overflow-hidden" style="background-color: #ff6900">
     <div class="absolute inset-0 stripe-bg opacity-60 pointer-events-none"></div>
-
     <div class="relative w-full overflow-hidden md:max-w-6xl md:mx-auto md:px-4 md:overflow-visible">
       <div class="mobile-scroll-only flex items-center gap-8 md:animate-none md:flex-wrap md:justify-center md:gap-6 md:w-full">
         <div class="hidden md:contents text-sm font-medium whitespace-nowrap md:text-3xl md:leading-relaxed">
-            <span>People</span>
-            <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
-            <span>Village</span>
-            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
-            <span>Local Artist</span>
-            <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
-            <span>Food</span>
-            <img src="https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
-            <span>Suwon-Insta Music</span>
-            <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
-            <span>Tourist</span>
-            <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
-            <span>Book</span>
-            <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>People</span><img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Village</span><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Local Artist</span><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Food</span><img src="https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Suwon-Insta Music</span><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Tourist</span><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
+            <span>Book</span><img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=200&auto=format&fit=crop" class="w-14 h-14 rounded-full object-cover border-4 border-white/80" />
             <span>Culture, Play</span>
         </div>
-
         <div class="flex md:hidden items-center gap-3 text-sm font-medium whitespace-nowrap">
             <span>People</span><img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=200&auto=format&fit=crop" class="w-6 h-6 rounded-full object-cover border-2 border-white/80" />
             <span>Village</span><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=200&auto=format&fit=crop" class="w-6 h-6 rounded-full object-cover border-2 border-white/80" />
@@ -331,7 +317,6 @@
         <span class="font-bold text-lg">Insta Hotel Instagram</span>
         <span class="ml-1 text-sm text-slate-500">@instahotel_mainbranch</span>
       </p>
-
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-8">
         <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=600&auto=format&fit=crop" alt="" class="w-full aspect-square object-cover" />
         <img src="https://images.unsplash.com/photo-1520256862855-398228c41684?q=80&w=601&auto=format&fit=crop" alt="" class="w-full aspect-square object-cover" />
@@ -342,7 +327,6 @@
         <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=606&auto=format&fit=crop" alt="" class="w-full aspect-square object-cover" />
         <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=607&auto=format&fit=crop" alt="" class="w-full aspect-square object-cover" />
       </div>
-
       <div class="text-center">
         <button id="btnMore" class="px-8 py-3 border border-slate-300 text-xs text-slate-500 bg-white hover:bg-slate-50 uppercase tracking-widest">
           View More
@@ -353,7 +337,6 @@
 
   <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-100">
     <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-500">
-      
       <div class="flex justify-center gap-4 mb-6">
         <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank" class="hover:opacity-75 transition-opacity">
             <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
@@ -368,32 +351,31 @@
             <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
         </a>
       </div>
-
       <div class="space-y-1.5 leading-relaxed font-light">
         <p>insta hotel mainbranch, Korea</p>
-        
         <p>
             <span id="companyName">(주)호텔인스타</span>
             <span class="mx-1">|</span>
             <span id="ceoName">대표자 : 이영환</span>
         </p>
-
         <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
         <p id="address">수원시 영통구 영통로 94-6</p>
         <p>Business License 176-24-01388 <span class="mx-1">|</span> Tel 031-203-4301</p>
       </div>
-
       <div class="flex justify-center gap-8 mt-8 text-slate-400">
         <a href="#" id="termsLink" class="hover:text-slate-600">이용약관</a>
         <a href="#" id="privacyLink" class="hover:text-slate-600 font-medium">개인정보처리방침</a>
       </div>
-
     </div>
   </section>
 
-  <a href="reservation2.html" class="booking-floating-btn">
-      <span class="font-bold">최저가 예약</span>
-      <span class="text-xs text-orange-300">Official Site Guarantee</span>
+  <a href="reservation.html" class="floating-book-btn">
+    <span class="book-icon" style="font-size:20px;">📅</span>
+    <div class="book-text-group">
+        <span class="book-title">최저가 예약 (Best Price)</span>
+        <span class="book-sub">Official Site Guarantee</span>
+    </div>
+    <span class="book-arrow">➔</span>
   </a>
 
   <div class="chat-widget-container" id="chatWidget">
@@ -411,7 +393,6 @@
             <span>KakaoTalk (KOR)</span>
         </a>
     </div>
-
     <div class="chat-main-btn" onclick="toggleChatWidget()">💬</div>
   </div>
 
@@ -419,8 +400,6 @@
     function toggleChatWidget() {
         var widget = document.getElementById('chatWidget');
         widget.classList.toggle('active');
-        
-        // 버튼 아이콘 변경 (말풍선 <-> X)
         var btn = widget.querySelector('.chat-main-btn');
         if (widget.classList.contains('active')) {
             btn.innerHTML = '✕'; 
@@ -429,10 +408,9 @@
         }
     }
   </script>
+
   <script>
-    /* --------------------------------------
-       1. 헤더 스크롤 색상 변경
-    -------------------------------------- */
+    /* 헤더 스크롤 색상 */
     const header = document.getElementById("header");
     window.addEventListener("scroll", () => {
       if (window.scrollY > 20) {
@@ -444,9 +422,7 @@
       }
     });
 
-    /* --------------------------------------
-       2. 모바일 메뉴 (Drawer)
-    -------------------------------------- */
+    /* 모바일 메뉴 */
     const mobileMenuBtn = document.getElementById("mobile-menu-btn");
     const mobileDrawer = document.getElementById("mobile-drawer");
     const drawerOverlay = document.getElementById("drawer-overlay");
@@ -475,9 +451,7 @@
         });
     }
 
-    /* --------------------------------------
-       3. 메인 히어로 슬라이더
-    -------------------------------------- */
+    /* 슬라이더 */
     let index = 0;
     const slides = document.querySelectorAll(".slide");
     const dots = document.querySelectorAll(".dot");
@@ -502,9 +476,7 @@
     }
     setInterval(showNextSlide, 4000);
 
-    /* --------------------------------------
-       4. 다국어 번역 로직 (이미지 적용)
-    -------------------------------------- */
+    /* 다국어 번역 */
     const translations = {
       ko: { 
           img: "kr.png",
@@ -558,19 +530,14 @@
 
     function updateLanguage(lang) {
         const t = translations[lang] || translations.ko;
-
-        // 1. 국기 이미지 변경
         if(currentFlagIcon) {
             currentFlagIcon.src = t.img;
             currentFlagIcon.alt = lang;
         }
-
-        // 2. 텍스트 변경
         const textIds = [
             "btnMore", "companyName", "ceoName", "bizNumber", "address",
             "termsLink", "privacyLink", "inquiryBtn"
         ];
-        
         textIds.forEach(id => {
             const el = document.getElementById(id);
             if(el && t[id]) {
@@ -579,7 +546,6 @@
         });
     }
 
-    // 헤더 셀렉트 이벤트
     if(headerSelect) {
         headerSelect.addEventListener("change", (e) => {
             const lang = e.target.value;
@@ -587,8 +553,6 @@
             updateLanguage(lang);
         });
     }
-
-    // 드로어 셀렉트 이벤트
     if(drawerSelect) {
         drawerSelect.addEventListener("change", (e) => {
             const lang = e.target.value;
