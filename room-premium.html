@@ -7,7 +7,129 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; font-family: 'Poppins', sans-serif; }
+
+    /* --------------------------------------------------------
+       [1] 중앙 하단 플로팅 예약 버튼 스타일 (Main Page 스타일 적용)
+    -------------------------------------------------------- */
+    .floating-book-btn {
+        position: fixed;
+        bottom: 30px; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        z-index: 9990; /* 채팅 버튼보다는 아래 레이어 */
+        
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        
+        background-color: #111; /* 고급스러운 검정 배경 */
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px; /* 둥근 알약 모양 */
+        border: 2px solid #ff6900; /* 브랜드 컬러 테두리 */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        
+        width: auto;
+        min-width: 260px; 
+        justify-content: center;
+    }
+
+    .floating-book-btn:hover {
+        transform: translateX(-50%) translateY(-5px); 
+        box-shadow: 0 8px 25px rgba(255, 105, 0, 0.4); 
+        background-color: #000;
+    }
+
+    .book-text-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        line-height: 1.2;
+    }
+    
+    .book-title { font-weight: bold; font-size: 16px; color: #fff; }
+    .book-sub { font-size: 11px; color: #ff6900; font-weight: 600; }
+    .book-arrow { font-size: 18px; color: #ccc; margin-left: auto;}
+
+    /* 모바일 스타일 조정 */
+    @media (max-width: 768px) {
+        .floating-book-btn {
+            bottom: 25px; 
+            min-width: auto;
+            width: 65%; /* 화면의 65% 차지 */
+            padding: 10px 20px;
+            left: 40%; /* 채팅 버튼과 안 겹치게 살짝 왼쪽으로 치우침 */
+        }
+        .book-title { font-size: 14px; }
+    }
+
+    /* --------------------------------------------------------
+       [2] 우측 하단 채팅 위젯 스타일 (Main Page 스타일 적용)
+    -------------------------------------------------------- */
+    .chat-widget-container {
+        position: fixed;
+        bottom: 25px;
+        right: 20px;
+        z-index: 9999; /* 제일 위에 뜸 */
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .chat-main-btn {
+        width: 50px;  
+        height: 50px; 
+        background-color: #ff6900; 
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        transition: transform 0.3s;
+    }
+
+    .chat-widget-container.active .chat-main-btn {
+        transform: rotate(45deg);
+        background-color: #e65100; 
+    }
+
+    .chat-options {
+        display: none; 
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 12px;
+        align-items: flex-end;
+    }
+
+    .chat-widget-container.active .chat-options {
+        display: flex;
+        animation: fadeInUp 0.3s ease-in-out;
+    }
+
+    .chat-option-item {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: white;
+        padding: 8px 14px; 
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 13px;
+        box-shadow: 1px 1px 8px rgba(0,0,0,0.2);
+        transition: transform 0.2s;
+        white-space: nowrap; 
+    }
+
+    .chat-option-item:hover { transform: scale(1.05); }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -174,7 +296,7 @@
 
         <section class="mb-16">
             <div class="overflow-hidden rounded-lg bg-slate-100 shadow-sm">
-               <img src="프리미엄5.png" alt="Premium Room detail" class="w-full h-auto object-cover" />
+                <img src="프리미엄5.png" alt="Premium Room detail" class="w-full h-auto object-cover" />
             </div>
         </section>
 
@@ -217,18 +339,47 @@
     </section>
   </main>
 
-  <a 
-    href="http://pf.kakao.com/_xiITuG"
-    target="_blank"
-    class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#FFEB00] text-black px-4 py-2 rounded-full shadow-lg hover:bg-yellow-400 transition-colors font-bold"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-      <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
-    </svg>
-    <span id="inquiryBtn" class="text-lg">문의</span>
+  <a href="reservation2.html" class="floating-book-btn">
+    <span class="book-icon" style="font-size:20px;">📅</span>
+    <div class="book-text-group">
+        <span class="book-title">최저가 예약 </span>
+        <span class="book-sub">Official Site Guarantee</span>
+    </div>
+    <span class="book-arrow">➔</span>
   </a>
 
+  <div class="chat-widget-container" id="chatWidget">
+    <div class="chat-options">
+        
+        <a href="https://ig.me/m/instahotel_mainbranch" target="_blank" class="chat-option-item" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+            <span>Instagram DM</span>
+        </a>
+
+        <a href="https://wa.me/821042077372" target="_blank" class="chat-option-item" style="background-color: #25D366;">
+            <span>WhatsApp (ENG)</span>
+        </a>
+
+        <a href="http://pf.kakao.com/_xiITuG" target="_blank" class="chat-option-item" style="background-color: #FEE500; color: #3c1e1e;">
+            <span>KakaoTalk (KOR)</span>
+        </a>
+    </div>
+    <div class="chat-main-btn" onclick="toggleChatWidget()">💬</div>
+  </div>
   <script>
+    /* --------------------------------------
+       0. 채팅 위젯 토글 함수 (추가됨)
+    -------------------------------------- */
+    function toggleChatWidget() {
+        var widget = document.getElementById('chatWidget');
+        widget.classList.toggle('active');
+        var btn = widget.querySelector('.chat-main-btn');
+        if (widget.classList.contains('active')) {
+            btn.innerHTML = '✕'; 
+        } else {
+            btn.innerHTML = '💬'; 
+        }
+    }
+
     /* --------------------------------------
        1. 모바일 메뉴 (Drawer) 열기/닫기
     -------------------------------------- */
@@ -380,7 +531,9 @@
         const t = translations[lang] || translations.ko;
 
         // 1. 상단 국기 아이콘 변경
-        if(currentFlagIcon) currentFlagIcon.textContent = t.flag;
+        if(currentFlagIcon && t.img) {
+             currentFlagIcon.src = t.img;
+        }
 
         // 2. 텍스트 업데이트 (ID 매칭 방식 - 한국어 부분만 교체)
         const textIds = [
