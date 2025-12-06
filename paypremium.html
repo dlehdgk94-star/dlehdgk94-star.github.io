@@ -524,13 +524,13 @@
         const mobileCloseBtn = document.getElementById("mobile-menu-close-btn");
 
         function openMenu() {
-            mobileDrawer.classList.remove("-translate-x-full");
-            drawerOverlay.classList.remove("hidden");
+            if(mobileDrawer) mobileDrawer.classList.remove("-translate-x-full");
+            if(drawerOverlay) drawerOverlay.classList.remove("hidden");
             document.body.style.overflow = "hidden"; 
         }
         function closeMenu() {
-            mobileDrawer.classList.add("-translate-x-full");
-            drawerOverlay.classList.add("hidden");
+            if(mobileDrawer) mobileDrawer.classList.add("-translate-x-full");
+            if(drawerOverlay) drawerOverlay.classList.add("hidden");
             document.body.style.overflow = ""; 
         }
 
@@ -889,25 +889,36 @@
             }
         }
 
+        // =========================================================
+        // [중요] 페이지 로드 및 언어 변경 핸들링 (프리미엄 객실용)
+        // =========================================================
         window.onload = function() {
             // URL에서 currency 파라미터 가져오기 (기본값 ko)
             const params = new URLSearchParams(window.location.search);
-            const langFromUrl = params.get('currency') || 'ko';
+            const urlLang = params.get('currency') || 'ko';
             
             // 초기 언어 설정
-            updateLanguage(langFromUrl);
+            updateLanguage(urlLang);
 
-            // 헤더 투명 셀렉트 박스 이벤트
-            if(headerSelect) {
-                headerSelect.addEventListener("change", (e) => {
-                    updateLanguage(e.target.value);
-                });
+            // 언어 변경 시 처리 함수
+            function handleLanguageChange(e) {
+                const selectedLang = e.target.value;
+                
+                // 처음 들어온 언어(화폐)와 다르면 예약 상세 페이지로 리다이렉트
+                if (selectedLang !== urlLang) {
+                    window.location.href = '예약상세프리미엄.html';
+                } else {
+                    // 동일 언어면 화면 갱신만 수행
+                    updateLanguage(selectedLang);
+                }
             }
-            // 드로어 메뉴 셀렉트 박스 이벤트
+
+            // 헤더 & 드로어 메뉴 셀렉트 박스 이벤트 연결
+            if(headerSelect) {
+                headerSelect.addEventListener("change", handleLanguageChange);
+            }
             if(drawerSelect) {
-                drawerSelect.addEventListener("change", (e) => {
-                    updateLanguage(e.target.value);
-                });
+                drawerSelect.addEventListener("change", handleLanguageChange);
             }
         };
 
