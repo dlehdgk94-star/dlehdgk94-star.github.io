@@ -915,13 +915,12 @@
     }
 
     // --------------------------------------------------------------------------
-    // [중요] 언어 변경 로직 수정: 다른 언어 선택 시 바로 예약 페이지로 이동
+    // [중요] 언어 변경 로직 수정: 다른 언어 선택 시 바로 '예약상세스탠.html'로 이동
     // --------------------------------------------------------------------------
     window.onload = function() {
         const params = new URLSearchParams(window.location.search);
         
         // URL에서 currency 파라미터를 읽어 초기 언어 설정 (없으면 'ko')
-        // 이 urlLang이 기준점이 됩니다.
         const urlLang = params.get('currency') || 'ko';
         
         // 초기 화면 렌더링
@@ -936,10 +935,10 @@
             
             // 처음 들어온 언어(화폐)와 다른 언어를 선택했다면?
             if (selectedLang !== urlLang) {
-                // 경고창 없이 즉시 예약 페이지로 리다이렉트
-                window.location.href = 'reservation.html';
+                // [수정 완료] 예약상세스탠.html로 즉시 리다이렉트
+                window.location.href = '예약상세스탠.html';
             } else {
-                // 만약 원래 언어를 다시 선택했다면 화면만 갱신 (단순 UI 업데이트)
+                // 원래 언어와 같은 것을 선택했다면 화면만 갱신
                 updateLanguage(selectedLang);
                 if(headerSelect) headerSelect.value = selectedLang;
                 if(drawerSelect) drawerSelect.value = selectedLang;
@@ -1014,12 +1013,10 @@
 
         const params = new URLSearchParams(window.location.search);
         
-        // [수정] 스탠다드 룸이므로 기본 ID를 1로 설정 (URL에 roomId가 있으면 그걸 사용)
         const roomId = parseInt(params.get('roomId')) || 1;
 
         const checkin = params.get('checkin');
         const checkout = params.get('checkout');
-        // 금액은 DB 저장용으로 숫자 그대로 사용
         const roomPrice = parseFloat(params.get('roomPrice')) || 0;
         const total = parseFloat(params.get('total')) || 0;
         
@@ -1033,11 +1030,9 @@
             }
         }
 
-        // 버튼 비활성화 (중복 클릭 방지)
         btn.disabled = true;
         btn.innerText = t.btn_processing;
 
-        // 저장할 데이터 객체 생성
         const insertData = {
             room_id: roomId, 
             guest_name: name,
@@ -1070,7 +1065,7 @@
             console.error('Booking Error:', err);
             alert(t.alert_error + "\nDetail: " + err.message);
             btn.disabled = false;
-            btn.innerText = t.btn_pay; // 버튼 원래대로 복구
+            btn.innerText = t.btn_pay; 
         }
     }
     </script>
