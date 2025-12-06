@@ -2,35 +2,34 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Insta Hotel - Breakfast</title>
+  
   <meta name="google-site-verification" content="fsXjRMcfj7Jm3Vswe92wB_Tf7mTOIy7_CckNERtv_wY" />
   <meta name="naver-site-verification" content="507ad30f2472ed24be95dd772ab1cf49e5f32c51" />
-  <title>Insta Hotel - Breakfast</title>
   <meta property="og:type" content="website">
   <meta property="og:title" content="Insta Hotel - Breakfast Menu">
   <meta property="og:description" content="인스타 호텔 조식 & 룸서비스 메뉴입니다.">
   <meta property="og:image" content="https://dlehdgk94-star.github.io/hero7.jpg">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
   <style>
-    html { scroll-behavior: smooth; font-family: 'Poppins', sans-serif; }
-    /* 메뉴 카드 스타일 */
+    html { scroll-behavior: smooth; font-family: 'Poppins', 'Noto Sans KR', sans-serif; }
     .menu-card {
-        background-color: #fffbf0; /* 연한 노란색 배경 */
-        border-radius: 1.5rem; /* 둥근 모서리 */
+        background-color: #fffbf0;
+        border-radius: 1.5rem;
     }
   </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
     const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
     const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
-    
-    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
     window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
-    
     console.log("홈페이지-슈파베이스 연결 성공!");
-</script>
+  </script>
 </head>
 
 <body class="text-slate-900 bg-white">
@@ -52,7 +51,7 @@
       <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
         <a href="about.html" class="hover:text-orange-200 transition-colors" data-translate="nav_about">about</a>
         <a href="rooms.html" class="hover:text-orange-200 transition-colors" data-translate="nav_rooms">rooms</a>
-        <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors" data-translate="nav_breakfast">breakfast(조식)</a>
+        <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors underline underline-offset-4" data-translate="nav_breakfast">breakfast(조식)</a>
         <a href="reservation.html" class="hover:text-orange-200 transition-colors" data-translate="nav_reservation">reservation(예약)</a>
         <a href="instaspot.html" class="hover:text-orange-200 transition-colors" data-translate="nav_instaspot">tour&food&cafe(관광&맛집&카페)</a>
         <a href="#lounge" class="hover:text-orange-200 transition-colors" data-translate="nav_lounge">bluerain lounge</a>
@@ -107,7 +106,7 @@
             </ul>
         </li>
 
-        <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]" data-translate="nav_breakfast">breakfast(조식)</a></li>
+        <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900] text-[#ff6900]" data-translate="nav_breakfast">breakfast(조식)</a></li>
         <li><a href="reservation.html" class="block hover:text-[#ff6900]" data-translate="nav_reservation">reservation(예약)</a></li>
         <li><a href="instaspot.html" class="block hover:text-[#ff6900]" data-translate="nav_instaspot">tour&food&cafe(관광&맛집&카페)</a></li>
         <li><a href="#lounge" class="block hover:text-[#ff6900]" data-translate="nav_lounge">bluerain lounge</a></li>
@@ -155,7 +154,7 @@
               Allergy Info: Eggs, Milk, Wheat, Soy, Tomato, Pork, Beef
             </div>
             <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
-              <span class="font-bold text-[#ff6900]">KRW 7,300</span>
+              <span class="font-bold text-[#ff6900]" id="price-a1">KRW 7,300</span>
               <span class="font-bold text-slate-900">No. A 1</span>
             </div>
           </div>
@@ -177,7 +176,7 @@
               Allergy Info: Eggs, Milk, Soy, Wheat, Pork, Tomato
             </div>
             <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
-              <span class="font-bold text-[#ff6900]">KRW 8,200</span>
+              <span class="font-bold text-[#ff6900]" id="price-b2">KRW 8,200</span>
               <span class="font-bold text-slate-900">No. B 2</span>
             </div>
           </div>
@@ -199,7 +198,7 @@
               Allergy Info: Eggs, Milk, Soy, Wheat, Tomato, Pork, Beef
             </div>
             <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
-              <span class="font-bold text-[#ff6900]">KRW 8,200</span>
+              <span class="font-bold text-[#ff6900]" id="price-c3">KRW 8,200</span>
               <span class="font-bold text-slate-900">No. C 3</span>
             </div>
           </div>
@@ -221,7 +220,7 @@
               Allergy Info: Wheat, Milk, Tomato, Soy, Eggs, Pork
             </div>
             <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
-              <span class="font-bold text-[#ff6900]">KRW 8,600</span>
+              <span class="font-bold text-[#ff6900]" id="price-d4">KRW 8,600</span>
               <span class="font-bold text-slate-900">No. D 4</span>
             </div>
           </div>
@@ -243,7 +242,7 @@
               Allergy Info: Wheat, Milk, Tomato, Soy, Eggs, Crab
             </div>
             <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
-              <span class="font-bold text-[#ff6900]">KRW 8,200</span>
+              <span class="font-bold text-[#ff6900]" id="price-e5">KRW 8,200</span>
               <span class="font-bold text-slate-900">No. E 5</span>
             </div>
           </div>
@@ -265,7 +264,7 @@
               Allergy Info: Wheat, Soy, Tomato, Milk, Eggs, Pork, Beef
             </div>
             <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
-              <span class="font-bold text-[#ff6900]">KRW 8,900</span>
+              <span class="font-bold text-[#ff6900]" id="price-f6">KRW 8,900</span>
               <span class="font-bold text-slate-900">No. F 6</span>
             </div>
           </div>
@@ -287,7 +286,7 @@
               Allergy Info: Milk, Soy, Chicken, Tomato, Eggs
             </div>
             <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
-              <span class="font-bold text-[#ff6900]">KRW 9,300</span>
+              <span class="font-bold text-[#ff6900]" id="price-g7">KRW 9,300</span>
               <span class="font-bold text-slate-900">No. G 7</span>
             </div>
           </div>
@@ -309,7 +308,7 @@
               Allergy Info: Chicken, Wheat, Soy, Milk, Tomato
             </div>
             <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
-              <span class="font-bold text-[#ff6900]">KRW 9,300</span>
+              <span class="font-bold text-[#ff6900]" id="price-h8">KRW 9,300</span>
               <span class="font-bold text-slate-900">No. H 8</span>
             </div>
           </div>
@@ -331,7 +330,7 @@
               Allergy Info: Milk, Tomato, Eggs, Soy, Chicken
             </div>
             <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
-              <span class="font-bold text-[#ff6900]">KRW 9,600</span>
+              <span class="font-bold text-[#ff6900]" id="price-i9">KRW 9,600</span>
               <span class="font-bold text-slate-900">No. I 9</span>
             </div>
           </div>
@@ -353,7 +352,7 @@
                 Allergy Info: Eggs, Milk, Soy, Wheat, Pork, Chicken
               </div>
               <div class="flex justify-between items-end mt-2 pt-2 border-t border-orange-100">
-                <span class="font-bold text-[#ff6900]">KRW 8,200</span>
+                <span class="font-bold text-[#ff6900]" id="price-j10">KRW 8,200</span>
                 <span class="font-bold text-slate-900">No. J 10</span>
               </div>
             </div>
@@ -367,7 +366,7 @@
             <img src="우유.jpg" alt="Milk" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
             <h3 id="menu-title-k11" class="font-bold text-slate-800">우유 . Milk (300ml)</h3>
             <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
-                <span class="font-bold text-[#ff6900]">KRW 2,000</span>
+                <span class="font-bold text-[#ff6900]" id="price-k11">KRW 2,000</span>
                 <span class="font-semibold text-slate-700">No. K 11</span>
             </div>
         </div>
@@ -376,7 +375,7 @@
             <img src="바나나우유.jpg" alt="Banana Milk" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
             <h3 id="menu-title-l12" class="font-bold text-slate-800">바나나 우유 . Banana Milk</h3>
             <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
-                <span class="font-bold text-[#ff6900]">KRW 2,000</span>
+                <span class="font-bold text-[#ff6900]" id="price-l12">KRW 2,000</span>
                 <span class="font-semibold text-slate-700">No. L 12</span>
             </div>
         </div>
@@ -385,7 +384,7 @@
             <img src="오렌지주스.jpg" alt="Orange Juice" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
             <h3 id="menu-title-m13" class="font-bold text-slate-800">오렌지 주스 . Orange juice</h3>
             <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
-                <span class="font-bold text-[#ff6900]">KRW 2,400</span>
+                <span class="font-bold text-[#ff6900]" id="price-m13">KRW 2,400</span>
                 <span class="font-semibold text-slate-700">No. M 13</span>
             </div>
         </div>
@@ -394,7 +393,7 @@
             <img src="커피.jpg" alt="Americano" class="h-32 object-contain mb-4 zoomable-image cursor-pointer">
             <h3 id="menu-title-n14" class="font-bold text-slate-800">커피 - 아메리카노 . Americano</h3>
             <div class="mt-auto w-full pt-3 border-t border-orange-100 flex justify-between items-center text-sm">
-                <span class="font-bold text-[#ff6900]">KRW 2,500</span>
+                <span class="font-bold text-[#ff6900]" id="price-n14">KRW 2,500</span>
                 <span class="font-semibold text-slate-700">No. N 14</span>
             </div>
         </div>
@@ -519,13 +518,75 @@
     }
 
     /* --------------------------------------
-       3. 다국어 번역 로직
+       3. 메뉴 기본 가격 설정 (KRW)
+    -------------------------------------- */
+    const menuBasePrices = {
+        "price-a1": 7300,
+        "price-b2": 8200,
+        "price-c3": 8200,
+        "price-d4": 8600,
+        "price-e5": 8200,
+        "price-f6": 8900,
+        "price-g7": 9300,
+        "price-h8": 9300,
+        "price-i9": 9600,
+        "price-j10": 8200,
+        "price-k11": 2000,
+        "price-l12": 2000,
+        "price-m13": 2400,
+        "price-n14": 2500
+    };
+
+    /* --------------------------------------
+       4. 환율 및 포맷팅 로직
+    -------------------------------------- */
+    // 대략적 환율 (필요시 업데이트)
+    function getExchangeRate(lang) {
+        if (lang === 'en') return 0.00075; // 1000원 -> 0.75달러
+        if (lang === 'ja') return 0.11;    // 1000원 -> 110엔
+        if (lang === 'zh') return 0.0053;  // 1000원 -> 5.3위안
+        return 1;
+    }
+
+    function formatMoney(amount, lang) {
+        if (lang === 'en') {
+            // 달러: 소수점 2자리 + $
+            return "$" + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        } else if (lang === 'ja') {
+            // 엔: 정수 + 円
+            return Math.round(amount).toLocaleString() + "円";
+        } else if (lang === 'zh') {
+            // 위안: 정수 + ¥
+            return "¥" + Math.round(amount).toLocaleString();
+        } else {
+            // 원화: 정수 + KRW
+            return "KRW " + Math.round(amount).toLocaleString();
+        }
+    }
+
+    function updateMenuPrices(lang) {
+        const rate = getExchangeRate(lang);
+        
+        for (const [id, basePrice] of Object.entries(menuBasePrices)) {
+            const el = document.getElementById(id);
+            if(el) {
+                // KRW가 아닐 경우 환율 적용
+                let finalPrice = basePrice;
+                if(lang !== 'ko') {
+                    finalPrice = basePrice * rate;
+                }
+                el.innerText = formatMoney(finalPrice, lang);
+            }
+        }
+    }
+
+    /* --------------------------------------
+       5. 다국어 번역 로직
     -------------------------------------- */
     const translations = {
       ko: { 
-          img: "kr.png", // 헤더용 국기 이미지
+          img: "kr.png",
 
-          /* 헤더 메뉴 (data-translate 키) */
           nav_about: "about", 
           nav_rooms: "rooms", 
           nav_breakfast: "breakfast", 
@@ -534,10 +595,8 @@
           nav_lounge: "bluerain lounge", 
           nav_contact: "contact",
 
-          /* 배달 안내 */
           "notice-text": "아침 7시~8시 객실 문 앞 배달, 벨로 안내드립니다.<br>준비된 조식을 받아 객실에서 편하게 즐겨주세요.",
 
-          /* 메뉴 번역 */
           "menu-title-a1": "햄치즈 크라상 샌드위치<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Croissant Sandwich</span>",
           "menu-desc-a1": "겹겹이 고소한 크라상에 신선한 토마토와 짭조름한 햄, 치즈를 넣은 크라상의 베스트 플레이버 샌드위치<br>Layered buttery croissant with fresh tomato, savory ham, and cheese.",
 
@@ -573,8 +632,6 @@
           "menu-title-m13": "오렌지 주스 . Orange juice",
           "menu-title-n14": "커피 - 아메리카노 . Americano",
 
-
-          /* 하단 정보 */
           btnMore: "더보기", 
           companyName: "(주)호텔인스타", 
           ceoName: "대표자 : 이영환", 
@@ -587,7 +644,6 @@
       en: { 
           img: "usa.png",
 
-          /* 헤더 메뉴 */
           nav_about: "about", 
           nav_rooms: "rooms", 
           nav_breakfast: "breakfast", 
@@ -596,10 +652,8 @@
           nav_lounge: "bluerain lounge", 
           nav_contact: "contact",
 
-          /* 배달 안내 */
           "notice-text": "Breakfast is delivered to your door between 7:00 and 8:00 AM.<br>We will ring the bell. Please enjoy your meal in the comfort of your room.",
 
-          /* 메뉴 번역 */
           "menu-title-a1": "Ham & Cheese Croissant Sandwich",
           "menu-desc-a1": "Layered buttery croissant with fresh tomato, savory ham, and cheese.",
 
@@ -635,7 +689,6 @@
           "menu-title-m13": "Orange juice",
           "menu-title-n14": "Americano",
 
-          /* 하단 정보 */
           btnMore: "View more", 
           companyName: "Insta Hotel Co., Ltd.", 
           ceoName: "CEO: Lee Young Hwan", 
@@ -648,7 +701,6 @@
       ja: { 
           img: "jp.png",
 
-          /* 헤더 메뉴 */
           nav_about: "about (ホテル紹介)", 
           nav_rooms: "rooms", 
           nav_breakfast: "breakfast (朝食)", 
@@ -657,10 +709,8 @@
           nav_lounge: "bluerain lounge", 
           nav_contact: "contact",
 
-          /* 배달 안내 */
           "notice-text": "朝7時～8時の間に客室の前までお届けし、ベルでお知らせします。<br>客室でごゆっくり朝食をお楽しみください。",
 
-          /* 메뉴 번역 */
           "menu-title-a1": "ハムチーズクロワッサンサンド<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Croissant Sandwich</span>",
           "menu-desc-a1": "香ばしいクロワッサンに新鮮なトマト、ハム、チーズを挟んだベストセラーサンドイッチ。<br>Layered buttery croissant with fresh tomato, savory ham, and cheese.",
 
@@ -696,7 +746,6 @@
           "menu-title-m13": "オレンジジュース",
           "menu-title-n14": "コーヒー (アメリカーノ)",
 
-          /* 하단 정보 */
           btnMore: "もっと見る", 
           companyName: "インスタホテル株式会社", 
           ceoName: "代表者 : イ・ヨンファン", 
@@ -709,7 +758,6 @@
       zh: { 
           img: "cn.png",
 
-          /* 헤더 메뉴 */
           nav_about: "about (酒店介绍)", 
           nav_rooms: "rooms", 
           nav_breakfast: "breakfast (早餐)", 
@@ -718,10 +766,8 @@
           nav_lounge: "bluerain lounge", 
           nav_contact: "contact",
 
-          /* 배달 안내 */
           "notice-text": "早餐于7:00~8:00送到客房门口并按铃通知。<br>请在客房内舒适地享用为您准备的早餐。",
 
-          /* 메뉴 번역 */
           "menu-title-a1": "火腿芝士牛角包三明治<br><span class='text-sm font-semibold text-slate-600'>Ham & Cheese Croissant Sandwich</span>",
           "menu-desc-a1": "层层酥脆的牛角包搭配新鲜番茄、咸香火腿和芝士的最佳风味三明治。<br>Layered buttery croissant with fresh tomato, savory ham, and cheese.",
 
@@ -757,7 +803,6 @@
           "menu-title-m13": "橙汁",
           "menu-title-n14": "咖啡 (美式)",
 
-          /* 하단 정보 */
           btnMore: "查看更多", 
           companyName: "Insta Hotel有限公司", 
           ceoName: "代表：李永焕", 
@@ -811,6 +856,9 @@
             const key = el.getAttribute("data-translate");
             if(t[key]) el.textContent = t[key];
         });
+
+        // (3) 메뉴 가격 업데이트
+        updateMenuPrices(lang);
     }
 
     if(headerSelect) {
