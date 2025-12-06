@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment – Insta Hotel - mainbranch</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Payment – Insta Hotel - Twin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -12,10 +12,11 @@
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f4f4f4; color: #333; }
         
+        /* 컨테이너 */
         .payment-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 100px 20px 60px;
+            padding: 100px 20px 60px; /* 헤더 높이 고려 */
         }
 
         /* 폼 스타일 */
@@ -148,7 +149,7 @@
         }
         .total-price { color: #ff6900; font-size: 24px; }
 
-        /* [NEW] 선택한 옵션 리스트 스타일 추가 */
+        /* 선택한 옵션 리스트 스타일 */
         .option-detail-list { 
             margin-top: 5px; 
             margin-bottom: 15px;
@@ -194,6 +195,7 @@
             margin-top: 20px;
         }
         .btn-submit:hover { background-color: #e05e00; }
+        .btn-submit:disabled { background-color: #ccc; cursor: not-allowed; }
 
         /* 팝업 모달 스타일 */
         .modal {
@@ -264,7 +266,7 @@
 
   <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
     <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
-       
+      
       <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -352,7 +354,8 @@
       </div>
     </div>
   </nav>
-  <main class="payment-container">
+
+    <main class="payment-container">
         <h2 class="page-title" data-i18n="page_title">결제하기</h2>
 
         <div class="checkout-grid">
@@ -407,8 +410,7 @@
                     </div>
                     <p class="notice-text">
                         <strong data-i18n="label_about_res">예약과 관련하여 •</strong><br>
-                        * <span data-i18n="notice_checkin">insta hotel email (yhl5258@naver.com)을 받으셔야 예약 확정이 된 것입니다.<br>
-                        * 체크인 당일 현장에서 예약자 본인 확인이 진행됩니다.</span>
+                        * <span data-i18n="notice_checkin">insta hotel email (yhl5258@naver.com)을 받으셔야 예약 확정이 된 것입니다.<br>* 체크인 당일 현장에서 예약자 본인 확인이 진행됩니다.</span>
                     </p>
                     
                     <label class="confirm-check">
@@ -478,7 +480,7 @@
                     </ul>
                 </div>
 
-                <button class="btn-submit" onclick="requestPayment()" data-i18n="btn_pay">결제하기</button>
+                <button id="btn-submit" class="btn-submit" onclick="requestPayment()" data-i18n="btn_pay">결제하기</button>
 
             </div>
         </div>
@@ -520,14 +522,18 @@
     const mobileCloseBtn = document.getElementById("mobile-menu-close-btn");
 
     function openMenu() {
-        mobileDrawer.classList.remove("-translate-x-full");
-        drawerOverlay.classList.remove("hidden");
-        document.body.style.overflow = "hidden"; 
+        if(mobileDrawer && drawerOverlay) {
+            mobileDrawer.classList.remove("-translate-x-full");
+            drawerOverlay.classList.remove("hidden");
+            document.body.style.overflow = "hidden"; 
+        }
     }
     function closeMenu() {
-        mobileDrawer.classList.add("-translate-x-full");
-        drawerOverlay.classList.add("hidden");
-        document.body.style.overflow = ""; 
+        if(mobileDrawer && drawerOverlay) {
+            mobileDrawer.classList.add("-translate-x-full");
+            drawerOverlay.classList.add("hidden");
+            document.body.style.overflow = ""; 
+        }
     }
 
     if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMenu);
@@ -546,8 +552,10 @@
 
     const translations = {
         ko: {
-            img: "kr.png", // 이미지 파일명
+            img: "kr.png", 
             flag: "🇰🇷",
+            unit_prefix: "",
+            unit_suffix: "원",
             unit_night: "박",
             alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
             alert_done: "결제가 완료되었습니다! 예약 내역이 저장되었습니다.",
@@ -609,6 +617,8 @@
         en: {
             img: "usa.png",
             flag: "🇺🇸",
+            unit_prefix: "$",
+            unit_suffix: "",
             unit_night: " nights",
             alert_agree: "You must agree to all terms to proceed.",
             alert_done: "Reservation Completed! Details saved.",
@@ -670,6 +680,8 @@
         ja: {
             img: "jp.png",
             flag: "🇯🇵",
+            unit_prefix: "",
+            unit_suffix: "円",
             unit_night: " 泊",
             alert_agree: "すべての規約に同意する必要があります。",
             alert_done: "予約が完了しました！詳細が保存されました。",
@@ -731,6 +743,8 @@
         zh: {
             img: "cn.png",
             flag: "🇨🇳",
+            unit_prefix: "¥",
+            unit_suffix: "",
             unit_night: " 晚",
             alert_agree: "必须同意所有条款才能付款。",
             alert_done: "预订完成！详情已保存。",
@@ -895,36 +909,42 @@
         }
     }
 
+    // ====================================================================
+    // [중요] 페이지 로드 및 언어 변경 감지 로직
+    // 다른 언어 선택 시 '예약상세트윈.html'로 리다이렉트
+    // ====================================================================
     window.onload = function() {
-        // [NEW] URL에서 currency 파라미터 확인하여 언어 설정
         const params = new URLSearchParams(window.location.search);
-        const urlLang = params.get('currency');
+        // URL에서 currency 파라미터 가져오기 (기본값 ko)
+        const urlLang = params.get('currency') || 'ko';
         
-        if (urlLang && translations[urlLang]) {
-            updateLanguage(urlLang);
-        } else {
-            updateLanguage('ko'); // 기본값
-        }
-        
+        // 초기 언어 설정
+        updateLanguage(urlLang);
+
         const headerSelect = document.getElementById("header-lang-select");
         const drawerSelect = document.getElementById("drawer-lang-select");
 
-        // 헤더 투명 셀렉트 박스 이벤트
-        if(headerSelect) {
-            headerSelect.addEventListener("change", (e) => {
-                const lang = e.target.value;
-                if(drawerSelect) drawerSelect.value = lang; 
-                updateLanguage(lang);
-            });
+        // 언어 변경 처리 함수
+        function handleLanguageChange(e) {
+            const selectedLang = e.target.value;
+            // 처음 들어온 언어(urlLang)와 다른 언어를 선택했다면
+            if (selectedLang !== urlLang) {
+                // 예약 상세 페이지로 리다이렉트 (Twin 룸)
+                window.location.href = '예약상세트윈.html';
+            } else {
+                // 같은 언어라면 단순 화면 갱신
+                updateLanguage(selectedLang);
+            }
         }
 
-        // 드로어 메뉴 셀렉트 박스 이벤트
+        // 헤더 언어 선택 이벤트
+        if(headerSelect) {
+            headerSelect.addEventListener("change", handleLanguageChange);
+        }
+        
+        // 모바일 드로어 언어 선택 이벤트
         if(drawerSelect) {
-            drawerSelect.addEventListener("change", (e) => {
-                const lang = e.target.value;
-                if(headerSelect) headerSelect.value = lang; 
-                updateLanguage(lang);
-            });
+            drawerSelect.addEventListener("change", handleLanguageChange);
         }
     };
 
@@ -1003,6 +1023,11 @@
             }
         }
 
+        // 버튼 비활성화 (중복 클릭 방지)
+        const submitBtn = document.getElementById('btn-submit');
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Processing...";
+
         try {
             const { data, error } = await client
                 .from('bookings') 
@@ -1016,17 +1041,20 @@
                         room_id: roomId,  // room_id 저장 추가
                         room_price: roomPrice,
                         total_price: total,
+                        currency: currentLang, // 결제 통화 정보 저장
                         selected_options: selectedOptionsArray,
                         social_insta: insta,
                         social_tiktok: tiktok,
                         guest_request: requestMsg,
-                        status: 'PAID'
+                        status: '결제완료'
                     }
                 ]);
 
             if (error) {
                 console.error('Supabase error:', error);
                 alert(t.alert_fail + error.message);
+                submitBtn.disabled = false;
+                submitBtn.innerText = t.btn_pay;
             } else {
                 alert(t.alert_done);
                 window.location.href = 'index.html'; 
@@ -1034,6 +1062,8 @@
         } catch (err) {
             console.error('Unexpected error:', err);
             alert("시스템 오류가 발생했습니다.");
+            submitBtn.disabled = false;
+            submitBtn.innerText = t.btn_pay;
         }
     }
     </script>
