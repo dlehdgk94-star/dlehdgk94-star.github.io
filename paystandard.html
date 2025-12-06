@@ -914,32 +914,46 @@
         }
     }
 
+    // --------------------------------------------------------------------------
+    // [중요] 언어 변경 로직 수정: 다른 언어 선택 시 바로 예약 페이지로 이동
+    // --------------------------------------------------------------------------
     window.onload = function() {
         const params = new URLSearchParams(window.location.search);
-        // URL에서 currency 파라미터를 읽어서 초기 언어 설정 (없으면 'ko')
+        
+        // URL에서 currency 파라미터를 읽어 초기 언어 설정 (없으면 'ko')
+        // 이 urlLang이 기준점이 됩니다.
         const urlLang = params.get('currency') || 'ko';
         
+        // 초기 화면 렌더링
         updateLanguage(urlLang);
         
         const headerSelect = document.getElementById("header-lang-select");
         const drawerSelect = document.getElementById("drawer-lang-select");
 
-        // 헤더 투명 셀렉트 박스 이벤트
-        if(headerSelect) {
-            headerSelect.addEventListener("change", (e) => {
-                const lang = e.target.value;
-                if(drawerSelect) drawerSelect.value = lang; 
-                updateLanguage(lang);
-            });
+        // 언어 변경 핸들러 함수
+        function handleLanguageChange(e) {
+            const selectedLang = e.target.value;
+            
+            // 처음 들어온 언어(화폐)와 다른 언어를 선택했다면?
+            if (selectedLang !== urlLang) {
+                // 경고창 없이 즉시 예약 페이지로 리다이렉트
+                window.location.href = 'reservation.html';
+            } else {
+                // 만약 원래 언어를 다시 선택했다면 화면만 갱신 (단순 UI 업데이트)
+                updateLanguage(selectedLang);
+                if(headerSelect) headerSelect.value = selectedLang;
+                if(drawerSelect) drawerSelect.value = selectedLang;
+            }
         }
 
-        // 드로어 메뉴 셀렉트 박스 이벤트
+        // 헤더 언어 선택박스 감지
+        if(headerSelect) {
+            headerSelect.addEventListener("change", handleLanguageChange);
+        }
+
+        // 모바일 드로어 언어 선택박스 감지
         if(drawerSelect) {
-            drawerSelect.addEventListener("change", (e) => {
-                const lang = e.target.value;
-                if(headerSelect) headerSelect.value = lang; 
-                updateLanguage(lang);
-            });
+            drawerSelect.addEventListener("change", handleLanguageChange);
         }
     };
 
