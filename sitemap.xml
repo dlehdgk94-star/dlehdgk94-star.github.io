@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <url>
-    <loc>https://dlehdgk94-star.github.io/</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://instahotel-main.com/</loc>
+    <lastmod>2025-12-08</lastmod>
     <priority>1.0</priority>
   </url>
-
-  <url><loc>https://dlehdgk94-star.github.io/index.html</loc></url>
-  <url><loc>https://dlehdgk94-star.github.io/about.html</loc></url>
-  <url><loc>https://dlehdgk94-star.github.io/contact.html</loc></url>
-  <url><loc>https://dlehdgk94-star.github.io/rooms.html</loc></url>
-  <url><loc>https://dlehdgk94-star.github.io/reservation.html</loc></url>
-
-  <url><loc>https://dlehdgk94-star.github.io/room-deluxe.html</loc></url>
-  <url><loc>https://dlehdgk94-star.github.io/room-luxery.html</loc></url>
-  <url><loc>https://dlehdgk94-star.github.io/room-premium.html</loc></url>
-  <url><loc>https://dlehdgk94-star.github.io/room-special.html</loc></url>
-  <url><loc>https://dlehdgk94-star.github.io/room-standard.html</loc></url>
-  <url><loc>https://dlehdgk94-star.github.io/room-twin.html</loc></url>
-
+  <url>
+    <loc>https://instahotel-main.com/about.html</loc>
+    <lastmod>2025-12-08</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://instahotel-main.com/rooms.html</loc>
+    <lastmod>2025-12-08</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://instahotel-main.com/조식메뉴판.html</loc>
+    <lastmod>2025-12-08</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://instahotel-main.com/reservation.html</loc>
+    <lastmod>2025-12-08</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://instahotel-main.com/instaspot.html</loc>
+    <lastmod>2025-12-08</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://instahotel-main.com/contact.html</loc>
+    <lastmod>2025-12-08</lastmod>
+    <priority>0.8</priority>
+  </url>
 </urlset>
