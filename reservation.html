@@ -3,80 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reservation – Insta Hotel - mainbranch</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <title>Reservation – Insta Hotel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
+  
   <style>
-    html { scroll-behavior: smooth; font-family: 'Poppins', sans-serif; }
+    /* 폰트 설정 */
+    body { font-family: 'Poppins', 'Noto Sans KR', sans-serif; }
     
-    /* 🔥 무한 슬라이드 애니메이션 (기존 유지) */
-    @keyframes slideInfinite {
-      0%    { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .animate-slide {
-        animation: slideInfinite 30s linear infinite;
-    }
-
-    /* --------------------------------------------------------
-       [1] 중앙 하단 플로팅 예약 버튼 스타일 (NEW - 메인페이지와 동일)
-    -------------------------------------------------------- */
-    .floating-book-btn {
-        position: fixed;
-        bottom: 30px; 
-        left: 50%; 
-        transform: translateX(-50%); 
-        z-index: 9990; /* 채팅 버튼보다는 아래 레이어 */
-        
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        
-        background-color: #111; /* 고급스러운 검정 배경 */
-        color: white;
-        padding: 12px 30px;
-        border-radius: 50px; /* 둥근 알약 모양 */
-        border: 2px solid #ff6900; /* 브랜드 컬러 테두리 */
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        text-decoration: none;
-        transition: all 0.3s ease;
-        
-        width: auto;
-        min-width: 260px; 
-        justify-content: center;
-    }
-
-    .floating-book-btn:hover {
-        transform: translateX(-50%) translateY(-5px); 
-        box-shadow: 0 8px 25px rgba(255, 105, 0, 0.4); 
-        background-color: #000;
-    }
-
-    .book-text-group {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        line-height: 1.2;
-    }
+    /* [예약 페이지 그리드 레이아웃] */
+    .booking-grid { display: flex; gap: 40px; }
     
-    .book-title { font-weight: bold; font-size: 16px; color: #fff; }
-    .book-sub { font-size: 11px; color: #ff6900; font-weight: 600; }
-    .book-arrow { font-size: 18px; color: #ccc; margin-left: auto;}
+    /* 달력 스타일 */
+    .calendar-section { width: 300px; flex-shrink: 0; }
+    .cal-header { display: flex; justify-content: center; align-items: center; margin-bottom: 20px; font-weight: 500; font-size: 18px; }
+    .cal-header i { margin: 0 20px; cursor: pointer; color: #888; font-size: 14px; padding: 10px; }
+    .calendar-table { width: 100%; text-align: center; font-size: 13px; color: #888; }
+    .calendar-table th { font-weight: 400; padding-bottom: 15px; color: #bbb; }
+    
+    /* td 기본 스타일 */
+    .calendar-table td { padding: 10px 0; cursor: pointer; width: 40px; height: 40px; border-radius: 0; } 
+    .calendar-table td:hover:not(.past-day):not(.selected-day) { color: #FF5000; font-weight: bold; background-color: #fff0e6; border-radius: 50%; }
+    
+    /* 날짜 상태 */
+    .today { color: #FF5000 !important; font-weight: 800 !important; }
+    .selected-day { background-color: #FF5000 !important; color: white !important; font-weight: bold; border-radius: 50% !important; z-index: 1; position: relative; }
+    .in-range { background-color: #ffe8d9; color: #FF5000; }
+    .past-day { color: #e0e0e0 !important; pointer-events: none; cursor: default; }
+    
+    /* 객실 리스트 스타일 */
+    .room-section { flex-grow: 1; }
+    .room-card { display: flex; align-items: center; padding: 30px 0; border-bottom: 1px solid #eee; }
+    .room-img { width: 160px; height: 120px; background-color: #ddd; border-radius: 8px; overflow: hidden; margin-right: 30px; flex-shrink: 0; }
+    .room-img img { width: 100%; height: 100%; object-fit: cover; }
+    .room-info { flex-grow: 1; }
+    .room-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; color: #333; }
+    .room-price { font-size: 18px; font-weight: 700; margin-bottom: 4px; color: #111; }
+    /* 가격 옆에 작게 박수 표시 등을 위한 스타일 */
+    .price-detail { font-size: 13px; font-weight: normal; color: #666; margin-left: 5px; }
+    .room-cap { font-size: 13px; color: #888; }
+    
+    /* 예약 버튼 기본 스타일 */
+    .btn-reserve { padding: 8px 25px; border: 1px solid #ccc; background: white; border-radius: 4px; font-size: 13px; cursor: pointer; transition: 0.2s; white-space: nowrap; display: inline-block; text-align: center; text-decoration: none; color: #333; }
+    .btn-reserve:hover { border-color: #333; background-color: #f9f9f9; }
 
-    /* 모바일 스타일 조정 */
+    /* 예약 마감 스타일 */
+    .btn-soldout { background-color: #f0f0f0 !important; color: #aaa !important; border-color: #ddd !important; cursor: not-allowed !important; pointer-events: none; }
+
+    /* [모바일 달력 팝업 스타일] */
+    .section-guide { 
+        display: none; /* PC 숨김 */
+        border: 1px solid #333; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; background: white; justify-content: space-between; font-weight: 500; cursor: pointer;
+    }
+    .section-guide::after { content: '\f073'; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+    .modal-buttons { display: none; } 
+
+    /* [반응형 - 모바일] */
     @media (max-width: 768px) {
-        .floating-book-btn {
-            bottom: 25px; 
-            min-width: auto;
-            width: 65%; /* 화면의 65% 차지 */
-            padding: 10px 20px;
-            left: 40%; /* 채팅 버튼과 안 겹치게 살짝 왼쪽으로 치우침 */
+        .booking-grid { flex-direction: column; gap: 0; }
+        .section-guide { display: flex; }
+        .calendar-section {
+            display: none; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6); z-index: 9999;
+            justify-content: center; align-items: center;
         }
-        .book-title { font-size: 14px; }
+        .calendar-section.active { display: flex; }
+        .calendar-inner-box {
+            background: white; width: 90%; max-width: 400px; padding: 30px 20px;
+            border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 25px; }
+        .btn-modal { flex: 1; padding: 15px 0; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; }
+        .btn-cancel { background: white; border: 1px solid #ddd; color: #666; }
+        .btn-confirm { background: #111; color: white; }
+
+        .room-card { padding: 20px 0; position: relative; }
+        .room-img { width: 90px; height: 90px; margin-right: 15px; border-radius: 12px; }
+        .room-title { font-size: 15px; }
+        .room-price { font-size: 16px; }
+        .room-cap { font-size: 12px; }
+        .btn-reserve { position: absolute; right: 0; top: 50%; transform: translateY(-50%); padding: 6px 12px; font-size: 12px; }
     }
 
     /* --------------------------------------------------------
-       [2] 우측 하단 채팅 위젯 스타일 (NEW - 메인페이지와 동일)
+       [추가] 우측 하단 채팅 위젯 스타일 (Index 페이지와 동일)
     -------------------------------------------------------- */
     .chat-widget-container {
         position: fixed;
@@ -140,24 +152,24 @@
         to { opacity: 1; transform: translateY(0); }
     }
   </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
     const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
     const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
     
-    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함 (이름 충돌 방지)
+    // window 객체에 담아서 어디서든 꺼내 쓸 수 있게 함
     window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
     
     console.log("홈페이지-슈파베이스 연결 성공!");
-</script>
+  </script>
 </head>
 <body class="bg-white text-slate-900 font-sans">
 
-  <header id="header" class="fixed top-0 left-0 right-0 z-30 transition-colors duration-300 bg-transparent text-white">
+  <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
     <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
       
-      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
+      <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
@@ -168,15 +180,15 @@
         <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
-        <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
-        <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
-        <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast(조식)</a>
-        <a href="reservation.html" class="hover:text-orange-200 transition-colors">reservation(예약)</a>
-        <a href="instaspot.html" class="hover:text-orange-200 transition-colors">tour&food&cafe(관광&맛집&카페)</a>
-        <a href="#lounge" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
-        <a href="contact.html" class="hover:text-orange-200 transition-colors">contact</a>
-      </nav>
+     <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
+  <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
+  <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
+  <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast(조식)</a>
+  <a href="reservation.html" class="hover:text-orange-200 transition-colors">reservation(예약)</a>
+  <a href="instaspot.html" class="hover:text-orange-200 transition-colors">tour&food&cafe(관광&맛집&카페)</a>
+  <a href="#lounge" class="hover:text-orange-200 transition-colors">bluerain lounge</a>
+  <a href="contact.html" class="hover:text-orange-200 transition-colors">contact</a>
+</nav>
 
       <div class="flex items-center relative drop-shadow-md z-20">
          <div class="flex items-center gap-2 cursor-pointer relative group">
@@ -225,7 +237,7 @@
                 <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
             </ul>
         </li>
-        
+
         <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]">breakfast(조식)</a></li>
         <li><a href="reservation.html" class="block hover:text-[#ff6900]">reservation(예약)</a></li>
         <li><a href="instaspot.html" class="block hover:text-[#ff6900]">tour&food&cafe(관광&맛집&카페)</a></li>
@@ -245,120 +257,128 @@
     </div>
   </nav>
 
-  <main class="pt-0">
-    <section class="relative h-[360px] md:h-[460px] overflow-hidden">
-      <img
-        src="hero6.jpg"
-        alt="Room view"
-        class="absolute inset-0 w-full h-full object-cover"
-      />
-      <div class="absolute inset-0 bg-black/10"></div>
-    </section>
+  <main class="mx-auto max-w-6xl px-4 pb-20 pt-24 md:px-6">
+    
+    <div class="mb-12">
+        <h2 class="text-[#FF5000] font-bold text-lg mb-2" id="benefit-title">Insta Hotel 예약 혜택</h2>
+        <p class="text-sm text-gray-600" id="benefit-desc">* 홈페이지 예약 시, 다양한 혜택을 함께 이용하실 수 있습니다 :)</p>
+    </div>
 
-    <section class="max-w-6xl mx-auto px-4 py-12 md:py-16">
-      <h1 class="text-lg md:text-xl font-semibold mb-10">
-        Room Reservation
-      </h1>
-
-      <div class="grid grid-cols-3 gap-3 md:gap-10 mb-12">
-        <div class="text-center transition hover:-translate-y-1 duration-300">
-          <a href="reservation2.html" class="block">
-            <img src="hero7.jpg" alt="패키지 1" class="w-24 h-24 md:w-44 md:h-44 mx-auto rounded-full object-cover shadow-md font-bold" />
-            <p class="mt-2 md:mt-4 text-xs md:text-sm font-semibold text-slate-700 break-keep">Friends & Fun</p>
-          </a>
-        </div>
-        <div class="text-center transition hover:-translate-y-1 duration-300">
-          <a href="reservation2.html" class="block">
-            <img src="럭셔리5.png" alt="패키지 2" class="w-24 h-24 md:w-44 md:h-44 mx-auto rounded-full object-cover shadow-md font-bold" />
-            <p class="mt-2 md:mt-4 text-xs md:text-sm font-semibold text-slate-700 break-keep">Stylish Retreat</p>
-          </a>
-        </div>
-        <div class="text-center transition hover:-translate-y-1 duration-300">
-          <a href="reservation2.html" class="block">
-            <img src="hero9.png" alt="패키지 3" class="w-24 h-24 md:w-44 md:h-44 mx-auto rounded-full object-cover shadow-md font-bold" />
-            <p class="mt-2 md:mt-4 text-xs md:text-sm font-semibold text-slate-700 break-keep">Relax & Recharge</p>
-          </a>
-        </div>
-      </div>
-      <div class="grid md:grid-cols-4 gap-10 items-start mb-12">
-        <div class="md:col-span-3 text-[15px] leading-relaxed space-y-1 text-[#ff6900] font-semibold" id="res-notice-group">
-          <p>• 예약 및 호텔 이용 관련 : yhl5258@naver.com</p>
-          <p>• 예약하기 버튼을 누르시면 편하게 예약가능하십니다.</p>
-        </div>
-        <div class="flex md:justify-end items-center">
-          <a href="reservation2.html" class="w-full md:w-56 py-3 bg-[#ff6900] text-white text-sm font-semibold rounded-full shadow-md hover:bg-orange-500 transition duration-300 text-center flex justify-center items-center" id="btn-reserve">
-    예약하기
-</a>
-        </div>
-      </div>
-
-      <section class="max-w-5xl mx-auto px-4 pt-10 pb-12 text-sm leading-relaxed border-t border-slate-100 mt-10">
-        <p class="text-orange-500 font-semibold mb-2" id="long-stay-label">장기숙박 관련 안내</p>
-        <h2 class="text-2xl md:text-3xl font-bold mb-4" id="long-stay-title">인스타호텔 장기 투숙 안내 (Long-term stay announcement)</h2>
+    <div class="booking-grid">
         
-        <div id="long-stay-desc">
-            <p class="text-orange-500 font-semibold mb-1">
-              인스타호텔에서 보증금 없이<br />특별한 가격으로 일상을 여행하는 삶을 경험해보세요!
-            </p>
+        <div class="section-guide" onclick="openModal()">
+            <span id="display-text-mobile">체크인 / 체크아웃 날짜를 선택해 주세요</span>
         </div>
 
-        <div class="space-y-1 mb-6 mt-6" id="long-stay-details">
-          <p>▶ 주소 : 경기도 수원시 영통구 영통로 94-6, 인스타호텔 본점</p>
-          <p>▶ 거주기간 : 최소 1개월 이상</p>
-          <p>▶ 방 형태 : 룸 1개, 화장실 1개</p>
-          <p>▶ 옵션 : TV, WiFi, 침대, 냉장고, 에어컨, 공기청정기, 자동비데, 욕조(일부 객실) 등</p>
-          <p>▶ 관리비 : 없음</p>
-          <p>▶ 입주일 : 즉시 가능</p>
-          <p>▶ 문의 : 카카오톡 플러스친구 [인스타호텔] / 인스타그램 @instahotel_mainbranch / 전화 031-203-4301</p>
-        </div>
+        <aside class="calendar-section" id="calendar-modal">
+            <div class="calendar-inner-box">
+                <div class="cal-header">
+                    <i class="fas fa-chevron-left" onclick="changeMonth(-1)"></i>
+                    <span id="current-month-year">2025.11</span>
+                    <i class="fas fa-chevron-right" onclick="changeMonth(1)"></i>
+                </div>
+                <table class="calendar-table">
+                    <thead>
+                        <tr><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr>
+                    </thead>
+                    <tbody id="calendar-body"></tbody>
+                </table>
+                
+                <div class="modal-buttons">
+                    <button class="btn-modal btn-cancel" onclick="closeModal()" id="btn-cancel">취소</button>
+                    <button class="btn-modal btn-confirm" onclick="confirmDate()" id="btn-confirm">확인</button>
+                </div>
+            </div>
+        </aside>
+
+        <section class="room-section">
+            <article class="room-card" data-room-id="1">
+                <div class="room-img"><img src="hero11.jpg" alt="Standard"></div>
+                <div class="room-info">
+                    <div class="room-title" id="room1-title">스탠다드</div>
+                    <div class="room-price" id="room1-price">85,000원<span class="price-detail"></span></div>
+                    <div class="room-cap" id="room1-cap">기준 2인 (최대 2인)</div>
+                </div>
+                <a href="예약상세스탠.html" data-href="예약상세스탠.html" class="btn-reserve dynamic-reserve-btn">예약</a>
+            </article>
+
+            <article class="room-card" data-room-id="2">
+                <div class="room-img"><img src="hero12.jpg" alt="Deluxe"></div>
+                <div class="room-info">
+                    <div class="room-title" id="room2-title">디럭스</div>
+                    <div class="room-price" id="room2-price">95,000원<span class="price-detail"></span></div>
+                    <div class="room-cap" id="room2-cap">기준 2인 (최대 2인)</div>
+                </div>
+                <a href="예약상세디럭스.html" data-href="예약상세디럭스.html" class="btn-reserve dynamic-reserve-btn">예약</a>
+            </article>
+
+            <article class="room-card" data-room-id="3">
+                <div class="room-img"><img src="hero2.jpg" alt="Premium"></div>
+                <div class="room-info">
+                    <div class="room-title" id="room3-title">프리미엄</div>
+                    <div class="room-price" id="room3-price">105,000원<span class="price-detail"></span></div>
+                    <div class="room-cap" id="room3-cap">기준 2인 (최대 2인)</div>
+                </div>
+                <a href="예약상세프리미엄.html" data-href="예약상세프리미엄.html" class="btn-reserve dynamic-reserve-btn">예약</a>
+            </article>
+
+            <article class="room-card" data-room-id="4">
+                <div class="room-img"><img src="hero7.jpg" alt="Luxury"></div>
+                <div class="room-info">
+                    <div class="room-title" id="room4-title">럭셔리</div>
+                    <div class="room-price" id="room4-price">115,000원<span class="price-detail"></span></div>
+                    <div class="room-cap" id="room4-cap">기준 2인 (최대 2인)</div>
+                </div>
+                <a href="예약상세럭셔리.html" data-href="예약상세럭셔리.html" class="btn-reserve dynamic-reserve-btn">예약</a>
+            </article>
+
+            <article class="room-card" data-room-id="5">
+                <div class="room-img"><img src="hero8.png" alt="Twin"></div>
+                <div class="room-info">
+                    <div class="room-title" id="room5-title">트윈</div>
+                    <div class="room-price" id="room5-price">130,000원<span class="price-detail"></span></div>
+                    <div class="room-cap" id="room5-cap">기준 2인 (최대 3인 무료)</div>
+                </div>
+                <a href="예약상세트윈.html" data-href="예약상세트윈.html" class="btn-reserve dynamic-reserve-btn">예약</a>
+            </article>
+
+            <article class="room-card" data-room-id="6">
+                <div class="room-img"><img src="hero16.png" alt="Special"></div>
+                <div class="room-info">
+                    <div class="room-title" id="room6-title">특실</div>
+                    <div class="room-price" id="room6-price">150,000원<span class="price-detail"></span></div>
+                    <div class="room-cap" id="room6-cap">기준 2인 (최대 4인 무료)</div>
+                </div>
+                <a href="예약상세특실.html" data-href="예약상세특실.html" class="btn-reserve dynamic-reserve-btn">예약</a>
+            </article>
         
         </section>
-    </section>
+    </div>
+  </main>
 
-    <section class="max-w-6xl mx-auto px-4 pt-10 pb-16">
-      <div class="relative w-full max-w-5xl mx-auto h-[180px] md:h-[420px] overflow-hidden rounded shadow-md mt-10">
-        <div id="slideTrack" class="flex h-full gap-3 w-[200%] animate-slide">
-          <img src="hero7.jpg" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 1" />
-          <img src="hero8.png" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 2" />
-          <img src="hero5.jpg" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 3" />
-          <img src="조식.jpg"   class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 4" />
-          <img src="hero2.jpg"  class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 5" />
-          <img src="조식.png"   class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 6" />
-          <img src="hero7.jpg" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 1 copy" />
-          <img src="hero8.png" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 2 copy" />
-          <img src="hero5.jpg" class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 3 copy" />
-          <img src="조식.jpg"   class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 4 copy" />
-          <img src="hero2.jpg"  class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 5 copy" />
-          <img src="조식.png"   class="w-[16.6667%] h-full object-cover flex-shrink-0" alt="Room 6 copy" />
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
+  <footer id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
       <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
         <div class="flex justify-center gap-4 text-lg"> 
-           <a href="https://www.instagram.com/instahotelkorea" target="_blank">
-               <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
-           </a>
-           <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
-               <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
-           </a>
-           <a href="http://pf.kakao.com/_xiITuG" target="_blank">
-               <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
-           </a>
-           <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
-               <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
-           </a>        
+            <a href="https://www.instagram.com/instahotelkorea" target="_blank">
+                <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
+            </a>
+            <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
+                <img src="icons8-네이버-64.png" alt="Naver" width="24" height="24">
+            </a>
+            <a href="http://pf.kakao.com/_xiITuG" target="_blank">
+                <img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24">
+            </a>
+            <a href="https://www.facebook.com/VIPdesign2020" target="_blank">
+                <img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24">
+            </a>        
         </div>
 
         <div class="space-y-1">
           <p>insta hotel mainbranch, Korea</p>
-          
           <p id="companyName">(주)호텔인스타</p>
           <p id="ceoName">대표자 : 이영환</p>
           <p id="bizNumber">통신판매업 신고번호: 2023-수원영통-1696호</p>
           <p id="address">수원시 영통구 영통로 94-6</p>
-          
           <p>Business License 176-24-01388 | Tel 031-203-4301</p>
         </div>
 
@@ -367,17 +387,7 @@
           <a href="#" class="hover:underline" id="privacy">개인정보처리방침</a>
         </div>
       </div>
-    </section>
-  </main>
-
-  <a href="reservation2.html" class="floating-book-btn">
-    <span class="book-icon" style="font-size:20px;">📅</span>
-    <div class="book-text-group">
-        <span class="book-title">최저가 예약 </span>
-        <span class="book-sub">Official Site Guarantee</span>
-    </div>
-    <span class="book-arrow">➔</span>
-  </a>
+  </footer>
 
   <div class="chat-widget-container" id="chatWidget">
     <div class="chat-options">
@@ -397,10 +407,10 @@
     <div class="chat-main-btn" onclick="toggleChatWidget()">💬</div>
   </div>
 
-  <script>
-    /* --------------------------------------
-       [NEW] 채팅 위젯 토글 함수 (메인페이지와 동일)
-    -------------------------------------- */
+ <script>
+    // ------------------------------------
+    // [추가] 채팅 위젯 스크립트
+    // ------------------------------------
     function toggleChatWidget() {
         var widget = document.getElementById('chatWidget');
         widget.classList.toggle('active');
@@ -412,23 +422,9 @@
         }
     }
 
-    /* --------------------------------------
-       1. 헤더 스크롤 색상 변경 로직 (메인페이지와 동일)
-    -------------------------------------- */
-    const header = document.getElementById("header");
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 20) {
-        header.classList.add("bg-[#ff6900]", "shadow-md");
-        header.classList.remove("bg-transparent");
-      } else {
-        header.classList.remove("bg-[#ff6900]", "shadow-md");
-        header.classList.add("bg-transparent");
-      }
-    });
-
-    /* --------------------------------------
-       2. 모바일 메뉴 (Drawer) 열기/닫기
-    -------------------------------------- */
+    // ------------------------------------
+    // 1. 헤더/모바일 메뉴 기능
+    // ------------------------------------
     const mobileMenuBtn = document.getElementById("mobile-menu-btn");
     const mobileDrawer = document.getElementById("mobile-drawer");
     const drawerOverlay = document.getElementById("drawer-overlay");
@@ -457,130 +453,63 @@
         });
     }
 
-    /* --------------------------------------
-       3. 다국어 번역 데이터 (이미지 파일명 적용)
-    -------------------------------------- */
+    // ------------------------------------
+    // 2. 다국어 번역 데이터
+    // ------------------------------------
     const translations = {
       ko: {
-        img: "kr.png", // 이미지 파일명
+        img: "kr.png",
         flag: "🇰🇷",
-        
-        "res-notice-group": `
-          <p>• 예약 및 호텔 이용 관련 : yhl5258@naver.com</p>
-          <p>• 예약하기 버튼을 누르시면 편하게 예약가능하십니다.</p>
-        `,
-        "btn-reserve": "예약하기",
-
-        "long-stay-label": "장기숙박 관련 안내",
-        "long-stay-title": "인스타호텔 장기 투숙 안내 (Long-term stay announcement)",
-        "long-stay-desc": `
-            <p class="text-orange-500 font-semibold mb-1">
-              인스타호텔에서 보증금 없이<br />특별한 가격으로 일상을 여행하는 삶을 경험해보세요!
-            </p>
-        `,
-        "long-stay-details": `
-          <p>▶ 주소 : 경기도 수원시 영통구 영통로 94-6, 인스타호텔 본점</p>
-          <p>▶ 거주기간 : 최소 1개월 이상</p>
-          <p>▶ 방 형태 : 룸 1개, 화장실 1개</p>
-          <p>▶ 옵션 : TV, WiFi, 침대, 냉장고, 에어컨, 공기청정기, 자동비데, 욕조(일부 객실) 등</p>
-          <p>▶ 관리비 : 없음</p>
-          <p>▶ 입주일 : 즉시 가능</p>
-          <p>▶ 문의 : 카카오톡 플러스친구 [인스타호텔] / 인스타그램 @instahotel_mainbranch / 전화 031-203-4301</p>
-        `,
-
+        "benefit-title": "Insta Hotel 예약 혜택",
+        "benefit-desc": "* 홈페이지 예약 시, 다양한 혜택을 함께 이용하실 수 있습니다 :)",
+        "display-text-mobile": "체크인 / 체크아웃 날짜를 선택해 주세요",
+        "btn-cancel": "취소",
+        "btn-confirm": "확인",
+        "room1-title": "스탠다드", "room2-title": "디럭스", "room3-title": "프리미엄", "room4-title": "럭셔리", "room5-title": "트윈", "room6-title": "특실",
+        "room1-cap": "기준 2인 (최대 2인)", "room2-cap": "기준 2인 (최대 2인)", "room3-cap": "기준 2인 (최대 2인)", "room4-cap": "기준 2인 (최대 2인)", "room5-cap": "기준 2인 (최대 3인 무료)", "room6-cap": "기준 2인 (최대 4인 무료)",
+        "reserve-btn": "예약",
         companyName: "(주)호텔인스타", ceoName: "대표자 : 이영환", bizNumber: "통신판매업 신고번호: 2023-수원영통-1696호", address: "수원시 영통구 영통로 94-6",
         terms: "이용약관", privacy: "개인정보처리방침", inquiryBtn: "문의"
       },
-
       en: {
         img: "usa.png",
         flag: "🇺🇸",
-
-        "res-notice-group": `
-          <p>• Inquiries regarding reservations & usage: yhl5258@naver.com</p>
-          <p>• You can easily make a reservation by clicking the 'Book Now' button.</p>
-        `,
-        "btn-reserve": "Book Now",
-
-        "long-stay-label": "Long-term Stay Info",
-        "long-stay-title": "Insta Hotel Long-term Stay Announcement",
-        "long-stay-desc": `
-            <p class="text-orange-500 font-semibold mb-1">
-              Experience the life of traveling daily at a special price<br />without a deposit at the Insta Hotel!
-            </p>
-        `,
-        "long-stay-details": `
-          <p>▶ Address : Insta Hotel Main Branch, 94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si</p>
-          <p>▶ Stay Duration : Minimum 1 month</p>
-          <p>▶ Room Type : 1 Room, 1 Bathroom</p>
-          <p>▶ Amenities : TV, WiFi, Bed, Refrigerator, AC, Air Purifier, Bidet, Bathtub (selected rooms), etc.</p>
-          <p>▶ Maintenance Fee : None</p>
-          <p>▶ Move-in Date : Immediate move-in available</p>
-          <p>▶ Contact : KakaoTalk [Insta Hotel] / Instagram @instahotel_mainbranch / Tel +82-31-203-4301</p>
-        `,
-
+        "benefit-title": "Insta Hotel Booking Benefits",
+        "benefit-desc": "* Enjoy various benefits when booking through our homepage :)",
+        "display-text-mobile": "Please select Check-in / Check-out dates",
+        "btn-cancel": "Cancel",
+        "btn-confirm": "Confirm",
+        "room1-title": "Standard", "room2-title": "Deluxe", "room3-title": "Premium", "room4-title": "Luxury", "room5-title": "Twin", "room6-title": "Special",
+        "room1-cap": "Std 2 / Max 2", "room2-cap": "Std 2 / Max 2", "room3-cap": "Std 2 / Max 2", "room4-cap": "Std 2 / Max 2", "room5-cap": "Std 2 / Max 3 (Free)", "room6-cap": "Std 2 / Max 4 (Free)",
+        "reserve-btn": "Book",
         companyName: "Insta Hotel Co., Ltd.", ceoName: "CEO: Lee Young Hwan", bizNumber: "Registration: 2023-Suwon Yeongtong-1696", address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si",
         terms: "Terms of Use", privacy: "Privacy Policy", inquiryBtn: "Contact"
       },
-
       ja: {
         img: "jp.png",
         flag: "🇯🇵",
-
-        "res-notice-group": `
-          <p>• 予約および利用に関するお問い合わせ : yhl5258@naver.com</p>
-          <p>•「予約する」ボタンをクリックすると、簡単にご予約いただけます。</p>
-        `,
-        "btn-reserve": "予約する",
-
-        "long-stay-label": "長期滞在のご案内",
-        "long-stay-title": "インスタホテル長期滞在のご案内",
-        "long-stay-desc": `
-            <p class="text-orange-500 font-semibold mb-1">
-              保証金なしで特別な価格で<br />日常を旅するような生活をインスタホテルで体験してください！
-            </p>
-        `,
-        "long-stay-details": `
-          <p>▶ 住所 : 京畿道 水原市 霊通区 霊通路 94-6, インスタホテル本店</p>
-          <p>▶ 居住期間 : 最低1ヶ月以上</p>
-          <p>▶ 部屋タイプ : ルーム1、バスルーム1</p>
-          <p>▶ オプション : TV, WiFi, ベッド, 冷蔵庫, エアコン, 空気清浄機, 自動ビデ, 浴槽(一部客室)など</p>
-          <p>▶ 管理費 : なし</p>
-          <p>▶ 入居日 : 即時可能</p>
-          <p>▶ お問い合わせ : カカオトーク [インスタホテル] / Instagram @instahotel_mainbranch / 電話 031-203-4301</p>
-        `,
-
+        "benefit-title": "Insta Hotel 予約特典",
+        "benefit-desc": "* ホームページからご予約いただくと、様々な特典をご利用いただけます :)",
+        "display-text-mobile": "チェックイン・アウト日を選択してください",
+        "btn-cancel": "キャンセル",
+        "btn-confirm": "確認",
+        "room1-title": "スタンダード", "room2-title": "デラックス", "room3-title": "プレミアム", "room4-title": "ラグジュアリー", "room5-title": "ツイン", "room6-title": "スペシャルルーム",
+        "room1-cap": "基準 2名 / 最大 2名", "room2-cap": "基準 2名 / 最大 2名", "room3-cap": "基準 2名 / 最大 2名", "room4-cap": "基準 2名 / 最大 2名", "room5-cap": "基準 2名 / 最大 3名 (無料)", "room6-cap": "基準 2名 / 最大 4名 (無料)",
+        "reserve-btn": "予約",
         companyName: "インスタホテル株式会社", ceoName: "代表者 : イ・ヨンファン", bizNumber: "登録番号: 2023-水原霊通-1696", address: "水原市霊通区霊通路94-6",
         terms: "利用規約", privacy: "個人情報処理方針", inquiryBtn: "お問い合わせ"
       },
-
       zh: {
         img: "cn.png",
         flag: "🇨🇳",
-
-        "res-notice-group": `
-          <p>• 预订及使用咨询 : yhl5258@naver.com</p>
-          <p>• 点击“立即预订”按钮即可轻松预约。</p>
-        `,
-        "btn-reserve": "立即预订",
-
-        "long-stay-label": "长期住宿指南",
-        "long-stay-title": "Insta Hotel 长期住宿公告",
-        "long-stay-desc": `
-            <p class="text-orange-500 font-semibold mb-1">
-              在Insta Hotel体验无需押金、<br />以特惠价格享受如旅行般的日常生活！
-            </p>
-        `,
-        "long-stay-details": `
-          <p>▶ 地址 : 京畿道 水原市 灵通区 灵通路 94-6, Insta Hotel总店</p>
-          <p>▶ 居住期间 : 至少1个月以上</p>
-          <p>▶ 房型 : 1室 1卫</p>
-          <p>▶ 设施 : 电视, WiFi, 床, 冰箱, 空调, 空气净化器, 智能马桶盖, 浴缸(部分客房)等</p>
-          <p>▶ 管理费 : 无</p>
-          <p>▶ 入住日 : 可立即入住</p>
-          <p>▶ 咨询 : KakaoTalk Plus Friend [Insta Hotel] / Instagram @instahotel_mainbranch / 电话 031-203-4301</p>
-        `,
-
+        "benefit-title": "Insta Hotel 预订优惠",
+        "benefit-desc": "* 通过官网预订，可享受多种优惠 :)",
+        "display-text-mobile": "请选择入住/退房日期",
+        "btn-cancel": "取消",
+        "btn-confirm": "确认",
+        "room1-title": "标准房", "room2-title": "豪华房", "room3-title": "尊贵房", "room4-title": "奢华房", "room5-title": "双床房", "room6-title": "特别房",
+        "room1-cap": "标准 2人 / 最大 2人", "room2-cap": "标准 2人 / 最大 2人", "room3-cap": "标准 2人 / 最大 2人", "room4-cap": "标准 2人 / 最大 2人", "room5-cap": "标准 2人 / 最大 3人 (免费)", "room6-cap": "标准 2人 / 最大 4人 (免费)",
+        "reserve-btn": "预订",
         companyName: "Insta Hotel有限公司", ceoName: "代表：李永焕", bizNumber: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6",
         terms: "使用条款", privacy: "隐私政策", inquiryBtn: "咨询"
       }
@@ -592,29 +521,31 @@
 
     function updateLanguage(lang) {
         const t = translations[lang] || translations.ko;
+        
+        if(currentFlagIcon && t.img) currentFlagIcon.src = t.img;
 
-        // 1. 상단 국기 아이콘 변경 (이미지 src 수정)
-        if(currentFlagIcon && t.img) {
-            currentFlagIcon.src = t.img;
-        }
-
-        // 2. 텍스트 업데이트
         const textIds = [
-            "res-notice-group", "btn-reserve",
-            "long-stay-label", "long-stay-title", "long-stay-desc", "long-stay-details",
-            "companyName", "ceoName", "bizNumber", "address",
-            "terms", "privacy", "inquiryBtn"
+            "benefit-title", "benefit-desc", "display-text-mobile", "btn-cancel", "btn-confirm",
+            "room1-title", "room1-cap", "room2-title", "room2-cap", "room3-title", "room3-cap",
+            "room4-title", "room4-cap", "room5-title", "room5-cap", "room6-title", "room6-cap",
+            "companyName", "ceoName", "bizNumber", "address", "terms", "privacy", "inquiryBtn"
         ];
-
+        
         textIds.forEach(id => {
             const el = document.getElementById(id);
-            if(el && t[id]) {
-                el.innerHTML = t[id];
+            if(el && t[id]) el.innerHTML = t[id];
+        });
+
+        const reserveBtns = document.querySelectorAll(".dynamic-reserve-btn");
+        reserveBtns.forEach(btn => {
+            if(!btn.classList.contains('btn-soldout')) {
+                btn.textContent = t["reserve-btn"];
             }
         });
+        updateMobileText();
+        updateDisplayPrices();
     }
 
-    // 헤더 투명 셀렉트 박스 이벤트
     if(headerSelect) {
         headerSelect.addEventListener("change", (e) => {
             const lang = e.target.value;
@@ -622,8 +553,6 @@
             updateLanguage(lang);
         });
     }
-
-    // 드로어 메뉴 셀렉트 박스 이벤트
     if(drawerSelect) {
         drawerSelect.addEventListener("change", (e) => {
             const lang = e.target.value;
@@ -631,7 +560,368 @@
             updateLanguage(lang);
         });
     }
-  </script>
+    
+    // ------------------------------------
+    // 3. 달력 기능 및 DB 가격/재고 연동
+    // ------------------------------------
+    let date = new Date(); 
+    let currentYear = date.getFullYear();
+    let currentMonth = date.getMonth(); 
+    
+    let checkinDate = null;
+    let checkoutDate = null;
+    let tempCheckinDate = null; 
 
+    const monthYearEl = document.getElementById("current-month-year");
+    const calendarBody = document.getElementById("calendar-body");
+    const displayTextMobile = document.getElementById("display-text-mobile");
+    const calendarModal = document.getElementById("calendar-modal");
+
+    let globalRoomData = {}; 
+
+    async function fetchRoomPrices() {
+        const { data, error } = await window.supabaseClient
+            .from('rooms')
+            .select('*');
+
+        if (error) {
+            console.error("가격 정보를 가져오지 못했습니다:", error);
+            return;
+        }
+
+        data.forEach(room => {
+            globalRoomData[room.id] = room;
+        });
+
+        console.log("DB 가격 로드 완료:", globalRoomData);
+        updateDisplayPrices();
+    }
+
+    // ★ 가격 표시 함수 (여기가 수정되었습니다)
+    function updateDisplayPrices() {
+        if (Object.keys(globalRoomData).length === 0) return;
+
+        // 1. 기간 설정
+        let startDate, endDate, nightCount;
+        if (checkinDate && checkoutDate) {
+            startDate = new Date(checkinDate);
+            endDate = new Date(checkoutDate);
+        } else if (checkinDate) {
+            startDate = new Date(checkinDate);
+            endDate = new Date(checkinDate);
+            endDate.setDate(startDate.getDate() + 1);
+        } else {
+            startDate = new Date();
+            startDate.setHours(0,0,0,0);
+            endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+        }
+
+        const diffTime = Math.abs(endDate - startDate);
+        nightCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+        // 2. 현재 언어 설정 확인
+        const lang = headerSelect ? headerSelect.value : 'ko';
+        
+        let currencySymbol = "원";
+        let symbolPosition = "suffix"; 
+        let colWeekday = "default_price"; 
+        let colWeekend = "weekend_price"; 
+
+        if (lang === 'en') {
+            currencySymbol = "$";
+            symbolPosition = "prefix";
+            colWeekday = "default_price_usd";
+            colWeekend = "weekend_price_usd";
+        } else if (lang === 'ja') {
+            currencySymbol = "円";
+            symbolPosition = "suffix";
+            colWeekday = "default_price_jpy";
+            colWeekend = "weekend_price_jpy";
+        } else if (lang === 'zh') {
+            currencySymbol = "¥";
+            symbolPosition = "prefix";
+            colWeekday = "default_price_cny";
+            colWeekend = "weekend_price_cny";
+        }
+
+        // 3. 각 객실별 금액 계산
+        const roomCards = document.querySelectorAll('.room-card');
+        
+        roomCards.forEach(card => {
+            const roomId = card.getAttribute('data-room-id');
+            const roomInfo = globalRoomData[roomId];
+            
+            if (!roomInfo) return;
+
+            let totalPrice = 0;
+            let loopDate = new Date(startDate);
+
+            for (let i = 0; i < nightCount; i++) {
+                const dayOfWeek = loopDate.getDay(); 
+                if (dayOfWeek === 6) {
+                    totalPrice += roomInfo[colWeekend] || 0;
+                } else {
+                    totalPrice += roomInfo[colWeekday] || 0;
+                }
+                loopDate.setDate(loopDate.getDate() + 1);
+            }
+
+            // 4. 화면 업데이트
+            const priceEl = card.querySelector('.room-price');
+            
+            // ★ 수정: 영어(en)일 때만 .00 붙이기
+            let formattedPrice;
+            if (lang === 'en') {
+                formattedPrice = totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else {
+                formattedPrice = totalPrice.toLocaleString();
+            }
+            
+            let finalPriceText = "";
+            if (symbolPosition === "prefix") {
+                finalPriceText = `${currencySymbol}${formattedPrice}`; 
+            } else {
+                finalPriceText = `${formattedPrice}${currencySymbol}`; 
+            }
+
+            let nightText = ` (${nightCount}박)`;
+            if (lang === 'en') nightText = ` (${nightCount} nights)`;
+            else if (lang === 'ja') nightText = ` (${nightCount}泊)`;
+            else if (lang === 'zh') nightText = ` (${nightCount}晚)`;
+
+            if (nightCount === 1) nightText = ""; 
+
+            priceEl.innerHTML = `${finalPriceText}<span class="price-detail text-sm font-normal text-gray-500">${nightText}</span>`;
+        });
+    }
+
+    function toDateString(dateObj) {
+        if (!dateObj) return '';
+        const year = dateObj.getFullYear();
+        const month = dateObj.getMonth() + 1;
+        const day = dateObj.getDate();
+        return `${year}년 ${month}월 ${day}일`;
+    }
+    
+    function formatDateToYMD(dateObj) {
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    async function checkAvailability() {
+        if (!checkinDate || !checkoutDate) return;
+
+        const startDate = formatDateToYMD(checkinDate);
+        const endDate = formatDateToYMD(checkoutDate);
+        
+        console.log(`재고 조회 시작: ${startDate} ~ ${endDate}`);
+
+        const { data: soldOutList, error } = await window.supabaseClient
+            .from('inventory')
+            .select('room_id')
+            .gte('date', startDate)
+            .lt('date', endDate) 
+            .or('stock.lte.0,is_available.eq.false'); 
+
+        if (error) {
+            console.error("재고 조회 중 오류 발생:", error);
+            return;
+        }
+
+        const soldOutRoomIds = [...new Set(soldOutList.map(item => item.room_id))];
+        console.log("마감된 방 ID 목록:", soldOutRoomIds);
+
+        const allRoomCards = document.querySelectorAll('.room-card');
+        
+        allRoomCards.forEach(card => {
+            const roomId = Number(card.getAttribute('data-room-id'));
+            const btn = card.querySelector('.btn-reserve');
+            const lang = headerSelect ? headerSelect.value : 'ko';
+            const t = translations[lang] || translations.ko;
+
+            if (soldOutRoomIds.includes(roomId)) {
+                btn.textContent = "예약 마감";
+                if(lang === 'en') btn.textContent = "Sold Out";
+                else if(lang === 'ja') btn.textContent = "満室";
+                else if(lang === 'zh') btn.textContent = "已售完";
+
+                btn.classList.add('btn-soldout');
+                btn.removeAttribute("href"); 
+                btn.onclick = (e) => e.preventDefault(); 
+            } else {
+                btn.textContent = t["reserve-btn"] || "예약";
+                btn.classList.remove('btn-soldout');
+                if(btn.dataset.href) {
+                    btn.setAttribute("href", btn.dataset.href);
+                }
+                btn.onclick = null; 
+            }
+        });
+    }
+
+    function updateMobileText() {
+        const lang = headerSelect.value;
+        const t = translations[lang] || translations.ko;
+        let text = t["display-text-mobile"];
+        
+        if (checkinDate && checkoutDate) {
+            text = `${toDateString(checkinDate)} ~ ${toDateString(checkoutDate)}`;
+            displayTextMobile.style.color = "#FF5000";
+            displayTextMobile.style.fontWeight = "bold";
+        } else if (checkinDate) {
+            text = `${toDateString(checkinDate)} ~ ?`;
+            displayTextMobile.style.color = "#FF5000";
+            displayTextMobile.style.fontWeight = "bold";
+        } else {
+            displayTextMobile.style.color = "";
+            displayTextMobile.style.fontWeight = "";
+        }
+        displayTextMobile.textContent = text;
+    }
+
+    function openModal() {
+        if (window.innerWidth <= 768) {
+            tempCheckinDate = checkinDate;
+            calendarModal.classList.add("active");
+        }
+    }
+
+    function closeModal() {
+        if (window.innerWidth <= 768) {
+            if (checkinDate && !checkoutDate && tempCheckinDate) {
+                checkinDate = tempCheckinDate;
+            }
+            if (!checkinDate && checkoutDate) {
+                checkinDate = null;
+                checkoutDate = null;
+            }
+            renderCalendar();
+            updateDisplayPrices();
+        }
+        calendarModal.classList.remove("active");
+    }
+
+    function confirmDate() {
+        if (checkinDate && checkoutDate) {
+            updateMobileText();
+            closeModal();
+            checkAvailability();
+            updateDisplayPrices();
+        } else {
+            const lang = headerSelect.value;
+            let alertMessage = "체크인/체크아웃 날짜를 모두 선택해 주세요.";
+            if (lang === 'en') alertMessage = "Please select both check-in and check-out dates.";
+            else if (lang === 'ja') alertMessage = "チェックイン日とチェックアウト日の両方を選択してください。";
+            else if (lang === 'zh') alertMessage = "请选择入住和退房日期。";
+            
+            alert(alertMessage);
+        }
+    }
+
+    function renderCalendar() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const lastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const displayMonth = currentMonth + 1;
+
+        monthYearEl.textContent = `${currentYear}.${displayMonth < 10 ? '0' + displayMonth : displayMonth}`;
+        calendarBody.innerHTML = "";
+        let dateCount = 1;
+        
+        for (let i = 0; i < 6; i++) {
+            let row = document.createElement("tr");
+            for (let j = 0; j < 7; j++) {
+                let cell = document.createElement("td");
+                
+                if (i === 0 && j < firstDay) {
+                    cell.classList.add("other-month");
+                    cell.textContent = ""; 
+                } else if (dateCount > lastDate) {
+                    // 빈 칸
+                } else {
+                    cell.textContent = dateCount;
+                    const dateStamp = new Date(currentYear, currentMonth, dateCount);
+                    dateStamp.setHours(0, 0, 0, 0);
+                    
+                    if (dateStamp < today) {
+                        cell.classList.add("past-day");
+                    } 
+                    else if (dateStamp.getTime() === today.getTime()) {
+                        cell.classList.add("today");
+                        addClickEvent(cell, dateStamp);
+                    } 
+                    else {
+                        addClickEvent(cell, dateStamp);
+                    }
+                    
+                    if (checkinDate && dateStamp.getTime() === checkinDate.getTime()) {
+                        cell.classList.add("selected-day");
+                    }
+                    if (checkoutDate && dateStamp.getTime() === checkoutDate.getTime()) {
+                        cell.classList.add("selected-day");
+                    }
+                    if (checkinDate && checkoutDate && dateStamp > checkinDate && dateStamp < checkoutDate) {
+                        cell.classList.add("in-range");
+                    }
+                    
+                    dateCount++;
+                }
+                row.appendChild(cell);
+            }
+            calendarBody.appendChild(row);
+            if (dateCount > lastDate) break;
+        }
+        updateMobileText();
+    }
+
+    function addClickEvent(cell, dateStamp) {
+        cell.addEventListener("click", function() {
+            if (!checkinDate || (checkinDate && checkoutDate)) {
+                checkinDate = dateStamp;
+                checkoutDate = null;
+                updateDisplayPrices();
+            } else if (checkinDate && !checkoutDate) {
+                if (dateStamp.getTime() === checkinDate.getTime()) {
+                    checkinDate = null;
+                    checkoutDate = null;
+                    updateDisplayPrices();
+                }
+                else if (dateStamp < checkinDate) {
+                    checkinDate = dateStamp;
+                    updateDisplayPrices();
+                } else {
+                    checkoutDate = dateStamp;
+                    checkAvailability();
+                    updateDisplayPrices();
+                }
+            }
+            renderCalendar();
+        });
+    }
+
+    function changeMonth(step) {
+        const today = new Date();
+        today.setDate(1); 
+        today.setHours(0, 0, 0, 0);
+        
+        const newDate = new Date(currentYear, currentMonth + step, 1);
+        
+        if (newDate < today) {
+            return;
+        }
+        
+        currentMonth += step;
+        if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+        else if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+        renderCalendar();
+    }
+
+    renderCalendar();
+    fetchRoomPrices(); 
+  </script>
 </body>
 </html>
