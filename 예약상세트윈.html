@@ -858,10 +858,19 @@
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        function renderCalendar(year, month) {
+       function renderCalendar(year, month) {
             const calendarBody = document.getElementById('calendar-body');
             const monthTitle = document.getElementById('current-month');
             
+            // [수정 1] 오늘 날짜와 6개월 뒤 날짜 계산
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // 시간 초기화
+
+            const maxDate = new Date();
+            maxDate.setHours(0, 0, 0, 0);
+            maxDate.setMonth(today.getMonth() + 6); // 6개월 뒤 설정
+            // ------------------------------------
+
             if (currentLang === 'en') {
                 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
                 monthTitle.innerText = `${monthNames[month]} ${year}`;
@@ -897,12 +906,15 @@
                 dateDiv.innerText = i;
                 
                 const thisDate = new Date(year, month, i);
+                thisDate.setHours(0, 0, 0, 0); // 날짜 비교를 위해 시간 초기화
 
-                if (thisDate < today) {
-                    dateDiv.classList.add('disabled');
+                // [수정 2] 과거 날짜 OR 6개월 뒤 날짜는 'disabled' 처리
+                if (thisDate < today || thisDate > maxDate) {
+                    dateDiv.classList.add('disabled'); // 클릭 불가 스타일 적용
                 } else {
                     dateDiv.onclick = () => selectDate(thisDate);
                 }
+                // -----------------------------------------------------
 
                 if (selectedStartDate && thisDate.getTime() === selectedStartDate.getTime()) {
                     dateDiv.classList.add('selected');
@@ -917,7 +929,6 @@
                 calendarBody.appendChild(dateDiv);
             }
         }
-
         function changeMonth(direction) {
             currentMonth += direction;
             if (currentMonth < 0) {
