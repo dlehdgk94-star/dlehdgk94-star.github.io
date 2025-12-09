@@ -125,6 +125,71 @@
         .share-box { width: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; height: 100%; }
         .share-box:hover { background-color: #f9f9f9; }
         .share-box svg { width: 22px; height: 22px; stroke: #333; stroke-width: 1.5; }
+
+        /* --------------------------------------------------------
+           [NEW] 우측 하단 채팅 위젯 스타일 (프리미엄 페이지 스타일 적용)
+        -------------------------------------------------------- */
+        .chat-widget-container {
+            position: fixed;
+            bottom: 25px;
+            right: 20px;
+            z-index: 9999; /* 제일 위에 뜸 */
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .chat-main-btn {
+            width: 50px;  
+            height: 50px; 
+            background-color: #ff6900; 
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .chat-widget-container.active .chat-main-btn {
+            transform: rotate(45deg);
+            background-color: #e65100; 
+        }
+
+        .chat-options {
+            display: none; 
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+            align-items: flex-end;
+        }
+
+        .chat-widget-container.active .chat-options {
+            display: flex;
+            animation: fadeInUp 0.3s ease-in-out;
+        }
+
+        .chat-option-item {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            padding: 8px 14px; 
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+            box-shadow: 1px 1px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            white-space: nowrap; 
+        }
+
+        .chat-option-item:hover { transform: scale(1.05); }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -230,6 +295,7 @@
       </div>
     </div>
   </nav>
+
 
     <main class="reservation-container">
        <div class="left-column">
@@ -459,7 +525,7 @@
     <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
         <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
           <div class="flex justify-center gap-4 text-lg"> 
-              <a href="https://www.instagram.com/instahotel_mainbranch/" target="_blank">
+              <a href="https://www.instagram.com/instahotelkorea" target="_blank">
                   <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
               </a>
               <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
@@ -489,15 +555,37 @@
         </div>
     </section>
   
-    <a href="http://pf.kakao.com/_xiITuG" target="_blank"
-      class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#FFEB00] text-black px-4 py-2 rounded-full shadow-lg hover:bg-yellow-400 transition-colors font-bold">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-        <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
-      </svg>
-      <span id="inquiryBtn" class="text-lg">문의</span>
-    </a>
+    <div class="chat-widget-container" id="chatWidget">
+        <div class="chat-options">
+            
+            <a href="https://www.instagram.com/instahotelkorea" target="_blank" class="chat-option-item" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+                <span>Instagram DM</span>
+            </a>
+    
+            <a href="https://wa.me/821042077372" target="_blank" class="chat-option-item" style="background-color: #25D366;">
+                <span>WhatsApp (ENG)</span>
+            </a>
+    
+            <a href="http://pf.kakao.com/_xiITuG" target="_blank" class="chat-option-item" style="background-color: #FEE500; color: #3c1e1e;">
+                <span>KakaoTalk (KOR)</span>
+            </a>
+        </div>
+        <div class="chat-main-btn" onclick="toggleChatWidget()">💬</div>
+    </div>
 
     <script>
+        // --- [NEW] 채팅 위젯 토글 기능 ---
+        function toggleChatWidget() {
+            var widget = document.getElementById('chatWidget');
+            widget.classList.toggle('active');
+            var btn = widget.querySelector('.chat-main-btn');
+            if (widget.classList.contains('active')) {
+                btn.innerHTML = '✕'; 
+            } else {
+                btn.innerHTML = '💬'; 
+            }
+        }
+
         // --- 좋아요 버튼 기능 ---
         const likeBtn = document.getElementById('like-btn');
         const likeCountDisplay = document.getElementById('like-count');
@@ -509,7 +597,7 @@
             this.classList.add('liked');
         });
 
-        // --- 공통 스크립트 (모바일 메뉴 등) ---
+        // --- 공통 스크립트 ---
         const header = document.getElementById("header");
         const mobileMenuBtn = document.getElementById("mobile-menu-btn");
         const mobileDrawer = document.getElementById("mobile-drawer");
@@ -538,7 +626,7 @@
             });
         }
 
-        // --- 다국어 번역 데이터 ---
+        // --- 다국어 번역 데이터 (화폐 로직 포함) ---
         const translations = {
             ko: {
                 flag: "kr.png",
@@ -673,13 +761,13 @@
         const drawerSelect = document.getElementById("drawer-lang-select");
         const currentFlagIcon = document.getElementById("current-flag-icon");
 
-        // [DB] 방 정보 가져오기 (ID: 2 = 디럭스 라고 가정)
-        // 만약 디럭스룸의 ID가 2가 아니라면 이 숫자를 DB에 맞게 변경하세요.
+        // [DB] 방 정보 가져오기 
+        // ★ 디럭스(Deluxe) 룸 ID = 2번으로 설정 (예시)
         async function fetchRoomData() {
             const { data, error } = await window.supabaseClient
                 .from('rooms')
                 .select('*')
-                .eq('id', 2) // 디럭스 룸 ID (예시로 2번)
+                .eq('id', 2) // ★ 디럭스 룸 ID 2번
                 .single();
 
             if (error) {
@@ -687,7 +775,7 @@
                 return;
             }
             currentRoomData = data;
-            console.log("DB 데이터 로드 완료:", currentRoomData);
+            console.log("DB 데이터 로드 완료 (디럭스, ID: 2):", currentRoomData);
             calculateTotalWrapper(); // 데이터 로드 후 계산 갱신
         }
 
@@ -1058,6 +1146,7 @@
                 optionTotalKRW += parseInt(box.value);
                 const labelSpan = box.nextElementSibling;
                 if (labelSpan) {
+                    // 줄바꿈 문자 등을 공백으로 치환
                     let menuName = labelSpan.innerText.replace(/\n/g, ' ');
                     selectedOptionNames.push(menuName);
                 }
