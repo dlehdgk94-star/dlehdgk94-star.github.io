@@ -738,6 +738,13 @@
     function renderCalendar() {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
+
+        // [추가된 부분 1] 오늘 기준으로 6개월 뒤 날짜 계산
+        const maxDate = new Date();
+        maxDate.setMonth(today.getMonth() + 6);
+        maxDate.setHours(0, 0, 0, 0); 
+        // ---------------------------------------------
+
         const firstDay = new Date(currentYear, currentMonth, 1).getDay();
         const lastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
         const displayMonth = currentMonth + 1;
@@ -761,9 +768,14 @@
                     const dateStamp = new Date(currentYear, currentMonth, dateCount);
                     dateStamp.setHours(0, 0, 0, 0);
                     
+                    // [수정된 부분 2] 과거 날짜 OR 6개월 뒤 날짜는 선택 불가 처리
                     if (dateStamp < today) {
-                        cell.classList.add("past-day");
+                        cell.classList.add("past-day"); // 이미 있는 스타일 (클릭 불가, 회색)
                     } 
+                    else if (dateStamp > maxDate) { 
+                        cell.classList.add("past-day"); // 6개월 뒤도 똑같이 막음
+                    }
+                    // -------------------------------------------------------
                     else if (dateStamp.getTime() === today.getTime()) {
                         cell.classList.add("today");
                         addClickEvent(cell, dateStamp);
@@ -772,6 +784,7 @@
                         addClickEvent(cell, dateStamp);
                     }
                     
+                    // 선택된 날짜 및 범위 표시 로직 (기존 유지)
                     if (checkinDate && dateStamp.getTime() === checkinDate.getTime()) {
                         cell.classList.add("selected-day");
                     }
@@ -791,7 +804,6 @@
         }
         updateMobileText();
     }
-
     function addClickEvent(cell, dateStamp) {
         cell.addEventListener("click", function() {
             if (!checkinDate || (checkinDate && checkoutDate)) {
