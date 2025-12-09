@@ -249,6 +249,71 @@
             .product-info { flex-direction: row; }
             .product-img { width: 80px; height: 80px; }
         }
+
+        /* --------------------------------------------------------
+           [NEW] 우측 하단 채팅 위젯 스타일
+        -------------------------------------------------------- */
+        .chat-widget-container {
+            position: fixed;
+            bottom: 25px;
+            right: 20px;
+            z-index: 9999;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .chat-main-btn {
+            width: 50px;  
+            height: 50px; 
+            background-color: #ff6900; 
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .chat-widget-container.active .chat-main-btn {
+            transform: rotate(45deg);
+            background-color: #e65100; 
+        }
+
+        .chat-options {
+            display: none; 
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+            align-items: flex-end;
+        }
+
+        .chat-widget-container.active .chat-options {
+            display: flex;
+            animation: fadeInUp 0.3s ease-in-out;
+        }
+
+        .chat-option-item {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            padding: 8px 14px; 
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+            box-shadow: 1px 1px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            white-space: nowrap; 
+        }
+
+        .chat-option-item:hover { transform: scale(1.05); }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -279,13 +344,13 @@
       </a>
 
       <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
-        <a href="about.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_about">about</a>
-        <a href="rooms.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_rooms">rooms</a>
-        <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_breakfast">breakfast(조식)</a>
-        <a href="reservation.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_reservation">reservation(예약)</a>
-        <a href="instaspot.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_instaspot">tour&food&cafe(관광&맛집&카페)</a>
-        <a href="#lounge" class="hover:text-orange-200 transition-colors" data-i18n="nav_lounge">bluerain lounge</a>
-        <a href="contact.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_contact">contact</a>
+          <a href="about.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_about">about</a>
+          <a href="rooms.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_rooms">rooms</a>
+          <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_breakfast">breakfast(조식)</a>
+          <a href="reservation.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_reservation">reservation(예약)</a>
+          <a href="instaspot.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_instaspot">tour&food&cafe(관광&맛집&카페)</a>
+          <a href="#lounge" class="hover:text-orange-200 transition-colors" data-i18n="nav_lounge">bluerain lounge</a>
+          <a href="contact.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_contact">contact</a>
       </nav>
 
       <div class="flex items-center relative drop-shadow-md z-20">
@@ -512,7 +577,37 @@
         </div>
     </section>
 
+    <div class="chat-widget-container" id="chatWidget">
+        <div class="chat-options">
+            
+            <a href="https://www.instagram.com/instahotelkorea" target="_blank" class="chat-option-item" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+                <span>Instagram DM</span>
+            </a>
+    
+            <a href="https://wa.me/821042077372" target="_blank" class="chat-option-item" style="background-color: #25D366;">
+                <span>WhatsApp (ENG)</span>
+            </a>
+    
+            <a href="http://pf.kakao.com/_xiITuG" target="_blank" class="chat-option-item" style="background-color: #FEE500; color: #3c1e1e;">
+                <span>KakaoTalk (KOR)</span>
+            </a>
+        </div>
+        <div class="chat-main-btn" onclick="toggleChatWidget()">💬</div>
+    </div>
+
     <script>
+    // --- [NEW] 채팅 위젯 토글 기능 ---
+    function toggleChatWidget() {
+        var widget = document.getElementById('chatWidget');
+        widget.classList.toggle('active');
+        var btn = widget.querySelector('.chat-main-btn');
+        if (widget.classList.contains('active')) {
+            btn.innerHTML = '✕'; 
+        } else {
+            btn.innerHTML = '💬'; 
+        }
+    }
+
     /* --------------------------------------
        1. 모바일 메뉴 (Drawer) 열기/닫기
     -------------------------------------- */
