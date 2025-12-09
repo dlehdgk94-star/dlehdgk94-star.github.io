@@ -1,38 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://instahotel-main.com/</loc>
-    <lastmod>2025-12-08</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://instahotel-main.com/about.html</loc>
-    <lastmod>2025-12-08</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://instahotel-main.com/rooms.html</loc>
-    <lastmod>2025-12-08</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://instahotel-main.com/조식메뉴판.html</loc>
-    <lastmod>2025-12-08</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://instahotel-main.com/reservation.html</loc>
-    <lastmod>2025-12-08</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://instahotel-main.com/instaspot.html</loc>
-    <lastmod>2025-12-08</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://instahotel-main.com/contact.html</loc>
-    <lastmod>2025-12-08</lastmod>
-    <priority>0.8</priority>
-  </url>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://instahotelkorea.com/</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/about.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/rooms.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/%EC%A1%B0%EC%8B%9D%EB%A9%94%EB%89%B4%ED%8C%90.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/reservation.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/instaspot.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/contact.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/reservation2.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/index.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/room-twin.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/room-special.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/room-luxery.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/room-premium.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/room-deluxe.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/room-standard.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/%EC%9D%B8%EC%8A%A4%ED%83%80%EC%8A%A4%ED%8C%9F%EA%B4%80%EA%B4%91.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/%EC%9D%B8%EC%8A%A4%ED%83%80%EC%8A%A4%ED%8C%9F%EC%B9%B4%ED%8E%98.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/%EC%9D%B8%EC%8A%A4%ED%83%80%EC%8A%A4%ED%8C%9F%EB%A7%9B%EC%A7%91.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/%EC%98%88%EC%95%BD%EC%83%81%EC%84%B8%EC%8A%A4%ED%83%A0.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/%EC%98%88%EC%95%BD%EC%83%81%EC%84%B8%EB%94%94%EB%9F%AD%EC%8A%A4.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/%EC%98%88%EC%95%BD%EC%83%81%EC%84%B8%ED%94%84%EB%A6%AC%EB%AF%B8%EC%97%84.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/%EC%98%88%EC%95%BD%EC%83%81%EC%84%B8%EB%9F%AD%EC%85%94%EB%A6%AC.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/%EC%98%88%EC%95%BD%EC%83%81%EC%84%B8%ED%8A%B8%EC%9C%88.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://instahotelkorea.com/%EC%98%88%EC%95%BD%EC%83%81%EC%84%B8%ED%8A%B9%EC%8B%A4.html</loc>
+  <lastmod>2025-12-09T01:26:15+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+
+
 </urlset>
