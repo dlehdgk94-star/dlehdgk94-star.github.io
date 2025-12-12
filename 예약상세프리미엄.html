@@ -1005,62 +1005,58 @@
              return 1; // 한국어
         }
 
+        // 날짜와 요일에 따른 숙박비 총액 계산 함수 (금요일 요금 로직 추가됨)
         function calculateTotal() {
-            if (!currentRoomData) return 0; // DB 로딩 전이면 0 리턴
-
-            const checkinInput = document.getElementById('checkin').value;
-            const checkoutInput = document.getElementById('checkout').value;
+            const checkinStr = document.getElementById('checkin').value;
+            const checkoutStr = document.getElementById('checkout').value;
             
-            if (!checkinInput || !checkoutInput) return 0;
+            // 날짜가 선택되지 않았거나 데이터가 없으면 0 리턴
+            if (!checkinStr || !checkoutStr || !roomData) return 0;
 
-            const startDate = new Date(checkinInput);
-            const endDate = new Date(checkoutInput);
-
+            const start = new Date(checkinStr);
+            const end = new Date(checkoutStr);
             let totalPrice = 0;
-            let currentDate = new Date(startDate);
-            let nightCount = 0;
 
-            // [언어별 컬럼 선택]
-            let colWeekday = "default_price";
-            let colWeekend = "weekend_price";
+            // 1. 현재 언어 설정에 따라 사용할 '컬럼 이름' 결정
+            let weekdayKey, fridayKey, weekendKey;
 
             if (currentLang === 'en') {
-                colWeekday = "default_price_usd";
-                colWeekend = "weekend_price_usd";
+                // 달러 (USD)
+                weekdayKey = 'default_price_usd';
+                fridayKey = 'friday_price_usd';
+                weekendKey = 'weekend_price_usd';
             } else if (currentLang === 'ja') {
-                colWeekday = "default_price_jpy";
-                colWeekend = "weekend_price_jpy";
+                // 엔화 (JPY)
+                weekdayKey = 'default_price_jpy';
+                fridayKey = 'friday_price_jpy';
+                weekendKey = 'weekend_price_jpy';
             } else if (currentLang === 'zh') {
-                colWeekday = "default_price_cny";
-                colWeekend = "weekend_price_cny";
-            }
-
-            while (currentDate < endDate) {
-                const dayOfWeek = currentDate.getDay(); // 0(일) ~ 6(토)
-                let dailyPrice = 0;
-
-                // 토요일(6)은 주말 가격, 나머지는 평일 가격 적용
-                if (dayOfWeek === 6) { 
-                    dailyPrice = currentRoomData[colWeekend] || 0;
-                } else {
-                    dailyPrice = currentRoomData[colWeekday] || 0;
-                }
-                
-                totalPrice += dailyPrice;
-                currentDate.setDate(currentDate.getDate() + 1);
-                nightCount++;
-            }
-
-            document.getElementById('nights').innerText = nightCount;
-            
-            // 금액 포맷팅 (달러는 소수점 2자리)
-            if(currentLang === 'en') {
-                document.getElementById('total').innerText = totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                // 위안화 (CNY)
+                weekdayKey = 'default_price_cny';
+                fridayKey = 'friday_price_cny';
+                weekendKey = 'weekend_price_cny';
             } else {
-                document.getElementById('total').innerText = totalPrice.toLocaleString();
+                // 한국어 (KRW) - 기본
+                weekdayKey = 'default_price';
+                fridayKey = 'friday_price';
+                weekendKey = 'weekend_price';
             }
 
-            document.getElementById('date-range-text').innerText = `${checkinInput} ~ ${checkoutInput}`;
+            // 2. 체크인 날짜부터 체크아웃 전날까지 하루씩 반복하며 요금 더하기
+            for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+                const dayOfWeek = d.getDay(); // 0:일, 1:월 ... 5:금, 6:토
+
+                if (dayOfWeek === 6) {
+                    // 토요일인 경우
+                    totalPrice += roomData[weekendKey];
+                } else if (dayOfWeek === 5) {
+                    // ★ 금요일인 경우 (새로 추가된 로직) ★
+                    totalPrice += roomData[fridayKey];
+                } else {
+                    // 일~목 (평일)인 경우
+                    totalPrice += roomData[weekdayKey];
+                }
+            }
 
             return totalPrice;
         }
