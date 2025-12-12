@@ -511,7 +511,7 @@
         updateDisplayPrices();
     }
 
-    // ★ 가격 표시 함수 (여기가 수정되었습니다)
+    // ★ 가격 표시 함수 (금요일 요금 로직 추가됨)
     function updateDisplayPrices() {
         if (Object.keys(globalRoomData).length === 0) return;
 
@@ -534,28 +534,34 @@
         const diffTime = Math.abs(endDate - startDate);
         nightCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
-        // 2. 현재 언어 설정 확인
+        // 2. 현재 언어 설정 및 컬럼 선택
         const lang = headerSelect ? headerSelect.value : 'ko';
         
         let currencySymbol = "원";
         let symbolPosition = "suffix"; 
-        let colWeekday = "default_price"; 
+        
+        // [수정 1] 컬럼 변수 설정 (금요일 추가)
+        let colWeekday = "default_price";
+        let colFriday = "friday_price";   // 금요일 (기본)
         let colWeekend = "weekend_price"; 
 
         if (lang === 'en') {
             currencySymbol = "$";
             symbolPosition = "prefix";
             colWeekday = "default_price_usd";
+            colFriday = "friday_price_usd"; // 금요일 (USD)
             colWeekend = "weekend_price_usd";
         } else if (lang === 'ja') {
             currencySymbol = "円";
             symbolPosition = "suffix";
             colWeekday = "default_price_jpy";
+            colFriday = "friday_price_jpy"; // 금요일 (JPY)
             colWeekend = "weekend_price_jpy";
         } else if (lang === 'zh') {
             currencySymbol = "¥";
             symbolPosition = "prefix";
             colWeekday = "default_price_cny";
+            colFriday = "friday_price_cny"; // 금요일 (CNY)
             colWeekend = "weekend_price_cny";
         }
 
@@ -573,9 +579,16 @@
 
             for (let i = 0; i < nightCount; i++) {
                 const dayOfWeek = loopDate.getDay(); 
+                
+                // [수정 2] 요일별 가격 합산 로직 변경
                 if (dayOfWeek === 6) {
+                    // 토요일 (주말)
                     totalPrice += roomInfo[colWeekend] || 0;
+                } else if (dayOfWeek === 5) {
+                    // ★ 금요일 (금요일 전용 요금)
+                    totalPrice += roomInfo[colFriday] || 0;
                 } else {
+                    // 일~목 (평일)
                     totalPrice += roomInfo[colWeekday] || 0;
                 }
                 loopDate.setDate(loopDate.getDate() + 1);
@@ -584,7 +597,6 @@
             // 4. 화면 업데이트
             const priceEl = card.querySelector('.room-price');
             
-            // ★ 수정: 영어(en)일 때만 .00 붙이기
             let formattedPrice;
             if (lang === 'en') {
                 formattedPrice = totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
