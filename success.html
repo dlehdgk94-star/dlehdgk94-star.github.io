@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation Confirmed – Insta Hotel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* [기본 스타일 - Payment 페이지와 동일] */
+        html { scroll-behavior: smooth; }
+        body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f4f4f4; color: #333; }
+        
+        .success-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 20px 80px;
+            text-align: center;
+        }
+
+        /* 카드 스타일 */
+        .result-card {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        /* 성공 아이콘 애니메이션 */
+        .success-icon-box {
+            width: 80px;
+            height: 80px;
+            background-color: #e6f9e6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .success-icon {
+            color: #28a745;
+            width: 40px;
+            height: 40px;
+        }
+        
+        .title { font-size: 28px; font-weight: 700; color: #333; margin-bottom: 10px; }
+        .subtitle { font-size: 16px; color: #666; margin-bottom: 30px; }
+
+        /* 정보 테이블 */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .info-table th {
+            width: 30%;
+            padding: 12px 0;
+            color: #888;
+            font-weight: 500;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .info-table td {
+            width: 70%;
+            padding: 12px 0;
+            color: #333;
+            font-weight: 600;
+            font-size: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            text-align: right;
+        }
+        .info-table tr:last-child th, 
+        .info-table tr:last-child td { border-bottom: none; }
+
+        .total-amount { color: #ff6900; font-size: 18px; font-weight: 700; }
+
+        /* 버튼 그룹 */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 15px 30px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.2s;
+            width: 48%;
+        }
+        .btn-home {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            color: #555;
+        }
+        .btn-home:hover { background-color: #f9f9f9; }
+
+        .btn-check {
+            background-color: #ff6900;
+            border: 1px solid #ff6900;
+            color: white;
+        }
+        .btn-check:hover { background-color: #e05e00; }
+
+        /* 로딩 오버레이 */
+        #loading-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff6900;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        @media (max-width: 600px) {
+            .btn-group { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
+        const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
+        window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
+    </script>
+</head>
+<body>
+
+    <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
+        <div class="w-full px-4 md:px-10 py-3 flex items-center justify-center h-14 relative">
+            <a href="index.html" class="flex items-center drop-shadow-md z-20">
+                <span class="text-xl font-bold tracking-tight">Insta Hotel - mainbranch</span>
+            </a>
+        </div>
+    </header>
+
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <h3 class="text-xl font-bold text-gray-700">결제를 확인하고 있습니다...</h3>
+        <p class="text-gray-500 text-sm mt-2">잠시만 기다려주세요.</p>
+    </div>
+
+    <main class="success-container" id="success-content" style="display:none;">
+        
+        <div class="result-card">
+            <div class="success-icon-box">
+                <svg xmlns="http://www.w3.org/2000/svg" class="success-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            
+            <h2 class="title">예약이 확정되었습니다!</h2>
+            <p class="subtitle">고객님의 예약이 성공적으로 완료되었습니다.<br>이메일로 예약 확인서가 발송됩니다.</p>
+
+            <div style="border-top: 2px solid #f4f4f4; width: 100%; margin: 20px 0;"></div>
+
+            <table class="info-table">
+                <tr>
+                    <th>예약 번호</th>
+                    <td id="res-order-id" style="font-family: monospace; letter-spacing: 1px;">-</td>
+                </tr>
+                <tr>
+                    <th>예약자명</th>
+                    <td id="res-name">-</td>
+                </tr>
+                <tr>
+                    <th>객실 타입</th>
+                    <td id="res-room">-</td>
+                </tr>
+                <tr>
+                    <th>체크인</th>
+                    <td id="res-checkin">-</td>
+                </tr>
+                <tr>
+                    <th>체크아웃</th>
+                    <td id="res-checkout">-</td>
+                </tr>
+                <tr>
+                    <th>총 결제금액</th>
+                    <td class="total-amount" id="res-price">-</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="btn-group">
+            <a href="index.html" class="btn btn-home">메인으로 돌아가기</a>
+            <button onclick="alert('예약 확인 이메일을 확인해주세요!')" class="btn btn-check">예약 내역 저장하기</button> 
+        </div>
+
+    </main>
+
+    <section class="py-8 text-center text-xs text-slate-500">
+        <p>(주)호텔인스타 | 수원시 영통구 영통로 94-6</p>
+        <p class="mt-1">Copyright © Insta Hotel. All rights reserved.</p>
+    </section>
+
+    <script>
+        async function processBooking() {
+            // 1. URL 파라미터 가져오기 (토스에서 보내준 값)
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentKey = urlParams.get("paymentKey");
+            const orderId = urlParams.get("orderId");
+            const amount = urlParams.get("amount");
+
+            // 2. 로컬 스토리지에서 예약 정보 가져오기 (Payment 페이지에서 저장한 값)
+            const tempBookingData = localStorage.getItem('tempBookingData');
+
+            // 예외 처리: 정보가 없으면 홈으로
+            if (!paymentKey || !tempBookingData) {
+                alert("잘못된 접근이거나 세션이 만료되었습니다.");
+                window.location.href = "index.html";
+                return;
+            }
+
+            const bookingData = JSON.parse(tempBookingData);
+
+            try {
+                // -----------------------------------------------------------
+                // [중요] 실제 운영시에는 여기서 '토스 결제 승인 API'를 호출해야 합니다.
+                // 현재는 클라이언트(화면)에서 바로 DB 저장을 진행합니다.
+                // -----------------------------------------------------------
+
+                // 3. Supabase에 데이터 저장 준비
+                // bookingData 객체에 토스 결제 정보 추가
+                const finalData = {
+                    ...bookingData,
+                    payment_key: paymentKey,
+                    order_id: orderId,
+                    amount: Number(amount),
+                    status: '예약확정', // paid
+                    created_at: new Date().toISOString()
+                };
+
+                // 4. Supabase Insert 실행 (테이블명: bookings 라고 가정)
+                // 만약 테이블명이 다르다면 수정해주세요.
+                const { data, error } = await window.supabaseClient
+                    .from('bookings')
+                    .insert([finalData]);
+
+                if (error) {
+                    throw error;
+                }
+
+                console.log("DB 저장 성공:", data);
+
+                // 5. 화면에 정보 표시
+                document.getElementById('res-order-id').innerText = orderId;
+                document.getElementById('res-name').innerText = bookingData.guest_name;
+                document.getElementById('res-room').innerText = getRoomName(bookingData.room_id);
+                document.getElementById('res-checkin').innerText = bookingData.check_in;
+                document.getElementById('res-checkout').innerText = bookingData.check_out;
+                
+                // 금액 포맷팅
+                const formattedPrice = Number(amount).toLocaleString() + (bookingData.currency === 'ko' ? '원' : '');
+                document.getElementById('res-price').innerText = formattedPrice;
+
+                // 6. 로컬 스토리지 데이터 삭제 (중복 저장 방지)
+                localStorage.removeItem('tempBookingData');
+
+                // 7. 로딩 끄고 결과 화면 보여주기
+                setTimeout(() => {
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    document.getElementById('success-content').style.display = 'block';
+                }, 1000); // 1초 정도 로딩 효과
+
+            } catch (err) {
+                console.error("처리 중 오류 발생:", err);
+                alert("예약 처리 중 오류가 발생했습니다. 관리자에게 문의해주세요.\n" + err.message);
+                // 오류 발생 시에도 일단 홈으로 보내거나 문의처를 남기는 것이 좋습니다.
+                document.getElementById('loading-overlay').innerHTML = `
+                    <div style="text-align:center;">
+                        <h3 style="color:red;">오류 발생</h3>
+                        <p>관리자에게 문의해주세요. (031-203-4301)</p>
+                        <a href="index.html" style="text-decoration:underline;">홈으로</a>
+                    </div>
+                `;
+            }
+        }
+
+        // 룸 ID를 이름으로 바꾸는 헬퍼 함수
+        function getRoomName(id) {
+            const rooms = {
+                1: '스탠다드 (Standard)',
+                2: '디럭스 (Deluxe)',
+                3: '프리미엄 (Premium)',
+                4: '럭셔리 (Luxury)',
+                5: '스페셜 (Special)',
+                6: '트윈 (Twin)'
+            };
+            return rooms[id] || 'Unknown Room';
+        }
+
+        // 페이지 로드 시 실행
+        processBooking();
+    </script>
+
+</body>
+</html>
