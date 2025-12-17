@@ -250,7 +250,7 @@
         }
 
         /* --------------------------------------------------------
-           [NEW] 우측 하단 채팅 위젯 스타일
+            [NEW] 우측 하단 채팅 위젯 스타일
         -------------------------------------------------------- */
         .chat-widget-container {
             position: fixed;
@@ -1050,8 +1050,8 @@
             if (event.target == modal) { modal.style.display = "none"; }
         }
 
-       // ★ 1. 토스 페이먼츠 초기화
-    const clientKey = 'test_ck_ALnQvDd2VJqkZ2qdx74N3Mj7X41m'; // 테스트 키
+        // ★ 1. 토스 페이먼츠 초기화 (LIVE 키 적용됨)
+    const clientKey = 'live_ck_6bJXmgo28e7p2RKp4BqjVLANGKWx'; 
     var tossPayments = TossPayments(clientKey);
 
     // ★ 2. 결제 요청 함수 (스탠다드용)
@@ -1125,13 +1125,15 @@
         // ---------------------------------------------------------
         const orderId = 'ORDER_STD_' + new Date().getTime() + Math.floor(Math.random() * 1000);
         
-        // 결제 금액이 0원이면 에러나므로 테스트용 1000원 설정 (실제 운영시 수정 필요)
+        // [주의] 결제 금액이 0원이면 에러나므로 테스트용 1000원 설정
+        // 실제 라이브 운영 시에는 total이 0이면 결제를 막거나, 
+        // 100원 결제 등으로 정책을 정해야 합니다.
         const payAmount = total > 0 ? total : 1000; 
 
         tossPayments.requestPayment('카드', {
             amount: payAmount,
             orderId: orderId,
-            orderName: 'Insta Hotel 디럭스스 예약', // 주문명
+            orderName: 'Insta Hotel 디럭스 예약', // 주문명
             customerName: name,
             customerEmail: email,
             successUrl: window.location.origin + '/success.html', // 성공 페이지
