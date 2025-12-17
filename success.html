@@ -10,7 +10,7 @@
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
     <style>
-        /* [기본 스타일 - Payment 페이지와 동일] */
+        /* [기본 스타일] */
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f4f4f4; color: #333; }
         
@@ -28,11 +28,10 @@
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             margin-bottom: 30px;
-            /* 캡처 시 배경색 강제 지정 */
             background-color: #ffffff; 
         }
 
-        /* 성공 아이콘 애니메이션 */
+        /* 성공 아이콘 */
         .success-icon-box {
             width: 80px;
             height: 80px;
@@ -97,7 +96,6 @@
             font-size: 16px;
             transition: all 0.2s;
             width: 48%;
-            /* 버튼 내용 정렬 */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -164,8 +162,8 @@
 
     <div id="loading-overlay">
         <div class="spinner"></div>
-        <h3 class="text-xl font-bold text-gray-700">예약을 확인하고 있습니다...</h3>
-        <p class="text-gray-500 text-sm mt-2">Checking reservation status...</p>
+        <h3 class="text-xl font-bold text-gray-700">결제를 확인하고 있습니다...</h3>
+        <p class="text-gray-500 text-sm mt-2">Processing Payment...</p>
     </div>
 
     <main class="success-container" id="success-content" style="display:none;">
@@ -235,28 +233,27 @@
 
     <script>
         // ----------------------------------------------------
-        // 📸 [NEW] 티켓 이미지 저장 기능 (Global Standard)
+        // 📸 티켓 이미지 저장 기능
         // ----------------------------------------------------
         function downloadTicket() {
             const ticketElement = document.querySelector('.result-card');
             const btn = document.querySelector('.btn-check');
             const originalText = btn.innerHTML;
 
-            // 로딩 표시
+            // 버튼 로딩 상태 표시
             btn.innerHTML = '<span class="spinner" style="width:15px; height:15px; border-width:2px; margin:0; display:inline-block;"></span> Saving...';
             btn.disabled = true;
 
             html2canvas(ticketElement, {
-                scale: 2, // 고해상도
+                scale: 2, 
                 backgroundColor: "#ffffff",
                 useCORS: true 
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'InstaHotel_Booking_Voucher.png'; // 저장될 파일명
+                link.download = 'InstaHotel_Booking_Voucher.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
 
-                // 버튼 복구 및 알림
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 alert("The ticket has been saved to your album! 📸\n(티켓이 앨범에 저장되었습니다.)");
@@ -268,53 +265,22 @@
             });
         }
 
-
         // ----------------------------------------------------
-        // ⚙️ 예약 처리 로직 (processBooking)
+        // ⚙️ 예약 및 결제 최종 승인 로직 (processBooking)
         // ----------------------------------------------------
         async function processBooking() {
-            // 1. URL 파라미터 가져오기 (토스 또는 테스트 링크에서 보내준 값)
+            // 1. URL 파라미터 확인 (토스에서 넘어온 값들)
             const urlParams = new URLSearchParams(window.location.search);
             const paymentKey = urlParams.get("paymentKey");
             const orderId = urlParams.get("orderId");
             const amount = urlParams.get("amount");
 
-            // ----------------------------------------------------
-            // 🚀 [TEST MODE] 개발자 테스트용 (Relax & Recharge 버튼)
-            // ----------------------------------------------------
-            if (orderId === 'test_1234') {
-                console.log("🛠️ 테스트 모드 실행");
-
-                // 1초 뒤에 가짜 데이터를 보여줌 (로딩 효과)
-                setTimeout(() => {
-                    document.getElementById('res-order-id').innerText = orderId;
-                    document.getElementById('res-name').innerText = "Test Guest (김인스타)";
-                    document.getElementById('res-room').innerText = "Relax & Recharge (Test)";
-                    document.getElementById('res-checkin').innerText = "2025.12.24";
-                    document.getElementById('res-checkout').innerText = "2025.12.25";
-                    
-                    const formattedPrice = Number(amount || 150000).toLocaleString() + '원';
-                    document.getElementById('res-price').innerText = formattedPrice;
-
-                    // 로딩 끄고 화면 보이기
-                    document.getElementById('loading-overlay').style.display = 'none';
-                    document.getElementById('success-content').style.display = 'block';
-                }, 800);
-                
-                return; // 여기서 함수 종료 (DB 저장 안함)
-            }
-
-
-            // ----------------------------------------------------
-            // 💳 [REAL MODE] 실제 결제 후 처리 (토스 리다이렉트)
-            // ----------------------------------------------------
-            
-            // 2. 로컬 스토리지에서 예약 정보 가져오기 (Payment 페이지에서 저장한 값)
+            // 2. localStorage에서 예약자 정보 가져오기
             const tempBookingData = localStorage.getItem('tempBookingData');
 
-            // 예외 처리: 정보가 없으면 홈으로
-            if (!paymentKey || !tempBookingData) {
-                alert("Invalid Access or Session Expired.");
+            // 예외 처리: 필수 정보가 없으면 홈으로 리다이렉트
+            if (!paymentKey || !orderId || !amount || !tempBookingData) {
+                alert("잘못된 접근이거나 세션이 만료되었습니다. 처음부터 다시 시도해주세요.");
                 window.location.href = "index.html";
                 return;
             }
@@ -322,75 +288,91 @@
             const bookingData = JSON.parse(tempBookingData);
 
             try {
-                // 3. Supabase에 데이터 저장 준비
-                const finalData = {
-                    ...bookingData,
-                    payment_key: paymentKey,
-                    order_id: orderId,
-                    amount: Number(amount),
-                    status: 'confirmed', // paid
-                    created_at: new Date().toISOString()
-                };
-
-                // 4. Supabase Insert 실행
-                const { data, error } = await window.supabaseClient
-                    .from('bookings')
-                    .insert([finalData]);
+                // 3. [중요] Supabase Edge Function 호출 (결제 승인 + DB 저장)
+                // 'confirm-payment'라는 이름의 함수를 호출합니다.
+                const { data, error } = await window.supabaseClient.functions.invoke('confirm-payment', {
+                    body: {
+                        paymentKey: paymentKey,
+                        orderId: orderId,
+                        amount: Number(amount),
+                        // 예약 정보 함께 전송
+                        guest_name: bookingData.guest_name,
+                        phone: bookingData.phone,
+                        guest_email: bookingData.guest_email,
+                        room_id: bookingData.room_id,
+                        check_in: bookingData.check_in,
+                        check_out: bookingData.check_out,
+                        total_price: bookingData.total_price,
+                        selected_options: bookingData.selected_options,
+                        guest_request: bookingData.guest_request,
+                        social_insta: bookingData.social_insta,
+                        social_tiktok: bookingData.social_tiktok,
+                        currency: bookingData.currency
+                    }
+                });
 
                 if (error) {
-                    throw error;
+                    console.error("Function Error:", error);
+                    throw new Error("결제 승인 중 오류가 발생했습니다. (Code: 001)");
                 }
 
-                console.log("DB 저장 성공:", data);
+                // 4. 승인 성공 시 화면에 정보 표시
+                console.log("Booking Confirmed:", data);
 
-                // 5. 화면에 정보 표시
                 document.getElementById('res-order-id').innerText = orderId;
                 document.getElementById('res-name').innerText = bookingData.guest_name;
                 document.getElementById('res-room').innerText = getRoomName(bookingData.room_id);
                 document.getElementById('res-checkin').innerText = bookingData.check_in;
                 document.getElementById('res-checkout').innerText = bookingData.check_out;
                 
-                // 금액 포맷팅
-                const formattedPrice = Number(amount).toLocaleString() + (bookingData.currency === 'ko' ? '원' : '');
-                document.getElementById('res-price').innerText = formattedPrice;
+                // 화폐 단위에 따른 표시
+                const unit = bookingData.currency === 'ko' ? '원' : 
+                             bookingData.currency === 'ja' ? '円' : 
+                             bookingData.currency === 'zh' ? '¥' : '';
+                const prefix = bookingData.currency === 'en' ? '$' : '';
+                
+                document.getElementById('res-price').innerText = prefix + Number(amount).toLocaleString() + unit;
 
-                // 6. 로컬 스토리지 데이터 삭제 (중복 저장 방지)
+                // 5. 사용한 임시 데이터 삭제 (중복 처리 방지)
                 localStorage.removeItem('tempBookingData');
 
-                // 7. 로딩 끄고 결과 화면 보여주기
+                // 6. 로딩 화면 끄고 결과 화면 보여주기
                 setTimeout(() => {
                     document.getElementById('loading-overlay').style.display = 'none';
                     document.getElementById('success-content').style.display = 'block';
                 }, 1000); 
 
             } catch (err) {
-                console.error("처리 중 오류 발생:", err);
-                alert("Error processing reservation. Please contact us.\n" + err.message);
+                console.error("Processing Error:", err);
+                alert("결제 승인에 실패했습니다. 관리자에게 문의해주세요.\n" + err.message);
                 
+                // 실패 시 화면 처리
                 document.getElementById('loading-overlay').innerHTML = `
                     <div style="text-align:center;">
-                        <h3 style="color:red;">Error Occurred</h3>
-                        <p>Please contact us (031-203-4301)</p>
-                        <a href="index.html" style="text-decoration:underline;">Home</a>
+                        <h3 style="color:#ff6900; font-weight:bold; font-size:20px;">결제 승인 실패</h3>
+                        <p style="margin:10px 0;">오류가 발생하여 예약을 완료하지 못했습니다.</p>
+                        <p style="color:#666;">관리자 문의: 031-203-4301</p>
+                        <br>
+                        <a href="index.html" style="text-decoration:underline; font-weight:bold;">홈으로 돌아가기</a>
                     </div>
                 `;
             }
         }
 
-        // 룸 ID를 이름으로 바꾸는 헬퍼 함수
+        // 룸 ID를 이름으로 변환하는 함수
         function getRoomName(id) {
             const rooms = {
                 1: 'Standard (스탠다드)',
                 2: 'Deluxe (디럭스)',
                 3: 'Premium (프리미엄)',
                 4: 'Luxury (럭셔리)',
-                5: 'Special (스페셜)',
-                6: 'Twin (트윈)'
+                5: 'Twin (트윈)',
+                6: 'Special (특실)'
             };
             return rooms[id] || 'Unknown Room';
         }
 
-        // 페이지 로드 시 실행
+        // 페이지 로드 시 로직 실행
         processBooking();
     </script>
 
