@@ -250,7 +250,7 @@
         }
 
         /* --------------------------------------------------------
-           [NEW] 우측 하단 채팅 위젯 스타일 (스탠다드 페이지와 동일)
+            [NEW] 우측 하단 채팅 위젯 스타일 (스탠다드 페이지와 동일)
         -------------------------------------------------------- */
         .chat-widget-container {
             position: fixed;
@@ -654,7 +654,7 @@
             unit_suffix: "원",
             unit_night: "박",
             alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
-            alert_done: "결제가 완료되었습니다! 예약 내역이 저장되었습니다.",
+            alert_done: "결제가 완료되었습니다! 예약 확인 페이지로 이동합니다.",
             alert_fail: "예약 저장 실패: ",
             alert_fill_all: "예약자 정보를 모두 입력해주세요.",
             
@@ -717,7 +717,7 @@
             unit_suffix: "",
             unit_night: " nights",
             alert_agree: "You must agree to all terms to proceed.",
-            alert_done: "Reservation Completed! Details saved.",
+            alert_done: "Payment Completed! Redirecting...",
             alert_fail: "Error saving reservation: ",
             alert_fill_all: "Please fill in all guest information.",
             
@@ -780,7 +780,7 @@
             unit_suffix: "円",
             unit_night: " 泊",
             alert_agree: "すべての規約に同意する必要があります。",
-            alert_done: "予約が完了しました！詳細が保存されました。",
+            alert_done: "決済が完了しました！予約確認ページへ移動します。",
             alert_fail: "予約の保存中にエラーが発生しました： ",
             alert_fill_all: "予約者情報をすべて入力してください。",
             
@@ -843,7 +843,7 @@
             unit_suffix: "",
             unit_night: " 晚",
             alert_agree: "必须同意所有条款才能付款。",
-            alert_done: "预订完成！详情已保存。",
+            alert_done: "支付完成！跳转至确认页面...",
             alert_fail: "保存预订时出错： ",
             alert_fill_all: "请填写所有预订人信息。",
             
@@ -1067,8 +1067,8 @@
         }
     }
 
-    // ★ 1. 토스 페이먼츠 초기화
-    const clientKey = 'test_ck_ALnQvDd2VJqkZ2qdx74N3Mj7X41m'; // 공유해주신 테스트 키
+    // ★ 1. 토스 페이먼츠 초기화 (LIVE 키 적용됨)
+    const clientKey = 'live_ck_6bJXmgo28e7p2RKp4BqjVLANGKWx'; 
     var tossPayments = TossPayments(clientKey);
 
     // ★ 2. 결제 요청 함수 (토스 결제창 띄우기)
