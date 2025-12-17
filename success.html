@@ -10,7 +10,6 @@
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
     <style>
-        /* [기본 스타일 - Payment 페이지와 동일] */
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f4f4f4; color: #333; }
         
@@ -21,18 +20,15 @@
             text-align: center;
         }
 
-        /* 카드 스타일 */
         .result-card {
             background: white;
             padding: 40px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             margin-bottom: 30px;
-            /* 캡처 시 배경색 강제 지정 */
             background-color: #ffffff; 
         }
 
-        /* 성공 아이콘 애니메이션 */
         .success-icon-box {
             width: 80px;
             height: 80px;
@@ -52,7 +48,6 @@
         .title { font-size: 28px; font-weight: 700; color: #333; margin-bottom: 10px; }
         .subtitle { font-size: 16px; color: #666; margin-bottom: 30px; }
 
-        /* 정보 테이블 */
         .info-table {
             width: 100%;
             border-collapse: collapse;
@@ -81,7 +76,6 @@
 
         .total-amount { color: #ff6900; font-size: 18px; font-weight: 700; }
 
-        /* 버튼 그룹 */
         .btn-group {
             display: flex;
             gap: 15px;
@@ -97,7 +91,6 @@
             font-size: 16px;
             transition: all 0.2s;
             width: 48%;
-            /* 버튼 내용 정렬 */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -108,16 +101,12 @@
             border: 1px solid #ddd;
             color: #555;
         }
-        .btn-home:hover { background-color: #f9f9f9; }
-
         .btn-check {
             background-color: #ff6900;
             border: 1px solid #ff6900;
             color: white;
         }
-        .btn-check:hover { background-color: #e05e00; }
 
-        /* 로딩 오버레이 */
         #loading-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -138,6 +127,43 @@
             margin-bottom: 20px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* 🔥 [NEW] 이미지 저장 팝업 스타일 (인스타 대응용) */
+        #save-modal {
+            display: none; /* 기본 숨김 */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 10000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+        #save-modal img {
+            max-width: 90%;
+            max-height: 70vh;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        #save-modal p {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .close-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 14px;
+        }
 
         @media (max-width: 600px) {
             .btn-group { flex-direction: column; }
@@ -168,6 +194,12 @@
         <p class="text-gray-500 text-sm mt-2">Checking reservation status...</p>
     </div>
 
+    <div id="save-modal">
+        <p>👇 Tap and hold the image to save!<br><span style="font-size:14px; opacity:0.8;">(이미지를 꾹 눌러서 저장하세요)</span></p>
+        <img id="generated-image" src="" alt="Ticket Image">
+        <button class="close-btn" onclick="closeModal()">Close (닫기)</button>
+    </div>
+
     <main class="success-container" id="success-content" style="display:none;">
         
         <div class="result-card">
@@ -178,7 +210,7 @@
             </div>
             
             <h2 class="title">예약이 확정되었습니다!</h2>
-            <p class="subtitle">Reservation Confirmed.<br>Please save this ticket image.</p>
+            <p class="subtitle">Reservation Confirmed.<br>Please save this ticket.</p>
 
             <div style="border-top: 2px solid #f4f4f4; width: 100%; margin: 20px 0;"></div>
 
@@ -218,11 +250,11 @@
                 Home
             </a>
             
-            <button onclick="downloadTicket()" class="btn btn-check">
+            <button onclick="showTicketImage()" class="btn btn-check">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                Save Ticket (티켓 저장)
+                Save Ticket
             </button> 
         </div>
 
@@ -235,57 +267,60 @@
 
     <script>
         // ----------------------------------------------------
-        // 📸 [NEW] 티켓 이미지 저장 기능 (Global Standard)
+        // 📸 [NEW] 인스타그램/모바일 대응 이미지 생성 로직
         // ----------------------------------------------------
-        function downloadTicket() {
+        function showTicketImage() {
             const ticketElement = document.querySelector('.result-card');
             const btn = document.querySelector('.btn-check');
             const originalText = btn.innerHTML;
+            const modal = document.getElementById('save-modal');
+            const modalImg = document.getElementById('generated-image');
 
-            // 로딩 표시
-            btn.innerHTML = '<span class="spinner" style="width:15px; height:15px; border-width:2px; margin:0; display:inline-block;"></span> Saving...';
+            // 버튼 로딩 표시
+            btn.innerHTML = '<span class="spinner" style="width:15px; height:15px; border-width:2px; margin:0; display:inline-block;"></span> Generating...';
             btn.disabled = true;
 
             html2canvas(ticketElement, {
-                scale: 2, // 고해상도
+                scale: 2, 
                 backgroundColor: "#ffffff",
                 useCORS: true 
             }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'InstaHotel_Booking_Voucher.png'; // 저장될 파일명
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+                // 캔버스를 이미지 주소(DataURL)로 변환
+                const imgData = canvas.toDataURL('image/png');
+                
+                // 모달창의 이미지 소스로 설정
+                modalImg.src = imgData;
+                
+                // 모달창 띄우기 (flex로 변경)
+                modal.style.display = 'flex';
 
-                // 버튼 복구 및 알림
+                // 버튼 원상복구
                 btn.innerHTML = originalText;
                 btn.disabled = false;
-                alert("The ticket has been saved to your album! 📸\n(티켓이 앨범에 저장되었습니다.)");
             }).catch(err => {
                 console.error("Capture Error:", err);
-                alert("Save failed. Please take a screenshot manually.");
+                alert("Error generating image.");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             });
         }
 
+        function closeModal() {
+            document.getElementById('save-modal').style.display = 'none';
+        }
+
 
         // ----------------------------------------------------
-        // ⚙️ 예약 처리 로직 (processBooking)
+        // ⚙️ 예약 처리 로직 (이전과 동일)
         // ----------------------------------------------------
         async function processBooking() {
-            // 1. URL 파라미터 가져오기 (토스 또는 테스트 링크에서 보내준 값)
             const urlParams = new URLSearchParams(window.location.search);
             const paymentKey = urlParams.get("paymentKey");
             const orderId = urlParams.get("orderId");
             const amount = urlParams.get("amount");
 
-            // ----------------------------------------------------
-            // 🚀 [TEST MODE] 개발자 테스트용 (Relax & Recharge 버튼)
-            // ----------------------------------------------------
+            // 🚀 [TEST MODE]
             if (orderId === 'test_1234') {
-                console.log("🛠️ 테스트 모드 실행");
-
-                // 1초 뒤에 가짜 데이터를 보여줌 (로딩 효과)
                 setTimeout(() => {
                     document.getElementById('res-order-id').innerText = orderId;
                     document.getElementById('res-name').innerText = "Test Guest (김인스타)";
@@ -296,23 +331,14 @@
                     const formattedPrice = Number(amount || 150000).toLocaleString() + '원';
                     document.getElementById('res-price').innerText = formattedPrice;
 
-                    // 로딩 끄고 화면 보이기
                     document.getElementById('loading-overlay').style.display = 'none';
                     document.getElementById('success-content').style.display = 'block';
                 }, 800);
-                
-                return; // 여기서 함수 종료 (DB 저장 안함)
+                return; 
             }
 
-
-            // ----------------------------------------------------
-            // 💳 [REAL MODE] 실제 결제 후 처리 (토스 리다이렉트)
-            // ----------------------------------------------------
-            
-            // 2. 로컬 스토리지에서 예약 정보 가져오기 (Payment 페이지에서 저장한 값)
+            // 💳 [REAL MODE]
             const tempBookingData = localStorage.getItem('tempBookingData');
-
-            // 예외 처리: 정보가 없으면 홈으로
             if (!paymentKey || !tempBookingData) {
                 alert("Invalid Access or Session Expired.");
                 window.location.href = "index.html";
@@ -322,42 +348,32 @@
             const bookingData = JSON.parse(tempBookingData);
 
             try {
-                // 3. Supabase에 데이터 저장 준비
                 const finalData = {
                     ...bookingData,
                     payment_key: paymentKey,
                     order_id: orderId,
                     amount: Number(amount),
-                    status: 'confirmed', // paid
+                    status: 'confirmed', 
                     created_at: new Date().toISOString()
                 };
 
-                // 4. Supabase Insert 실행
                 const { data, error } = await window.supabaseClient
                     .from('bookings')
                     .insert([finalData]);
 
-                if (error) {
-                    throw error;
-                }
+                if (error) throw error;
 
-                console.log("DB 저장 성공:", data);
-
-                // 5. 화면에 정보 표시
                 document.getElementById('res-order-id').innerText = orderId;
                 document.getElementById('res-name').innerText = bookingData.guest_name;
                 document.getElementById('res-room').innerText = getRoomName(bookingData.room_id);
                 document.getElementById('res-checkin').innerText = bookingData.check_in;
                 document.getElementById('res-checkout').innerText = bookingData.check_out;
                 
-                // 금액 포맷팅
                 const formattedPrice = Number(amount).toLocaleString() + (bookingData.currency === 'ko' ? '원' : '');
                 document.getElementById('res-price').innerText = formattedPrice;
 
-                // 6. 로컬 스토리지 데이터 삭제 (중복 저장 방지)
                 localStorage.removeItem('tempBookingData');
 
-                // 7. 로딩 끄고 결과 화면 보여주기
                 setTimeout(() => {
                     document.getElementById('loading-overlay').style.display = 'none';
                     document.getElementById('success-content').style.display = 'block';
@@ -377,7 +393,6 @@
             }
         }
 
-        // 룸 ID를 이름으로 바꾸는 헬퍼 함수
         function getRoomName(id) {
             const rooms = {
                 1: 'Standard (스탠다드)',
@@ -390,7 +405,6 @@
             return rooms[id] || 'Unknown Room';
         }
 
-        // 페이지 로드 시 실행
         processBooking();
     </script>
 
