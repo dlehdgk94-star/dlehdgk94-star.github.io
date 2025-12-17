@@ -155,7 +155,7 @@
 
     <div id="loading-overlay">
         <div class="spinner"></div>
-        <h3 class="text-xl font-bold text-gray-700">결제를 확인하고 있습니다...</h3>
+        <h3 class="text-xl font-bold text-gray-700">예약을 확인하고 있습니다...</h3>
         <p class="text-gray-500 text-sm mt-2">잠시만 기다려주세요.</p>
     </div>
 
@@ -215,12 +215,42 @@
 
     <script>
         async function processBooking() {
-            // 1. URL 파라미터 가져오기 (토스에서 보내준 값)
+            // 1. URL 파라미터 가져오기 (토스 또는 테스트 링크에서 보내준 값)
             const urlParams = new URLSearchParams(window.location.search);
             const paymentKey = urlParams.get("paymentKey");
             const orderId = urlParams.get("orderId");
             const amount = urlParams.get("amount");
 
+            // ----------------------------------------------------
+            // 🚀 [TEST MODE] 개발자 테스트용 (Relax & Recharge 버튼)
+            // ----------------------------------------------------
+            if (orderId === 'test_1234') {
+                console.log("🛠️ 테스트 모드 실행");
+
+                // 1초 뒤에 가짜 데이터를 보여줌 (로딩 효과)
+                setTimeout(() => {
+                    document.getElementById('res-order-id').innerText = orderId;
+                    document.getElementById('res-name').innerText = "김인스타 (테스트)";
+                    document.getElementById('res-room').innerText = "Relax & Recharge (테스트룸)";
+                    document.getElementById('res-checkin').innerText = "2025.12.24";
+                    document.getElementById('res-checkout').innerText = "2025.12.25";
+                    
+                    const formattedPrice = Number(amount || 150000).toLocaleString() + '원';
+                    document.getElementById('res-price').innerText = formattedPrice;
+
+                    // 로딩 끄고 화면 보이기
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    document.getElementById('success-content').style.display = 'block';
+                }, 800);
+                
+                return; // 여기서 함수 종료 (DB 저장 안함)
+            }
+
+
+            // ----------------------------------------------------
+            // 💳 [REAL MODE] 실제 결제 후 처리 (토스 리다이렉트)
+            // ----------------------------------------------------
+            
             // 2. 로컬 스토리지에서 예약 정보 가져오기 (Payment 페이지에서 저장한 값)
             const tempBookingData = localStorage.getItem('tempBookingData');
 
@@ -234,11 +264,6 @@
             const bookingData = JSON.parse(tempBookingData);
 
             try {
-                // -----------------------------------------------------------
-                // [중요] 실제 운영시에는 여기서 '토스 결제 승인 API'를 호출해야 합니다.
-                // 현재는 클라이언트(화면)에서 바로 DB 저장을 진행합니다.
-                // -----------------------------------------------------------
-
                 // 3. Supabase에 데이터 저장 준비
                 // bookingData 객체에 토스 결제 정보 추가
                 const finalData = {
@@ -250,8 +275,7 @@
                     created_at: new Date().toISOString()
                 };
 
-                // 4. Supabase Insert 실행 (테이블명: bookings 라고 가정)
-                // 만약 테이블명이 다르다면 수정해주세요.
+                // 4. Supabase Insert 실행
                 const { data, error } = await window.supabaseClient
                     .from('bookings')
                     .insert([finalData]);
@@ -280,12 +304,12 @@
                 setTimeout(() => {
                     document.getElementById('loading-overlay').style.display = 'none';
                     document.getElementById('success-content').style.display = 'block';
-                }, 1000); // 1초 정도 로딩 효과
+                }, 1000); 
 
             } catch (err) {
                 console.error("처리 중 오류 발생:", err);
                 alert("예약 처리 중 오류가 발생했습니다. 관리자에게 문의해주세요.\n" + err.message);
-                // 오류 발생 시에도 일단 홈으로 보내거나 문의처를 남기는 것이 좋습니다.
+                
                 document.getElementById('loading-overlay').innerHTML = `
                     <div style="text-align:center;">
                         <h3 style="color:red;">오류 발생</h3>
