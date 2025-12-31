@@ -9,137 +9,28 @@
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
     <style>
-        /* [기본 스타일] */
+        /* 스타일은 기존과 동일 */
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f4f4f4; color: #333; }
         
-        .success-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 120px 20px 80px;
-            text-align: center;
-        }
-
-        /* 카드 스타일 */
-        .result-card {
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            background-color: #ffffff; 
-        }
-
-        /* 성공 아이콘 */
-        .success-icon-box {
-            width: 80px;
-            height: 80px;
-            background-color: #e6f9e6;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-        }
-        .success-icon {
-            color: #28a745;
-            width: 40px;
-            height: 40px;
-        }
-        
+        .success-container { max-width: 800px; margin: 0 auto; padding: 120px 20px 80px; text-align: center; }
+        .result-card { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .success-icon-box { width: 80px; height: 80px; background-color: #e6f9e6; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        .success-icon { color: #28a745; width: 40px; height: 40px; }
         .title { font-size: 28px; font-weight: 700; color: #333; margin-bottom: 10px; }
         .subtitle { font-size: 16px; color: #666; margin-bottom: 30px; }
-
-        /* 정보 테이블 */
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            text-align: left;
-        }
-        .info-table th {
-            width: 30%;
-            padding: 12px 0;
-            color: #888;
-            font-weight: 500;
-            font-size: 14px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .info-table td {
-            width: 70%;
-            padding: 12px 0;
-            color: #333;
-            font-weight: 600;
-            font-size: 15px;
-            border-bottom: 1px solid #f0f0f0;
-            text-align: right;
-        }
-        .info-table tr:last-child th, 
-        .info-table tr:last-child td { border-bottom: none; }
-
+        .info-table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: left; }
+        .info-table th { width: 30%; padding: 12px 0; color: #888; font-weight: 500; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+        .info-table td { width: 70%; padding: 12px 0; color: #333; font-weight: 600; font-size: 15px; border-bottom: 1px solid #f0f0f0; text-align: right; }
         .total-amount { color: #ff6900; font-size: 18px; font-weight: 700; }
-
-        /* 버튼 그룹 */
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-        .btn {
-            padding: 15px 30px;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 16px;
-            transition: all 0.2s;
-            width: 48%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px; 
-        }
-        .btn-home {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            color: #555;
-        }
-        .btn-home:hover { background-color: #f9f9f9; }
-
-        .btn-check {
-            background-color: #ff6900;
-            border: 1px solid #ff6900;
-            color: white;
-        }
-        .btn-check:hover { background-color: #e05e00; }
-
-        /* 로딩 오버레이 */
-        #loading-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.95);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #ff6900;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
+        .btn-group { display: flex; gap: 15px; justify-content: center; margin-top: 30px; }
+        .btn { padding: 15px 30px; border-radius: 4px; font-weight: 600; cursor: pointer; text-decoration: none; font-size: 16px; width: 48%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-home { background-color: #fff; border: 1px solid #ddd; color: #555; }
+        .btn-check { background-color: #ff6900; border: 1px solid #ff6900; color: white; }
+        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #ff6900; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        @media (max-width: 600px) {
-            .btn-group { flex-direction: column; }
-            .btn { width: 100%; }
-        }
+        @media (max-width: 600px) { .btn-group { flex-direction: column; } .btn { width: 100%; } }
     </style>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -166,210 +57,110 @@
     </div>
 
     <main class="success-container" id="success-content" style="display:none;">
-        
         <div class="result-card">
             <div class="success-icon-box">
                 <svg xmlns="http://www.w3.org/2000/svg" class="success-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
             </div>
-            
             <h2 class="title">예약이 확정되었습니다!</h2>
             <p class="subtitle">Reservation Confirmed.<br>Please save this ticket image.</p>
-
             <div style="border-top: 2px solid #f4f4f4; width: 100%; margin: 20px 0;"></div>
-
             <table class="info-table">
-                <tr>
-                    <th>예약 번호 (Order ID)</th>
-                    <td id="res-order-id" style="font-family: monospace; letter-spacing: 1px;">-</td>
-                </tr>
-                <tr>
-                    <th>예약자명 (Name)</th>
-                    <td id="res-name">-</td>
-                </tr>
-                <tr>
-                    <th>객실 (Room)</th>
-                    <td id="res-room">-</td>
-                </tr>
-                <tr>
-                    <th>체크인 (Check-in)</th>
-                    <td id="res-checkin">-</td>
-                </tr>
-                <tr>
-                    <th>체크아웃 (Check-out)</th>
-                    <td id="res-checkout">-</td>
-                </tr>
-                <tr>
-                    <th>총 결제금액 (Total)</th>
-                    <td class="total-amount" id="res-price">-</td>
-                </tr>
+                <tr><th>예약 번호 (Order ID)</th><td id="res-order-id" style="font-family: monospace;">-</td></tr>
+                <tr><th>예약자명 (Name)</th><td id="res-name">-</td></tr>
+                <tr><th>객실 (Room)</th><td id="res-room">-</td></tr>
+                <tr><th>체크인 (Check-in)</th><td id="res-checkin">-</td></tr>
+                <tr><th>체크아웃 (Check-out)</th><td id="res-checkout">-</td></tr>
+                <tr><th>총 결제금액 (Total)</th><td class="total-amount" id="res-price">-</td></tr>
             </table>
         </div>
-
         <div class="btn-group">
-            <a href="index.html" class="btn btn-home">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                Home
-            </a>
-            
-            <button onclick="downloadTicket()" class="btn btn-check">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                Save Ticket (티켓 저장)
-            </button> 
+            <a href="index.html" class="btn btn-home">Home</a>
+            <button onclick="downloadTicket()" class="btn btn-check">Save Ticket</button> 
         </div>
-
     </main>
 
-    <section class="py-8 text-center text-xs text-slate-500">
-        <p>(주)호텔인스타 | 수원시 영통구 영통로 94-6</p>
-        <p class="mt-1">Copyright © Insta Hotel. All rights reserved.</p>
-    </section>
-
     <script>
-        // ----------------------------------------------------
-        // 📸 티켓 이미지 저장 기능
-        // ----------------------------------------------------
         function downloadTicket() {
             const ticketElement = document.querySelector('.result-card');
             const btn = document.querySelector('.btn-check');
             const originalText = btn.innerHTML;
-
-            btn.innerHTML = '<span class="spinner" style="width:15px; height:15px; border-width:2px; margin:0; display:inline-block;"></span> Saving...';
+            btn.innerHTML = 'Saving...';
             btn.disabled = true;
-
-            html2canvas(ticketElement, {
-                scale: 2, 
-                backgroundColor: "#ffffff",
-                useCORS: true 
-            }).then(canvas => {
+            html2canvas(ticketElement, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = 'InstaHotel_Booking_Voucher.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                alert("The ticket has been saved to your album! 📸\n(티켓이 앨범에 저장되었습니다.)");
-            }).catch(err => {
-                console.error("Capture Error:", err);
-                alert("Save failed. Please take a screenshot manually.");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             });
         }
 
-        // ----------------------------------------------------
-        // ⚙️ 예약 및 결제 최종 승인 로직 (processBooking)
-        // ----------------------------------------------------
         async function processBooking() {
-            // 1. URL 파라미터 확인 (토스에서 넘어온 값들)
             const urlParams = new URLSearchParams(window.location.search);
             const paymentKey = urlParams.get("paymentKey");
             const orderId = urlParams.get("orderId");
             const amount = urlParams.get("amount");
-
-            // 2. localStorage에서 예약자 정보 가져오기
             const tempBookingData = localStorage.getItem('tempBookingData');
 
-            // 예외 처리: 필수 정보가 없으면 홈으로 리다이렉트
             if (!paymentKey || !orderId || !amount || !tempBookingData) {
-                alert("잘못된 접근이거나 세션이 만료되었습니다. 처음부터 다시 시도해주세요.");
+                alert("잘못된 접근입니다. 메인으로 이동합니다.");
                 window.location.href = "index.html";
                 return;
             }
 
             const bookingData = JSON.parse(tempBookingData);
 
-            try {
-                // 3. [수정됨] Supabase에 직접 저장 (Edge Function 사용 X)
-                // functions.invoke 대신 .from('bookings').insert() 사용
-                const { data, error } = await window.supabaseClient
-                    .from('bookings')
-                    .insert({
-                        guest_name: bookingData.guest_name,
-                        phone: bookingData.phone,
-                        guest_email: bookingData.guest_email,
-                        room_id: bookingData.room_id,
-                        check_in: bookingData.check_in,
-                        check_out: bookingData.check_out,
-                        total_price: Number(amount),
-                        status: 'confirmed', // 예약 확정 상태
-                        guest_request: bookingData.guest_request,
-                        social_insta: bookingData.social_insta,
-                        social_tiktok: bookingData.social_tiktok,
-                        selected_options: bookingData.selected_options
-                        // paymentKey는 현재 테이블에 컬럼이 없으면 생략 (있으면 추가 가능)
-                    });
+            // [수정된 부분] 테이블에 있는 모든 칸에 데이터를 맞춰서 넣습니다.
+            const { data, error } = await window.supabaseClient
+                .from('bookings')
+                .insert({
+                    guest_name: bookingData.guest_name,
+                    phone: bookingData.phone,
+                    guest_email: bookingData.guest_email,
+                    room_id: Number(bookingData.room_id),
+                    check_in: bookingData.check_in,
+                    check_out: bookingData.check_out,
+                    total_price: Number(amount),
+                    status: 'confirmed',
+                    guest_request: bookingData.guest_request || '',
+                    social_insta: bookingData.social_insta || '',
+                    social_tiktok: bookingData.social_tiktok || '',
+                    selected_options: bookingData.selected_options || [],
+                    payment_key: paymentKey, // ★ 추가됨
+                    order_id: orderId,       // ★ 추가됨
+                    room_price: Number(bookingData.room_price || 0) // ★ 추가됨
+                });
 
-                if (error) {
-                    console.error("Supabase Insert Error:", error);
-                    throw new Error("데이터베이스 저장 실패 (Code: DB-INS)");
-                }
-
-                // 4. 저장 성공 시 화면에 정보 표시
-                console.log("Booking Saved Successfully!");
-
+            if (error) {
+                console.error("저장 실패:", error);
+                alert("결제는 되었으나 저장에 실패했습니다. 관리자에게 문의하세요.\n" + error.message);
+                document.getElementById('loading-overlay').style.display = 'none';
+            } else {
+                // 성공 시 화면 표시
                 document.getElementById('res-order-id').innerText = orderId;
                 document.getElementById('res-name').innerText = bookingData.guest_name;
                 document.getElementById('res-room').innerText = getRoomName(bookingData.room_id);
                 document.getElementById('res-checkin').innerText = bookingData.check_in;
                 document.getElementById('res-checkout').innerText = bookingData.check_out;
-                
-                // 화폐 단위에 따른 표시
-                const unit = bookingData.currency === 'ko' ? '원' : 
-                             bookingData.currency === 'ja' ? '円' : 
-                             bookingData.currency === 'zh' ? '¥' : '';
-                const prefix = bookingData.currency === 'en' ? '$' : '';
-                
-                document.getElementById('res-price').innerText = prefix + Number(amount).toLocaleString() + unit;
+                document.getElementById('res-price').innerText = Number(amount).toLocaleString() + "원";
 
-                // 5. 사용한 임시 데이터 삭제 (중복 처리 방지)
                 localStorage.removeItem('tempBookingData');
-
-                // 6. 로딩 화면 끄고 결과 화면 보여주기
                 setTimeout(() => {
                     document.getElementById('loading-overlay').style.display = 'none';
                     document.getElementById('success-content').style.display = 'block';
-                }, 1000); 
-
-            } catch (err) {
-                console.error("Processing Error:", err);
-                alert("예약 저장에 실패했습니다. 관리자에게 문의해주세요.\n" + err.message);
-                
-                // 실패 시 화면 처리
-                document.getElementById('loading-overlay').innerHTML = `
-                    <div style="text-align:center;">
-                        <h3 style="color:#ff6900; font-weight:bold; font-size:20px;">예약 저장 실패</h3>
-                        <p style="margin:10px 0;">결제는 되었으나 예약 정보 저장에 실패했습니다.</p>
-                        <p style="color:#666;">관리자 문의: 031-203-4301</p>
-                        <br>
-                        <a href="index.html" style="text-decoration:underline; font-weight:bold;">홈으로 돌아가기</a>
-                    </div>
-                `;
+                }, 1000);
             }
         }
 
-        // 룸 ID를 이름으로 변환하는 함수
         function getRoomName(id) {
-            const rooms = {
-                1: 'Standard (스탠다드)',
-                2: 'Deluxe (디럭스)',
-                3: 'Premium (프리미엄)',
-                4: 'Luxury (럭셔리)',
-                5: 'Twin (트윈)',
-                6: 'Special (특실)'
-            };
-            return rooms[id] || 'Unknown Room';
+            const rooms = { 1:'Standard', 2:'Deluxe', 3:'Premium', 4:'Luxury', 5:'Twin', 6:'Special' };
+            return rooms[id] || 'Unknown';
         }
 
-        // 페이지 로드 시 로직 실행
         processBooking();
     </script>
-
 </body>
 </html>
