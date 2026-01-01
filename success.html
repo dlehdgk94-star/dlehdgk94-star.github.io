@@ -9,10 +9,8 @@
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
     <style>
-        /* 스타일은 기존과 동일 */
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f4f4f4; color: #333; }
-        
         .success-container { max-width: 800px; margin: 0 auto; padding: 120px 20px 80px; text-align: center; }
         .result-card { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
         .success-icon-box { width: 80px; height: 80px; background-color: #e6f9e6; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
@@ -20,8 +18,8 @@
         .title { font-size: 28px; font-weight: 700; color: #333; margin-bottom: 10px; }
         .subtitle { font-size: 16px; color: #666; margin-bottom: 30px; }
         .info-table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: left; }
-        .info-table th { width: 30%; padding: 12px 0; color: #888; font-weight: 500; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
-        .info-table td { width: 70%; padding: 12px 0; color: #333; font-weight: 600; font-size: 15px; border-bottom: 1px solid #f0f0f0; text-align: right; }
+        .info-table th { width: 35%; padding: 12px 0; color: #888; font-weight: 500; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+        .info-table td { width: 65%; padding: 12px 0; color: #333; font-weight: 600; font-size: 15px; border-bottom: 1px solid #f0f0f0; text-align: right; }
         .total-amount { color: #ff6900; font-size: 18px; font-weight: 700; }
         .btn-group { display: flex; gap: 15px; justify-content: center; margin-top: 30px; }
         .btn { padding: 15px 30px; border-radius: 4px; font-weight: 600; cursor: pointer; text-decoration: none; font-size: 16px; width: 48%; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -35,9 +33,9 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5YXNpaGN6YXFzYWNlbmtsaG5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzNjY5MTIsImV4cCI6MjA3OTk0MjkxMn0.E1J5qEgl79Ato3upXJSL0OyrgsOw6gJbNHo88AWdct0' 
-        window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
+        const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5YXNpaGN6YXFzYWNlbmtsaG5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzNjY5MTIsImV4cCI6MjA3OTk0MjkxMn0.E1J5qEgl79Ato3upXJSL0OyrgsOw6gJbNHo88AWdct0';
+        window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
     </script>
 </head>
 <body>
@@ -52,8 +50,8 @@
 
     <div id="loading-overlay">
         <div class="spinner"></div>
-        <h3 class="text-xl font-bold text-gray-700">결제를 확인하고 있습니다...</h3>
-        <p class="text-gray-500 text-sm mt-2">Processing Payment...</p>
+        <h3 class="text-xl font-bold text-gray-700">결제를 최종 확인하고 있습니다...</h3>
+        <p class="text-gray-500 text-sm mt-2">Processing Payment & Confirming Booking...</p>
     </div>
 
     <main class="success-container" id="success-content" style="display:none;">
@@ -85,7 +83,6 @@
         function downloadTicket() {
             const ticketElement = document.querySelector('.result-card');
             const btn = document.querySelector('.btn-check');
-            const originalText = btn.innerHTML;
             btn.innerHTML = 'Saving...';
             btn.disabled = true;
             html2canvas(ticketElement, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
@@ -93,7 +90,7 @@
                 link.download = 'InstaHotel_Booking_Voucher.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-                btn.innerHTML = originalText;
+                btn.innerHTML = 'Save Ticket (티켓 저장)';
                 btn.disabled = false;
             });
         }
@@ -106,58 +103,70 @@
             const tempBookingData = localStorage.getItem('tempBookingData');
 
             if (!paymentKey || !orderId || !amount || !tempBookingData) {
-                alert("잘못된 접근입니다. 메인으로 이동합니다.");
+                alert("결제 정보가 부족합니다. 처음부터 다시 진행해 주세요.");
                 window.location.href = "index.html";
                 return;
             }
 
             const bookingData = JSON.parse(tempBookingData);
 
-            // [수정된 부분] 테이블에 있는 모든 칸에 데이터를 맞춰서 넣습니다.
-            const { data, error } = await window.supabaseClient
-                .from('bookings')
-                .insert({
-                    guest_name: bookingData.guest_name,
-                    phone: bookingData.phone,
-                    guest_email: bookingData.guest_email,
-                    room_id: Number(bookingData.room_id),
-                    check_in: bookingData.check_in,
-                    check_out: bookingData.check_out,
-                    total_price: Number(amount),
-                    status: 'confirmed',
-                    guest_request: bookingData.guest_request || '',
-                    social_insta: bookingData.social_insta || '',
-                    social_tiktok: bookingData.social_tiktok || '',
-                    selected_options: bookingData.selected_options || [],
-                    payment_key: paymentKey, // ★ 추가됨
-                    order_id: orderId,       // ★ 추가됨
-                    room_price: Number(bookingData.room_price || 0) // ★ 추가됨
+            try {
+                // [매출액 해결의 핵심!] Supabase Edge Function을 호출하여 결제를 '승인'합니다.
+                // 이 단계가 완료되어야 토스페이먼츠 관리자에 실제 매출액이 찍힙니다.
+                const { data, error } = await window.supabaseClient.functions.invoke('confirm-payment', {
+                    body: {
+                        paymentKey: paymentKey,
+                        orderId: orderId,
+                        amount: Number(amount),
+                        // 예약 정보 전송
+                        guest_name: bookingData.guest_name,
+                        phone: bookingData.phone,
+                        guest_email: bookingData.guest_email,
+                        room_id: bookingData.room_id,
+                        check_in: bookingData.check_in,
+                        check_out: bookingData.check_out,
+                        total_price: Number(amount),
+                        selected_options: bookingData.selected_options || [],
+                        guest_request: bookingData.guest_request || '',
+                        social_insta: bookingData.social_insta || '',
+                        social_tiktok: bookingData.social_tiktok || '',
+                        currency: bookingData.currency || 'ko'
+                    }
                 });
 
-            if (error) {
-                console.error("저장 실패:", error);
-                alert("결제는 되었으나 저장에 실패했습니다. 관리자에게 문의하세요.\n" + error.message);
-                document.getElementById('loading-overlay').style.display = 'none';
-            } else {
-                // 성공 시 화면 표시
+                if (error) {
+                    console.error("결제 승인 중 서버 오류:", error);
+                    throw new Error("결제 승인 요청 중 문제가 발생했습니다.");
+                }
+
+                // 성공 시 화면 표시 업데이트
                 document.getElementById('res-order-id').innerText = orderId;
                 document.getElementById('res-name').innerText = bookingData.guest_name;
                 document.getElementById('res-room').innerText = getRoomName(bookingData.room_id);
                 document.getElementById('res-checkin').innerText = bookingData.check_in;
                 document.getElementById('res-checkout').innerText = bookingData.check_out;
-                document.getElementById('res-price').innerText = Number(amount).toLocaleString() + "원";
+
+                const unit = bookingData.currency === 'ko' ? '원' : bookingData.currency === 'ja' ? '円' : '¥';
+                const prefix = bookingData.currency === 'en' ? '$' : '';
+                document.getElementById('res-price').innerText = prefix + Number(amount).toLocaleString() + unit;
 
                 localStorage.removeItem('tempBookingData');
+                
                 setTimeout(() => {
                     document.getElementById('loading-overlay').style.display = 'none';
                     document.getElementById('success-content').style.display = 'block';
                 }, 1000);
+
+            } catch (err) {
+                console.error("최종 처리 오류:", err);
+                alert("결제 승인에 실패했거나 매출 등록에 문제가 생겼습니다. 관리자에게 문의하세요.\n" + err.message);
+                window.location.href = "fail.html";
             }
         }
 
         function getRoomName(id) {
             const rooms = { 1:'Standard', 2:'Deluxe', 3:'Premium', 4:'Luxury', 5:'Twin', 6:'Special' };
-            return rooms[id] || 'Unknown';
+            return rooms[id] || 'Room';
         }
 
         processBooking();
