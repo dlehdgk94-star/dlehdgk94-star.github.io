@@ -1050,11 +1050,11 @@
             if (event.target == modal) { modal.style.display = "none"; }
         }
 
-        // ★ 1. 토스 페이먼츠 초기화 (LIVE 키 적용됨)
+    // ★ 1. 토스 페이먼츠 초기화 (LIVE 키 적용됨)
     const clientKey = 'live_ck_6bJXmgo28e7p2RKp4BqjVLANGKWx'; 
     var tossPayments = TossPayments(clientKey);
 
-    // ★ 2. 결제 요청 함수 (스탠다드용)
+    // ★ 2. 결제 요청 함수 (디럭스용 수정)
     async function requestPayment() {
         // (1) 약관 동의 확인
         const isInfoChecked = document.getElementById('chk-info').checked;
@@ -1076,7 +1076,7 @@
         const requestMsg = document.getElementById('input-request').value.trim();
 
         if (!name || !phone || !email) {
-            alert(t.alert_fill_all);
+            alert(t.alert_fill_info);
             return;
         }
 
@@ -1084,8 +1084,11 @@
         const params = new URLSearchParams(window.location.search);
         const checkin = params.get('checkin');
         const checkout = params.get('checkout');
-        // ★ 디럭스 룸 ID 기본값은 2
-        const roomId = parseInt(params.get('roomId')) || 2; 
+        
+        // ★★★ [수정됨] 디럭스 고정 설정 ★★★
+        const roomId = 2; // 디럭스 룸 번호
+        const roomName = "Deluxe (디럭스)"; // 디럭스 이름
+
         const roomPrice = parseFloat(params.get('roomPrice')) || 0;
         const total = parseFloat(params.get('total')) || 0;
         
@@ -1109,6 +1112,7 @@
             check_in: checkin,
             check_out: checkout,
             room_id: roomId,
+            room_name: roomName, // ★ 객실 이름 저장 (Success 페이지용)
             room_price: roomPrice,
             total_price: total,
             currency: currentLang,
@@ -1123,11 +1127,9 @@
         // ---------------------------------------------------------
         // (5) 토스 결제창 띄우기
         // ---------------------------------------------------------
-        const orderId = 'ORDER_STD_' + new Date().getTime() + Math.floor(Math.random() * 1000);
+        const orderId = 'ORDER_DLX_' + new Date().getTime() + Math.floor(Math.random() * 1000);
         
         // [주의] 결제 금액이 0원이면 에러나므로 테스트용 1000원 설정
-        // 실제 라이브 운영 시에는 total이 0이면 결제를 막거나, 
-        // 100원 결제 등으로 정책을 정해야 합니다.
         const payAmount = total > 0 ? total : 1000; 
 
         tossPayments.requestPayment('카드', {
