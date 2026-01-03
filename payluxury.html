@@ -1065,7 +1065,7 @@
     const clientKey = 'live_ck_6bJXmgo28e7p2RKp4BqjVLANGKWx'; 
     var tossPayments = TossPayments(clientKey);
 
-    // ★ 2. 결제 요청 함수 (스탠다드용)
+    // ★ 2. 결제 요청 함수 (럭셔리용 수정됨)
     async function requestPayment() {
         // (1) 약관 동의 확인
         const isInfoChecked = document.getElementById('chk-info').checked;
@@ -1087,7 +1087,7 @@
         const requestMsg = document.getElementById('input-request').value.trim();
 
         if (!name || !phone || !email) {
-            alert(t.alert_fill_all);
+            alert(t.alert_fill_info);
             return;
         }
 
@@ -1095,8 +1095,11 @@
         const params = new URLSearchParams(window.location.search);
         const checkin = params.get('checkin');
         const checkout = params.get('checkout');
-        // ★ 럭셔리 룸 ID 기본값은 4
-        const roomId = parseInt(params.get('roomId')) || 4; 
+        
+        // ★★★ [수정됨] 럭셔리 고정 설정 ★★★
+        const roomId = 4; // 럭셔리 룸 번호
+        const roomName = "Luxury (럭셔리)"; // 럭셔리 이름
+
         const roomPrice = parseFloat(params.get('roomPrice')) || 0;
         const total = parseFloat(params.get('total')) || 0;
         
@@ -1120,6 +1123,7 @@
             check_in: checkin,
             check_out: checkout,
             room_id: roomId,
+            room_name: roomName, // ★ 객실 이름 저장
             room_price: roomPrice,
             total_price: total,
             currency: currentLang,
@@ -1134,9 +1138,9 @@
         // ---------------------------------------------------------
         // (5) 토스 결제창 띄우기
         // ---------------------------------------------------------
-        const orderId = 'ORDER_STD_' + new Date().getTime() + Math.floor(Math.random() * 1000);
+        const orderId = 'ORDER_LUX_' + new Date().getTime() + Math.floor(Math.random() * 1000);
         
-        // 결제 금액이 0원이면 에러나므로 테스트용 1000원 설정 (실제 운영시 수정 필요)
+        // 결제 금액이 0원이면 에러나므로 테스트용 1000원 설정
         const payAmount = total > 0 ? total : 1000; 
 
         tossPayments.requestPayment('카드', {
