@@ -111,8 +111,7 @@
             const bookingData = JSON.parse(tempBookingData);
 
             try {
-                // [매출액 해결의 핵심!] Supabase Edge Function을 호출하여 결제를 '승인'합니다.
-                // 이 단계가 완료되어야 토스페이먼츠 관리자에 실제 매출액이 찍힙니다.
+                // Supabase Edge Function을 호출하여 결제 승인 및 DB 저장
                 const { data, error } = await window.supabaseClient.functions.invoke('confirm-payment', {
                     body: {
                         paymentKey: paymentKey,
@@ -139,19 +138,34 @@
                     throw new Error("결제 승인 요청 중 문제가 발생했습니다.");
                 }
 
-                // 성공 시 화면 표시 업데이트
+                // -----------------------------------------------------------
+                // ★ 화면 표시 업데이트 (여기서 저장해둔 room_name을 사용합니다!)
+                // -----------------------------------------------------------
                 document.getElementById('res-order-id').innerText = orderId;
                 document.getElementById('res-name').innerText = bookingData.guest_name;
-                document.getElementById('res-room').innerText = getRoomName(bookingData.room_id);
+                
+                // room_name이 있으면 그것을 쓰고, 없으면 ID로 찾기 (안전장치)
+                const displayRoomName = bookingData.room_name || getRoomName(bookingData.room_id);
+                document.getElementById('res-room').innerText = displayRoomName;
+                
                 document.getElementById('res-checkin').innerText = bookingData.check_in;
                 document.getElementById('res-checkout').innerText = bookingData.check_out;
 
-                const unit = bookingData.currency === 'ko' ? '원' : bookingData.currency === 'ja' ? '円' : '¥';
-                const prefix = bookingData.currency === 'en' ? '$' : '';
-                document.getElementById('res-price').innerText = prefix + Number(amount).toLocaleString() + unit;
+                // 통화 기호 처리
+                const unit = bookingData.currency === 'ko' ? '원' : bookingData.currency === 'ja' ? '円' : '';
+                const prefix = (bookingData.currency === 'en') ? '$' : (bookingData.currency === 'zh') ? '¥' : '';
+                
+                // en인 경우 소수점 2자리, 아니면 정수
+                const formattedPrice = (bookingData.currency === 'en') 
+                    ? Number(amount).toLocaleString('en-US', {minimumFractionDigits: 2}) 
+                    : Number(amount).toLocaleString();
 
+                document.getElementById('res-price').innerText = prefix + formattedPrice + unit;
+
+                // 데이터 사용 완료 후 스토리지 정리
                 localStorage.removeItem('tempBookingData');
                 
+                // 로딩 화면 끄고 결과 화면 보이기
                 setTimeout(() => {
                     document.getElementById('loading-overlay').style.display = 'none';
                     document.getElementById('success-content').style.display = 'block';
@@ -160,12 +174,13 @@
             } catch (err) {
                 console.error("최종 처리 오류:", err);
                 alert("결제 승인에 실패했거나 매출 등록에 문제가 생겼습니다. 관리자에게 문의하세요.\n" + err.message);
-                window.location.href = "fail.html";
+                window.location.href = "fail.html"; // 실패 시 이동
             }
         }
 
+        // 혹시나 room_name이 누락되었을 때를 대비한 백업 함수
         function getRoomName(id) {
-            const rooms = { 1:'Standard', 2:'Deluxe', 3:'Premium', 4:'Luxury', 5:'Twin', 6:'Special' };
+            const rooms = { 1:'Standard (스탠다드)', 2:'Deluxe (디럭스)', 3:'Premium (프리미엄)', 4:'Luxury (럭셔리)', 5:'Twin (트윈)', 6:'Special (스페셜)' };
             return rooms[id] || 'Room';
         }
 
