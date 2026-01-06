@@ -511,8 +511,8 @@
         updateDisplayPrices();
     }
 
-    // ★ 가격 표시 함수 (금요일 요금 로직 추가됨)
-    function updateDisplayPrices() {
+    // ★ [수정된 함수] 가격 표시 (Inventory 변동 가격 우선 적용)
+    async function updateDisplayPrices() {
         if (Object.keys(globalRoomData).length === 0) return;
 
         // 1. 기간 설정
@@ -534,13 +534,35 @@
         const diffTime = Math.abs(endDate - startDate);
         nightCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
-        // 2. 현재 언어 설정 및 컬럼 선택
+        // 2. [추가됨] 해당 기간의 Inventory(특가/변동가격) 데이터 가져오기
+        const startStr = formatDateToYMD(startDate);
+        const endStr = formatDateToYMD(endDate); // 넉넉하게 endDate까지 조회
+
+        let inventoryMap = {};
+
+        try {
+            const { data: invData, error } = await window.supabaseClient
+                .from('inventory')
+                .select('room_id, date, price') // 가격 정보 가져오기
+                .gte('date', startStr)
+                .lte('date', endStr);
+
+            if (invData) {
+                // 검색 속도를 높이기 위해 Map 형태로 변환: "방ID_날짜" = 가격
+                invData.forEach(item => {
+                    inventoryMap[`${item.room_id}_${item.date}`] = item.price;
+                });
+            }
+        } catch (err) {
+            console.error("가격 정보를 가져오는 중 오류:", err);
+        }
+
+        // 3. 현재 언어 설정 및 컬럼 선택
         const lang = headerSelect ? headerSelect.value : 'ko';
         
         let currencySymbol = "원";
         let symbolPosition = "suffix"; 
         
-        // [수정 1] 컬럼 변수 설정 (금요일 추가)
         let colWeekday = "default_price";
         let colFriday = "friday_price";   // 금요일 (기본)
         let colWeekend = "weekend_price"; 
@@ -565,7 +587,7 @@
             colWeekend = "weekend_price_cny";
         }
 
-        // 3. 각 객실별 금액 계산
+        // 4. 각 객실별 금액 계산
         const roomCards = document.querySelectorAll('.room-card');
         
         roomCards.forEach(card => {
@@ -578,23 +600,34 @@
             let loopDate = new Date(startDate);
 
             for (let i = 0; i < nightCount; i++) {
+                const dateKey = formatDateToYMD(loopDate); // YYYY-MM-DD
                 const dayOfWeek = loopDate.getDay(); 
                 
-                // [수정 2] 요일별 가격 합산 로직 변경
-                if (dayOfWeek === 6) {
-                    // 토요일 (주말)
-                    totalPrice += roomInfo[colWeekend] || 0;
-                } else if (dayOfWeek === 5) {
-                    // ★ 금요일 (금요일 전용 요금)
-                    totalPrice += roomInfo[colFriday] || 0;
+                // ★ [핵심 수정 로직]
+                // 1순위: Inventory 테이블에 해당 날짜/방의 가격이 있는지 확인
+                const customPrice = inventoryMap[`${roomId}_${dateKey}`];
+
+                if (customPrice !== undefined && customPrice !== null) {
+                    // Inventory에 설정된 가격이 있으면 그걸 사용 (특가/성수기 등)
+                    totalPrice += customPrice;
                 } else {
-                    // 일~목 (평일)
-                    totalPrice += roomInfo[colWeekday] || 0;
+                    // 2순위: 없으면 기존 Rooms 테이블의 요일별 가격 사용
+                    if (dayOfWeek === 6) {
+                        // 토요일 (주말)
+                        totalPrice += roomInfo[colWeekend] || 0;
+                    } else if (dayOfWeek === 5) {
+                        // 금요일
+                        totalPrice += roomInfo[colFriday] || 0;
+                    } else {
+                        // 일~목 (평일)
+                        totalPrice += roomInfo[colWeekday] || 0;
+                    }
                 }
+                
                 loopDate.setDate(loopDate.getDate() + 1);
             }
 
-            // 4. 화면 업데이트
+            // 5. 화면 업데이트
             const priceEl = card.querySelector('.room-price');
             
             let formattedPrice;
@@ -751,7 +784,7 @@
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        // [추가된 부분 1] 오늘 기준으로 2개월 뒤 날짜 계산
+        // [추가된 부분] 오늘 기준으로 2개월 뒤 날짜 계산
         const maxDate = new Date();
         maxDate.setMonth(today.getMonth() + 2);
         maxDate.setHours(0, 0, 0, 0); 
@@ -780,7 +813,7 @@
                     const dateStamp = new Date(currentYear, currentMonth, dateCount);
                     dateStamp.setHours(0, 0, 0, 0);
                     
-                    // [수정된 부분 2] 과거 날짜 OR 6개월 뒤 날짜는 선택 불가 처리
+                    // 과거 날짜 OR 6개월 뒤 날짜는 선택 불가 처리
                     if (dateStamp < today) {
                         cell.classList.add("past-day"); // 이미 있는 스타일 (클릭 불가, 회색)
                     } 
@@ -860,6 +893,6 @@
 
     renderCalendar();
     fetchRoomPrices(); 
-  </script>
+ </script>
 </body>
 </html>
