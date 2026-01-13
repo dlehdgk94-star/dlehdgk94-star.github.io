@@ -168,11 +168,13 @@
             margin-bottom: 2px;
         }
 
+        /* 수정된 결제 수단 스타일 */
         .payment-method label { 
             display: flex; 
             align-items: center; 
             margin-right: 15px; 
             font-size: 14px; 
+            margin-bottom: 8px; /* 간격 확보 */
         }
         .terms-list { list-style: none; margin-top: 10px; padding: 0; }
         .terms-list li { margin-bottom: 10px; font-size: 13px; color: #666; display: flex; justify-content: space-between; align-items: center; }
@@ -529,7 +531,15 @@
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_method">결제수단</div>
                     <div class="payment-method">
-                        <label><input type="radio" name="payment" checked> <span data-i18n="label_credit_card">신용카드</span></label>
+                        <label style="margin-right: 20px;">
+                            <input type="radio" name="payment" value="card" checked onclick="setPaymentMethod('card')"> 
+                            <span data-i18n="label_credit_card">신용카드</span>
+                        </label>
+
+                        <label>
+                            <input type="radio" name="payment" value="paypal" onclick="setPaymentMethod('paypal')"> 
+                            <span>PayPal (페이팔)</span>
+                        </label>
                     </div>
                 </div>
 
@@ -567,7 +577,7 @@
                 <a href="https://www.instagram.com/instahotelkorea" target="_blank"><img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24"></a>
                 <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank"><img src="icons8-네이버-64.png" alt="Naver" width="24" height="24"></a>
                 <a href="http://pf.kakao.com/_xiITuG" target="_blank"><img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24"></a>
-                <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>        
+                <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>          
             </div>
             <div class="space-y-1">
                 <p>insta hotel mainbranch, Korea</p>
@@ -1049,11 +1059,24 @@
             }
         }
 
+    // --------------------------------------------------------------------------------------
+    // [수정된 결제 로직] : PayPal 디자인 추가 및 로직 분기 (카드: 토스, PayPal: 준비 중)
+    // --------------------------------------------------------------------------------------
+
     // ★ 1. 토스 페이먼츠 초기화 (LIVE 키 적용됨)
     const clientKey = 'live_ck_6bJXmgo28e7p2RKp4BqjVLANGKWx'; 
     var tossPayments = TossPayments(clientKey);
 
-    // ★ 2. 결제 요청 함수 (스페셜용 수정)
+    // ★ 2. 현재 선택된 결제 수단 (기본값: 카드)
+    let currentPaymentMethod = 'card';
+
+    // 라디오 버튼 클릭 시 호출되는 함수
+    function setPaymentMethod(method) {
+        currentPaymentMethod = method;
+        // console.log("선택된 결제수단:", currentPaymentMethod);
+    }
+
+    // ★ 3. 결제 요청 함수 (스페셜용 수정)
     async function requestPayment() {
         // (1) 약관 동의 확인
         const isInfoChecked = document.getElementById('chk-info').checked;
@@ -1075,7 +1098,7 @@
         const requestMsg = document.getElementById('input-request').value.trim();
 
         if (!name || !phone || !email) {
-            alert(t.alert_fill_all);
+            alert(t.alert_fill_info);
             return;
         }
 
@@ -1084,7 +1107,7 @@
         const checkin = params.get('checkin');
         const checkout = params.get('checkout');
         
-        // ★★★ [수정됨] 스페셜 고정 설정 ★★★
+        // ★★★ [스페셜 고정 설정] ★★★
         const roomId = 6; // 스페셜 룸 번호
         const roomName = "Special (스페셜)"; // 스페셜 이름
 
@@ -1102,51 +1125,60 @@
         }
 
         // ---------------------------------------------------------
-        // (4) 임시 저장 (결제 성공 페이지에서 사용하기 위함)
+        // (4) 결제 수단에 따른 분기 처리
         // ---------------------------------------------------------
-        const bookingData = {
-            guest_name: name,
-            phone: phone,
-            guest_email: email,
-            check_in: checkin,
-            check_out: checkout,
-            room_id: roomId,
-            room_name: roomName, // ★ 객실 이름 저장
-            room_price: roomPrice,
-            total_price: total,
-            currency: currentLang,
-            selected_options: selectedOptionsArray,
-            social_insta: insta,
-            social_tiktok: tiktok,
-            guest_request: requestMsg,
-            status: '결제완료' 
-        };
-        localStorage.setItem('tempBookingData', JSON.stringify(bookingData));
-
-        // ---------------------------------------------------------
-        // (5) 토스 결제창 띄우기
-        // ---------------------------------------------------------
-        const orderId = 'ORDER_SPC_' + new Date().getTime() + Math.floor(Math.random() * 1000);
         
-        // 결제 금액이 0원이면 에러나므로 테스트용 1000원 설정
-        const payAmount = total > 0 ? total : 1000; 
+        if (currentPaymentMethod === 'paypal') {
+            // [CASE 1] PayPal 선택 시 -> 준비 중 알림 (심사용 UI)
+            alert("현재 PayPal 결제 승인 대기 중입니다.\n신용카드를 이용해 주세요.\n(PayPal is coming soon. Please use Credit Card.)");
+            return; 
 
-        tossPayments.requestPayment('카드', {
-            amount: payAmount,
-            orderId: orderId,
-            orderName: 'Insta Hotel 스페셜 예약', // 주문명
-            customerName: name,
-            customerEmail: email,
-            successUrl: window.location.origin + '/success.html', // 성공 페이지
-            failUrl: window.location.origin + '/fail.html',       // 실패 페이지
-        })
-        .catch(function (error) {
-            if (error.code === 'USER_CANCEL') {
-                alert('결제를 취소했습니다.');
-            } else {
-                alert('결제 실패: ' + error.message);
-            }
-        });
+        } else {
+            // [CASE 2] 신용카드 선택 시 (기본) -> 토스 페이먼츠 실행
+            
+            // 임시 저장 (Success 페이지용)
+            const bookingData = {
+                guest_name: name,
+                phone: phone,
+                guest_email: email,
+                check_in: checkin,
+                check_out: checkout,
+                room_id: roomId,
+                room_name: roomName, 
+                room_price: roomPrice,
+                total_price: total,
+                currency: currentLang,
+                selected_options: selectedOptionsArray,
+                social_insta: insta,
+                social_tiktok: tiktok,
+                guest_request: requestMsg,
+                status: '결제완료' 
+            };
+            localStorage.setItem('tempBookingData', JSON.stringify(bookingData));
+
+            // 토스 결제창 띄우기
+            const orderId = 'ORDER_SPC_' + new Date().getTime() + Math.floor(Math.random() * 1000);
+            
+            // [주의] 결제 금액이 0원이면 에러나므로 테스트용 1000원 설정
+            const payAmount = total > 0 ? total : 1000; 
+
+            tossPayments.requestPayment('카드', {
+                amount: payAmount,
+                orderId: orderId,
+                orderName: 'Insta Hotel 스페셜 예약', // 주문명
+                customerName: name,
+                customerEmail: email,
+                successUrl: window.location.origin + '/success.html', // 성공 페이지
+                failUrl: window.location.origin + '/fail.html',       // 실패 페이지
+            })
+            .catch(function (error) {
+                if (error.code === 'USER_CANCEL') {
+                    alert('결제를 취소했습니다.');
+                } else {
+                    alert('결제 실패: ' + error.message);
+                }
+            });
+        }
     }
     </script>
 </body>
