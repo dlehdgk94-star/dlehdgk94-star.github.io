@@ -168,11 +168,13 @@
             margin-bottom: 2px;
         }
 
+        /* 수정된 결제 수단 스타일 */
         .payment-method label { 
             display: flex; 
             align-items: center; 
             margin-right: 15px; 
             font-size: 14px; 
+            margin-bottom: 8px; /* 간격 확보 */
         }
         .terms-list { list-style: none; margin-top: 10px; padding: 0; }
         .terms-list li { margin-bottom: 10px; font-size: 13px; color: #666; display: flex; justify-content: space-between; align-items: center; }
@@ -531,7 +533,15 @@
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_method">결제수단</div>
                     <div class="payment-method">
-                        <label><input type="radio" name="payment" checked> <span data-i18n="label_credit_card">신용카드</span></label>
+                        <label style="margin-right: 20px;">
+                            <input type="radio" name="payment" value="card" checked onclick="setPaymentMethod('card')"> 
+                            <span data-i18n="label_credit_card">신용카드</span>
+                        </label>
+
+                        <label>
+                            <input type="radio" name="payment" value="paypal" onclick="setPaymentMethod('paypal')"> 
+                            <span>PayPal (페이팔)</span>
+                        </label>
                     </div>
                 </div>
 
@@ -550,7 +560,7 @@
                     </ul>
                 </div>
 
-                <button id="btn-submit" class="btn-submit" onclick="requestPayment()" data-i18n="btn_pay">결제하기</button>
+                <button class="btn-submit" onclick="requestPayment()" data-i18n="btn_pay">결제하기</button>
 
             </div>
         </div>
@@ -569,7 +579,7 @@
                 <a href="https://www.instagram.com/instahotelkorea" target="_blank"><img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24"></a>
                 <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank"><img src="icons8-네이버-64.png" alt="Naver" width="24" height="24"></a>
                 <a href="http://pf.kakao.com/_xiITuG" target="_blank"><img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24"></a>
-                <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>        
+                <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>          
             </div>
             <div class="space-y-1">
                 <p>insta hotel mainbranch, Korea</p>
@@ -697,7 +707,6 @@
                 label_room_price: "객실 가격",
                 label_option: "옵션(조식 등)",
                 label_total_price: "총 결제금액",
-                
                 label_option_list: "선택한 옵션",
                 
                 sect_method: "결제수단",
@@ -756,7 +765,6 @@
                 label_room_price: "Room Price",
                 label_option: "Options",
                 label_total_price: "Total Amount",
-                
                 label_option_list: "Selected Options",
                 
                 sect_method: "Payment Method",
@@ -815,7 +823,6 @@
                 label_room_price: "客室価格",
                 label_option: "オプション",
                 label_total_price: "総決済金額",
-                
                 label_option_list: "選択したオプション",
                 
                 sect_method: "決済手段",
@@ -874,7 +881,6 @@
                 label_room_price: "客房价格",
                 label_option: "选项",
                 label_total_price: "总支付金额",
-                
                 label_option_list: "已选择的选项",
                 
                 sect_method: "支付方式",
@@ -899,12 +905,14 @@
             currentLang = lang;
             const t = translations[lang] || translations.ko;
 
-            // 1. 국기 이미지 업데이트
             if(currentFlagIcon && t.img) {
                 currentFlagIcon.src = t.img;
             }
 
-            // 2. 텍스트 번역 업데이트
+            // 헤더 및 드로어 셀렉트 박스 동기화
+            if(headerSelect) headerSelect.value = lang;
+            if(drawerSelect) drawerSelect.value = lang;
+
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (t[key]) {
@@ -912,7 +920,6 @@
                 }
             });
 
-            // 플레이스홀더 번역 적용
             document.getElementById('input-name').placeholder = t.ph_name;
             document.getElementById('input-phone').placeholder = t.ph_phone;
             document.getElementById('input-email').placeholder = t.ph_email;
@@ -924,49 +931,47 @@
             document.getElementById("ceoName").innerText = t.ceo;
             document.getElementById("bizNumber").innerText = t.biz;
             document.getElementById("address").innerText = t.addr;
-            
-            // 언어가 바뀌면 금액 표시도 다시 렌더링 (단위 변경 등)
+
             renderPriceInfo();
-            
-            // 셀렉트 박스 값 동기화
-            if(headerSelect) headerSelect.value = lang;
-            if(drawerSelect) drawerSelect.value = lang;
+        }
+
+        // [화폐 단위 포맷팅 함수]
+        function formatMoney(amount, lang) {
+            const num = parseFloat(amount);
+            if (lang === 'en') {
+                return '$' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else if (lang === 'ja') {
+                return '¥' + Math.round(num).toLocaleString();
+            } else if (lang === 'zh') {
+                return '¥' + Math.round(num).toLocaleString();
+            } else {
+                return Math.round(num).toLocaleString() + '원';
+            }
         }
 
         function renderPriceInfo() {
             const params = new URLSearchParams(window.location.search);
+            const t = translations[currentLang] || translations.ko;
             
             const checkin = params.get('checkin') || "";
             const checkout = params.get('checkout') || "";
             const nights = params.get('nights') || '0';
-            const roomPrice = parseFloat(params.get('roomPrice')) || 0;
-            const optionPrice = parseFloat(params.get('optionPrice')) || 0;
-            const total = parseFloat(params.get('total')) || 0;
-
-            const t = translations[currentLang];
-            
-            // 금액 포맷팅 함수 (달러는 소수점 2자리, 나머지는 정수)
-            const fmt = (n) => {
-                let numStr;
-                if(currentLang === 'en') {
-                    numStr = n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                } else {
-                    numStr = Math.round(n).toLocaleString();
-                }
-                return t.unit_prefix + numStr + t.unit_suffix;
-            };
+            const roomPrice = params.get('roomPrice') ? parseFloat(params.get('roomPrice')) : 0;
+            const optionPrice = params.get('optionPrice') ? parseFloat(params.get('optionPrice')) : 0;
+            const total = params.get('total') ? parseFloat(params.get('total')) : 0;
 
             if(checkin && checkout) {
                 document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
             }
             document.getElementById('display-nights').innerText = nights + t.unit_night;
             
-            document.getElementById('display-room-price-info').innerText = fmt(roomPrice);
-            document.getElementById('summary-room-price').innerText = fmt(roomPrice);
-            document.getElementById('summary-option-price').innerText = fmt(optionPrice);
-            document.getElementById('summary-total-price').innerText = fmt(total);
+            // 화폐 단위 적용하여 출력
+            document.getElementById('display-room-price-info').innerText = formatMoney(roomPrice, currentLang);
+            document.getElementById('summary-room-price').innerText = formatMoney(roomPrice, currentLang);
+            document.getElementById('summary-option-price').innerText = formatMoney(optionPrice, currentLang);
+            document.getElementById('summary-total-price').innerText = formatMoney(total, currentLang);
 
-            // 옵션 상세 리스트 표시 로직
+            // 옵션 상세 리스트 표시
             const optionContainer = document.getElementById('option-detail-list');
             const optionDetailsRaw = params.get('optionDetails');
             let optionDetails = [];
@@ -980,7 +985,6 @@
             }
 
             if (optionDetails.length > 0) {
-                // 옵션이 있을 경우 표시
                 optionContainer.style.display = 'block';
                 const listHtml = optionDetails.map(item => `<li>${item}</li>`).join('');
                 optionContainer.innerHTML = `
@@ -988,43 +992,40 @@
                     <ul>${listHtml}</ul>
                 `;
             } else {
-                // 옵션이 없을 경우 숨김
                 optionContainer.style.display = 'none';
                 optionContainer.innerHTML = '';
             }
         }
 
-        // ====================================================================
-        // [중요] 페이지 로드 및 언어 변경 감지 로직
-        // 다른 언어 선택 시 '예약상세트윈.html'로 리다이렉트
-        // ====================================================================
+        // =========================================================
+        // [중요] 페이지 로드 및 언어 변경 핸들링 (트윈 객실용)
+        // =========================================================
         window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
             // URL에서 currency 파라미터 가져오기 (기본값 ko)
+            const params = new URLSearchParams(window.location.search);
             const urlLang = params.get('currency') || 'ko';
             
             // 초기 언어 설정
             updateLanguage(urlLang);
 
-            // 언어 변경 처리 함수
+            // 언어 변경 시 처리 함수
             function handleLanguageChange(e) {
                 const selectedLang = e.target.value;
-                // 처음 들어온 언어(urlLang)와 다른 언어를 선택했다면
+                
+                // 처음 들어온 언어(화폐)와 다르면 예약 상세 페이지로 리다이렉트
                 if (selectedLang !== urlLang) {
-                    // 예약 상세 페이지로 리다이렉트 (Twin 룸)
-                    window.location.href = '예약상세트윈.html';
+                    // ★ 트윈 예약 페이지로 이동
+                    window.location.href = '예약상세트윈.html'; 
                 } else {
-                    // 같은 언어라면 단순 화면 갱신
+                    // 동일 언어면 화면 갱신만 수행
                     updateLanguage(selectedLang);
                 }
             }
 
-            // 헤더 언어 선택 이벤트
+            // 헤더 & 드로어 메뉴 셀렉트 박스 이벤트 연결
             if(headerSelect) {
                 headerSelect.addEventListener("change", handleLanguageChange);
             }
-            
-            // 모바일 드로어 언어 선택 이벤트
             if(drawerSelect) {
                 drawerSelect.addEventListener("change", handleLanguageChange);
             }
@@ -1060,11 +1061,24 @@
             }
         }
 
+    // --------------------------------------------------------------------------------------
+    // [수정된 결제 로직] : PayPal 디자인 추가 및 로직 분기 (카드: 토스, PayPal: 준비 중)
+    // --------------------------------------------------------------------------------------
+
     // ★ 1. 토스 페이먼츠 초기화 (LIVE 키 적용됨)
     const clientKey = 'live_ck_6bJXmgo28e7p2RKp4BqjVLANGKWx'; 
     var tossPayments = TossPayments(clientKey);
 
-    // ★ 2. 결제 요청 함수 (트윈용 수정됨)
+    // ★ 2. 현재 선택된 결제 수단 (기본값: 카드)
+    let currentPaymentMethod = 'card';
+
+    // 라디오 버튼 클릭 시 호출되는 함수
+    function setPaymentMethod(method) {
+        currentPaymentMethod = method;
+        // console.log("선택된 결제수단:", currentPaymentMethod);
+    }
+
+    // ★ 3. 결제 요청 함수 (트윈용 수정됨)
     async function requestPayment() {
         // (1) 약관 동의 확인
         const isInfoChecked = document.getElementById('chk-info').checked;
@@ -1095,7 +1109,7 @@
         const checkin = params.get('checkin');
         const checkout = params.get('checkout');
         
-        // ★★★ [수정됨] 트윈 고정 설정 ★★★
+        // ★★★ [트윈 고정 설정] ★★★
         const roomId = 5; // 트윈 룸 번호
         const roomName = "Twin (트윈)"; // 트윈 이름
 
@@ -1113,51 +1127,60 @@
         }
 
         // ---------------------------------------------------------
-        // (4) 임시 저장 (결제 성공 페이지에서 사용하기 위함)
+        // (4) 결제 수단에 따른 분기 처리
         // ---------------------------------------------------------
-        const bookingData = {
-            guest_name: name,
-            phone: phone,
-            guest_email: email,
-            check_in: checkin,
-            check_out: checkout,
-            room_id: roomId,
-            room_name: roomName, // ★ 객실 이름 저장
-            room_price: roomPrice,
-            total_price: total,
-            currency: currentLang,
-            selected_options: selectedOptionsArray,
-            social_insta: insta,
-            social_tiktok: tiktok,
-            guest_request: requestMsg,
-            status: '결제완료' 
-        };
-        localStorage.setItem('tempBookingData', JSON.stringify(bookingData));
-
-        // ---------------------------------------------------------
-        // (5) 토스 결제창 띄우기
-        // ---------------------------------------------------------
-        const orderId = 'ORDER_TWN_' + new Date().getTime() + Math.floor(Math.random() * 1000);
         
-        // 결제 금액이 0원이면 에러나므로 테스트용 1000원 설정
-        const payAmount = total > 0 ? total : 1000; 
+        if (currentPaymentMethod === 'paypal') {
+            // [CASE 1] PayPal 선택 시 -> 준비 중 알림 (심사용 UI)
+            alert("현재 PayPal 결제 승인 대기 중입니다.\n신용카드를 이용해 주세요.\n(PayPal is coming soon. Please use Credit Card.)");
+            return; 
 
-        tossPayments.requestPayment('카드', {
-            amount: payAmount,
-            orderId: orderId,
-            orderName: 'Insta Hotel 트윈 예약', // 주문명
-            customerName: name,
-            customerEmail: email,
-            successUrl: window.location.origin + '/success.html', // 성공 페이지
-            failUrl: window.location.origin + '/fail.html',       // 실패 페이지
-        })
-        .catch(function (error) {
-            if (error.code === 'USER_CANCEL') {
-                alert('결제를 취소했습니다.');
-            } else {
-                alert('결제 실패: ' + error.message);
-            }
-        });
+        } else {
+            // [CASE 2] 신용카드 선택 시 (기본) -> 토스 페이먼츠 실행
+            
+            // 임시 저장 (Success 페이지용)
+            const bookingData = {
+                guest_name: name,
+                phone: phone,
+                guest_email: email,
+                check_in: checkin,
+                check_out: checkout,
+                room_id: roomId,
+                room_name: roomName, 
+                room_price: roomPrice,
+                total_price: total,
+                currency: currentLang,
+                selected_options: selectedOptionsArray,
+                social_insta: insta,
+                social_tiktok: tiktok,
+                guest_request: requestMsg,
+                status: '결제완료' 
+            };
+            localStorage.setItem('tempBookingData', JSON.stringify(bookingData));
+
+            // 토스 결제창 띄우기
+            const orderId = 'ORDER_TWN_' + new Date().getTime() + Math.floor(Math.random() * 1000);
+            
+            // [주의] 결제 금액이 0원이면 에러나므로 테스트용 1000원 설정
+            const payAmount = total > 0 ? total : 1000; 
+
+            tossPayments.requestPayment('카드', {
+                amount: payAmount,
+                orderId: orderId,
+                orderName: 'Insta Hotel 트윈 예약', // 주문명
+                customerName: name,
+                customerEmail: email,
+                successUrl: window.location.origin + '/success.html', // 성공 페이지
+                failUrl: window.location.origin + '/fail.html',       // 실패 페이지
+            })
+            .catch(function (error) {
+                if (error.code === 'USER_CANCEL') {
+                    alert('결제를 취소했습니다.');
+                } else {
+                    alert('결제 실패: ' + error.message);
+                }
+            });
+        }
     }
     </script>
 </body>
