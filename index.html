@@ -182,7 +182,7 @@
 
 <body class="text-slate-900 bg-white">
 
-  <header id="header" class="fixed top-0 left-0 right-0 z-30 transition-colors duration-300 bg-transparent text-white">
+  <header id="header" class="fixed top-0 left-0 right-0 z-30 transition-colors duration-300 bg-[#ff6900] shadow-md text-white">
     <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
       
       <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md">
@@ -327,7 +327,7 @@
         <span class="ml-1 text-sm text-slate-500">@instahotelkorea</span>
       </p>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-8">
-    
+        
     <a href="https://www.instagram.com/p/DSUmXVnEdL0/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" class="block overflow-hidden group">
         <img src="12. 인스타.png" 
              alt="Instagram 1" 
@@ -460,17 +460,10 @@
   </script>
 
   <script>
-    /* 헤더 스크롤 색상 */
-    const header = document.getElementById("header");
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 20) {
-        header.classList.add("bg-[#ff6900]", "shadow-md");
-        header.classList.remove("bg-transparent");
-      } else {
-        header.classList.remove("bg-[#ff6900]", "shadow-md");
-        header.classList.add("bg-transparent");
-      }
-    });
+    /* [수정됨] 헤더 스크롤 관련 스크립트 삭제함. 
+       이곳에 있던 window.addEventListener("scroll", ...) 코드가 없어져야
+       상단바가 항상 주황색으로 고정됩니다.
+    */
 
     /* 모바일 메뉴 */
     const mobileMenuBtn = document.getElementById("mobile-menu-btn");
@@ -613,137 +606,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
