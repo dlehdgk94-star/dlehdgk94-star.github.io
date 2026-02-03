@@ -49,24 +49,24 @@
     }
 
     /* --------------------------------------------------------
-       [1] 중앙 하단 플로팅 예약 버튼 스타일 (NEW)
+       [1] 중앙 하단 플로팅 예약 버튼 스타일
     -------------------------------------------------------- */
     .floating-book-btn {
         position: fixed;
         bottom: 30px; 
         left: 50%; 
         transform: translateX(-50%); 
-        z-index: 9990; /* 채팅 버튼보다는 아래 레이어 */
+        z-index: 9990; 
         
         display: flex;
         align-items: center;
         gap: 15px;
         
-        background-color: #111; /* 고급스러운 검정 배경 */
+        background-color: #111; 
         color: white;
         padding: 12px 30px;
-        border-radius: 50px; /* 둥근 알약 모양 */
-        border: 2px solid #ff6900; /* 브랜드 컬러 테두리 */
+        border-radius: 50px; 
+        border: 2px solid #ff6900; 
         box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         text-decoration: none;
         transition: all 0.3s ease;
@@ -98,9 +98,9 @@
         .floating-book-btn {
             bottom: 25px; 
             min-width: auto;
-            width: 65%; /* 화면의 65% 차지 */
+            width: 65%; 
             padding: 10px 20px;
-            left: 40%; /* 채팅 버튼과 안 겹치게 살짝 왼쪽으로 치우침 */
+            left: 40%; 
         }
         .book-title { font-size: 14px; }
     }
@@ -112,7 +112,7 @@
         position: fixed;
         bottom: 25px;
         right: 20px;
-        z-index: 9999; /* 제일 위에 뜸 */
+        z-index: 9999; 
         font-family: 'Poppins', sans-serif;
     }
 
@@ -196,7 +196,7 @@
         <span class="hidden md:block text-2xl font-semibold tracking-tight">Insta Hotel - mainbranch</span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-sm font-medium drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
+      <nav class="hidden md:flex items-center gap-5 whitespace-nowrap text-base font-bold drop-shadow-md md:absolute md:left-1/2 md:-translate-x-1/2 z-10">
         <a href="about.html" class="hover:text-orange-200 transition-colors">about</a>
         <a href="rooms.html" class="hover:text-orange-200 transition-colors">rooms</a>
         <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast(조식)</a>
@@ -460,11 +460,6 @@
   </script>
 
   <script>
-    /* [수정됨] 헤더 스크롤 관련 스크립트 삭제함. 
-       이곳에 있던 window.addEventListener("scroll", ...) 코드가 없어져야
-       상단바가 항상 주황색으로 고정됩니다.
-    */
-
     /* 모바일 메뉴 */
     const mobileMenuBtn = document.getElementById("mobile-menu-btn");
     const mobileDrawer = document.getElementById("mobile-drawer");
