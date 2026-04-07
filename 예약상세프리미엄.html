@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation – Insta Hotel - Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>Reservation – Insta Hotel - Lavendery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -127,7 +127,7 @@
         .share-box svg { width: 22px; height: 22px; stroke: #333; stroke-width: 1.5; }
 
         /* --------------------------------------------------------
-           [NEW] 우측 하단 채팅 위젯 스타일 (메인 페이지 스타일 적용)
+           [NEW] 우측 하단 채팅 위젯 스타일 (프리미엄 페이지 스타일 적용)
         -------------------------------------------------------- */
         .chat-widget-container {
             position: fixed;
@@ -205,7 +205,7 @@
 </head>
 <body class="bg-white text-slate-900 font-sans">
 
-    <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
+  <header id="header" class="fixed top-0 left-0 right-0 z-30 bg-[#ff6900] text-white shadow-md">
     <div class="w-full px-4 md:px-10 py-3 flex items-center justify-between h-14 relative">
       
       <button id="mobile-menu-btn" class="md:hidden text-white flex items-center focus:outline-none drop-shadow-md z-20">
@@ -267,12 +267,12 @@
                 <span data-i18n="nav_rooms">rooms</span> <span class="text-sm">▼</span>
             </div>
             <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
-                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Envidion</a></li>
                 <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Special</a></li>
-                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Luxury</a></li>
-                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Premium</a></li>
-                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Deluxe</a></li>
-                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Standard</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Glorio</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Lavendery</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Iris</a></li>
+                <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Edelweiss</a></li>
                 <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
             </ul>
         </li>
@@ -296,6 +296,7 @@
     </div>
   </nav>
 
+
     <main class="reservation-container">
        <div class="left-column">
            <div class="main-image" id="main-photo" style="background-image: url('hero2.jpg');"></div>
@@ -315,14 +316,14 @@
 
            <div class="description-header" data-i18n="desc_header">상세정보</div>
            <div class="description-text">
-               <p data-i18n="desc_p1">[프리미엄]<br>insta hotel은 편안함과 감성을 한눈에 담을 수 있는 공간입니다.<br>은은한 조명과 따뜻한 우드 톤의 객실은 여행과 일상 속에서 잠시 쉬어갈 수 있는 편안한 분위기를 제공합니다.</p>
+               <p data-i18n="desc_p1">[라벤더리 룸]<br>insta hotel은 편안함과 감성을 한눈에 담을 수 있는 공간입니다.<br>은은한 조명과 따뜻한 우드 톤의 객실은 여행과 일상 속에서 잠시 쉬어갈 수 있는 편안한 분위기를 제공합니다.</p>
                <p data-i18n="desc_p2">객실마다 다른 감성의 공간 연출로 <br>고요한 밤의 분위기를 자연스럽게 느낄 수 있도록 구성했습니다.</p>
                <p data-i18n="desc_p3">투숙객에게는 편안한 휴식이 될 수 있도록 모든 객실에 Free wi-fi, 편리한 주차 등이 제공됩니다.</p>
            </div>
        </div>
 
        <div class="right-column">
-           <h2 class="room-title" data-i18n="room_title">프리미엄</h2>
+           <h2 class="room-title" data-i18n="room_title">라벤더리 룸</h2>
 
            <div class="calendar-wrapper">
                <div class="calendar-header">
@@ -524,7 +525,7 @@
     <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
         <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
           <div class="flex justify-center gap-4 text-lg"> 
-              <a href="https://www.instagram.com/instahotelkorea" target="_blank">
+              <a href="https://www.instagram.com/instar_hotel_/" target="_blank">
                   <img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24">
               </a>
               <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank">
@@ -557,7 +558,7 @@
     <div class="chat-widget-container" id="chatWidget">
         <div class="chat-options">
             
-            <a href="https://www.instagram.com/instahotelkorea" target="_blank" class="chat-option-item" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+            <a href="https://www.instagram.com/instar_hotel_/" target="_blank" class="chat-option-item" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
                 <span>Instagram DM</span>
             </a>
     
@@ -596,7 +597,7 @@
             this.classList.add('liked');
         });
 
-        // --- 공통 스크립트 (모바일 메뉴 등) ---
+        // --- 공통 스크립트 ---
         const header = document.getElementById("header");
         const mobileMenuBtn = document.getElementById("mobile-menu-btn");
         const mobileDrawer = document.getElementById("mobile-drawer");
@@ -625,17 +626,17 @@
             });
         }
 
-        // --- 다국어 번역 데이터 ---
+        // --- 다국어 번역 데이터 (화폐 로직 포함) ---
         const translations = {
             ko: {
                 flag: "kr.png",
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 scroll_hint: "← 옆으로 밀어서 더 보기",
                 desc_header: "상세정보",
-                desc_p1: "[프리미엄]<br>insta hotel은 편안함과 감성을 한눈에 담을 수 있는 공간입니다.<br>은은한 조명과 따뜻한 우드 톤의 객실은 여행과 일상 속에서 잠시 쉬어갈 수 있는 편안한 분위기를 제공합니다.",
+                desc_p1: "[라벤더리 룸]<br>insta hotel은 편안함과 감성을 한눈에 담을 수 있는 공간입니다.<br>은은한 조명과 따뜻한 우드 톤의 객실은 여행과 일상 속에서 잠시 쉬어갈 수 있는 편안한 분위기를 제공합니다.",
                 desc_p2: "객실마다 다른 감성의 공간 연출로 <br>고요한 밤의 분위기를 자연스럽게 느낄 수 있도록 구성했습니다.",
                 desc_p3: "투숙객에게는 편안한 휴식이 될 수 있도록 모든 객실에 Free wi-fi, 편리한 주차 등이 제공됩니다.",
-                room_title: "프리미엄",
+                room_title: "라벤더리 룸",
                 checkin_label: "체크인", checkout_label: "체크아웃",
                 msg_select_date: "날짜를 선택해주세요",
                 label_nights: "박", label_total: "총 합계", label_won: "원",
@@ -663,10 +664,10 @@
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 scroll_hint: "← Swipe to see more",
                 desc_header: "Details",
-                desc_p1: "[Premium]<br>Insta Hotel is a space where you can capture comfort and sensibility at a glance.<br>The softly lit rooms with warm wood tones provide a comfortable atmosphere for a break during your trip.",
+                desc_p1: "[Lavendery Room]<br>Insta Hotel is a space where you can capture comfort and sensibility at a glance.<br>The softly lit rooms with warm wood tones provide a comfortable atmosphere for a break during your trip.",
                 desc_p2: "Each room is designed with a different emotional vibe,<br>allowing you to naturally feel the atmosphere of a quiet night.",
                 desc_p3: "For a comfortable rest, all rooms are provided with Free Wi-Fi, convenient parking, etc.",
-                room_title: "Premium",
+                room_title: "Lavendery Room",
                 checkin_label: "Check-in", checkout_label: "Check-out",
                 msg_select_date: "Please select dates",
                 label_nights: "nights", label_total: "Total", label_won: "",
@@ -694,10 +695,10 @@
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 scroll_hint: "← スワイプしてもっと見る",
                 desc_header: "詳細情報",
-                desc_p1: "[プレミアム]<br>インスタホテルは、快適さと感性を一目で感じられる空間です。<br>ほのかな照明と温かみのあるウッドトーンの客室は、旅や日常の中で一休みできる快適な雰囲気を提供します。",
+                desc_p1: "[ラベンダリールーム]<br>インスタホテルは、快適さと感性を一目で感じられる空間です。<br>ほのかな照明と温かみのあるウッドトーンの客室は、旅や日常の中で一休みできる快適な雰囲気を提供します。",
                 desc_p2: "客室ごとに異なる感性の空間演出により、<br>静かな夜の雰囲気を自然に感じられるように構成しました。",
                 desc_p3: "お客様の快適な休息のために、全客室に無料Wi-Fi、便利な駐車場などが提供されます。",
-                room_title: "プレミアム",
+                room_title: "ラベンダリールーム",
                 checkin_label: "チェックイン", checkout_label: "チェックアウト",
                 msg_select_date: "日付を選択してください",
                 label_nights: "泊", label_total: "合計", label_won: "円",
@@ -722,16 +723,16 @@
             },
             zh: {
                 flag: "cn.png",
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "蓝雨休息室", nav_contact: "contact",
+                nav_about: "关于", nav_rooms: "客房", nav_reservation: "预订", nav_lounge: "蓝雨休息室", nav_contact: "联系我们",
                 scroll_hint: "← 滑动查看更多",
                 desc_header: "详细信息",
-                desc_p1: "[优选房]<br>Insta Hotel 是一个可以一眼容纳舒适和感性的空间。<br>隐隐的灯光和温暖的木色调客房，为您提供旅行和日常生活中可以暂时休息的舒适氛围。",
+                desc_p1: "[Lavendery 房]<br>Insta Hotel 是一个可以一眼容纳舒适和感性的空间。<br>隐隐的灯光和温暖的木色调客房，为您提供旅行和日常生活中可以暂时休息的舒适氛围。",
                 desc_p2: "每个客房都有不同的感性空间设计，<br>让您自然地感受到宁静夜晚的氛围。",
                 desc_p3: "为了给住客提供舒适的休息，所有客房均提供免费Wi-Fi、便捷的停车服务等。",
-                room_title: "优选房",
+                room_title: "Lavendery 房",
                 checkin_label: "入住", checkout_label: "退房",
                 msg_select_date: "请选择日期",
-                label_nights: "晚", label_total: "总计", label_won: "", // 중국어는 단위(元) 생략, ¥ 기호만 사용
+                label_nights: "晚", label_total: "总计", label_won: "", // 중국어는 단위(元) 생략, ¥ 기호만使用
                 opt_header: "早餐·客房服务", opt_sub: "请勾选您想要的菜单",
                 btn_reserve: "立即预订",
                 companyName: "Insta Hotel有限公司", ceoName: "代表：李永焕", bizNumber: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6",
@@ -762,12 +763,12 @@
         const currentFlagIcon = document.getElementById("current-flag-icon");
 
         // [DB] 방 정보 가져오기 
-        // 주의: DB의 id값이 3이 아닐 경우, 실제 DB의 프리미엄 룸 id로 수정해주세요.
+        // ★ 라벤더리 룸 ID = 3번으로 설정 (예시)
         async function fetchRoomData() {
             const { data, error } = await window.supabaseClient
                 .from('rooms')
                 .select('*')
-                .eq('id', 3) // 프리미엄 룸 ID (예시로 3번)
+                .eq('id', 3) // 프리미엄 룸 ID (예시로 3번) -> 라벤더리 룸 ID 3번
                 .single();
 
             if (error) {
@@ -776,7 +777,7 @@
                 return;
             }
             currentRoomData = data;
-            console.log("DB 데이터 로드 완료 (프리미엄):", currentRoomData);
+            console.log("DB 데이터 로드 완료 (라벤더리, ID: 3):", currentRoomData);
             calculateTotalWrapper(); // 데이터 로드 후 계산 갱신
         }
 
@@ -788,7 +789,7 @@
             const { data, error } = await window.supabaseClient
                 .from('inventory')
                 .select('date, price')
-                .eq('room_id', 3) // 프리미엄 룸 ID
+                .eq('room_id', 3) // 라벤더리 룸 ID
                 .gte('date', sStr)
                 .lte('date', eStr);
 
@@ -1038,18 +1039,21 @@
              return 1; // 한국어
         }
 
-        // 날짜와 요일에 따른 숙박비 총액 계산 함수 (금요일/변동가격 로직 추가됨)
+        // [수정 1] 날짜와 요일에 따른 숙박비 계산 함수 (특실/금요일 요금 적용)
         function calculateTotal() {
-            const checkinStr = document.getElementById('checkin').value;
-            const checkoutStr = document.getElementById('checkout').value;
+            if (!currentRoomData) return 0; // DB 데이터 없으면 0
+
+            const checkinInput = document.getElementById('checkin').value;
+            const checkoutInput = document.getElementById('checkout').value;
             
-            if (!checkinStr || !checkoutStr || !currentRoomData) return 0;
+            if (!checkinInput || !checkoutInput) return 0;
 
-            const start = new Date(checkinStr);
-            const end = new Date(checkoutStr);
+            const startDate = new Date(checkinInput);
+            const endDate = new Date(checkoutInput);
+
             let totalPrice = 0;
-
-            // 1. 현재 언어 설정에 따라 사용할 '컬럼 이름' 결정
+            
+            // 언어별 컬럼 이름 설정
             let weekdayKey, fridayKey, weekendKey;
 
             if (currentLang === 'en') {
@@ -1074,7 +1078,7 @@
             const exchangeRate = getOptionExchangeRate(currentLang);
 
             // 2. 체크인 날짜부터 체크아웃 전날까지 하루씩 반복하며 요금 더하기
-            for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+            for (let d = new Date(startDate); d < endDate; d.setDate(d.getDate() + 1)) {
                 const dateKey = toDateString(d); // YYYY-MM-DD format
                 
                 // ★ [핵심] Inventory 테이블에 특가가 있는지 먼저 확인
@@ -1105,12 +1109,12 @@
             return totalPrice;
         }
 
-        // 체크박스 중복 계산 및 화면 표시 업데이트 함수 (수정됨)
+        // [수정 2] 화면 표시 및 최종 합계 계산 함수 (박수와 방 가격 표시 로직 추가됨)
         function calculateTotalWrapper() {
-            // 1. 방 가격 계산
+            // 1. 방 가격 가져오기 (calculateTotal 함수에서 계산된 값)
             let roomPrice = calculateTotal();
             
-            // 2. [추가됨] 몇 박인지(nights) 계산하기
+            // 2. 몇 박(Nights)인지 계산하기
             const checkinVal = document.getElementById('checkin').value;
             const checkoutVal = document.getElementById('checkout').value;
             let nightCount = 0;
@@ -1118,12 +1122,12 @@
             if(checkinVal && checkoutVal) {
                 const s = new Date(checkinVal);
                 const e = new Date(checkoutVal);
-                // 날짜 차이(밀리초)를 일(day) 단위로 변환
                 const diffTime = Math.abs(e - s);
+                // 밀리초를 일(Day) 단위로 변환 후 올림 처리
                 nightCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
             }
 
-            // 3. 옵션 가격 계산
+            // 3. 옵션(조식 등) 가격 계산
             let optionTotalKRW = 0;
             const checkboxes = document.querySelectorAll('.option-checkbox:checked');
             checkboxes.forEach((box) => {
@@ -1134,7 +1138,7 @@
             const rate = getOptionExchangeRate(currentLang);
             let optionPrice = (currentLang === 'ko') ? optionTotalKRW : (optionTotalKRW * rate);
 
-            // 소수점/반올림 처리
+            // 소수점 처리 (영어 외에는 반올림)
             if(currentLang !== 'en') {
                 roomPrice = Math.round(roomPrice);
                 optionPrice = Math.round(optionPrice);
@@ -1143,24 +1147,28 @@
             let grandTotal = roomPrice + optionPrice;
 
             // ============================================================
-            // ★ [중요] 화면 업데이트 로직 추가 ★
+            // ★ 화면 업데이트 (여기가 추가된 핵심 부분입니다!) ★
             // ============================================================
             
-            // 1) 달력 바로 아래 "0박" 부분을 현재 박수로 변경
+            // (1) "0박" -> 실제 박수 표시
             document.getElementById('nights').innerText = nightCount;
             
-            // 2) 달력 바로 아래 "0원" 부분을 "방 가격"으로 변경
-            // (옵션을 제외한 순수 숙박비만 보여줍니다)
+            // (2) 날짜 범위 텍스트 업데이트 (예: 2025-12-25 ~ 2025-12-27)
+            if(checkinVal && checkoutVal) {
+                document.getElementById('date-range-text').innerText = `${checkinVal} ~ ${checkoutVal}`;
+            }
+
+            // (3) 달력 밑 "방 가격" 표시 (옵션 제외 금액)
             if(currentLang === 'en') {
                 document.getElementById('total').innerText = roomPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             } else {
                 document.getElementById('total').innerText = roomPrice.toLocaleString();
             }
 
-            // 3) 옵션 가격 표시 업데이트
+            // (4) 옵션 가격 UI 업데이트 (+7,300원 등)
             updateOptionPricesUI(rate);
 
-            // 4) 맨 아래 "총 합계" (숙박비 + 옵션) 업데이트
+            // (5) 맨 아래 "총 합계" 표시 (방 가격 + 옵션 가격)
             if(currentLang === 'en') {
                 document.getElementById('grand-total').innerText = grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             } else {
@@ -1245,7 +1253,7 @@
             const optionDetailsEncoded = encodeURIComponent(JSON.stringify(selectedOptionNames));
 
             // 결제 페이지로 이동 (currency 정보도 함께 넘김)
-            // 프리미엄 페이지이므로 paypremium.html로 이동
+            // ★ 라벤더리 객실 결제 페이지: paypremium.html (기존 링크 형식 유지)
             const url = `paypremium.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${total}&optionDetails=${optionDetailsEncoded}&currency=${currentLang}`;
 
             window.location.href = url;
