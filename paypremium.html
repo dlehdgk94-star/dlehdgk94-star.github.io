@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment – Insta Hotel - Premium</title>
+    <title>Payment – Insta Hotel - Lavendery</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -319,13 +319,11 @@
     </style>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://js.tosspayments.com/v1/payment"></script>
+    <script src="https://js.tosspayments.com/v1/payment"></script> 
     <script>
         const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
         const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
-        
         window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
-        
         console.log("결제페이지-슈파베이스 연결 성공!");
     </script>
 </head>
@@ -351,7 +349,7 @@
             <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast(조식)</a>
             <a href="reservation.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_reservation">reservation(예약)</a>
             <a href="instaspot.html" class="hover:text-orange-200 transition-colors">tour&food&cafe(관광&맛집&카페)</a>
-            <a href="#lounge" class="hover:text-orange-200 transition-colors" data-i18n="nav_lounge">bluerain lounge</a>
+            <a href="index.html#lounge" class="hover:text-orange-200 transition-colors" data-i18n="nav_lounge">bluerain lounge</a>
             <a href="contact.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_contact">contact</a>
           </nav>
     
@@ -393,12 +391,12 @@
                     <span data-i18n="nav_rooms">rooms</span> <span class="text-sm">▼</span>
                 </div>
                 <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Envidion</a></li>
                     <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Special</a></li>
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Luxury</a></li>
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Premium</a></li>
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Deluxe</a></li>
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Standard</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Glorio</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Lavendery</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Iris</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Edelweiss</a></li>
                     <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
                 </ul>
             </li>
@@ -406,7 +404,7 @@
             <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]">breakfast(조식)</a></li>
             <li><a href="reservation.html" class="block hover:text-[#ff6900]" data-i18n="nav_reservation">reservation(예약)</a></li>
             <li><a href="instaspot.html" class="block hover:text-[#ff6900]">tour&food&cafe(관광&맛집&카페)</a></li>
-            <li><a href="#lounge" class="block hover:text-[#ff6900]" data-i18n="nav_lounge">bluerain lounge</a></li>
+            <li><a href="index.html#lounge" class="block hover:text-[#ff6900]" data-i18n="nav_lounge">bluerain lounge</a></li>
             <li><a href="contact.html" class="block hover:text-[#ff6900]" data-i18n="nav_contact">contact</a></li>
           </ul>
     
@@ -432,11 +430,11 @@
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_product">예약 상품 정보</div>
                     <div class="product-info">
-                        <img src="프리미엄1.png" alt="객실 이미지" class="product-img">
+                        <img src="hero2.jpg" alt="객실 이미지" class="product-img">
                         <div class="product-details">
-                            <h3 data-i18n="room_name">프리미엄 (Premium)</h3>
-                            <p><span data-i18n="label_schedule">일정</span>: <span id="display-nights">1박</span> (<span id="display-date-range">날짜 미선택</span>)</p>
-                            <p><span data-i18n="label_guests">인원</span>: <span data-i18n="text_guests_default">성인 2명 (기본)</span></p>
+                            <h3 data-i18n="room_name">라벤더리 룸 (Lavendery)</h3>
+                            <p><span data-i18n="label_schedule">일정</span>: <span id="display-nights">1박</span> (<span id="display-date-range" data-i18n="text_no_date">날짜 미선택</span>)</p>
+                            <p><span data-i18n="label_guests">인원</span>: <span data-i18n="text_adults_default">성인 2명 (기본)</span></p>
                             <div class="price" id="display-room-price-info">0원</div>
                         </div>
                     </div>
@@ -457,20 +455,21 @@
                     <input type="email" id="input-email" placeholder="이메일 (E-mail)">
                     
                     <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;" data-i18n="notice_sns">
-                        * 우리와 SNS 팔로우 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.
+                        * 우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.
                     </div>
 
                     <div class="input-row">
                         <div class="input-half">
-                            <input type="text" id="input-instagram" placeholder="인스타그램 (Instagram)">
+                            <input type="text" id="input-instagram" placeholder="Instagram">
                         </div>
                         <div class="input-half">
-                            <input type="text" id="input-tiktok" placeholder="틱톡 (Tiktok)">
+                            <input type="text" id="input-tiktok" placeholder="Tiktok">
                         </div>
                     </div>
                     
                     <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
                 </div>
+
 
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_extra">추가정보 입력</div>
@@ -574,7 +573,7 @@
     <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
         <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
             <div class="flex justify-center gap-4 text-lg"> 
-                <a href="https://www.instagram.com/instahotelkorea" target="_blank"><img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24"></a>
+                <a href="https://www.instagram.com/instar_hotel_/" target="_blank"><img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24"></a>
                 <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank"><img src="icons8-네이버-64.png" alt="Naver" width="24" height="24"></a>
                 <a href="http://pf.kakao.com/_xiITuG" target="_blank"><img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24"></a>
                 <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>          
@@ -587,13 +586,17 @@
                 <p id="address">수원시 영통구 영통로 94-6</p>
                 <p>Business License 176-24-01388 | Tel 031-203-4301</p>
             </div>
+            <div class="flex justify-center gap-4 pt-2">
+                <a href="#" class="hover:underline" id="terms">이용약관</a>
+                <a href="#" class="hover:underline" id="privacy">개인정보처리방침</a>
+            </div>
         </div>
     </section>
 
     <div class="chat-widget-container" id="chatWidget">
         <div class="chat-options">
             
-            <a href="https://www.instagram.com/instahotelkorea" target="_blank" class="chat-option-item" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+            <a href="https://www.instagram.com/instar_hotel_/" target="_blank" class="chat-option-item" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
                 <span>Instagram DM</span>
             </a>
     
@@ -621,55 +624,61 @@
             }
         }
 
-        /* --------------------------------------
-           1. 모바일 메뉴 (Drawer) 열기/닫기
-        -------------------------------------- */
+        // --- 좋아요 버튼 기능 ---
+        const likeBtn = document.getElementById('like-btn');
+        const likeCountDisplay = document.getElementById('like-count');
+        let likeCount = 178; 
+        
+        likeBtn.addEventListener('click', function() {
+            likeCount++; 
+            likeCountDisplay.innerText = likeCount;
+            this.classList.add('liked');
+        });
+
+        // --- 공통 스크립트 ---
+        const header = document.getElementById("header");
         const mobileMenuBtn = document.getElementById("mobile-menu-btn");
         const mobileDrawer = document.getElementById("mobile-drawer");
         const drawerOverlay = document.getElementById("drawer-overlay");
         const mobileCloseBtn = document.getElementById("mobile-menu-close-btn");
+        const roomsToggle = document.getElementById("rooms-toggle");
+        const roomsSubmenu = document.getElementById("rooms-submenu");
 
         function openMenu() {
-            if(mobileDrawer) mobileDrawer.classList.remove("-translate-x-full");
-            if(drawerOverlay) drawerOverlay.classList.remove("hidden");
+            mobileDrawer.classList.remove("-translate-x-full");
+            drawerOverlay.classList.remove("hidden");
             document.body.style.overflow = "hidden"; 
         }
         function closeMenu() {
-            if(mobileDrawer) mobileDrawer.classList.add("-translate-x-full");
-            if(drawerOverlay) drawerOverlay.classList.add("hidden");
+            mobileDrawer.classList.add("-translate-x-full");
+            drawerOverlay.classList.add("hidden");
             document.body.style.overflow = ""; 
         }
 
         if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMenu);
         if (mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMenu);
         if (drawerOverlay) drawerOverlay.addEventListener("click", closeMenu);
-
-        const roomsToggle = document.getElementById("rooms-toggle");
-        const roomsSubmenu = document.getElementById("rooms-submenu");
         if(roomsToggle && roomsSubmenu){
             roomsToggle.addEventListener("click", () => {
                 roomsSubmenu.classList.toggle("hidden");
             });
         }
 
-        /* --------------------------------------
-           2. 다국어 데이터 및 로직
-        -------------------------------------- */
+        // --- 다국어 번역 데이터 ---
         const translations = {
             ko: {
-                flag: "🇰🇷",
-                img: "kr.png",
+                flag: "kr.png",
                 unit_night: "박",
-                
                 alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
                 alert_done: "결제가 완료되었습니다! (데모)",
                 alert_fill_info: "예약자 정보를 모두 입력해주세요.",
+                alert_error: "오류가 발생했습니다: ",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation (예약)", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 
                 page_title: "결제하기",
                 sect_product: "예약 상품 정보",
-                room_name: "프리미엄 (Premium)",
+                room_name: "라벤더리 룸 (Lavendery)",
                 label_schedule: "일정",
                 text_date_unselected: "날짜 미선택",
                 label_guests: "인원",
@@ -716,19 +725,18 @@
                 addr: "수원시 영통구 영통로 94-6"
             },
             en: {
-                flag: "🇺🇸",
-                img: "usa.png",
+                flag: "usa.png",
                 unit_night: " nights",
-                
                 alert_agree: "You must agree to all terms to proceed.",
                 alert_done: "Payment Completed! (Demo)",
                 alert_fill_info: "Please fill in all guest information.",
+                alert_error: "An error occurred: ",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 
                 page_title: "Payment",
                 sect_product: "Booking Info",
-                room_name: "Premium",
+                room_name: "Lavendery Room",
                 label_schedule: "Schedule",
                 text_date_unselected: "Date not selected",
                 label_guests: "Guests",
@@ -775,19 +783,18 @@
                 addr: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si"
             },
             ja: {
-                flag: "🇯🇵",
-                img: "jp.png",
+                flag: "jp.png",
                 unit_night: " 泊",
-                
                 alert_agree: "すべての規約に同意する必要があります。",
                 alert_done: "決済が完了しました！(デモ)",
                 alert_fill_info: "予約者情報をすべて入力してください。",
+                alert_error: "エラーが発生しました: ",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 
                 page_title: "決済",
                 sect_product: "予約情報",
-                room_name: "プレミアム (Premium)",
+                room_name: "ラベンダリールーム (Lavendery)",
                 label_schedule: "日程",
                 text_date_unselected: "日付未選択",
                 label_guests: "人数",
@@ -834,19 +841,18 @@
                 addr: "水原市霊通区霊通路94-6"
             },
             zh: {
-                flag: "🇨🇳",
-                img: "cn.png",
+                flag: "cn.png",
                 unit_night: " 晚",
-                
                 alert_agree: "必须同意所有条款才能付款。",
                 alert_done: "支付完成！(演示)",
                 alert_fill_info: "请填写所有预订人信息。",
+                alert_error: "发生错误: ",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "蓝雨休息室", nav_contact: "联系我们",
                 
                 page_title: "支付",
                 sect_product: "预订信息",
-                room_name: "高级版 (Premium)",
+                room_name: "Lavendery 房",
                 label_schedule: "日程",
                 text_date_unselected: "日期未选择",
                 label_guests: "人数",
@@ -903,8 +909,8 @@
             currentLang = lang;
             const t = translations[lang] || translations.ko;
 
-            if(currentFlagIcon && t.img) {
-                currentFlagIcon.src = t.img;
+            if(currentFlagIcon && t.flag) {
+                currentFlagIcon.src = t.flag;
             }
 
             // 헤더 및 드로어 셀렉트 박스 동기화
@@ -995,18 +1001,15 @@
             }
         }
 
-        // =========================================================
-        // [중요] 페이지 로드 및 언어 변경 핸들링 (프리미엄 객실용)
-        // =========================================================
+        // ====================================================================
+        // [중요] 페이지 로드 및 언어 변경 핸들링
+        // ====================================================================
         window.onload = function() {
-            // URL에서 currency 파라미터 가져오기 (기본값 ko)
             const params = new URLSearchParams(window.location.search);
             const urlLang = params.get('currency') || 'ko';
             
-            // 초기 언어 설정
             updateLanguage(urlLang);
 
-            // 언어 변경 시 처리 함수
             function handleLanguageChange(e) {
                 const selectedLang = e.target.value;
                 
@@ -1014,18 +1017,12 @@
                 if (selectedLang !== urlLang) {
                     window.location.href = '예약상세프리미엄.html';
                 } else {
-                    // 동일 언어면 화면 갱신만 수행
                     updateLanguage(selectedLang);
                 }
             }
 
-            // 헤더 & 드로어 메뉴 셀렉트 박스 이벤트 연결
-            if(headerSelect) {
-                headerSelect.addEventListener("change", handleLanguageChange);
-            }
-            if(drawerSelect) {
-                drawerSelect.addEventListener("change", handleLanguageChange);
-            }
+            if(headerSelect) headerSelect.addEventListener("change", handleLanguageChange);
+            if(drawerSelect) drawerSelect.addEventListener("change", handleLanguageChange);
         };
 
         const chkAll = document.getElementById('chk-all');
@@ -1072,10 +1069,9 @@
     // 라디오 버튼 클릭 시 호출되는 함수
     function setPaymentMethod(method) {
         currentPaymentMethod = method;
-        // console.log("선택된 결제수단:", currentPaymentMethod);
     }
 
-    // ★ 3. 결제 요청 함수 (프리미엄용 수정)
+    // ★ 3. 결제 요청 함수
     async function requestPayment() {
         // (1) 약관 동의 확인
         const isInfoChecked = document.getElementById('chk-info').checked;
@@ -1106,9 +1102,9 @@
         const checkin = params.get('checkin');
         const checkout = params.get('checkout');
         
-        // ★★★ [프리미엄 고정 설정] ★★★
-        const roomId = 3; // 프리미엄 룸 번호
-        const roomName = "Premium (프리미엄)"; // 프리미엄 이름
+        // ★★★ [라벤더리 룸 고정 설정] ★★★
+        const roomId = 3; // 라벤더리 룸 번호
+        const roomName = "Lavendery (라벤더리)"; // 라벤더리 이름
 
         const roomPrice = parseFloat(params.get('roomPrice')) || 0;
         const total = parseFloat(params.get('total')) || 0;
@@ -1128,7 +1124,7 @@
         // ---------------------------------------------------------
         
         if (currentPaymentMethod === 'paypal') {
-            // [CASE 1] PayPal 선택 시 -> 준비 중 알림 (심사용 UI)
+            // [CASE 1] PayPal 선택 시 -> 준비 중 알림
             alert("현재 PayPal 결제 승인 대기 중입니다.\n신용카드를 이용해 주세요.\n(PayPal is coming soon. Please use Credit Card.)");
             return; 
 
@@ -1164,7 +1160,7 @@
             tossPayments.requestPayment('카드', {
                 amount: payAmount,
                 orderId: orderId,
-                orderName: 'Insta Hotel 프리미엄 예약', // 주문명
+                orderName: 'Insta Hotel 라벤더리 예약', // 주문명
                 customerName: name,
                 customerEmail: email,
                 successUrl: window.location.origin + '/success.html', // 성공 페이지
