@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment – Insta Hotel - Special</title>
+    <title>Payment – Insta Hotel - Special Room</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -319,13 +319,11 @@
     </style>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://js.tosspayments.com/v1/payment"></script>
+    <script src="https://js.tosspayments.com/v1/payment"></script> 
     <script>
         const supabaseUrl = 'https://eyasihczaqsacenklhns.supabase.co'
         const supabaseKey = 'sb_publishable_KgiOOQUrWJzQTDCZnbhGcw_otKoMO27'
-        
         window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
-        
         console.log("결제페이지-슈파베이스 연결 성공!");
     </script>
 </head>
@@ -351,7 +349,7 @@
             <a href="조식메뉴판.html" class="hover:text-orange-200 transition-colors">breakfast(조식)</a>
             <a href="reservation.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_reservation">reservation(예약)</a>
             <a href="instaspot.html" class="hover:text-orange-200 transition-colors">tour&food&cafe(관광&맛집&카페)</a>
-            <a href="#lounge" class="hover:text-orange-200 transition-colors" data-i18n="nav_lounge">bluerain lounge</a>
+            <a href="index.html#lounge" class="hover:text-orange-200 transition-colors" data-i18n="nav_lounge">bluerain lounge</a>
             <a href="contact.html" class="hover:text-orange-200 transition-colors" data-i18n="nav_contact">contact</a>
           </nav>
     
@@ -393,12 +391,12 @@
                     <span data-i18n="nav_rooms">rooms</span> <span class="text-sm">▼</span>
                 </div>
                 <ul id="rooms-submenu" class="hidden mt-3 ml-4 space-y-3 border-l-2 border-slate-100 pl-4">
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Twin</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Envidion</a></li>
                     <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Special</a></li>
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Luxury</a></li>
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Premium</a></li>
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Deluxe</a></li>
-                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Standard</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Glorio</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Lavendery</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Iris</a></li>
+                    <li><a href="rooms.html" class="block text-sm text-slate-600 hover:text-[#ff6900]">Edelweiss</a></li>
                     <li><a href="reservation.html" class="block text-sm text-slate-600 hover:text-[#ff6900] font-semibold">Long Stay</a></li>
                 </ul>
             </li>
@@ -406,7 +404,7 @@
             <li><a href="조식메뉴판.html" class="block hover:text-[#ff6900]">breakfast(조식)</a></li>
             <li><a href="reservation.html" class="block hover:text-[#ff6900]" data-i18n="nav_reservation">reservation(예약)</a></li>
             <li><a href="instaspot.html" class="block hover:text-[#ff6900]">tour&food&cafe(관광&맛집&카페)</a></li>
-            <li><a href="#lounge" class="block hover:text-[#ff6900]" data-i18n="nav_lounge">bluerain lounge</a></li>
+            <li><a href="index.html#lounge" class="block hover:text-[#ff6900]" data-i18n="nav_lounge">bluerain lounge</a></li>
             <li><a href="contact.html" class="block hover:text-[#ff6900]" data-i18n="nav_contact">contact</a></li>
           </ul>
     
@@ -432,11 +430,11 @@
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_product">예약 상품 정보</div>
                     <div class="product-info">
-                        <img src="special.jpg" alt="hero10.jpg" class="product-img">
+                        <img src="hero10.jpg" alt="객실 이미지" class="product-img">
                         <div class="product-details">
-                            <h3 data-i18n="room_name">스페셜 (Special)</h3>
-                            <p><span data-i18n="label_schedule">일정</span>: <span id="display-nights">1박</span> (<span id="display-date-range">날짜 미선택</span>)</p>
-                            <p><span data-i18n="label_guests">인원</span>: <span data-i18n="text_guests_default">성인 2명 (기본)</span></p>
+                            <h3 data-i18n="room_name">스페셜 룸 (Special)</h3>
+                            <p><span data-i18n="label_schedule">일정</span>: <span id="display-nights">1박</span> (<span id="display-date-range" data-i18n="text_no_date">날짜 미선택</span>)</p>
+                            <p><span data-i18n="label_guests">인원</span>: <span data-i18n="text_adults_default">성인 2명 (기본)</span></p>
                             <div class="price" id="display-room-price-info">0원</div>
                         </div>
                     </div>
@@ -457,20 +455,21 @@
                     <input type="email" id="input-email" placeholder="이메일 (E-mail)">
                     
                     <div style="font-size: 12px; color: #ff6900; margin-top: 15px; margin-bottom: 5px; font-weight: 500;" data-i18n="notice_sns">
-                        * 우리와 SNS 팔로우 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.
+                        * 우리와 SNS 팔로우를 하면 예약정보를 간편하고 빠르게 확인할 수 있습니다.
                     </div>
 
                     <div class="input-row">
                         <div class="input-half">
-                            <input type="text" id="input-instagram" placeholder="인스타그램 (Instagram)">
+                            <input type="text" id="input-instagram" placeholder="Instagram">
                         </div>
                         <div class="input-half">
-                            <input type="text" id="input-tiktok" placeholder="틱톡 (Tiktok)">
+                            <input type="text" id="input-tiktok" placeholder="Tiktok">
                         </div>
                     </div>
                     
                     <input type="text" id="input-request" placeholder="요청사항 (Requests)" style="margin-top: 10px;">
                 </div>
+
 
                 <div class="section-card">
                     <div class="section-title" data-i18n="sect_extra">추가정보 입력</div>
@@ -574,7 +573,7 @@
     <section id="contact" class="pt-10 pb-12 bg-white border-t border-slate-200">
         <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-600 space-y-3">
             <div class="flex justify-center gap-4 text-lg"> 
-                <a href="https://www.instagram.com/instahotelkorea" target="_blank"><img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24"></a>
+                <a href="https://www.instagram.com/instar_hotel_/" target="_blank"><img src="icons8-인스-타-그램-48.png" alt="Instagram" width="24" height="24"></a>
                 <a href="https://map.naver.com/p/entry/place/1630717211" target="_blank"><img src="icons8-네이버-64.png" alt="Naver" width="24" height="24"></a>
                 <a href="http://pf.kakao.com/_xiITuG" target="_blank"><img src="icons8-카카오-톡-48.png" alt="KakaoTalk" width="24" height="24"></a>
                 <a href="https://www.facebook.com/VIPdesign2020" target="_blank"><img src="icons8-페이스-북-48.png" alt="Facebook" width="24" height="24"></a>          
@@ -587,13 +586,17 @@
                 <p id="address">수원시 영통구 영통로 94-6</p>
                 <p>Business License 176-24-01388 | Tel 031-203-4301</p>
             </div>
+            <div class="flex justify-center gap-4 pt-2">
+                <a href="#" class="hover:underline" id="terms">이용약관</a>
+                <a href="#" class="hover:underline" id="privacy">개인정보처리방침</a>
+            </div>
         </div>
     </section>
 
     <div class="chat-widget-container" id="chatWidget">
         <div class="chat-options">
             
-            <a href="https://www.instagram.com/instahotelkorea" target="_blank" class="chat-option-item" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+            <a href="https://www.instagram.com/instar_hotel_/" target="_blank" class="chat-option-item" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
                 <span>Instagram DM</span>
             </a>
     
@@ -621,55 +624,61 @@
             }
         }
 
-        /* --------------------------------------
-           1. 모바일 메뉴 (Drawer) 열기/닫기
-        -------------------------------------- */
+        // --- 좋아요 버튼 기능 ---
+        const likeBtn = document.getElementById('like-btn');
+        const likeCountDisplay = document.getElementById('like-count');
+        let likeCount = 178; 
+        
+        likeBtn.addEventListener('click', function() {
+            likeCount++; 
+            likeCountDisplay.innerText = likeCount;
+            this.classList.add('liked');
+        });
+
+        // --- 공통 스크립트 ---
+        const header = document.getElementById("header");
         const mobileMenuBtn = document.getElementById("mobile-menu-btn");
         const mobileDrawer = document.getElementById("mobile-drawer");
         const drawerOverlay = document.getElementById("drawer-overlay");
         const mobileCloseBtn = document.getElementById("mobile-menu-close-btn");
+        const roomsToggle = document.getElementById("rooms-toggle");
+        const roomsSubmenu = document.getElementById("rooms-submenu");
 
         function openMenu() {
-            if(mobileDrawer) mobileDrawer.classList.remove("-translate-x-full");
-            if(drawerOverlay) drawerOverlay.classList.remove("hidden");
+            mobileDrawer.classList.remove("-translate-x-full");
+            drawerOverlay.classList.remove("hidden");
             document.body.style.overflow = "hidden"; 
         }
         function closeMenu() {
-            if(mobileDrawer) mobileDrawer.classList.add("-translate-x-full");
-            if(drawerOverlay) drawerOverlay.classList.add("hidden");
+            mobileDrawer.classList.add("-translate-x-full");
+            drawerOverlay.classList.add("hidden");
             document.body.style.overflow = ""; 
         }
 
         if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMenu);
         if (mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMenu);
         if (drawerOverlay) drawerOverlay.addEventListener("click", closeMenu);
-
-        const roomsToggle = document.getElementById("rooms-toggle");
-        const roomsSubmenu = document.getElementById("rooms-submenu");
         if(roomsToggle && roomsSubmenu){
             roomsToggle.addEventListener("click", () => {
                 roomsSubmenu.classList.toggle("hidden");
             });
         }
 
-        /* --------------------------------------
-           2. 다국어 데이터 및 로직
-        -------------------------------------- */
+        // --- 다국어 번역 데이터 (화폐 로직 포함) ---
         const translations = {
             ko: {
-                flag: "🇰🇷",
-                img: "kr.png",
+                flag: "kr.png",
                 unit_night: "박",
-                
                 alert_agree: "모두 동의를 해야 결제를 할 수 있습니다.",
                 alert_done: "결제가 완료되었습니다! (데모)",
                 alert_fill_info: "예약자 정보를 모두 입력해주세요.",
+                alert_error: "오류가 발생했습니다: ",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation (예약)", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 
                 page_title: "결제하기",
                 sect_product: "예약 상품 정보",
-                room_name: "스페셜 (Special)", // ★ 스페셜로 변경
+                room_name: "스페셜 룸 (Special)",
                 label_schedule: "일정",
                 text_date_unselected: "날짜 미선택",
                 label_guests: "인원",
@@ -710,25 +719,21 @@
                 label_condition: "구매조건 확인 및 결제진행 동의",
                 btn_pay: "결제하기",
                 
-                company: "(주)호텔인스타", 
-                ceo: "대표자 : 이영환", 
-                biz: "통신판매업 신고번호: 2023-수원영통-1696호", 
-                addr: "수원시 영통구 영통로 94-6"
+                company: "(주)호텔인스타", ceo: "대표자 : 이영환", biz: "통신판매업 신고번호: 2023-수원영통-1696호", address: "수원시 영통구 영통로 94-6"
             },
             en: {
-                flag: "🇺🇸",
-                img: "usa.png",
+                flag: "usa.png",
                 unit_night: " nights",
-                
                 alert_agree: "You must agree to all terms to proceed.",
                 alert_done: "Payment Completed! (Demo)",
                 alert_fill_info: "Please fill in all guest information.",
+                alert_error: "An error occurred: ",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 
                 page_title: "Payment",
                 sect_product: "Booking Info",
-                room_name: "Special", // ★ Special로 변경
+                room_name: "Special Room",
                 label_schedule: "Schedule",
                 text_date_unselected: "Date not selected",
                 label_guests: "Guests",
@@ -769,25 +774,21 @@
                 label_condition: "Confirm Order & Agree to Payment",
                 btn_pay: "Pay Now",
                 
-                company: "Insta Hotel Co., Ltd.", 
-                ceo: "CEO: Lee Young Hwan", 
-                biz: "Reg: 2023-Suwon Yeongtong-1696", 
-                addr: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si"
+                company: "Insta Hotel Co., Ltd.", ceo: "CEO: Lee Young Hwan", biz: "Reg: 2023-Suwon Yeongtong-1696", address: "94-6, Yeongtong-ro, Yeongtong-gu, Suwon-si"
             },
             ja: {
-                flag: "🇯🇵",
-                img: "jp.png",
+                flag: "jp.png",
                 unit_night: " 泊",
-                
                 alert_agree: "すべての規約に同意する必要があります。",
                 alert_done: "決済が完了しました！(デモ)",
                 alert_fill_info: "予約者情報をすべて入力してください。",
+                alert_error: "エラーが発生しました: ",
                 
                 nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "bluerain lounge", nav_contact: "contact",
                 
                 page_title: "決済",
                 sect_product: "予約情報",
-                room_name: "スペシャル (Special)", // ★ Special로 변경
+                room_name: "スペシャルルーム (Special)",
                 label_schedule: "日程",
                 text_date_unselected: "日付未選択",
                 label_guests: "人数",
@@ -828,25 +829,21 @@
                 label_condition: "注文内容確認および決済進行への同意",
                 btn_pay: "決済する",
                 
-                company: "インスタホテル株式会社", 
-                ceo: "代表者 : イ・ヨンファン", 
-                biz: "登録番号: 2023-水原霊通-1696", 
-                addr: "水原市霊通区霊通路94-6"
+                company: "インスタホテル株式会社", ceo: "代表者 : イ・ヨンファン", biz: "登録番号: 2023-水原霊通-1696", address: "水原市霊通区霊通路94-6"
             },
             zh: {
-                flag: "🇨🇳",
-                img: "cn.png",
+                flag: "cn.png",
                 unit_night: " 晚",
-                
                 alert_agree: "必须同意所有条款才能付款。",
                 alert_done: "支付完成！(演示)",
                 alert_fill_info: "请填写所有预订人信息。",
+                alert_error: "发生错误: ",
                 
-                nav_about: "about", nav_rooms: "rooms", nav_reservation: "reservation", nav_lounge: "蓝雨休息室", nav_contact: "联系我们",
+                nav_about: "关于", nav_rooms: "客房", nav_reservation: "预订", nav_lounge: "蓝雨休息室", nav_contact: "联系我们",
                 
                 page_title: "支付",
                 sect_product: "预订信息",
-                room_name: "特别房 (Special)", // ★ Special로 변경
+                room_name: "Special 房",
                 label_schedule: "日程",
                 text_date_unselected: "日期未选择",
                 label_guests: "人数",
@@ -857,7 +854,7 @@
                 ph_phone: "联系方式",
                 ph_email: "电子邮箱",
                 ph_request: "特殊要求",
-                notice_sns: "* 关注我们的SNS，可以更方便快捷地查看预订信息。",
+                notice_sns: "* 关注我们的SNS，您可以简单快速地确认预约信息。",
                 
                 sect_extra: "附加信息",
                 notice_confirm_email: "收到电子邮件通知后，预订即确认为完成。",
@@ -887,299 +884,517 @@
                 label_condition: "确认订单并同意支付",
                 btn_pay: "支付",
                 
-                company: "Insta Hotel有限公司", 
-                ceo: "代表：李永焕", 
-                biz: "注册号：2023-水原灵通-1696", 
-                addr: "水原市灵通区灵通路94-6"
+                company: "Insta Hotel有限公司", ceo: "代表：李永焕", biz: "注册号：2023-水原灵通-1696", address: "水原市灵通区灵通路94-6"
             }
         };
 
         let currentLang = 'ko';
+        let currentRoomData = null; // Supabase에서 가져온 방 데이터 저장
+        let inventoryDataMap = {};  // 날짜별 변동 가격(특가) 저장용
+
         const headerSelect = document.getElementById("header-lang-select");
         const drawerSelect = document.getElementById("drawer-lang-select");
         const currentFlagIcon = document.getElementById("current-flag-icon");
 
+        // [DB] 방 정보 가져오기 
+        // ★ 특실(Special) 룸 ID = 6번으로 설정
+        async function fetchRoomData() {
+            const { data, error } = await window.supabaseClient
+                .from('rooms')
+                .select('*')
+                .eq('id', 6) // ★ 특실 룸 ID 6번
+                .single();
+
+            if (error) {
+                console.error("룸 정보를 가져오지 못했습니다.", error);
+                return;
+            }
+            currentRoomData = data;
+            console.log("DB 데이터 로드 완료 (특실, ID: 6):", currentRoomData);
+            calculateTotalWrapper(); // 데이터 로드 후 계산 갱신
+        }
+
+        // [DB] 날짜별 Inventory(특가) 가져오기
+        async function fetchInventoryForRange(start, end) {
+            const sStr = toDateString(start);
+            const eStr = toDateString(end);
+
+            const { data, error } = await window.supabaseClient
+                .from('inventory')
+                .select('date, price')
+                .eq('room_id', 6) // ★ 특실 룸 ID 6번
+                .gte('date', sStr)
+                .lte('date', eStr);
+
+            if (error) {
+                console.error("Inventory 조회 실패:", error);
+                return;
+            }
+
+            // 조회된 데이터를 Map에 저장 (날짜: 가격)
+            inventoryDataMap = {};
+            if(data) {
+                data.forEach(item => {
+                    inventoryDataMap[item.date] = item.price;
+                });
+            }
+            
+            // 데이터 가져온 후 가격 재계산
+            calculateTotalWrapper();
+        }
+
         function updateLanguage(lang) {
             currentLang = lang;
             const t = translations[lang] || translations.ko;
+            
+            // 1. 플래그 & 텍스트 업데이트
+            if(currentFlagIcon && t.flag) currentFlagIcon.src = t.flag;
 
-            if(currentFlagIcon && t.img) {
-                currentFlagIcon.src = t.img;
-            }
-
-            // 헤더 및 드로어 셀렉트 박스 동기화
-            if(headerSelect) headerSelect.value = lang;
-            if(drawerSelect) drawerSelect.value = lang;
-
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (t[key]) {
-                    el.innerHTML = t[key];
-                }
+            const textIds = ["companyName", "ceoName", "bizNumber", "address", "terms", "privacy", "inquiryBtn"];
+            textIds.forEach(id => {
+                const el = document.getElementById(id);
+                if(el && t[id]) el.innerText = t[id];
             });
 
-            document.getElementById('input-name').placeholder = t.ph_name;
-            document.getElementById('input-phone').placeholder = t.ph_phone;
-            document.getElementById('input-email').placeholder = t.ph_email;
-            document.getElementById('input-request').placeholder = t.ph_request;
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.innerHTML = t[key];
+            });
 
-            document.getElementById("companyName").innerText = t.company;
-            document.getElementById("ceoName").innerText = t.ceo;
-            document.getElementById("bizNumber").innerText = t.biz;
-            document.getElementById("address").innerText = t.addr;
+            // 2. 화폐 단위 및 심볼 업데이트
+            updateCurrencyDisplay();
 
-            renderPriceInfo();
+            // 3. 캘린더 다시 그리기 (요일 언어)
+            renderCalendar(currentYear, currentMonth);
+
+            // 4. 가격 재계산
+            calculateTotalWrapper();
         }
 
-        // [화폐 단위 포맷팅 함수]
-        function formatMoney(amount, lang) {
-            const num = parseFloat(amount);
-            if (lang === 'en') {
-                return '$' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            } else if (lang === 'ja') {
-                return '¥' + Math.round(num).toLocaleString();
-            } else if (lang === 'zh') {
-                return '¥' + Math.round(num).toLocaleString();
-            } else {
-                return Math.round(num).toLocaleString() + '원';
-            }
-        }
-
-        function renderPriceInfo() {
-            const params = new URLSearchParams(window.location.search);
+        // 화폐 기호 및 단위 업데이트 함수
+        function updateCurrencyDisplay() {
             const t = translations[currentLang] || translations.ko;
             
-            const checkin = params.get('checkin') || "";
-            const checkout = params.get('checkout') || "";
-            const nights = params.get('nights') || '0';
-            const roomPrice = params.get('roomPrice') ? parseFloat(params.get('roomPrice')) : 0;
-            const optionPrice = params.get('optionPrice') ? parseFloat(params.get('optionPrice')) : 0;
-            const total = params.get('total') ? parseFloat(params.get('total')) : 0;
+            // "원", "円" 등 뒤에 붙는 단위
+            document.querySelectorAll('.currency-unit').forEach(el => {
+                el.innerText = t.label_won;
+            });
 
-            if(checkin && checkout) {
-                document.getElementById('display-date-range').innerText = `${checkin} ~ ${checkout}`;
-            } else {
-                document.getElementById('display-date-range').innerText = t.text_date_unselected;
-            }
-            document.getElementById('display-nights').innerText = nights + t.unit_night;
+            // "$", "¥" 등 앞에 붙는 심볼
+            let symbol = "";
+            if (currentLang === 'en') symbol = "$";
+            else if (currentLang === 'zh') symbol = "¥";
             
-            // 화폐 단위 적용하여 출력
-            document.getElementById('display-room-price-info').innerText = formatMoney(roomPrice, currentLang);
-            document.getElementById('summary-room-price').innerText = formatMoney(roomPrice, currentLang);
-            document.getElementById('summary-option-price').innerText = formatMoney(optionPrice, currentLang);
-            document.getElementById('summary-total-price').innerText = formatMoney(total, currentLang);
-
-            // 옵션 상세 리스트 표시
-            const optionContainer = document.getElementById('option-detail-list');
-            const optionDetailsRaw = params.get('optionDetails');
-            let optionDetails = [];
-
-            if (optionDetailsRaw) {
-                try {
-                    optionDetails = JSON.parse(decodeURIComponent(optionDetailsRaw));
-                } catch (e) {
-                    console.error("옵션 파싱 에러", e);
-                }
-            }
-
-            if (optionDetails.length > 0) {
-                optionContainer.style.display = 'block';
-                const listHtml = optionDetails.map(item => `<li>${item}</li>`).join('');
-                optionContainer.innerHTML = `
-                    <div style="font-weight:bold; margin-bottom:5px;">${t.label_option_list}:</div>
-                    <ul>${listHtml}</ul>
-                `;
-            } else {
-                optionContainer.style.display = 'none';
-                optionContainer.innerHTML = '';
-            }
+            document.querySelectorAll('.currency-symbol').forEach(el => {
+                el.innerText = symbol;
+            });
         }
 
-        // =========================================================
-        // [중요] 페이지 로드 및 언어 변경 핸들링 (스페셜 객실용)
-        // =========================================================
-        window.onload = function() {
-            // URL에서 currency 파라미터 가져오기 (기본값 ko)
-            const params = new URLSearchParams(window.location.search);
-            const urlLang = params.get('currency') || 'ko';
-            
-            // 초기 언어 설정
-            updateLanguage(urlLang);
+        if(headerSelect) {
+            headerSelect.addEventListener("change", (e) => {
+                const lang = e.target.value;
+                if(drawerSelect) drawerSelect.value = lang; 
+                updateLanguage(lang);
+            });
+        }
+        if(drawerSelect) {
+            drawerSelect.addEventListener("change", (e) => {
+                const lang = e.target.value;
+                if(headerSelect) headerSelect.value = lang; 
+                updateLanguage(lang);
+            });
+        }
 
-            // 언어 변경 시 처리 함수
-            function handleLanguageChange(e) {
-                const selectedLang = e.target.value;
+        function changeMainImage(url) {
+            const mainPhoto = document.getElementById('main-photo');
+            mainPhoto.style.backgroundImage = `url('${url}')`;
+        }
+
+        // --- 달력 로직 ---
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth(); 
+        let selectedStartDate = null;
+        let selectedEndDate = null;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        function renderCalendar(year, month) {
+            const calendarBody = document.getElementById('calendar-body');
+            const monthTitle = document.getElementById('current-month');
+            
+            // [수정 1] 오늘 날짜와 2개월 뒤 날짜 계산
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // 시간 초기화
+
+            const maxDate = new Date();
+            maxDate.setHours(0, 0, 0, 0);
+            maxDate.setMonth(today.getMonth() + 2); // 2개월 뒤 설정
+            // ------------------------------------
+
+            if (currentLang === 'en') {
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                monthTitle.innerText = `${monthNames[month]} ${year}`;
+            } else {
+                monthTitle.innerText = `${year}년 ${month + 1}월`;
+            }
+            
+            calendarBody.innerHTML = "";
+
+            let weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+            if (currentLang === 'en') weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            if (currentLang === 'ja') weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+            if (currentLang === 'zh') weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+
+            weekdays.forEach(day => {
+                const div = document.createElement('div');
+                div.className = 'weekday';
+                div.innerText = day;
+                calendarBody.appendChild(div);
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                const div = document.createElement('div');
+                calendarBody.appendChild(div);
+            }
+
+            for (let i = 1; i <= lastDate; i++) {
+                const dateDiv = document.createElement('div');
+                dateDiv.className = 'day';
+                dateDiv.innerText = i;
                 
-                // 처음 들어온 언어(화폐)와 다르면 예약 상세 페이지로 리다이렉트
-                if (selectedLang !== urlLang) {
-                    // ★ 스페셜 예약 페이지로 이동 (파일명을 확인해주세요)
-                    window.location.href = '예약상세스페셜.html'; 
+                const thisDate = new Date(year, month, i);
+                thisDate.setHours(0, 0, 0, 0); // 날짜 비교를 위해 시간 초기화
+
+                // [수정 2] 과거 날짜 OR 6개월 뒤 날짜는 'disabled' 처리
+                if (thisDate < today || thisDate > maxDate) {
+                    dateDiv.classList.add('disabled'); // 클릭 불가 스타일 적용
                 } else {
-                    // 동일 언어면 화면 갱신만 수행
-                    updateLanguage(selectedLang);
+                    dateDiv.onclick = () => selectDate(thisDate);
+                }
+                // -----------------------------------------------------
+
+                if (selectedStartDate && thisDate.getTime() === selectedStartDate.getTime()) {
+                    dateDiv.classList.add('selected');
+                }
+                if (selectedEndDate && thisDate.getTime() === selectedEndDate.getTime()) {
+                    dateDiv.classList.add('selected');
+                }
+                if (selectedStartDate && selectedEndDate && thisDate > selectedStartDate && thisDate < selectedEndDate) {
+                    dateDiv.classList.add('in-range');
+                }
+
+                calendarBody.appendChild(dateDiv);
+            }
+        }
+
+        function changeMonth(direction) {
+            currentMonth += direction;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar(currentYear, currentMonth);
+        }
+
+        async function selectDate(date) {
+            if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
+                selectedStartDate = date;
+                selectedEndDate = null;
+                inventoryDataMap = {}; // 날짜 리셋 시 인벤토리 데이터도 초기화
+            } else if (selectedStartDate && !selectedEndDate) {
+                if (date < selectedStartDate) {
+                    selectedStartDate = date;
+                } else if (date.getTime() === selectedStartDate.getTime()) {
+                } else {
+                    selectedEndDate = date;
+                    // 체크아웃 날짜까지 선택되면 Inventory 데이터 가져오기 (비동기)
+                    await fetchInventoryForRange(selectedStartDate, selectedEndDate);
+                }
+            }
+            renderCalendar(currentYear, currentMonth);
+            updateInputValues();
+        }
+
+        function updateInputValues() {
+            const checkinInput = document.getElementById('checkin');
+            const checkoutInput = document.getElementById('checkout');
+            const displayCheckin = document.getElementById('display-checkin');
+            const displayCheckout = document.getElementById('display-checkout');
+
+            if (selectedStartDate) {
+                checkinInput.value = toDateString(selectedStartDate);
+                displayCheckin.innerText = toDateString(selectedStartDate);
+            } else {
+                checkinInput.value = "";
+                displayCheckin.innerText = "-";
+            }
+
+            if (selectedEndDate) {
+                checkoutInput.value = toDateString(selectedEndDate);
+                displayCheckout.innerText = toDateString(selectedEndDate);
+                calculateTotalWrapper();
+            } else {
+                checkoutInput.value = "";
+                displayCheckout.innerText = "-";
+                document.getElementById('nights').innerText = "0";
+                document.getElementById('total').innerText = "0";
+                document.getElementById('grand-total').innerText = "0";
+                
+                const t = translations[currentLang] || translations.ko;
+                document.getElementById('date-range-text').innerText = t.msg_select_date;
+            }
+        }
+
+        function toDateString(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        renderCalendar(currentYear, currentMonth);
+
+        // --- 가격 계산 로직 (DB 연동 + 환율 적용) ---
+        
+        // 옵션(샌드위치 등)은 DB에 없으므로, 대략적인 환율을 적용해 계산합니다.
+        function getOptionExchangeRate(lang) {
+             // 기준: 1000원 당 얼마인지 (단순 예시)
+             if (lang === 'en') return 0.00075; // 1000원 -> 0.75달러
+             if (lang === 'ja') return 0.11;    // 1000원 -> 110엔
+             if (lang === 'zh') return 0.0053;  // 1000원 -> 5.3위안
+             return 1; // 한국어
+        }
+
+        // [수정 1] 날짜와 요일에 따른 숙박비 계산 함수 (특실/금요일 요금 적용)
+        function calculateTotal() {
+            if (!currentRoomData) return 0; // DB 데이터 없으면 0
+
+            const checkinInput = document.getElementById('checkin').value;
+            const checkoutInput = document.getElementById('checkout').value;
+            
+            if (!checkinInput || !checkoutInput) return 0;
+
+            const startDate = new Date(checkinInput);
+            const endDate = new Date(checkoutInput);
+
+            let totalPrice = 0;
+            
+            // 언어별 컬럼 이름 설정
+            let weekdayKey, fridayKey, weekendKey;
+
+            if (currentLang === 'en') {
+                weekdayKey = 'default_price_usd';
+                fridayKey = 'friday_price_usd';
+                weekendKey = 'weekend_price_usd';
+            } else if (currentLang === 'ja') {
+                weekdayKey = 'default_price_jpy';
+                fridayKey = 'friday_price_jpy';
+                weekendKey = 'weekend_price_jpy';
+            } else if (currentLang === 'zh') {
+                weekdayKey = 'default_price_cny';
+                fridayKey = 'friday_price_cny';
+                weekendKey = 'weekend_price_cny';
+            } else {
+                weekdayKey = 'default_price';
+                fridayKey = 'friday_price';
+                weekendKey = 'weekend_price';
+            }
+
+            // 환율 (Inventory 특가 계산용)
+            const exchangeRate = getOptionExchangeRate(currentLang);
+
+            // 2. 체크인 날짜부터 체크아웃 전날까지 하루씩 반복하며 요금 더하기
+            for (let d = new Date(startDate); d < endDate; d.setDate(d.getDate() + 1)) {
+                const dateKey = toDateString(d); // YYYY-MM-DD format
+                
+                // ★ [핵심] Inventory 테이블에 특가가 있는지 먼저 확인
+                const customPrice = inventoryDataMap[dateKey];
+
+                if (customPrice !== undefined && customPrice !== null) {
+                    // 특가가 있으면 그걸 사용
+                    if (currentLang === 'ko') {
+                        totalPrice += customPrice; // 한국어면 그대로 더함
+                    } else {
+                        // 외국어면 환율 적용해서 더함 (DB에는 KRW만 있다고 가정)
+                        totalPrice += (customPrice * exchangeRate);
+                    }
+                } else {
+                    // 특가가 없으면 기존 요일별 가격 사용
+                    const dayOfWeek = d.getDay(); // 0:일 ... 6:토
+
+                    if (dayOfWeek === 6) { // 토요일
+                        totalPrice += currentRoomData[weekendKey];
+                    } else if (dayOfWeek === 5) { // 금요일
+                        totalPrice += currentRoomData[fridayKey];
+                    } else { // 평일
+                        totalPrice += currentRoomData[weekdayKey];
+                    }
                 }
             }
 
-            // 헤더 & 드로어 메뉴 셀렉트 박스 이벤트 연결
-            if(headerSelect) {
-                headerSelect.addEventListener("change", handleLanguageChange);
+            return totalPrice;
+        }
+
+        // [수정 2] 화면 표시 및 최종 합계 계산 함수 (박수와 방 가격 표시 로직 추가됨)
+        function calculateTotalWrapper() {
+            // 1. 방 가격 가져오기 (calculateTotal 함수에서 계산된 값)
+            let roomPrice = calculateTotal();
+            
+            // 2. 몇 박(Nights)인지 계산하기
+            const checkinVal = document.getElementById('checkin').value;
+            const checkoutVal = document.getElementById('checkout').value;
+            let nightCount = 0;
+            
+            if(checkinVal && checkoutVal) {
+                const s = new Date(checkinVal);
+                const e = new Date(checkoutVal);
+                const diffTime = Math.abs(e - s);
+                // 밀리초를 일(Day) 단위로 변환 후 올림 처리
+                nightCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
             }
-            if(drawerSelect) {
-                drawerSelect.addEventListener("change", handleLanguageChange);
-            }
-        };
 
-        const chkAll = document.getElementById('chk-all');
-        const subChks = document.querySelectorAll('.chk-sub');
-
-        chkAll.addEventListener('change', function() {
-            subChks.forEach(chk => chk.checked = this.checked);
-        });
-
-        subChks.forEach(chk => {
-            chk.addEventListener('change', function() {
-                const allChecked = Array.from(subChks).every(c => c.checked);
-                chkAll.checked = allChecked;
+            // 3. 옵션(조식 등) 가격 계산
+            let optionTotalKRW = 0;
+            const checkboxes = document.querySelectorAll('.option-checkbox:checked');
+            checkboxes.forEach((box) => {
+                optionTotalKRW += parseInt(box.value);
             });
-        });
 
-        const modal = document.getElementById("termsModal");
+            // 옵션 환율 적용
+            const rate = getOptionExchangeRate(currentLang);
+            let optionPrice = (currentLang === 'ko') ? optionTotalKRW : (optionTotalKRW * rate);
 
-        function openModal() {
-            modal.style.display = "flex"; 
-        }
+            // 소수점 처리 (영어 외에는 반올림)
+            if(currentLang !== 'en') {
+                roomPrice = Math.round(roomPrice);
+                optionPrice = Math.round(optionPrice);
+            }
 
-        function closeModal() {
-            modal.style.display = "none";
-        }
+            let grandTotal = roomPrice + optionPrice;
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
+            // ============================================================
+            // ★ 화면 업데이트 (여기가 추가된 핵심 부분입니다!) ★
+            // ============================================================
+            
+            // (1) "0박" -> 실제 박수 표시
+            document.getElementById('nights').innerText = nightCount;
+            
+            // (2) 날짜 범위 텍스트 업데이트 (예: 2025-12-25 ~ 2025-12-27)
+            if(checkinVal && checkoutVal) {
+                document.getElementById('date-range-text').innerText = `${checkinVal} ~ ${checkoutVal}`;
+            }
+
+            // (3) 달력 밑 "방 가격" 표시 (옵션 제외 금액)
+            if(currentLang === 'en') {
+                document.getElementById('total').innerText = roomPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else {
+                document.getElementById('total').innerText = roomPrice.toLocaleString();
+            }
+
+            // (4) 옵션 가격 UI 업데이트 (+7,300원 등)
+            updateOptionPricesUI(rate);
+
+            // (5) 맨 아래 "총 합계" 표시 (방 가격 + 옵션 가격)
+            if(currentLang === 'en') {
+                document.getElementById('grand-total').innerText = grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else {
+                document.getElementById('grand-total').innerText = grandTotal.toLocaleString();
             }
         }
 
-    // --------------------------------------------------------------------------------------
-    // [수정된 결제 로직] : PayPal 디자인 추가 및 로직 분기 (카드: 토스, PayPal: 준비 중)
-    // --------------------------------------------------------------------------------------
-
-    // ★ 1. 토스 페이먼츠 초기화 (LIVE 키 적용됨)
-    const clientKey = 'live_ck_6bJXmgo28e7p2RKp4BqjVLANGKWx'; 
-    var tossPayments = TossPayments(clientKey);
-
-    // ★ 2. 현재 선택된 결제 수단 (기본값: 카드)
-    let currentPaymentMethod = 'card';
-
-    // 라디오 버튼 클릭 시 호출되는 함수
-    function setPaymentMethod(method) {
-        currentPaymentMethod = method;
-        // console.log("선택된 결제수단:", currentPaymentMethod);
-    }
-
-    // ★ 3. 결제 요청 함수 (스페셜용 수정)
-    async function requestPayment() {
-        // (1) 약관 동의 확인
-        const isInfoChecked = document.getElementById('chk-info').checked;
-        const isRefundChecked = document.getElementById('chk-refund').checked;
-        const isTermsChecked = document.getElementById('chk-all').checked;
-        const t = translations[currentLang];
-
-        if (!isInfoChecked || !isRefundChecked || !isTermsChecked) {
-            alert(t.alert_agree);
-            return;
-        }
-
-        // (2) 입력값 가져오기
-        const name = document.getElementById('input-name').value.trim();
-        const phone = document.getElementById('input-phone').value.trim();
-        const email = document.getElementById('input-email').value.trim();
-        const insta = document.getElementById('input-instagram').value.trim();
-        const tiktok = document.getElementById('input-tiktok').value.trim();
-        const requestMsg = document.getElementById('input-request').value.trim();
-
-        if (!name || !phone || !email) {
-            alert(t.alert_fill_info);
-            return;
-        }
-
-        // (3) URL 파라미터 가져오기
-        const params = new URLSearchParams(window.location.search);
-        const checkin = params.get('checkin');
-        const checkout = params.get('checkout');
-        
-        // ★★★ [스페셜 고정 설정] ★★★
-        const roomId = 6; // 스페셜 룸 번호
-        const roomName = "Special (스페셜)"; // 스페셜 이름
-
-        const roomPrice = parseFloat(params.get('roomPrice')) || 0;
-        const total = parseFloat(params.get('total')) || 0;
-        
-        let selectedOptionsArray = [];
-        const optionDetailsRaw = params.get('optionDetails');
-        if (optionDetailsRaw) {
-            try {
-                selectedOptionsArray = JSON.parse(decodeURIComponent(optionDetailsRaw));
-            } catch (e) {
-                console.error("옵션 파싱 오류", e);
-            }
-        }
-
-        // ---------------------------------------------------------
-        // (4) 결제 수단에 따른 분기 처리
-        // ---------------------------------------------------------
-        
-        if (currentPaymentMethod === 'paypal') {
-            // [CASE 1] PayPal 선택 시 -> 준비 중 알림 (심사용 UI)
-            alert("현재 PayPal 결제 승인 대기 중입니다.\n신용카드를 이용해 주세요.\n(PayPal is coming soon. Please use Credit Card.)");
-            return; 
-
-        } else {
-            // [CASE 2] 신용카드 선택 시 (기본) -> 토스 페이먼츠 실행
+        // 옵션 목록의 가격 표시 텍스트(예: +7300원)를 현재 환율로 바꿔서 보여줌
+        function updateOptionPricesUI(rate) {
+            const t = translations[currentLang] || translations.ko;
+            const optionItems = document.querySelectorAll('.option-item');
             
-            // 임시 저장 (Success 페이지용)
-            const bookingData = {
-                guest_name: name,
-                phone: phone,
-                guest_email: email,
-                check_in: checkin,
-                check_out: checkout,
-                room_id: roomId,
-                room_name: roomName, 
-                room_price: roomPrice,
-                total_price: total,
-                currency: currentLang,
-                selected_options: selectedOptionsArray,
-                social_insta: insta,
-                social_tiktok: tiktok,
-                guest_request: requestMsg,
-                status: '결제완료' 
-            };
-            localStorage.setItem('tempBookingData', JSON.stringify(bookingData));
+            optionItems.forEach(item => {
+                const checkbox = item.querySelector('.option-checkbox');
+                const priceTextEl = item.querySelector('.option-price-text');
+                const krwValue = parseInt(checkbox.value);
+                
+                let displayPrice = 0;
+                let symbol = "";
+                let unit = t.label_won;
 
-            // 토스 결제창 띄우기
-            const orderId = 'ORDER_SPC_' + new Date().getTime() + Math.floor(Math.random() * 1000);
-            
-            // [주의] 결제 금액이 0원이면 에러나므로 테스트용 1000원 설정
-            const payAmount = total > 0 ? total : 1000; 
-
-            tossPayments.requestPayment('카드', {
-                amount: payAmount,
-                orderId: orderId,
-                orderName: 'Insta Hotel 스페셜 예약', // 주문명
-                customerName: name,
-                customerEmail: email,
-                successUrl: window.location.origin + '/success.html', // 성공 페이지
-                failUrl: window.location.origin + '/fail.html',       // 실패 페이지
-            })
-            .catch(function (error) {
-                if (error.code === 'USER_CANCEL') {
-                    alert('결제를 취소했습니다.');
+                if(currentLang === 'ko') {
+                    displayPrice = krwValue.toLocaleString();
                 } else {
-                    alert('결제 실패: ' + error.message);
+                    let converted = krwValue * rate;
+                    if(currentLang === 'en') {
+                        displayPrice = converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        symbol = "+$";
+                        unit = "";
+                    } else if(currentLang === 'zh') {
+                        displayPrice = Math.round(converted).toLocaleString();
+                        symbol = "+¥";
+                        unit = ""; // 중국어도 단위(元) 생략
+                    } else if(currentLang === 'ja') {
+                        displayPrice = Math.round(converted).toLocaleString();
+                        symbol = "+";
+                        unit = "円";
+                    }
+                }
+                
+                priceTextEl.innerHTML = `${symbol}${displayPrice}<span class="currency-unit">${unit}</span>`;
+            });
+        }
+
+        function goToPayment() {
+            const checkin = document.getElementById('checkin').value;
+            const checkout = document.getElementById('checkout').value;
+            const nights = document.getElementById('nights').innerText;
+
+            if (!checkin || !checkout) {
+                const t = translations[currentLang] || translations.ko;
+                alert(t.msg_select_date);
+                return;
+            }
+
+            // 계산된 최종 값들
+            let roomPrice = calculateTotal(); // 현재 통화 기준
+            let optionTotalKRW = 0;
+            const checkedBoxes = document.querySelectorAll('.option-checkbox:checked');
+            let selectedOptionNames = [];
+
+            checkedBoxes.forEach(box => {
+                optionTotalKRW += parseInt(box.value);
+                const labelSpan = box.nextElementSibling;
+                if (labelSpan) {
+                    // 줄바꿈 문자 등을 공백으로 치환
+                    let menuName = labelSpan.innerText.replace(/\n/g, ' ');
+                    selectedOptionNames.push(menuName);
                 }
             });
+
+            const rate = getOptionExchangeRate(currentLang);
+            let optionPrice = (currentLang === 'ko') ? optionTotalKRW : (optionTotalKRW * rate);
+            
+            // 소수점 정리
+            if(currentLang !== 'en') {
+                roomPrice = Math.round(roomPrice);
+                optionPrice = Math.round(optionPrice);
+            }
+
+            const total = roomPrice + optionPrice;
+            const optionDetailsEncoded = encodeURIComponent(JSON.stringify(selectedOptionNames));
+
+            // 결제 페이지로 이동 (currency 정보도 함께 넘김)
+            // ★ 특실 객실 결제 페이지: payspecial.html (기존 링크 형식 유지)
+            const url = `payspecial.html?checkin=${checkin}&checkout=${checkout}&nights=${nights}&roomPrice=${roomPrice}&optionPrice=${optionPrice}&total=${total}&optionDetails=${optionDetailsEncoded}&currency=${currentLang}`;
+
+            window.location.href = url;
         }
-    }
+
+        // 초기 데이터 로드
+        fetchRoomData();
     </script>
 </body>
 </html>
+이코드는 페이트윈 페이지야. 이것도 바뀐이름으로 바꿔줘.
