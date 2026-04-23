@@ -1012,15 +1012,6 @@
 
         // --- 가격 계산 로직 (DB 연동 + 환율 적용) ---
         
-        // 옵션(샌드위치 등)은 DB에 없으므로, 대략적인 환율을 적용해 계산합니다.
-        function getOptionExchangeRate(lang) {
-             // 기준: 1000원 당 얼마인지 (단순 예시)
-             if (lang === 'en') return 0.00075; // 1000원 -> 0.75달러
-             if (lang === 'ja') return 0.11;    // 1000원 -> 110엔
-             if (lang === 'zh') return 0.0053;  // 1000원 -> 5.3위안
-             return 1; // 한국어
-        }
-
         // 날짜와 요일에 따른 숙박비 계산 함수 (에델바이/금요일 요금 적용)
         function calculateTotal() {
             if (!currentRoomData) return 0; // DB 데이터 없으면 0
@@ -1057,8 +1048,11 @@
                 weekendKey = 'weekend_price';
             }
 
-            // 환율 (Inventory 특가 계산용)
-            const exchangeRate = getOptionExchangeRate(currentLang);
+            // 외국어 환율 적용 계수(필요시)
+            let exchangeRate = 1;
+            if (currentLang === 'en') exchangeRate = 0.00075;
+            if (currentLang === 'ja') exchangeRate = 0.11;
+            if (currentLang === 'zh') exchangeRate = 0.0053;
 
             // 2. 체크인 날짜부터 체크아웃 전날까지 하루씩 반복하며 요금 더하기
             for (let d = new Date(startDate); d < endDate; d.setDate(d.getDate() + 1)) {
@@ -1092,7 +1086,7 @@
             return totalPrice;
         }
 
-        // 화면 표시 및 최종 합계 계산 함수
+        // 화면 표시 및 최종 합계 계산 함수 (수정됨)
         function calculateTotalWrapper() {
             // URL 파라미터에서 기본 정보 가져오기
             const params = new URLSearchParams(window.location.search);
@@ -1100,28 +1094,20 @@
             const checkoutVal = params.get('checkout');
             const t = translations[currentLang] || translations.ko;
             
-            // 1. 방 가격 가져오기
+            // 1. 방 가격 계산
             let roomPrice = calculateTotal();
             
-            // 2. 몇 박(Nights)인지 계산하기
-            let nightCount = 0;
-            if(checkinVal && checkoutVal) {
+            // 2. 몇 박(Nights)인지 URL 파라미터에서 가져오거나 계산
+            let nightCount = params.get('nights') || 0;
+            if(!nightCount && checkinVal && checkoutVal) {
                 const s = new Date(checkinVal);
                 const e = new Date(checkoutVal);
                 const diffTime = Math.abs(e - s);
                 nightCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
             }
 
-            // 3. 옵션(조식 등) 가격 계산
-            let optionTotalKRW = 0;
-            const checkboxes = document.querySelectorAll('.option-checkbox:checked');
-            checkboxes.forEach((box) => {
-                optionTotalKRW += parseInt(box.value);
-            });
-
-            // 옵션 환율 적용
-            const rate = getOptionExchangeRate(currentLang);
-            let optionPrice = (currentLang === 'ko') ? optionTotalKRW : (optionTotalKRW * rate);
+            // 3. ★ 예약 페이지에서 전달한 옵션 가격 가져오기 (체크박스 X)
+            let optionPrice = Number(params.get('optionPrice')) || 0;
 
             // 소수점 처리 (영어 외에는 반올림)
             if(currentLang !== 'en') {
@@ -1157,10 +1143,7 @@
                 document.getElementById('summary-room-price').innerText = symbol + roomPrice.toLocaleString() + unit;
             }
 
-            // (4) 옵션 가격 UI 업데이트 (+7,300원 등)
-            updateOptionPricesUI(rate);
-            
-            // 요약 영역 옵션 총액 업데이트
+            // (4) 요약 영역 옵션 총액 업데이트
             if(currentLang === 'en') {
                 document.getElementById('summary-option-price').innerText = '$' + optionPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             } else {
@@ -1177,61 +1160,28 @@
                 const unit = (currentLang === 'ko') ? '원' : (currentLang === 'ja' ? '円' : '');
                 document.getElementById('summary-total-price').innerText = symbol + grandTotal.toLocaleString() + unit;
             }
-        }
 
-        // 옵션 목록의 가격 표시 텍스트(예: +7300원)를 현재 환율로 바꿔서 보여줌
-        function updateOptionPricesUI(rate) {
-            const t = translations[currentLang] || translations.ko;
-            const optionItems = document.querySelectorAll('.option-item');
-            
-            optionItems.forEach(item => {
-                const checkbox = item.querySelector('.option-checkbox');
-                const priceTextEl = item.querySelector('.option-price-text');
-                const krwValue = parseInt(checkbox.value);
-                
-                let displayPrice = 0;
-                let symbol = "";
-                let unit = t.label_won;
-
-                if(currentLang === 'ko') {
-                    displayPrice = krwValue.toLocaleString();
-                } else {
-                    let converted = krwValue * rate;
-                    if(currentLang === 'en') {
-                        displayPrice = converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                        symbol = "+$";
-                        unit = "";
-                    } else if(currentLang === 'zh') {
-                        displayPrice = Math.round(converted).toLocaleString();
-                        symbol = "+¥";
-                        unit = ""; // 중국어도 단위(元) 생략
-                    } else if(currentLang === 'ja') {
-                        displayPrice = Math.round(converted).toLocaleString();
-                        symbol = "+";
-                        unit = "円";
-                    }
-                }
-                
-                priceTextEl.innerHTML = `${symbol}${displayPrice}<span class="currency-unit">${unit}</span>`;
-            });
-            
-            // 옵션 항목 선택된 내역 표시 갱신
+            // (6) 선택한 옵션 리스트 화면 갱신
             updateSelectedOptionsList();
         }
         
+        // 선택된 옵션 내역을 URL에서 파싱하여 화면에 표시 (수정됨)
         function updateSelectedOptionsList() {
             const t = translations[currentLang] || translations.ko;
             const optionContainer = document.getElementById('option-detail-list');
-            const checkedBoxes = document.querySelectorAll('.option-checkbox:checked');
+            const params = new URLSearchParams(window.location.search);
+            
             let selectedOptionNames = [];
 
-            checkedBoxes.forEach(box => {
-                const labelSpan = box.nextElementSibling;
-                if (labelSpan) {
-                    let menuName = labelSpan.innerText.replace(/\n/g, ' ');
-                    selectedOptionNames.push(menuName);
+            // URL에서 전달된 optionDetails 가져와서 배열로 변환
+            const optionDetailsStr = params.get('optionDetails');
+            if (optionDetailsStr) {
+                try {
+                    selectedOptionNames = JSON.parse(decodeURIComponent(optionDetailsStr));
+                } catch (e) {
+                    console.error("옵션 파싱 에러:", e);
                 }
-            });
+            }
             
             if (selectedOptionNames.length > 0) {
                 optionContainer.style.display = 'block';
@@ -1276,9 +1226,9 @@
             function handleLanguageChange(e) {
                 const selectedLang = e.target.value;
 
-                // 기준 언어(urlLang)와 다른 언어를 선택했다면 -> 원래 예약상세스탠 페이지로
+                // 기준 언어(urlLang)와 다른 언어를 선택했다면 -> 원래 예약 페이지로 되돌아감
                 if (selectedLang !== urlLang) {
-                    window.location.href = '예약상세스탠.html'; 
+                    window.location.href = 'reservation.html'; // [수정] 스탠다드가 아닌 통합 예약페이지로 연결되도록 변경
                 } else {
                     // 같은 언어라면 그냥 UI 업데이트
                     updateLanguage(selectedLang);
@@ -1310,7 +1260,7 @@
         currentPaymentMethod = method;
     }
 
-    // ★ 3. 결제 요청 함수
+    // ★ 3. 결제 요청 함수 (수정됨)
     async function requestPayment() {
         // (1) 약관 동의 확인 (공통)
         const isInfoChecked = document.getElementById('chk-info').checked;
@@ -1347,21 +1297,17 @@
 
         // 가격 재계산
         let roomPrice = calculateTotal();
-        let optionTotalKRW = 0;
-        const checkedBoxes = document.querySelectorAll('.option-checkbox:checked');
+        
+        // ★ 예약 페이지에서 전달한 값 그대로 받기
+        let optionPrice = Number(params.get('optionPrice')) || 0;
+        
         let selectedOptionsArray = [];
-
-        checkedBoxes.forEach(box => {
-            optionTotalKRW += parseInt(box.value);
-            const labelSpan = box.nextElementSibling;
-            if (labelSpan) {
-                let menuName = labelSpan.innerText.replace(/\n/g, ' ');
-                selectedOptionsArray.push(menuName);
-            }
-        });
-
-        const rate = getOptionExchangeRate(currentLang);
-        let optionPrice = (currentLang === 'ko') ? optionTotalKRW : (optionTotalKRW * rate);
+        const optionDetailsStr = params.get('optionDetails');
+        if (optionDetailsStr) {
+            try {
+                selectedOptionsArray = JSON.parse(decodeURIComponent(optionDetailsStr));
+            } catch (e) {}
+        }
         
         // 소수점 정리
         if(currentLang !== 'en') {
