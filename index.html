@@ -2677,14 +2677,53 @@
                 setTimeout(function(){ goToBooking(); }, 200);
             }
         }
-        function goToBooking() {
+        async function goToBooking() {
             if (!checkinDate || !checkoutDate || !selectedRoomId) return;
-            var nights = Math.round((checkoutDate - checkinDate) / 86400000);
-            var roomCount = guests ? guests.room : 1;
-            var adultCount = guests ? guests.adult : 1;
+            var nights    = Math.round((checkoutDate - checkinDate) / 86400000);
+            var roomCount = guests ? guests.room  : 1;
+            var adultCount= guests ? guests.adult : 1;
+
+            /* 날짜 문자열 배열 생성 (체크인 당일 ~ 마지막 박) */
+            var dateStrs = [];
+            for (var i = 0; i < nights; i++) {
+                var d = new Date(checkinDate); d.setDate(d.getDate() + i);
+                dateStrs.push(d.toISOString().slice(0, 10));
+            }
+
+            /* room_inventory 조회 */
+            var invByDate = {};
+            var roomUuid  = _roomUuidMapI[selectedRoomId];
+            if (_getSbI() && roomUuid) {
+                try {
+                    var res = await _getSbI().from('room_inventory')
+                        .select('date, price, is_available, stock')
+                        .eq('room_id', roomUuid)
+                        .gte('date', dateStrs[0])
+                        .lte('date', dateStrs[dateStrs.length - 1]);
+                    if (res.data) res.data.forEach(function(r){ invByDate[r.date] = r; });
+                } catch(e) { console.warn('room_inventory 조회 실패, 기본 요금 사용', e); }
+            }
+
+            /* 마감 날짜 체크 */
+            for (var i = 0; i < nights; i++) {
+                var ds  = dateStrs[i];
+                var inv = invByDate[ds];
+                if (inv && (inv.is_available === false || inv.stock === 0)) {
+                    alert('선택하신 날짜 중 마감된 날짜가 있습니다.\n\n마감일: ' + ds + '\n\n다른 날짜를 선택해 주세요.');
+                    return;
+                }
+            }
+
+            /* 요금 계산: room_inventory 우선, 없으면 하드코딩 fallback */
             var total = 0;
-            for (var i = 0; i < nights; i++) { var d = new Date(checkinDate); d.setDate(d.getDate()+i); total += getNightRateI(selectedRoomId, d); }
+            for (var i = 0; i < nights; i++) {
+                var d2  = new Date(checkinDate); d2.setDate(d2.getDate() + i);
+                var ds2 = dateStrs[i];
+                var inv2= invByDate[ds2];
+                total  += (inv2 && inv2.price) ? inv2.price : getNightRateI(selectedRoomId, d2);
+            }
             total *= roomCount;
+
             var roomName = ROOM_NAMES_I[selectedRoomId] || selectedRoomId;
             localStorage.setItem('instaHotelBooking', JSON.stringify({
                 roomId: selectedRoomId, roomName: roomName,
@@ -2733,19 +2772,7 @@
             if (!selectedRoomId) {
                 selectedRoomId = window._bookingPinnedRoomId || 'edelweiss';
             }
-            var nights = Math.round((checkoutDate - checkinDate) / 86400000);
-            var roomCount = guests ? guests.room : 1;
-            var adultCount = guests ? guests.adult : 1;
-            var total = 0;
-            for (var i = 0; i < nights; i++) { var d = new Date(checkinDate); d.setDate(d.getDate()+i); total += getNightRateI(selectedRoomId, d); }
-            total *= roomCount;
-            var roomName = ROOM_NAMES_I[selectedRoomId] || selectedRoomId;
-            localStorage.setItem('instaHotelBooking', JSON.stringify({
-                roomId: selectedRoomId, roomName: roomName,
-                checkin: checkinDate.toISOString(), checkout: checkoutDate.toISOString(),
-                nights: nights, roomCount: roomCount, adultCount: adultCount, totalPrice: total
-            }));
-            window.location.href = 'booking.html';
+            goToBooking();
         }
 
         window.addEventListener('click', (e) => {
@@ -3066,6 +3093,27 @@
         const ROOM_ORDER_I=['edelweiss','aurora','glorio','envidion','special','ruby'];
         function fmtWon(n){ return n.toLocaleString('ko-KR'); }
         function getNightRateI(id,date){ var r=ROOM_PRICE_TABLE_I[id]; if(!r) return 0; var d=date.getDay(); return d===6?r.prices[2]:d===5?r.prices[1]:r.prices[0]; }
+
+        /* ── Supabase: 날짜별 요금·재고 조회 ── */
+        var _sbI = null;
+        var _roomUuidMapI = {};
+        function _getSbI(){
+            if(!_sbI && window.supabase){
+                try { _sbI = window.supabase.createClient(
+                    'https://lbhdujheuokkmiowobzu.supabase.co',
+                    'sb_publishable_2X3S_RgN_0ipbUtR-zAV6A_yIp1n5PC'
+                ); } catch(e){ console.warn('Supabase 초기화 실패', e); }
+            }
+            return _sbI;
+        }
+        async function _loadRoomUuidsI(){
+            var sb = _getSbI(); if(!sb) return;
+            try {
+                var res = await sb.from('rooms').select('id, name_en');
+                if(res.data) res.data.forEach(function(r){ if(r.id && r.name_en) _roomUuidMapI[r.name_en] = r.id; });
+            } catch(e) { console.warn('rooms UUID 로드 실패', e); }
+        }
+        document.addEventListener('DOMContentLoaded', function(){ _loadRoomUuidsI(); });
         function populatePricePopup(){
             if(!checkinDate||!checkoutDate) return;
             var listEl=document.getElementById('pricePopupList'); if(!listEl) return;
@@ -3798,7 +3846,7 @@
     </div>
 
     <script src="mobile-nav.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="ai-chat.js"></script>
 <script src="taxi-btns.js"></script>
 
