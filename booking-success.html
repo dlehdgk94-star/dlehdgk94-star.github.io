@@ -257,7 +257,49 @@
             payment_status: 'paid'
         });
 
-        if (error) console.error('[Supabase] 저장 오류:', error.message);
+        if (error) { console.error('[Supabase] 저장 오류:', error.message); return; }
+
+        /* ── room_inventory stock 차감 ── */
+        if (!b.roomId || !b.checkin || !b.nights || !b.roomCount) return;
+
+        // UTC ISO 저장값을 로컬(KST) 날짜 문자열로 변환
+        function _localDs(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+
+        const { data: roomRow } = await _sb.from('rooms').select('id').eq('name_en', b.roomId).maybeSingle();
+        const roomUuid = roomRow?.id;
+        if (!roomUuid) return;
+
+        const rc = b.roomCount;
+        let overbooked = false;
+
+        for (let i = 0; i < b.nights; i++) {
+            const d = new Date(b.checkin);
+            d.setDate(d.getDate() + i);
+            const dateStr = _localDs(d);
+
+            const { data: inv } = await _sb.from('room_inventory')
+                .select('stock').eq('room_id', roomUuid).eq('date', dateStr).maybeSingle();
+
+            if (!inv) continue; // 관리자가 미설정한 날짜 → skip
+
+            if (inv.stock < rc) { overbooked = true; break; }
+
+            // 낙관적 동시성: WHERE stock = <읽은값> AND stock >= rc
+            const { data: updated } = await _sb.from('room_inventory')
+                .update({ stock: inv.stock - rc })
+                .eq('room_id', roomUuid)
+                .eq('date', dateStr)
+                .eq('stock', inv.stock)  // 낙관적 잠금
+                .gte('stock', rc)        // 0 미만 방지
+                .select();
+
+            if (!updated || updated.length === 0) { overbooked = true; break; }
+        }
+
+        if (overbooked) {
+            await _sb.from('reservations').update({ payment_status: 'overbooked' }).eq('order_id', orderId);
+            console.warn('[재고] 오버부킹 감지 — 관리자 확인 필요:', orderId);
+        }
     })();
     </script>
     <script src="mobile-nav.js"></script>

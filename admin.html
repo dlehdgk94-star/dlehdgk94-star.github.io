@@ -86,6 +86,9 @@
         .badge-paid{ display:inline-block; background:#eafaf1; color:#27ae60; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
         .badge-pending{ display:inline-block; background:#fef9e7; color:#f39c12; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
         .badge-cancelled{ display:inline-block; background:#fdf2f2; color:#e74c3c; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
+        .badge-overbooked{ display:inline-block; background:#e74c3c; color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
+        .overbook-alert{ background:#fff0f0; border:2px solid #e74c3c; border-radius:10px; padding:14px 20px; margin-bottom:16px; color:#c0392b; font-weight:700; font-size:14px; display:flex; align-items:flex-start; gap:12px; }
+        .overbook-alert i{ font-size:18px; flex-shrink:0; margin-top:1px; }
         .empty-state{ padding:60px 20px; text-align:center; color:rgb(112,112,112); }
         .empty-state i{ font-size:36px; margin-bottom:14px; display:block; color:#ddd; }
         .loading-state{ padding:60px 20px; text-align:center; color:rgb(112,112,112); }
@@ -273,6 +276,7 @@
 
         <!-- ───── 예약 목록 ───── -->
         <div class="tab-panel" id="panel-reservations">
+            <div id="overbookAlert" style="display:none;"></div>
             <div class="filter-bar">
                 <input class="fi fi-search" id="searchInput" type="text" placeholder="이름·이메일·예약번호 검색..." oninput="applyFilter()">
                 <select class="fi fi-select" id="filterRoom" onchange="applyFilter()">
@@ -285,6 +289,7 @@
                     <option value="paid">결제 완료</option>
                     <option value="pending">대기 중</option>
                     <option value="cancelled">취소됨</option>
+                    <option value="overbooked">⚠ 오버부킹</option>
                 </select>
                 <input class="fi" id="filterDateFrom" type="date" onchange="applyFilter()" title="체크인 시작">
                 <input class="fi" id="filterDateTo"   type="date" onchange="applyFilter()" title="체크인 종료">
@@ -507,7 +512,7 @@ function switchTab(id){
 function fmtWon(n){ return n!=null ? Number(n).toLocaleString('ko-KR')+'원' : '-'; }
 function fmtDate(s){ if(!s) return '-'; const d=new Date(s+'T00:00:00'); return `${d.getMonth()+1}월 ${d.getDate()}일`; }
 function fmtDateTime(s){ if(!s) return '-'; const d=new Date(s); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
-function statusBadge(s){ if(s==='paid') return '<span class="badge-paid">결제완료</span>'; if(s==='cancelled') return '<span class="badge-cancelled">취소됨</span>'; return '<span class="badge-pending">대기중</span>'; }
+function statusBadge(s){ if(s==='paid') return '<span class="badge-paid">결제완료</span>'; if(s==='cancelled') return '<span class="badge-cancelled">취소됨</span>'; if(s==='overbooked') return '<span class="badge-overbooked">⚠ 오버부킹</span>'; return '<span class="badge-pending">대기중</span>'; }
 function toDateStr(y,m,d){ return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
 function showToast(msg='저장되었습니다 ✓'){
     const t=document.getElementById('saveToast');
@@ -538,6 +543,19 @@ async function loadReservations(){
     updateStats(allData);
     renderRecentTable(allData.slice(0,8));
     applyFilter();
+
+    // 오버부킹 경고 배너
+    const ob = allData.filter(r => r.payment_status === 'overbooked');
+    const alertEl = document.getElementById('overbookAlert');
+    if (alertEl) {
+        if (ob.length > 0) {
+            const ids = ob.map(r => r.order_id || r.id).join(', ');
+            alertEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i><div><strong>오버부킹 ${ob.length}건 확인 필요!</strong><br><span style="font-weight:400;font-size:13px;">예약번호: ${ids}</span><br><span style="font-weight:400;font-size:12px;color:#e74c3c;">해당 고객에게 연락 후 환불 또는 대안을 안내해주세요.</span></div>`;
+            alertEl.style.display = 'flex';
+        } else {
+            alertEl.style.display = 'none';
+        }
+    }
 }
 
 function updateStats(data){
