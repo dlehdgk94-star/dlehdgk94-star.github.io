@@ -664,13 +664,21 @@ let roomNameMap = {}; // { uuid: name_en }
 
 async function loadRoomUuids(){
     const {data, error} = await _sb.from('rooms').select('id, name_en');
-    if(error){ console.error('rooms 테이블 로드 실패:', error); return; }
-    if(data) data.forEach(r => {
+    if(error){
+        alert('[디버그] rooms 테이블 조회 실패:\n' + JSON.stringify(error));
+        return;
+    }
+    if(!data || data.length === 0){
+        alert('[디버그] rooms 테이블이 비어있거나 name_en 컬럼이 없습니다.\ndata: ' + JSON.stringify(data));
+        return;
+    }
+    data.forEach(r => {
         if(r.name_en && r.id){
             roomUuidMap[r.name_en] = r.id;
             roomNameMap[r.id]      = r.name_en;
         }
     });
+    console.log('[디버그] roomUuidMap 로드 완료:', roomUuidMap);
 }
 
 async function initInventory(){ await loadRoomUuids(); updateMonthLabel(); loadInventory(); }
@@ -803,7 +811,11 @@ async function saveDateEdit(){
     const price = parseInt(document.getElementById('editPrice').value) || 0;
     const stock = parseInt(document.getElementById('editStock').value) || 0;
 
-    const roomUuid = roomUuidMap[editingRoomId] || editingRoomId;
+    const roomUuid = roomUuidMap[editingRoomId];
+    if(!roomUuid){
+        alert('[디버그] UUID 매핑 실패!\neditingRoomId: ' + editingRoomId + '\nroomUuidMap: ' + JSON.stringify(roomUuidMap) + '\n\n→ rooms 테이블을 확인하세요.');
+        return;
+    }
     const {error} = await _sb.from('room_inventory').upsert(
         { room_id:roomUuid, date:editingDateStr, is_available:editIsAvail, price, stock },
         { onConflict:'room_id,date' }
