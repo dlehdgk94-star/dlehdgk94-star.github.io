@@ -778,6 +778,17 @@ function renderSheet(){
 
     document.getElementById('invSheetArea').innerHTML =
         `<table class="inv-table"><thead>${thead}</thead><tbody>${tbody}</tbody></table>`;
+
+    // 이번 달 보기일 때 오늘 날짜로 자동 스크롤
+    if (invYear === today.getFullYear() && invMonth === today.getMonth()) {
+        setTimeout(function(){
+            const scrollEl = document.querySelector('.inv-scroll');
+            if (!scrollEl) return;
+            const cellW  = 106;
+            const target = (today.getDate() - 1) * cellW;
+            scrollEl.scrollLeft = Math.min(target, scrollEl.scrollWidth - scrollEl.clientWidth);
+        }, 0);
+    }
 }
 
 /* ── 날짜 편집 모달 ── */
