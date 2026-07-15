@@ -239,13 +239,15 @@
 
     /* ── 예약 저장 + 재고 차감 (결제 확인 성공 후에만 호출) ── */
     async function saveReservation() {
-        if (!b.roomId && !g.name) return;
+        console.log('[saveReservation] 시작 — orderId:', orderId, '| roomId:', b.roomId, '| guestName:', g.name);
+        if (!b.roomId && !g.name) { console.warn('[saveReservation] roomId·guestName 모두 없음 → 중단'); return; }
         const roomNameKo = typeof getRoomName === 'function' ? getRoomName(b.roomId) : (b.roomId || '-');
 
         const { data: existing } = await _sb
             .from('reservations').select('id').eq('order_id', orderId).maybeSingle();
-        if (existing) return; // 중복 저장 방지
+        if (existing) { console.log('[saveReservation] 이미 저장된 레코드 존재 → 중복 방지 skip'); return; }
 
+        console.log('[saveReservation] reservations INSERT 시도...');
         const { error } = await _sb.from('reservations').insert({
             order_id:        orderId,
             payment_key:     payKey || null,
@@ -265,7 +267,8 @@
             special_request: g.request        || null,
             payment_status:  'paid'
         });
-        if (error) { console.error('[Supabase] 저장 오류:', error.message); return; }
+        if (error) { console.error('[Supabase] reservations 저장 오류:', error.message, error); return; }
+        console.log('[saveReservation] reservations INSERT 성공 ✓');
 
         /* ── room_inventory stock 차감 ── */
         if (!b.roomId || !b.checkin || !b.nights || !b.roomCount) return;
@@ -319,6 +322,7 @@
         }
 
         // Edge Function으로 서버 측 결제 확인
+        console.log('[initPage] confirm-payment 호출 — payKey:', payKey, '| orderId:', orderId, '| amount:', amount);
         try {
             const res = await fetch(
                 'https://lbhdujheuokkmiowobzu.supabase.co/functions/v1/confirm-payment',
@@ -331,7 +335,9 @@
                     body: JSON.stringify({ paymentKey: payKey, orderId, amount }),
                 }
             );
+            console.log('[initPage] confirm-payment HTTP status:', res.status);
             const result = await res.json();
+            console.log('[initPage] confirm-payment 응답:', result);
             if (!result.ok) {
                 renderErrorCard(result.error || '결제 승인에 실패했습니다.');
                 return;
@@ -343,6 +349,7 @@
         }
 
         // 확인 완료 → 성공 UI + DB 저장
+        console.log('[initPage] 결제 확인 성공 → renderSuccessCard + saveReservation 호출');
         renderSuccessCard();
         await saveReservation();
     })();
