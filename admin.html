@@ -638,7 +638,11 @@ function resetFilter(){
 
 /* ── 예약 상세 모달 ── */
 function openResModal(r){
-    const ig=r.guest_instagram?`<a href="https://instagram.com/${r.guest_instagram.replace('@','')}" target="_blank" style="color:#00768e;">${r.guest_instagram}</a>`:'-';
+    const igHandle = r.guest_instagram ? r.guest_instagram.replace(/^@/,'') : '';
+    const ig = igHandle
+        ? `<a href="https://instagram.com/${igHandle}" target="_blank" style="color:#00768e;">@${igHandle}</a>`
+        : '-';
+    const specialReq = (r.special_request && r.special_request.trim()) ? r.special_request : '없음';
     document.getElementById('resModalBody').innerHTML=`
         <div class="modal-section">
             <div class="modal-section-title">예약 정보</div>
@@ -655,8 +659,8 @@ function openResModal(r){
             <div class="modal-row"><span class="modal-key">연락처</span><span class="modal-val">${r.guest_phone?r.guest_phone.replace(/(\d{3})(\d{3,4})(\d{4})/,'$1-$2-$3'):'-'}</span></div>
             <div class="modal-row"><span class="modal-key">이메일</span><span class="modal-val">${r.guest_email||'-'}</span></div>
             <div class="modal-row"><span class="modal-key">나라</span><span class="modal-val">${COUNTRIES[r.guest_country]||r.guest_country||'-'}</span></div>
-            <div class="modal-row"><span class="modal-key">인스타그램</span><span class="modal-val">${ig}</span></div>
-            ${r.special_request?`<div class="modal-row"><span class="modal-key">특별요청</span><span class="modal-val">${r.special_request}</span></div>`:''}
+            <div class="modal-row"><span class="modal-key">인스타그램 계정</span><span class="modal-val">${ig}</span></div>
+            <div class="modal-row"><span class="modal-key">특별 요청사항</span><span class="modal-val" style="${specialReq==='없음'?'color:rgb(112,112,112);font-weight:400;':''}">${specialReq}</span></div>
         </div>
         <div class="modal-section">
             <div class="modal-section-title">결제 정보</div>
