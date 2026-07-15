@@ -659,7 +659,21 @@ let editingDateStr = null;
 let editingRoomId  = null;
 let editIsAvail    = true;
 
-function initInventory(){ updateMonthLabel(); loadInventory(); }
+let roomUuidMap = {}; // { name_en: uuid }
+let roomNameMap = {}; // { uuid: name_en }
+
+async function loadRoomUuids(){
+    const {data, error} = await _sb.from('rooms').select('id, name_en');
+    if(error){ console.error('rooms 테이블 로드 실패:', error); return; }
+    if(data) data.forEach(r => {
+        if(r.name_en && r.id){
+            roomUuidMap[r.name_en] = r.id;
+            roomNameMap[r.id]      = r.name_en;
+        }
+    });
+}
+
+async function initInventory(){ await loadRoomUuids(); updateMonthLabel(); loadInventory(); }
 
 function changeMonth(dir){
     invMonth += dir;
@@ -693,8 +707,9 @@ async function loadInventory(){
     invData = {};
     ROOM_IDS.forEach(id => invData[id] = {});
     if(data) data.forEach(r => {
-        if(!invData[r.room_id]) invData[r.room_id] = {};
-        invData[r.room_id][r.date] = r;
+        const nameEn = roomNameMap[r.room_id] || r.room_id;
+        if(!invData[nameEn]) invData[nameEn] = {};
+        invData[nameEn][r.date] = r;
     });
     if(error) console.error(error);
     renderSheet();
@@ -788,8 +803,9 @@ async function saveDateEdit(){
     const price = parseInt(document.getElementById('editPrice').value) || 0;
     const stock = parseInt(document.getElementById('editStock').value) || 0;
 
+    const roomUuid = roomUuidMap[editingRoomId] || editingRoomId;
     const {error} = await _sb.from('room_inventory').upsert(
-        { room_id:editingRoomId, date:editingDateStr, is_available:editIsAvail, price, stock },
+        { room_id:roomUuid, date:editingDateStr, is_available:editIsAvail, price, stock },
         { onConflict:'room_id,date' }
     );
     if(error){ alert('저장 실패: '+error.message); return; }
@@ -829,8 +845,10 @@ async function applyBulkEdit(){
 
     if(!selectedRooms.length){ alert('적용할 객실을 선택해 주세요.'); return; }
 
-    const rows = [];
+    const rows = [];      // Supabase upsert용 (UUID)
+    const localRows = []; // 로컬 캐시용 (name_en)
     selectedRooms.forEach(roomId => {
+        const roomUuid = roomUuidMap[roomId] || roomId;
         let cur = new Date(from+'T00:00:00');
         const end = new Date(to+'T00:00:00');
         while(cur <= end){
@@ -838,13 +856,10 @@ async function applyBulkEdit(){
                 const dateStr  = toDateStr(cur.getFullYear(), cur.getMonth(), cur.getDate());
                 const existing = invData[roomId]?.[dateStr];
                 const def      = ROOM_DEFAULTS[roomId];
-                rows.push({
-                    room_id: roomId,
-                    date:    dateStr,
-                    is_available: isAvail,
-                    price: priceVal !== '' ? parseInt(priceVal) : (existing?.price ?? def.price),
-                    stock: stockVal !== '' ? parseInt(stockVal) : (existing?.stock ?? def.stock)
-                });
+                const price    = priceVal !== '' ? parseInt(priceVal) : (existing?.price ?? def.price);
+                const stock    = stockVal !== '' ? parseInt(stockVal) : (existing?.stock ?? def.stock);
+                rows.push({ room_id:roomUuid, date:dateStr, is_available:isAvail, price, stock });
+                localRows.push({ room_id:roomId, date:dateStr, is_available:isAvail, price, stock });
             }
             cur.setDate(cur.getDate()+1);
         }
@@ -860,7 +875,7 @@ async function applyBulkEdit(){
 
     if(error){ alert('일괄 저장 실패: '+error.message); return; }
 
-    rows.forEach(r => {
+    localRows.forEach(r => {
         if(!invData[r.room_id]) invData[r.room_id] = {};
         invData[r.room_id][r.date] = r;
     });
