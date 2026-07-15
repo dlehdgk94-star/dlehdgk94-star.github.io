@@ -247,11 +247,14 @@
             .from('reservations').select('id').eq('order_id', orderId).maybeSingle();
         if (existing) { console.log('[saveReservation] 이미 저장된 레코드 존재 → 중복 방지 skip'); return; }
 
+        const { data: roomRow } = await _sb.from('rooms').select('id').eq('name_en', b.roomId).maybeSingle();
+        const roomUuid = roomRow?.id || null;
+
         console.log('[saveReservation] reservations INSERT 시도...');
         const { error } = await _sb.from('reservations').insert({
             order_id:        orderId,
             payment_key:     payKey || null,
-            room_id:         b.roomId         || null,
+            room_id:         roomUuid,
             room_name:       roomNameKo,
             checkin_date:    b.checkin  ? b.checkin.split('T')[0]  : null,
             checkout_date:   b.checkout ? b.checkout.split('T')[0] : null,
@@ -275,8 +278,6 @@
 
         function _localDs(d) { return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 
-        const { data: roomRow } = await _sb.from('rooms').select('id').eq('name_en', b.roomId).maybeSingle();
-        const roomUuid = roomRow?.id;
         if (!roomUuid) return;
 
         const rc = b.roomCount;
