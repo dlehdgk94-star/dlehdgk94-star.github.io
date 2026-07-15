@@ -120,14 +120,14 @@
         .th-date.th-today{ background:#e8f4fd; }
         .td-room{ position:sticky; left:0; z-index:5; background:#fff; padding:0 14px; font-size:13px; font-weight:700; color:rgb(28,28,28); border-right:2px solid #e0e0e0; white-space:nowrap; min-width:108px; }
         .td-room span{ display:block; font-size:10px; font-weight:500; color:rgb(112,112,112); margin-top:2px; }
-        .inv-cell{ width:70px; height:72px; text-align:center; cursor:pointer; padding:6px 4px; vertical-align:middle; transition:filter .12s; }
+        .inv-cell{ width:76px; height:72px; text-align:center; cursor:pointer; padding:6px 4px; vertical-align:middle; transition:filter .12s; }
         .inv-cell:hover{ filter:brightness(.93); }
         .inv-cell.c-none{ background:#fafafa; }
         .inv-cell.c-avail{ background:#f0faf5; }
         .inv-cell.c-closed{ background:#fff2f2; }
         .inv-cell.c-past{ opacity:.5; }
         .inv-cell.c-today{ outline:2px solid #00768e; outline-offset:-2px; }
-        .ic-price{ font-size:12px; font-weight:800; color:rgb(28,28,28); display:block; line-height:1.2; }
+        .ic-price{ font-size:10px; font-weight:800; color:rgb(28,28,28); display:block; line-height:1.2; white-space:nowrap; }
         .ic-stock{ font-size:10px; color:#333; display:block; margin-top:3px; }
         .ic-dot{ width:6px; height:6px; border-radius:50%; display:inline-block; margin-top:4px; }
         .ic-dot-avail{ background:#27ae60; }
@@ -697,8 +697,7 @@ function updateMonthLabel(){
 
 function fmtPriceShort(p){
     if(!p) return '-';
-    const man = p / 10000;
-    return (Number.isInteger(man) ? man : man.toFixed(1)) + '만';
+    return Number(p).toLocaleString('ko-KR') + '원';
 }
 
 async function loadInventory(){
