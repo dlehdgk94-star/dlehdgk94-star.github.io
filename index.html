@@ -299,7 +299,10 @@
         .cal-date.selected-end { background: #000; color: #fff; border-radius: 0 20px 20px 0; }
         .cal-date.selected-single { background: #000; color: #fff; border-radius: 20px; }
         .cal-date.in-range { background: #FAFAFA; border-radius: 0; }
-        .cal-date:hover:not(.faded):not(.selected-start):not(.selected-end):not(.selected-single) { background: #eaeaea; border-radius: 20px; }
+        .cal-date:hover:not(.faded):not(.selected-start):not(.selected-end):not(.selected-single):not(.cal-closed) { background: #eaeaea; border-radius: 20px; }
+        .cal-date.cal-closed { background: #e8e8e8; color: #bbb; cursor: not-allowed; }
+        .cal-date.cal-closed s { text-decoration: line-through; color: #ccc; }
+        .cal-closed-label { display: block; font-size: 9px; font-weight: 700; color: #aaa; margin-top: 1px; line-height: 1; }
 
         /* 투숙객 팝업 특화 스타일 */
         .guest-dropdown { width: 420px; left: -20px; }
@@ -2748,6 +2751,7 @@
                 document.getElementById('pricePopup').classList.remove('active');
             }
             if (roomId) selectedRoomId = roomId;
+            if (selectedRoomId) _fetchClosedDates(selectedRoomId);
             if (window.innerWidth <= 768) {
                 window._bookingPinnedRoomId = roomId || null;
                 var panel = document.getElementById('mob-book-panel');
@@ -2907,7 +2911,12 @@
                     }
                 }
                 
-                html += `<div class="${classes}" ${clickAction}>${i}</div>`;
+                var isClosed = date >= today && _invClosedDates.has(dateStr);
+                if (isClosed) {
+                    html += `<div class="${classes} cal-closed" title="예약 마감"><s>${i}</s><span class="cal-closed-label">마감</span></div>`;
+                } else {
+                    html += `<div class="${classes}" ${clickAction}>${i}</div>`;
+                }
             }
             return html;
         }
@@ -3115,6 +3124,25 @@
         }
         document.addEventListener('DOMContentLoaded', function(){ _loadRoomUuidsI(); });
         function _localDateStr(d){ var m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0'); return d.getFullYear()+'-'+m+'-'+dd; }
+        var _invClosedDates = new Set();
+        async function _fetchClosedDates(roomId) {
+            _invClosedDates = new Set();
+            var uuid = _roomUuidMapI[roomId];
+            if (!_getSbI() || !uuid) { renderCalendar(); return; }
+            var today = new Date();
+            var end3m = new Date(today.getFullYear(), today.getMonth() + 3, 0);
+            try {
+                var res = await _getSbI().from('room_inventory')
+                    .select('date, is_available, stock')
+                    .eq('room_id', uuid)
+                    .gte('date', _localDateStr(today))
+                    .lte('date', _localDateStr(end3m));
+                if (res.data) res.data.forEach(function(r){
+                    if (r.is_available === false || r.stock === 0) _invClosedDates.add(r.date);
+                });
+            } catch(e) { console.warn('마감 날짜 조회 실패', e); }
+            renderCalendar();
+        }
         function populatePricePopup(){
             if(!checkinDate||!checkoutDate) return;
             var listEl=document.getElementById('pricePopupList'); if(!listEl) return;
