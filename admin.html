@@ -128,7 +128,7 @@
         .inv-cell.c-past{ opacity:.5; }
         .inv-cell.c-today{ outline:2px solid #00768e; outline-offset:-2px; }
         .ic-price{ font-size:12px; font-weight:800; color:rgb(28,28,28); display:block; line-height:1.2; }
-        .ic-stock{ font-size:10px; color:rgb(112,112,112); display:block; margin-top:3px; }
+        .ic-stock{ font-size:10px; color:#333; display:block; margin-top:3px; }
         .ic-dot{ width:6px; height:6px; border-radius:50%; display:inline-block; margin-top:4px; }
         .ic-dot-avail{ background:#27ae60; }
         .ic-dot-closed{ background:#e74c3c; }
@@ -742,8 +742,8 @@ function renderSheet(){
             else                   cls += ' c-closed';
 
             const dotCls = rec===undefined ? 'ic-dot-none' : avail ? 'ic-dot-avail' : 'ic-dot-closed';
-            const priceLabel = rec ? fmtPriceShort(price) : `<span style="color:#bbb;">${fmtPriceShort(price)}</span>`;
-            const stockLabel = rec ? `재고${stock}` : `<span style="color:#bbb;">재고${stock}</span>`;
+            const priceLabel = fmtPriceShort(price);
+            const stockLabel = `재고${stock}`;
 
             cells += `<td class="${cls}" onclick="openDateModal('${roomId}','${dateStr}')">
                 <span class="ic-price">${priceLabel}</span>
