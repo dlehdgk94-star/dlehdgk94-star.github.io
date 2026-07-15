@@ -39,7 +39,7 @@
         .tab-btn i{ margin-right:7px; }
 
         /* ── 공통 컨테이너 ── */
-        .admin-body{ max-width:1440px; margin:0 auto; padding:28px 24px 80px; }
+        .admin-body{ max-width:none; margin:0 auto; padding:28px 32px 80px; }
         .tab-panel{ display:none; }
         .tab-panel.active{ display:block; }
 
@@ -112,7 +112,7 @@
         .inv-table{ border-collapse:collapse; min-width:max-content; width:100%; }
         .inv-table th, .inv-table td{ border:1px solid #eee; }
         .th-room{ position:sticky; left:0; z-index:6; background:#f8f8f8; min-width:108px; padding:10px 14px; font-size:12px; font-weight:700; color:rgb(112,112,112); text-transform:uppercase; letter-spacing:.3px; border-right:2px solid #e0e0e0; white-space:nowrap; }
-        .th-date{ min-width:70px; width:70px; text-align:center; padding:8px 4px; font-size:12px; font-weight:700; background:#f8f8f8; white-space:nowrap; }
+        .th-date{ min-width:106px; width:106px; text-align:center; padding:8px 4px; font-size:12px; font-weight:700; background:#f8f8f8; white-space:nowrap; }
         .th-date .d-num{ font-size:14px; font-weight:800; display:block; line-height:1; margin-bottom:2px; }
         .th-date .d-dow{ font-size:10px; font-weight:600; }
         .th-date.th-sun .d-num, .th-date.th-sun .d-dow{ color:#e74c3c; }
@@ -120,16 +120,16 @@
         .th-date.th-today{ background:#e8f4fd; }
         .td-room{ position:sticky; left:0; z-index:5; background:#fff; padding:0 14px; font-size:13px; font-weight:700; color:rgb(28,28,28); border-right:2px solid #e0e0e0; white-space:nowrap; min-width:108px; }
         .td-room span{ display:block; font-size:10px; font-weight:500; color:rgb(112,112,112); margin-top:2px; }
-        .inv-cell{ width:76px; height:72px; text-align:center; cursor:pointer; padding:6px 4px; vertical-align:middle; transition:filter .12s; }
+        .inv-cell{ width:106px; height:88px; text-align:center; cursor:pointer; padding:8px 6px; vertical-align:middle; transition:filter .12s; }
         .inv-cell:hover{ filter:brightness(.93); }
         .inv-cell.c-none{ background:#fafafa; }
         .inv-cell.c-avail{ background:#f0faf5; }
         .inv-cell.c-closed{ background:#fff2f2; }
         .inv-cell.c-past{ opacity:.5; }
         .inv-cell.c-today{ outline:2px solid #00768e; outline-offset:-2px; }
-        .ic-price{ font-size:10px; font-weight:800; color:rgb(28,28,28); display:block; line-height:1.2; white-space:nowrap; }
-        .ic-stock{ font-size:10px; color:#333; display:block; margin-top:3px; }
-        .ic-dot{ width:6px; height:6px; border-radius:50%; display:inline-block; margin-top:4px; }
+        .ic-price{ font-size:13px; font-weight:800; color:rgb(28,28,28); display:block; line-height:1.2; white-space:nowrap; }
+        .ic-stock{ font-size:11px; color:#333; display:block; margin-top:4px; }
+        .ic-dot{ width:7px; height:7px; border-radius:50%; display:inline-block; margin-top:5px; }
         .ic-dot-avail{ background:#27ae60; }
         .ic-dot-closed{ background:#e74c3c; }
         .ic-dot-none{ background:#ccc; }
