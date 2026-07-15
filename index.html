@@ -2687,7 +2687,7 @@
             var dateStrs = [];
             for (var i = 0; i < nights; i++) {
                 var d = new Date(checkinDate); d.setDate(d.getDate() + i);
-                dateStrs.push(d.toISOString().slice(0, 10));
+                dateStrs.push(_localDateStr(d));
             }
 
             /* room_inventory 조회 */
@@ -3114,6 +3114,7 @@
             } catch(e) { console.warn('rooms UUID 로드 실패', e); }
         }
         document.addEventListener('DOMContentLoaded', function(){ _loadRoomUuidsI(); });
+        function _localDateStr(d){ var m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0'); return d.getFullYear()+'-'+m+'-'+dd; }
         function populatePricePopup(){
             if(!checkinDate||!checkoutDate) return;
             var listEl=document.getElementById('pricePopupList'); if(!listEl) return;
