@@ -141,7 +141,7 @@ function buildEmailContent(
     : '-';
 
   /* ── 호텔 정보 (주소는 placeholder) ── */
-  const HOTEL_ADDRESS = '경기도 수원시 팔달구 ○○로 ○○'; // ← 실제 주소로 교체
+  const HOTEL_ADDRESS = '경기도 수원시 영통구 영통로 94-6 (호텔인스타)';
   const HOTEL_PHONE   = '031-203-4301';
 
   /* ── 공통 스타일 ── */
