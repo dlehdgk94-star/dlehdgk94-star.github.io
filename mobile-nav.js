@@ -429,9 +429,10 @@
                 var total = 0;
                 for (var i=0; i<nights; i++) { var nd=new Date(extCI); nd.setDate(nd.getDate()+i); total+=extNightRate(extRoomId,nd); }
                 total *= extGuests.room;
+                function toLocalDateStr(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
                 localStorage.setItem('instaHotelBooking', JSON.stringify({
                     roomId: extRoomId, roomName: EXT_NAMES[extRoomId]||extRoomId,
-                    checkin: extCI.toISOString(), checkout: extCO.toISOString(),
+                    checkin: toLocalDateStr(extCI), checkout: toLocalDateStr(extCO),
                     nights: nights, roomCount: extGuests.room, adultCount: extGuests.adult, totalPrice: total
                 }));
                 window.location.href = base + 'booking.html';

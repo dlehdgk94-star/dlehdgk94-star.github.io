@@ -397,7 +397,8 @@
             var roomCount=guests?guests.room:1, adultCount=guests?guests.adult:1;
             var total=0; for(var i=0;i<nights;i++){ var d=new Date(checkinDate); d.setDate(d.getDate()+i); total+=getNightRateG(selectedRoomId,d); } total*=roomCount;
             var roomName=ROOM_NAMES_G[selectedRoomId]||selectedRoomId;
-            localStorage.setItem('instaHotelBooking',JSON.stringify({ roomId:selectedRoomId,roomName:roomName,checkin:checkinDate.toISOString(),checkout:checkoutDate.toISOString(),nights:nights,roomCount:roomCount,adultCount:adultCount,totalPrice:total }));
+            function toLocalDateStr(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+            localStorage.setItem('instaHotelBooking',JSON.stringify({ roomId:selectedRoomId,roomName:roomName,checkin:toLocalDateStr(checkinDate),checkout:toLocalDateStr(checkoutDate),nights:nights,roomCount:roomCount,adultCount:adultCount,totalPrice:total }));
             window.location.href='booking.html';
         }
         var selectedRoomId=null;
@@ -780,7 +781,7 @@
         });
     </script>
     <script src="translations.js?v=20260710a"></script>
-    <script src="mobile-nav.js"></script>
+    <script src="mobile-nav.js?v=20260717"></script>
     
 <script src="ai-chat.js"></script>
 <script src="taxi-btns.js"></script>

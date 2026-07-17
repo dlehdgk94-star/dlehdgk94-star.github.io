@@ -942,7 +942,8 @@
             let total=0;
             if(effectiveRoomId&&typeof getNightRate==='function'){ for(let i=0;i<nights;i++){ const d=new Date(checkinDate); d.setDate(d.getDate()+i); total+=getNightRate(effectiveRoomId,d); } total*=roomCount; }
             const roomName=effectiveRoomId&&ROOM_DATA&&ROOM_DATA[effectiveRoomId]?ROOM_DATA[effectiveRoomId].roomTitle:'';
-            localStorage.setItem('instaHotelBooking',JSON.stringify({roomId:effectiveRoomId,roomName:roomName,checkin:checkinDate.toISOString(),checkout:checkoutDate.toISOString(),nights:nights,roomCount:roomCount,adultCount:adultCount,totalPrice:total}));
+            function toLocalDateStr(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+            localStorage.setItem('instaHotelBooking',JSON.stringify({roomId:effectiveRoomId,roomName:roomName,checkin:toLocalDateStr(checkinDate),checkout:toLocalDateStr(checkoutDate),nights:nights,roomCount:roomCount,adultCount:adultCount,totalPrice:total}));
             window.location.href='booking.html';
         }
 
@@ -1106,9 +1107,10 @@
             for (let i = 0; i < nights; i++) { const d = new Date(checkinDate); d.setDate(d.getDate()+i); total += getNightRate(effectiveRoomId, d); }
             total *= roomCount;
             const roomName = ROOM_DATA && ROOM_DATA[effectiveRoomId] ? ROOM_DATA[effectiveRoomId].roomTitle : effectiveRoomId;
+            function toLocalDateStr(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
             localStorage.setItem('instaHotelBooking', JSON.stringify({
                 roomId: effectiveRoomId, roomName: roomName,
-                checkin: checkinDate.toISOString(), checkout: checkoutDate.toISOString(),
+                checkin: toLocalDateStr(checkinDate), checkout: toLocalDateStr(checkoutDate),
                 nights: nights, roomCount: roomCount, adultCount: adultCount, totalPrice: total
             }));
             window.location.href = 'booking.html';
@@ -1529,7 +1531,7 @@
     </script>
     <script src="translations.js?v=20260710a"></script>
     <script>function toggleLangDropdown(e){e.stopPropagation();document.getElementById("langDropdown").classList.toggle("open");}function selectLang(el){var lang=el.dataset.code.toLowerCase();if(typeof setLanguage==='function'){setLanguage(lang);}else{document.getElementById("langCode").textContent=el.dataset.code;document.querySelectorAll(".lang-option").forEach(function(o){o.classList.remove("active");});el.classList.add("active");}document.getElementById("langDropdown").classList.remove("open");}document.addEventListener("click",function(){var d=document.getElementById("langDropdown");if(d)d.classList.remove("open");});</script>
-    <script src="mobile-nav.js"></script>
+    <script src="mobile-nav.js?v=20260717"></script>
 
 <script src="ai-chat.js"></script>
 <script src="taxi-btns.js"></script>

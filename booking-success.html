@@ -256,8 +256,8 @@
             payment_key:     payKey || null,
             room_id:         roomUuid,
             room_name:       roomNameKo,
-            checkin_date:    b.checkin  ? b.checkin.split('T')[0]  : null,
-            checkout_date:   b.checkout ? b.checkout.split('T')[0] : null,
+            checkin_date:    b.checkin  ? (b.checkin.includes('T')  ? b.checkin.split('T')[0]  : b.checkin)  : null,
+            checkout_date:   b.checkout ? (b.checkout.includes('T') ? b.checkout.split('T')[0] : b.checkout) : null,
             nights:          b.nights         || null,
             room_count:      b.roomCount      || null,
             adult_count:     b.adultCount     || null,
@@ -355,7 +355,7 @@
         await saveReservation();
     })();
     </script>
-    <script src="mobile-nav.js"></script>
+    <script src="mobile-nav.js?v=20260717"></script>
     
 <script src="ai-chat.js"></script>
 <script src="taxi-btns.js"></script>
