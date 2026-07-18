@@ -248,7 +248,8 @@ const translations = {
     "gal.label.convenience": "편의점",
     // nearby.html 전용
     "nearby.hero.label": "호텔 인스타",
-    "nearby.hero.title": "주변 관광지 & 편의시설",
+    "nearby.hero.title": "관광 · 삼성 비즈니스 · 교통 · 생활편의시설",
+    "nearby.section.title": "관광부터 비즈니스까지, 호텔 주변의 다양한 정보를 한눈에",
     "nearby.section.sub": "호텔 근처의 다양한 명소와 편의시설을 확인하세요",
     "nearby.desc.hwaseong": "유네스코 세계문화유산으로 지정된 조선시대 대표 성곽입니다. 정조대왕이 1796년에 완성한 화성은 독창적인 건축양식과 아름다운 풍경으로 수원을 찾는 관광객이 반드시 방문하는 대표 명소입니다.",
     "nearby.desc.everland": "국내 최대 규모의 테마파크로 다양한 놀이기구, 동물원, 계절별 꽃 축제 등을 즐길 수 있습니다. 가족 단위 방문객에게 특히 인기 있으며, 사계절 내내 다양한 이벤트와 공연이 펼쳐집니다.",
@@ -578,7 +579,8 @@ const translations = {
     "gal.label.convenience": "Convenience Store",
     // nearby.html
     "nearby.hero.label": "INSTA Hotel",
-    "nearby.hero.title": "Nearby Attractions & Facilities",
+    "nearby.hero.title": "Sightseeing · Samsung Business · Transit · Daily Essentials",
+    "nearby.section.title": "From sightseeing to business, everything around the hotel at a glance",
     "nearby.section.sub": "Discover attractions and facilities near the hotel",
     "nearby.desc.hwaseong": "A representative Joseon-era fortress designated as a UNESCO World Cultural Heritage site. Completed in 1796 by King Jeongjo, Hwaseong is celebrated for its unique architectural style and stunning scenery, making it a must-visit landmark for anyone traveling to Suwon.",
     "nearby.desc.everland": "South Korea's largest theme park, offering a wide range of rides, a zoo, and seasonal flower festivals. Especially popular with families, Everland hosts diverse events and performances all year round.",
@@ -908,7 +910,8 @@ const translations = {
     "gal.label.convenience": "コンビニ",
     // nearby.html
     "nearby.hero.label": "INSTAホテル",
-    "nearby.hero.title": "周辺観光地 & 便利施設",
+    "nearby.hero.title": "観光 · サムスンビジネス · 交通 · 生活利便施設",
+    "nearby.section.title": "観光からビジネスまで、ホテル周辺の多彩な情報を一目で",
     "nearby.section.sub": "ホテル近くの名所と便利施設をご確認ください",
     "nearby.desc.hwaseong": "ユネスコ世界文化遺産に登録された朝鮮時代を代表する城郭です。正祖大王が1796年に完成させた華城は、独創的な建築様式と美しい風景で、水原を訪れる観光客が必ず立ち寄る名所として知られています。",
     "nearby.desc.everland": "韓国最大規模のテーマパークで、様々なアトラクション、動物園、季節ごとの花祭りが楽しめます。特にファミリー層に人気で、四季を通じてさまざまなイベントやショーが開催されます。",
@@ -1238,7 +1241,8 @@ const translations = {
     "gal.label.convenience": "便利店",
     // nearby.html
     "nearby.hero.label": "INSTA酒店",
-    "nearby.hero.title": "周边景点 & 便利设施",
+    "nearby.hero.title": "观光 · 三星商务 · 交通 · 生活便利设施",
+    "nearby.section.title": "从观光到商务，酒店周边多彩资讯一目了然",
     "nearby.section.sub": "了解酒店附近的各大景点和便利设施",
     "nearby.desc.hwaseong": "这是被联合国教科文组织列为世界文化遗产的朝鲜时代代表性城郭。由正祖大王于1796年建成的华城以其独特的建筑风格和优美景色闻名，是来访水原游客的必游之地。",
     "nearby.desc.everland": "这是韩国规模最大的主题公园，设有丰富的游乐设施、动物园及各季节花卉节等活动，尤受家庭游客欢迎，全年举办各类活动与演出。",

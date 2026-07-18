@@ -135,51 +135,25 @@
         .nb-tab-btn.active{ color:rgb(28,28,28); border-bottom-color:rgb(28,28,28); }
         .nb-tab-btn:hover:not(.active){ color:rgb(112,112,112); }
 
-        /* ── 카테고리 정보 ── */
-        .nb-cat-info{ display:flex; align-items:flex-start; gap:18px; margin-bottom:30px; }
-        .nb-cat-icon-wrap{ width:46px; height:46px; background:rgb(28,28,28); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:17px; flex-shrink:0; margin-top:2px; }
-        .nb-cat-text{ flex:1; }
-        .nb-cat-name{ font-size:20px; font-weight:700; color:rgb(28,28,28); margin-bottom:8px; }
-        .nb-cat-desc{ font-size:14px; color:rgb(112,112,112); line-height:1.78; max-width:780px; }
-
-        /* ── 포토 그리드 ── */
-        .nb-photo-grid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; }
-        .nb-photo-item{ aspect-ratio:4/3; overflow:hidden; cursor:pointer; border-radius:6px; background:#e8e8e8; position:relative; }
-        .nb-photo-item img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.4s; }
-        .nb-photo-item:hover img{ transform:scale(1.06); }
-        .nb-photo-hover{ position:absolute; inset:0; background:rgba(0,0,0,0); transition:background 0.3s; display:flex; align-items:center; justify-content:center; }
-        .nb-photo-item:hover .nb-photo-hover{ background:rgba(0,0,0,0.15); }
-        .nb-photo-hover i{ color:#fff; font-size:20px; opacity:0; transition:opacity 0.3s; }
-        .nb-photo-item:hover .nb-photo-hover i{ opacity:1; }
-
-        /* ── 갤러리 라이트박스 ── */
-        .gallery-overlay{ position:fixed; inset:0; background:rgba(18,18,18,0.96); z-index:10000; display:none; align-items:center; justify-content:center; }
-        .gallery-overlay.open{ display:flex; }
-        .gallery-close{ position:absolute; top:0; right:calc(-40px - 1cm); background:rgba(255,255,255,0.92); border:none; border-radius:50%; color:rgb(28,28,28); width:40px; height:40px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.4); z-index:3; }
-        .gallery-close:hover{ background:#fff; }
-        @media (max-width:768px){ .gallery-close{ position:fixed; top:64px; right:14px; } }
-        .gallery-stage{ position:relative; display:inline-flex; align-items:center; justify-content:center; }
-        .gallery-track{ display:inline-flex; align-items:center; justify-content:center; }
-        .gallery-slide{ display:none; align-items:center; justify-content:center; }
-        .gallery-slide.g-active{ display:inline-flex; animation:gFadeIn 0.22s ease; }
-        @keyframes gFadeIn{ from{opacity:0;} to{opacity:1;} }
-        .gallery-slide img{ max-width:88vw; max-height:82vh; object-fit:contain; display:block; }
-        .gallery-nav{ position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.9); border:none; border-radius:50%; color:rgb(28,28,28); width:42px; height:42px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.35); z-index:2; }
-        .gallery-nav:hover{ background:#fff; }
-        .gallery-prev{ left:-22px; }
-        .gallery-next{ right:-22px; }
-        .gallery-counter{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.75); font-size:13px; font-family:'Barlow',sans-serif; }
-        @media (max-width:768px){
-            .gallery-overlay{ flex-direction:column; justify-content:center; }
-            .gallery-stage{ display:flex; width:100%; }
-            .gallery-track{ display:flex; width:100%; }
-            .gallery-slide{ width:100%; }
-            .gallery-slide.g-active{ display:flex; width:100%; }
-            .gallery-slide img{ width:100vw; max-width:100vw; max-height:65vh; }
-            .gallery-prev{ left:4px; }
-            .gallery-next{ right:4px; }
-            .gallery-counter{ position:relative; bottom:auto; left:auto; transform:none; margin-top:24px; text-align:center; }
-        }
+        /* ── 카드 그리드 ── */
+        .nb-card-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+        .nb-card{ background:#fff; border:1px solid #e8e8e8; border-radius:6px; overflow:hidden; transition:box-shadow 0.2s, transform 0.2s; }
+        .nb-card:hover{ box-shadow:0 4px 16px rgba(0,0,0,0.1); transform:translateY(-3px); }
+        .nb-card-photo{ aspect-ratio:3/2; background:#e8e8e8; overflow:hidden; }
+        .nb-card-photo img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.4s; }
+        .nb-card:hover .nb-card-photo img{ transform:scale(1.04); }
+        .nb-card-photo-placeholder{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#bbb; font-size:28px; }
+        .nb-card-body{ padding:16px 18px; }
+        .nb-card-header-row{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px; }
+        .nb-card-name{ font-size:15px; font-weight:700; color:rgb(28,28,28); }
+        .nb-card-distance{ font-size:11px; font-weight:600; color:rgb(112,112,112); background:#f5f5f5; border-radius:12px; padding:3px 9px; white-space:nowrap; flex-shrink:0; }
+        .nb-card-desc{ font-size:13px; color:rgb(112,112,112); line-height:1.65; margin-bottom:12px; }
+        .nb-card-link{ display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; color:#2A91A8; text-decoration:none; }
+        .nb-card-link:hover{ text-decoration:underline; text-underline-offset:2px; }
+        .nb-card-link i{ font-size:10px; }
+        .nb-empty-msg{ grid-column:1/-1; text-align:center; padding:60px 0; font-size:15px; color:rgb(112,112,112); }
+        @media (max-width:900px){ .nb-card-grid{ grid-template-columns:repeat(2,1fr); } }
+        @media (max-width:540px){ .nb-card-grid{ grid-template-columns:1fr; } }
             /* ── 언어 선택 ── */
         .lang-selector{ position:relative; }
         .lang-btn{ display:flex; align-items:center; gap:6px; background:none; border:1px solid #d0d0d0; border-radius:20px; padding:6px 12px; font-size:13px; font-weight:600; cursor:pointer; color:rgb(112,112,112); font-family:'Barlow',sans-serif; transition:border-color 0.2s,color 0.2s; }
@@ -311,14 +285,14 @@
 
     <!-- 히어로 -->
     <section class="nearby-hero">
-        <img src="images/nearby/main.png" alt="주변 관광지">
+        <img src="images/nearby/attractions/화성행궁.png?v=1" alt="화성행궁">
         <div class="nearby-hero-overlay">
             <div class="nearby-hero-label-row">
                 <span class="nearby-hero-line"></span>
                 <span class="nearby-hero-label" data-i18n="nearby.hero.label">호텔 인스타</span>
                 <span class="nearby-hero-line"></span>
             </div>
-            <h1 class="nearby-hero-title" data-i18n="nearby.hero.title">주변 관광지 & 편의시설</h1>
+            <h1 class="nearby-hero-title" data-i18n="nearby.hero.title">관광 · 삼성 비즈니스 · 교통 · 생활편의시설</h1>
         </div>
         <div class="nearby-hero-scroll">
             <span>SCROLL</span>
@@ -330,7 +304,7 @@
     <section class="nearby-section">
         <div class="nearby-inner">
             <div class="nearby-section-header">
-                <h2 class="nearby-section-title" data-i18n="nearby.hero.title">주변 관광지 & 편의시설</h2>
+                <h2 class="nearby-section-title" data-i18n="nearby.section.title">관광부터 비즈니스까지, 호텔 주변의 다양한 정보를 한눈에</h2>
                 <p class="nearby-section-sub" data-i18n="nearby.section.sub">호텔 근처의 다양한 명소와 편의시설을 확인하세요</p>
             </div>
 
@@ -339,30 +313,10 @@
                 <div class="nb-tabs" id="nbTabs"></div>
             </div>
 
-            <!-- 카테고리 정보 -->
-            <div class="nb-cat-info">
-                <div class="nb-cat-icon-wrap"><i class="fa-solid" id="nb-cat-icon"></i></div>
-                <div class="nb-cat-text">
-                    <p class="nb-cat-name" id="nb-cat-name"></p>
-                    <p class="nb-cat-desc" id="nb-cat-desc"></p>
-                </div>
-            </div>
-
-            <!-- 포토 그리드 -->
-            <div class="nb-photo-grid" id="nb-photo-grid"></div>
+            <!-- 카드 그리드 -->
+            <div class="nb-card-grid" id="nbCardGrid"></div>
         </div>
     </section>
-
-    <!-- 갤러리 라이트박스 -->
-    <div class="gallery-overlay" id="galleryOverlay" onclick="handleGalleryOverlayClick(event)">
-        <div class="gallery-stage" id="galleryStage">
-            <button class="gallery-close" onclick="closeGallery()"><i class="fa-solid fa-xmark"></i></button>
-            <div class="gallery-track" id="galleryTrack"></div>
-            <button class="gallery-nav gallery-prev" onclick="galleryNav(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-            <button class="gallery-nav gallery-next" onclick="galleryNav(1)"><i class="fa-solid fa-chevron-right"></i></button>
-        </div>
-        <div class="gallery-counter" id="galleryCounter"></div>
-    </div>
 
     <script>
         /* ── 예약 바 ── */
@@ -509,244 +463,95 @@
             var _sb=document.querySelector('.search-btn'); if(_sb){ _sb.classList.add('auto-highlight'); setTimeout(function(){ _sb.classList.remove('auto-highlight'); },3000); }
         }
 
-        /* ── 주변 관광지 번역 키 맵 ── */
-        var NB_NAME_KEY = {
-            'hwaseong':    'gal.label.hwaseong',
-            'everland':    'gal.label.everland',
-            'caribbean':   'gal.label.caribbean',
-            'lake-park':   'gal.label.lake_park',
-            'folk-village':'gal.label.folk_village',
-            'arboretum':   'gal.label.arboretum',
-            'starfield':   'gal.label.starfield',
-            'convenience': 'gal.label.convenience'
-        };
-        var NB_DESC_KEY = {
-            'hwaseong':    'nearby.desc.hwaseong',
-            'everland':    'nearby.desc.everland',
-            'caribbean':   'nearby.desc.caribbean',
-            'lake-park':   'nearby.desc.lake_park',
-            'folk-village':'nearby.desc.folk_village',
-            'arboretum':   'nearby.desc.arboretum',
-            'starfield':   'nearby.desc.starfield',
-            'convenience': 'nearby.desc.convenience'
-        };
+        /* ── 주변 카드 그리드 ── */
+        var _activeNbCat = '';
 
-        /* ── 주변 관광지 데이터 ── */
-        const NB_ORDER = ['hwaseong','folk-village','starfield','everland','caribbean','lake-park','arboretum','convenience'];
-
-        const NEARBY_DATA = {
-            'hwaseong': {
-                name: '수원화성',
-                icon: 'fa-landmark',
-                desc: '유네스코 세계문화유산으로 지정된 조선시대 대표 성곽입니다. 정조대왕이 1796년에 완성한 화성은 독창적인 건축양식과 아름다운 풍경으로 수원을 찾는 관광객이 반드시 방문하는 대표 명소입니다.',
-                images: [
-                    'images/nearby/hwaseong/1.png','images/nearby/hwaseong/2.jpg','images/nearby/hwaseong/3.jpg',
-                    'images/nearby/hwaseong/4.jpg','images/nearby/hwaseong/5.jpg','images/nearby/hwaseong/6.jpg',
-                    'images/nearby/hwaseong/7.jpg','images/nearby/hwaseong/8.jpg','images/nearby/hwaseong/9.jpg',
-                    'images/nearby/hwaseong/10.png','images/nearby/hwaseong/11.png','images/nearby/hwaseong/12.png',
-                    'images/nearby/hwaseong/13.png','images/nearby/hwaseong/14.png','images/nearby/hwaseong/15.png',
-                    'images/nearby/hwaseong/16.png','images/nearby/hwaseong/17.png','images/nearby/hwaseong/18.png',
-                    'images/nearby/hwaseong/19.png'
-                ]
-            },
-            'everland': {
-                name: '에버랜드',
-                icon: 'fa-ticket',
-                desc: '국내 최대 규모의 테마파크로 다양한 놀이기구, 동물원, 계절별 꽃 축제 등을 즐길 수 있습니다. 가족 단위 방문객에게 특히 인기 있으며, 사계절 내내 다양한 이벤트와 공연이 펼쳐집니다.',
-                images: [
-                    'images/nearby/everland/1.png','images/nearby/everland/2.png','images/nearby/everland/3.png',
-                    'images/nearby/everland/4.png','images/nearby/everland/5.png','images/nearby/everland/6.png',
-                    'images/nearby/everland/7.png','images/nearby/everland/8.png','images/nearby/everland/9.png',
-                    'images/nearby/everland/10.png','images/nearby/everland/11.png','images/nearby/everland/12.png',
-                    'images/nearby/everland/13.png','images/nearby/everland/14.png','images/nearby/everland/15.png',
-                    'images/nearby/everland/16.png','images/nearby/everland/17.png'
-                ]
-            },
-            'caribbean': {
-                name: '케리비안베이',
-                icon: 'fa-umbrella-beach',
-                desc: '에버랜드 내 위치한 국내 최대 규모의 워터파크입니다. 파도풀, 익스트림 슬라이드, 실내 스파 등 다양한 수상 어트랙션을 갖추고 있어 여름철 대표 인기 방문지입니다.',
-                images: [
-                    'images/nearby/caribbean/1.png','images/nearby/caribbean/2.png','images/nearby/caribbean/3.png',
-                    'images/nearby/caribbean/4.png','images/nearby/caribbean/5.png','images/nearby/caribbean/6.png',
-                    'images/nearby/caribbean/7.png'
-                ]
-            },
-            'lake-park': {
-                name: '광교호수공원',
-                icon: 'fa-water',
-                desc: '수원시 영통구에 위치한 도심 속 아름다운 자연 호수공원입니다. 광교저수지와 원천저수지 주변에 조성된 넓은 산책로, 자전거 도로, 카페, 문화공연장을 갖추고 있어 사계절 내내 많은 시민과 관광객이 즐겨 찾는 힐링 공간입니다.',
-                images: [
-                    'images/nearby/lake-park/1.png','images/nearby/lake-park/2.png','images/nearby/lake-park/3.png',
-                    'images/nearby/lake-park/4.png','images/nearby/lake-park/5.png','images/nearby/lake-park/6.png',
-                    'images/nearby/lake-park/7.png','images/nearby/lake-park/8.png','images/nearby/lake-park/9.png',
-                    'images/nearby/lake-park/10.png','images/nearby/lake-park/11.png','images/nearby/lake-park/12.png'
-                ]
-            },
-            'folk-village': {
-                name: '한국민속촌',
-                icon: 'fa-house-chimney',
-                desc: '조선시대의 전통 생활문화를 생생하게 체험할 수 있는 야외 민속박물관입니다. 초가집, 기와집 등 전통 가옥과 다양한 민속 공연을 관람하며 우리나라의 옛 생활 모습을 느낄 수 있습니다.',
-                images: [
-                    'images/nearby/folk-village/1.png','images/nearby/folk-village/2.png','images/nearby/folk-village/3.png',
-                    'images/nearby/folk-village/4.png','images/nearby/folk-village/5.png','images/nearby/folk-village/6.png',
-                    'images/nearby/folk-village/7.png','images/nearby/folk-village/8.png','images/nearby/folk-village/9.png',
-                    'images/nearby/folk-village/10.png','images/nearby/folk-village/11.png','images/nearby/folk-village/12.png',
-                    'images/nearby/folk-village/13.png','images/nearby/folk-village/14.png','images/nearby/folk-village/15.png',
-                    'images/nearby/folk-village/16.png','images/nearby/folk-village/17.png'
-                ]
-            },
-            'arboretum': {
-                name: '영흥수목원',
-                icon: 'fa-tree',
-                desc: '수원시에 위치한 도심형 수목원으로 다양한 식물과 계절별 꽃을 감상할 수 있습니다. 자연 속 산책로를 걸으며 힐링하기 좋은 수원의 숨겨진 명소로, 가족 나들이와 여유로운 산책을 즐기기에 안성맞춤입니다.',
-                images: [
-                    'images/nearby/arboretum/1.png','images/nearby/arboretum/2.png','images/nearby/arboretum/3.png',
-                    'images/nearby/arboretum/4.png','images/nearby/arboretum/5.png','images/nearby/arboretum/6.png',
-                    'images/nearby/arboretum/7.png'
-                ]
-            },
-            'starfield': {
-                name: '수원 스타필드',
-                icon: 'fa-bag-shopping',
-                desc: '수원에 위치한 대규모 복합쇼핑몰로 다양한 브랜드 매장과 맛집, 별마당도서관 등 문화·여가 공간이 한곳에 모여 있습니다. 쇼핑과 식사, 문화생활을 한 번에 즐길 수 있는 수원의 새로운 랜드마크입니다.',
-                images: [
-                    'images/nearby/starfield/스타필드.jpg',
-                    'images/nearby/starfield/스타필드-별마당도서관.jpg'
-                ]
-            },
-            'convenience': {
-                name: '편의점',
-                icon: 'fa-store',
-                desc: '호텔 바로 인근에 24시간 편의점이 위치해 있어 간단한 먹거리, 음료, 생필품을 언제든 편리하게 구매하실 수 있습니다. 투숙 중 필요한 것들을 가까운 거리에서 손쉽게 해결하세요.',
-                images: [
-                    'images/nearby/convenience/1.png','images/nearby/convenience/2.png','images/nearby/convenience/3.png',
-                    'images/nearby/convenience/4.png','images/nearby/convenience/5.png'
-                ]
-            }
-        };
-
-        var _activeNbId = 'hwaseong';
-
-        function switchTab(id) {
-            _activeNbId = id;
+        function switchNbTab(id) {
+            _activeNbCat = id;
             document.querySelectorAll('.nb-tab-btn').forEach(function(btn) {
                 btn.classList.toggle('active', btn.dataset.id === id);
             });
-            renderNbContent(id);
+            renderNbCards(id);
         }
 
-        function renderNbContent(id) {
-            var d = NEARBY_DATA[id];
-            var nameKey = NB_NAME_KEY[id];
-            var descKey = NB_DESC_KEY[id];
-            var nameText = (nameKey && typeof t === 'function') ? t(nameKey) : d.name;
-            var descText = (descKey && typeof t === 'function') ? t(descKey) : d.desc;
-            document.getElementById('nb-cat-icon').className = 'fa-solid ' + d.icon;
-            document.getElementById('nb-cat-name').textContent = nameText;
-            document.getElementById('nb-cat-desc').textContent = descText;
-            var grid = document.getElementById('nb-photo-grid');
+        function renderNbCards(catId) {
+            var cat = (typeof nearbyData !== 'undefined') && nearbyData.categories.find(function(c) { return c.id === catId; });
+            var grid = document.getElementById('nbCardGrid');
             grid.innerHTML = '';
-            d.images.forEach(function(src, i) {
-                var item = document.createElement('div');
-                item.className = 'nb-photo-item';
-                item.onclick = (function(idx){ return function(){ openNbGallery(id, idx); }; })(i);
-                var img = document.createElement('img');
-                img.src = src;
-                img.alt = nameText + ' ' + (i + 1);
-                item.appendChild(img);
-                var hover = document.createElement('div');
-                hover.className = 'nb-photo-hover';
-                hover.innerHTML = '<i class="fa-solid fa-expand"></i>';
-                item.appendChild(hover);
-                grid.appendChild(item);
+            if (!cat || !cat.places || cat.places.length === 0) {
+                var msg = document.createElement('div');
+                msg.className = 'nb-empty-msg';
+                msg.textContent = '준비 중입니다';
+                grid.appendChild(msg);
+                return;
+            }
+            cat.places.forEach(function(place) {
+                var card = document.createElement('div');
+                card.className = 'nb-card';
+                if (place.url) {
+                    card.style.cursor = 'pointer';
+                    card.onclick = (function(u) { return function() { window.open(u, '_blank', 'noopener,noreferrer'); }; })(place.url);
+                }
+
+                var photoDiv = document.createElement('div');
+                photoDiv.className = 'nb-card-photo';
+                if (place.photo) {
+                    var img = document.createElement('img');
+                    img.src = place.photo;
+                    img.alt = place.name;
+                    img.loading = 'lazy';
+                    photoDiv.appendChild(img);
+                } else {
+                    var ph = document.createElement('div');
+                    ph.className = 'nb-card-photo-placeholder';
+                    ph.innerHTML = '<i class="fa-regular fa-image"></i>';
+                    photoDiv.appendChild(ph);
+                }
+
+                var body = document.createElement('div');
+                body.className = 'nb-card-body';
+
+                var headerRow = document.createElement('div');
+                headerRow.className = 'nb-card-header-row';
+                var nameEl = document.createElement('span');
+                nameEl.className = 'nb-card-name';
+                nameEl.textContent = place.name;
+                var distEl = document.createElement('span');
+                distEl.className = 'nb-card-distance';
+                distEl.innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + place.distance;
+                headerRow.appendChild(nameEl);
+                headerRow.appendChild(distEl);
+
+                var descEl = document.createElement('p');
+                descEl.className = 'nb-card-desc';
+                descEl.textContent = place.description;
+
+                body.appendChild(headerRow);
+                body.appendChild(descEl);
+
+                card.appendChild(photoDiv);
+                card.appendChild(body);
+                grid.appendChild(card);
             });
         }
-
-        function syncNearbyLang() {
-            document.querySelectorAll('.nb-tab-btn').forEach(function(btn) {
-                var id = btn.dataset.id;
-                var nameKey = NB_NAME_KEY[id];
-                var icon = NEARBY_DATA[id] ? NEARBY_DATA[id].icon : '';
-                var label = (nameKey && typeof t === 'function') ? t(nameKey) : (NEARBY_DATA[id] ? NEARBY_DATA[id].name : id);
-                btn.innerHTML = '<i class="fa-solid ' + icon + '"></i>' + label;
-            });
-            renderNbContent(_activeNbId);
-        }
-
-        /* ── 갤러리 라이트박스 ── */
-        var _galleryImages = [];
-        var _galleryIdx = 0;
-
-        function _setGalleryTrack() {
-            document.getElementById('galleryTrack').querySelectorAll('.gallery-slide').forEach(function(s, i) {
-                s.classList.toggle('g-active', i === _galleryIdx);
-            });
-            document.getElementById('galleryCounter').textContent = (_galleryIdx + 1) + ' / ' + _galleryImages.length;
-        }
-
-        function openNbGallery(categoryId, startIdx) {
-            var d = NEARBY_DATA[categoryId];
-            if (!d || !d.images.length) return;
-            _galleryImages = d.images;
-            _galleryIdx = startIdx || 0;
-            var track = document.getElementById('galleryTrack');
-            track.innerHTML = '';
-            _galleryImages.forEach(function(src, i) {
-                var slide = document.createElement('div');
-                slide.className = 'gallery-slide' + (i === _galleryIdx ? ' g-active' : '');
-                var img = document.createElement('img');
-                img.src = src;
-                slide.appendChild(img);
-                track.appendChild(slide);
-            });
-            document.getElementById('galleryOverlay').classList.add('open');
-            document.body.style.overflow = 'hidden';
-            _setGalleryTrack();
-        }
-
-        function galleryNav(dir) {
-            var next = _galleryIdx + dir;
-            if (next < 0 || next >= _galleryImages.length) return;
-            _galleryIdx = next;
-            _setGalleryTrack();
-        }
-
-        function closeGallery() {
-            document.getElementById('galleryOverlay').classList.remove('open');
-            document.body.style.overflow = '';
-        }
-
-        function handleGalleryOverlayClick(e) {
-            if (e.target === document.getElementById('galleryOverlay')) closeGallery();
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (!document.getElementById('galleryOverlay').classList.contains('open')) return;
-            if (e.key === 'ArrowLeft') galleryNav(-1);
-            else if (e.key === 'ArrowRight') galleryNav(1);
-            else if (e.key === 'Escape') closeGallery();
-        });
-
 
         window.addEventListener('DOMContentLoaded', function() {
             renderCalendar();
             updateDateUI();
 
-            var tabsEl = document.getElementById('nbTabs');
-            NB_ORDER.forEach(function(id) {
-                var d = NEARBY_DATA[id];
-                var nameKey = NB_NAME_KEY[id];
-                var label = (nameKey && typeof t === 'function') ? t(nameKey) : d.name;
-                var btn = document.createElement('button');
-                btn.className = 'nb-tab-btn' + (id === _activeNbId ? ' active' : '');
-                btn.dataset.id = id;
-                btn.innerHTML = '<i class="fa-solid ' + d.icon + '"></i>' + label;
-                btn.onclick = function() { switchTab(id); };
-                tabsEl.appendChild(btn);
-            });
-
-            renderNbContent(_activeNbId);
+            if (typeof nearbyData !== 'undefined') {
+                var tabsEl = document.getElementById('nbTabs');
+                nearbyData.categories.forEach(function(cat, idx) {
+                    var btn = document.createElement('button');
+                    btn.className = 'nb-tab-btn' + (idx === 0 ? ' active' : '');
+                    btn.dataset.id = cat.id;
+                    btn.textContent = cat.label;
+                    btn.onclick = function() { switchNbTab(cat.id); };
+                    tabsEl.appendChild(btn);
+                });
+                _activeNbCat = nearbyData.categories[0].id;
+                renderNbCards(_activeNbCat);
+            }
         });
     </script>
     <script>
@@ -754,7 +559,8 @@
         function selectLang(el){ var lang=el.dataset.code.toLowerCase(); if(typeof setLanguage==='function'){ setLanguage(lang); } document.getElementById('langDropdown').classList.remove('open'); }
         document.addEventListener('click', function(){ var d=document.getElementById('langDropdown'); if(d)d.classList.remove('open'); });
     </script>
-    <script src="translations.js?v=20260710a"></script>
+    <script src="nearbyData.js?v=8"></script>
+    <script src="translations.js?v=20260710b"></script>
     <script src="mobile-nav.js?v=20260717"></script>
     
 <script src="ai-chat.js"></script>
