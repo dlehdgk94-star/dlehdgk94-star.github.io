@@ -133,7 +133,7 @@
     left: 0;\
     right: 0;\
     width: 100%;\
-    background: rgba(255,255,255,0.20);\
+    background: rgba(255,255,255,0);\
     -webkit-backdrop-filter: blur(12px);\
     backdrop-filter: blur(12px);\
     border-top: 1px solid rgba(0,0,0,0.10);\
