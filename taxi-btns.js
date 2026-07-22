@@ -5,6 +5,35 @@
 
     var APP_ADDRESS = '경기도 수원시 영통구 영통로 94-6';
 
+    // ── 딥링크 정의 ──
+    var DEEPLINKS = {
+        kakao: {
+            // Android: intent URL — 앱 미설치 시 Play 스토어 자동 fallback
+            android: 'intent://#Intent;package=com.kakao.taxi;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.kakao.taxi;end',
+            // iOS: 앱스토어로 직접 유도 (카카오T iOS 유니버설 링크 미공개)
+            ios: 'https://apps.apple.com/kr/app/id981110422',
+            web: 'https://kakaot.com'
+        },
+        uber: {
+            // 호텔 좌표 포함 딥링크 — 앱 설치 시 출발지 자동 입력
+            deeplink: 'uber://riderequest?pickup[latitude]=37.2377421&pickup[longitude]=127.0593218&pickup[nickname]=Insta%20Hotel%20Main%20Branch&pickup[formatted_address]=94-6%20Yeongtong-ro%2C%20Yeongtong-gu%2C%20Suwon',
+            web: 'https://m.uber.com'
+        },
+        baemin: {
+            // 공식 유니버설 링크: 앱/웹/스토어 자체 처리
+            url: 'https://baemin.go.link/baemincom'
+        },
+        coupang: {
+            // 공식 공유 딥링크: 앱/웹/스토어 자체 처리
+            url: 'https://share.coupangeats.com/pKV6Df0vMrb'
+        }
+    };
+
+    var _currentAppId = null;
+
+    function isIOS()     { return /iphone|ipad|ipod/i.test(navigator.userAgent); }
+    function isAndroid() { return /android/i.test(navigator.userAgent); }
+
     function getBase() {
         var scripts = document.getElementsByTagName('script');
         for (var i = 0; i < scripts.length; i++) {
@@ -19,20 +48,20 @@
 
     var html = '\
 <div id="taxi-btns-wrap">\
-    <button class="taxi-btn-item taxi-btn-app" onclick="openAppModal(\'taxi\',\'https://kakaot.com\')" aria-label="카카오T 택시">\
+    <button class="taxi-btn-item taxi-btn-app" onclick="openAppModal(\'taxi\',\'kakao\')" aria-label="카카오T 택시">\
         <div class="taxi-btn-icon">' + kakaoSvg + '</div>\
         <span class="taxi-btn-label">Taxi</span>\
     </button>\
-    <button class="taxi-btn-item taxi-btn-app" onclick="openAppModal(\'taxi\',\'https://m.uber.com\')" aria-label="우버">\
+    <button class="taxi-btn-item taxi-btn-app" onclick="openAppModal(\'taxi\',\'uber\')" aria-label="우버">\
         <div class="taxi-btn-icon">' + uberSvg + '</div>\
         <span class="taxi-btn-label">Taxi</span>\
     </button>\
     <div id="food-delivery-group">\
         <div id="food-delivery-icons">\
-            <button class="taxi-btn-item food-icon taxi-btn-app" onclick="openAppModal(\'delivery\',\'https://www.baemin.com\')" aria-label="배달의민족">\
+            <button class="taxi-btn-item food-icon taxi-btn-app" onclick="openAppModal(\'delivery\',\'baemin\')" aria-label="배달의민족">\
                 <div class="taxi-btn-icon"><img src="/images/baemin.svg" alt="배민" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
             </button>\
-            <button id="taxi-btn-coupang" class="taxi-btn-item food-icon taxi-btn-app" onclick="openAppModal(\'delivery\',\'https://www.coupangeats.com\')" aria-label="쿠팡이츠">\
+            <button id="taxi-btn-coupang" class="taxi-btn-item food-icon taxi-btn-app" onclick="openAppModal(\'delivery\',\'coupang\')" aria-label="쿠팡이츠">\
                 <div class="taxi-btn-icon"><img src="/images/coupang-eats1.svg" alt="쿠팡이츠" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
             </button>\
         </div>\
@@ -40,19 +69,19 @@
     </div>\
 </div>\
 <div id="mobile-bottom-bar">\
-    <button class="mbb-item" onclick="openAppModal(\'taxi\',\'https://kakaot.com\')" aria-label="카카오T 택시">\
+    <button class="mbb-item" onclick="openAppModal(\'taxi\',\'kakao\')" aria-label="카카오T 택시">\
         <div class="mbb-icon">' + kakaoSvg + '</div>\
         <span class="mbb-label">Taxi</span>\
     </button>\
-    <button class="mbb-item" onclick="openAppModal(\'taxi\',\'https://m.uber.com\')" aria-label="우버">\
+    <button class="mbb-item" onclick="openAppModal(\'taxi\',\'uber\')" aria-label="우버">\
         <div class="mbb-icon">' + uberSvg + '</div>\
         <span class="mbb-label">Taxi</span>\
     </button>\
-    <button class="mbb-item" onclick="openAppModal(\'delivery\',\'https://www.baemin.com\')" aria-label="배달의민족">\
+    <button class="mbb-item" onclick="openAppModal(\'delivery\',\'baemin\')" aria-label="배달의민족">\
         <div class="mbb-icon"><img src="/images/baemin.svg" alt="배민" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
         <span class="mbb-label">Food</span>\
     </button>\
-    <button class="mbb-item mbb-coupang" onclick="openAppModal(\'delivery\',\'https://www.coupangeats.com\')" aria-label="쿠팡이츠">\
+    <button class="mbb-item mbb-coupang" onclick="openAppModal(\'delivery\',\'coupang\')" aria-label="쿠팡이츠">\
         <div class="mbb-icon"><img src="/images/coupang-eats1.svg" alt="쿠팡이츠" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
         <span class="mbb-label">Food</span>\
     </button>\
@@ -76,7 +105,7 @@
         <p id="app-modal-hint">출발지에 입력하세요</p>\
         <div id="app-modal-btns">\
             <button id="app-modal-copy" onclick="appModalCopy()">주소 복사</button>\
-            <a id="app-modal-open" href="#" target="_blank" rel="noopener">앱 열기</a>\
+            <button id="app-modal-open" onclick="appModalOpen()">앱 열기</button>\
         </div>\
     </div>\
 </div>\
@@ -309,16 +338,14 @@
 #app-modal-open {\
     flex: 1;\
     background: rgb(114,107,113);\
+    border: none;\
     border-radius: 22px;\
     padding: 11px 4px;\
     font-size: 13px;\
     font-weight: 700;\
     color: #fff;\
+    cursor: pointer;\
     font-family: "Barlow", sans-serif;\
-    text-decoration: none;\
-    display: flex;\
-    align-items: center;\
-    justify-content: center;\
     transition: background 0.15s;\
     text-align: center;\
 }\
@@ -328,7 +355,9 @@
     document.body.insertAdjacentHTML('beforeend', html);
 
     // ── 모달 열기 ──
-    window.openAppModal = function(type, appUrl) {
+    window.openAppModal = function(type, appId) {
+        _currentAppId = appId;
+
         var overlay  = document.getElementById('app-modal-overlay');
         var titleEl  = document.getElementById('app-modal-title');
         var labelEl  = document.getElementById('app-modal-addr-label');
@@ -349,7 +378,6 @@
         hintEl.textContent  = tFn(hintKey);
         copyBtn.textContent = tFn('appmodal.copy');
         openBtn.textContent = tFn('appmodal.open');
-        openBtn.href = appUrl;
 
         overlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -361,6 +389,51 @@
         if (overlay) {
             overlay.style.display = 'none';
             document.body.style.overflow = '';
+        }
+    };
+
+    // ── 앱 열기 (딥링크 + OS 분기 + fallback) ──
+    window.appModalOpen = function() {
+        var info = DEEPLINKS[_currentAppId];
+        if (!info) return;
+
+        // 배민·쿠팡이츠: 공식 유니버설 링크 — 자체 fallback 포함
+        if (info.url) {
+            window.open(info.url, '_blank');
+            return;
+        }
+
+        // 카카오택시: OS 분기
+        if (_currentAppId === 'kakao') {
+            if (isAndroid()) {
+                // intent URL: 앱 있으면 앱, 없으면 Play 스토어
+                window.location.href = info.android;
+            } else if (isIOS()) {
+                // App Store로 이동 (카카오T 공식 유니버설 링크 미공개)
+                window.open(info.ios, '_blank');
+            } else {
+                window.open(info.web, '_blank');
+            }
+            return;
+        }
+
+        // 우버: 커스텀 스킴 시도 → 1.5s 안에 앱으로 안 넘어가면 웹으로 fallback
+        if (_currentAppId === 'uber') {
+            var appOpened = false;
+            var onHide = function() {
+                if (document.hidden) { appOpened = true; }
+            };
+            document.addEventListener('visibilitychange', onHide);
+
+            window.location.href = info.deeplink;
+
+            setTimeout(function() {
+                document.removeEventListener('visibilitychange', onHide);
+                if (!appOpened) {
+                    window.open(info.web, '_blank');
+                }
+            }, 1500);
+            return;
         }
     };
 
