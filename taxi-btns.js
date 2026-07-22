@@ -187,11 +187,6 @@
     left: 0;\
     right: 0;\
     width: 100%;\
-    background: rgba(255,255,255,0);\
-    -webkit-backdrop-filter: blur(12px);\
-    backdrop-filter: blur(12px);\
-    border-top: 1px solid rgba(0,0,0,0.10);\
-    box-shadow: 0 -2px 12px rgba(0,0,0,0.10);\
     z-index: 99000;\
     padding-bottom: env(safe-area-inset-bottom, 0px);\
     box-sizing: border-box;\
@@ -223,6 +218,7 @@
     justify-content: center;\
     overflow: hidden;\
     flex-shrink: 0;\
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.25));\
 }\
 .mbb-icon svg { width: 100%; height: 100%; display: block; }\
 .mbb-icon-chatgpt {\
@@ -241,7 +237,7 @@
     text-align: center;\
     white-space: nowrap;\
     line-height: 1.3;\
-    text-shadow: 0 0 2px rgba(255,255,255,0.8);\
+    text-shadow: 0 0 6px rgba(255,255,255,0.95), 0 1px 3px rgba(0,0,0,0.45);\
 }\
 #app-modal-overlay {\
     display: none;\
