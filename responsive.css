@@ -356,7 +356,10 @@
     .hotel-name     { font-size: 13px; white-space: nowrap; }
     .rating-dots    { gap: 2px; flex-shrink: 0; }
     .rating-dots i  { font-size: 9px; }
-    .rating-text    { font-size: 11px; white-space: nowrap; flex-shrink: 0; font-family: 'swiss-721', 'Barlow', sans-serif; }
+    .rating-text    { font-size: 11px; white-space: nowrap; flex-shrink: 0; font-family: 'Barlow', sans-serif; }
+
+    /* 모바일 하단 바 공간 선행 예약 — taxi-btns.js가 JS로 추가하기 전에 미리 확보해 CLS 방지 */
+    body { padding-bottom: 68px; }
     .hotel-info-right { display: none; }
 
     /* rooms.html 기존 sticky-wrapper 숨김 (index.html의 #booking-header 제외) */
