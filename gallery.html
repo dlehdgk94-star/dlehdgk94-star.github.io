@@ -666,9 +666,28 @@
             document.getElementById('galCount').innerHTML = '<span>' + visible + '</span>' + suffix;
         }
 
+        function _setupLazyObserver() {
+            if (_lazyObserver) { _lazyObserver.disconnect(); }
+            if (!('IntersectionObserver' in window)) { return; }
+            _lazyObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (!entry.isIntersecting) { return; }
+                    var img = entry.target;
+                    var lazySrc = img.dataset.lazySrc;
+                    if (lazySrc) {
+                        img.src = lazySrc;
+                        delete img.dataset.lazySrc;
+                    }
+                    _lazyObserver.unobserve(img);
+                });
+            }, { rootMargin: '400px 0px' });
+        }
+
         function renderGrid() {
             var grid = document.getElementById('galGrid');
             grid.innerHTML = '';
+            _setupLazyObserver();
+
             GALLERY_ITEMS.forEach(function(item, i) {
                 var div = document.createElement('div');
                 div.className = 'gal-item';
@@ -678,9 +697,19 @@
                 div.onclick = function() { openGalleryPhoto(div); };
 
                 var img = document.createElement('img');
-                img.src = item.src;
                 img.alt = item.label;
-                img.loading = i < 6 ? 'eager' : 'lazy';
+
+                if (i < 6) {
+                    // 첫 6장: 즉시 로드 (LCP 보호)
+                    img.src = item.src;
+                } else if (_lazyObserver) {
+                    // 나머지: src 미설정 → 뷰포트 진입 시 IntersectionObserver가 src 주입
+                    img.dataset.lazySrc = item.src;
+                    _lazyObserver.observe(img);
+                } else {
+                    // IntersectionObserver 미지원 브라우저 fallback
+                    img.src = item.src;
+                }
 
                 var overlay = document.createElement('div');
                 overlay.className = 'gal-item-overlay';
@@ -714,6 +743,7 @@
         /* ── 갤러리 라이트박스 ── */
         var _galleryImages = [];
         var _galleryIdx = 0;
+        var _lazyObserver = null;
 
         function _setGalleryTrack() {
             document.getElementById('galleryTrack').querySelectorAll('.gallery-slide').forEach(function(s, i) {
