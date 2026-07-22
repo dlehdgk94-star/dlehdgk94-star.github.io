@@ -25,14 +25,17 @@
         <div class="taxi-btn-icon">' + uberSvg + '</div>\
         <span class="taxi-btn-label">Taxi</span>\
     </a>\
-    <a id="taxi-btn-baemin" class="taxi-btn-item" href="https://baemin.com" target="_blank" rel="noopener" aria-label="배달의민족">\
-        <div class="taxi-btn-icon"><img src="/images/baemin.svg" alt="배민" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
-        <span class="taxi-btn-label">Food Delivery</span>\
-    </a>\
-    <a id="taxi-btn-coupang" class="taxi-btn-item" href="https://eats.coupang.com" target="_blank" rel="noopener" aria-label="쿠팡이츠">\
-        <div class="taxi-btn-icon"><img src="/images/coupang-eats1.svg" alt="쿠팡이츠" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
-        <span class="taxi-btn-label">Food Delivery</span>\
-    </a>\
+    <div id="food-delivery-group">\
+        <div id="food-delivery-icons">\
+            <a id="taxi-btn-baemin" class="taxi-btn-item food-icon" href="https://baemin.com" target="_blank" rel="noopener" aria-label="배달의민족">\
+                <div class="taxi-btn-icon"><img src="/images/baemin.svg" alt="배민" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
+            </a>\
+            <a id="taxi-btn-coupang" class="taxi-btn-item food-icon" href="https://eats.coupang.com" target="_blank" rel="noopener" aria-label="쿠팡이츠">\
+                <div class="taxi-btn-icon"><img src="/images/coupang-eats1.svg" alt="쿠팡이츠" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
+            </a>\
+        </div>\
+        <span class="taxi-btn-label">Order Food Delivery</span>\
+    </div>\
 </div>\
 <style>\
 #taxi-btns-wrap {\
@@ -53,6 +56,21 @@
     cursor: default;\
     pointer-events: none;\
     width: 56px;\
+}\
+#food-delivery-group {\
+    grid-column: 1 / -1;\
+    display: flex;\
+    flex-direction: column;\
+    align-items: center;\
+    gap: 5px;\
+}\
+#food-delivery-icons {\
+    display: flex;\
+    flex-direction: row;\
+    gap: 12px;\
+}\
+.food-icon {\
+    width: 44px;\
 }\
 .taxi-btn-icon {\
     width: 44px;\
