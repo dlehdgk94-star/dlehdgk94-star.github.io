@@ -133,9 +133,9 @@
     left: 0;\
     right: 0;\
     width: 100%;\
-    background: rgba(255,255,255,0.82);\
-    -webkit-backdrop-filter: blur(10px);\
-    backdrop-filter: blur(10px);\
+    background: rgba(255,255,255,0.65);\
+    -webkit-backdrop-filter: blur(12px);\
+    backdrop-filter: blur(12px);\
     border-top: 1px solid rgba(0,0,0,0.10);\
     box-shadow: 0 -2px 12px rgba(0,0,0,0.10);\
     z-index: 99000;\
@@ -187,6 +187,7 @@
     text-align: center;\
     white-space: nowrap;\
     line-height: 1.3;\
+    text-shadow: 0 0 2px rgba(255,255,255,0.8);\
 }\
 </style>';
 
