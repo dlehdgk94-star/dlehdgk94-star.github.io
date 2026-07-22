@@ -10,9 +10,9 @@
         kakao: {
             // Android: intent URL — 앱 미설치 시 Play 스토어 자동 fallback
             android: 'intent://#Intent;package=com.kakao.taxi;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.kakao.taxi;end',
-            // iOS: 앱스토어로 직접 유도 (카카오T iOS 유니버설 링크 미공개)
-            ios: 'https://apps.apple.com/kr/app/id981110422',
-            web: 'https://kakaot.com'
+            // iOS/데스크탑: 카카오T 공식 실행·다운로드 페이지
+            ios: 'https://t.kakao.com/launch',
+            web: 'https://t.kakao.com/launch'
         },
         uber: {
             // 호텔 좌표 포함 딥링크 — 앱 설치 시 출발지 자동 입력
