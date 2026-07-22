@@ -290,10 +290,10 @@
 
 /* 모바일 */
 @media (max-width: 768px) {
-    #ai-chat-wrap { bottom: 16px; right: 16px; }
+    #ai-chat-wrap { bottom: 72px; right: 16px; }
     #ai-chat-box { width: calc(100vw - 32px); height: 70vh; max-height: 520px; }
     #ai-chat-btn { width: 50px; height: 50px; }
-    #gemini-btn-wrap { display: none; }
+    #ai-side-icons-row { display: none; }
 }
 </style>
 `;

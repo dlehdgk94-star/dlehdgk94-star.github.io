@@ -37,6 +37,32 @@
         <span class="taxi-btn-label">Order Food Delivery</span>\
     </div>\
 </div>\
+<div id="mobile-bottom-bar">\
+    <a class="mbb-item" href="https://t.kakao.com" target="_blank" rel="noopener" aria-label="카카오T 택시">\
+        <div class="mbb-icon">' + kakaoSvg + '</div>\
+        <span class="mbb-label">Taxi</span>\
+    </a>\
+    <a class="mbb-item" href="https://www.uber.com/global/ko/cities/seoul/" target="_blank" rel="noopener" aria-label="우버">\
+        <div class="mbb-icon">' + uberSvg + '</div>\
+        <span class="mbb-label">Taxi</span>\
+    </a>\
+    <a class="mbb-item" href="https://baemin.com" target="_blank" rel="noopener" aria-label="배달의민족">\
+        <div class="mbb-icon"><img src="/images/baemin.svg" alt="배민" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
+        <span class="mbb-label">Food</span>\
+    </a>\
+    <a class="mbb-item mbb-coupang" href="https://eats.coupang.com" target="_blank" rel="noopener" aria-label="쿠팡이츠">\
+        <div class="mbb-icon"><img src="/images/coupang-eats1.svg" alt="쿠팡이츠" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
+        <span class="mbb-label">Food</span>\
+    </a>\
+    <a class="mbb-item" href="https://gemini.google.com" target="_blank" rel="noopener" aria-label="Gemini">\
+        <div class="mbb-icon"><img src="/images/gemini-color.svg" alt="Gemini" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
+        <span class="mbb-label">Gemini</span>\
+    </a>\
+    <button class="mbb-item mbb-chatgpt" onclick="window.toggleAiChat&&window.toggleAiChat()">\
+        <div class="mbb-icon mbb-icon-chatgpt"><img src="/images/symbol-icon.png" alt="ChatGPT" style="width:72%;height:72%;object-fit:contain;display:block;"></div>\
+        <span class="mbb-label">Chat GPT</span>\
+    </button>\
+</div>\
 <style>\
 #taxi-btns-wrap {\
     position: fixed;\
@@ -98,6 +124,67 @@
 }\
 @media (max-width: 768px) {\
     #taxi-btns-wrap { display: none; }\
+    body { padding-bottom: 68px !important; }\
+}\
+#mobile-bottom-bar {\
+    display: none;\
+    position: fixed;\
+    bottom: 0;\
+    left: 0;\
+    right: 0;\
+    width: 100%;\
+    background: #fff;\
+    border-top: 1px solid #e8e8e8;\
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.08);\
+    z-index: 99000;\
+    padding-bottom: env(safe-area-inset-bottom, 0px);\
+    box-sizing: border-box;\
+}\
+@media (max-width: 768px) {\
+    #mobile-bottom-bar { display: flex; }\
+}\
+.mbb-item {\
+    flex: 1;\
+    display: flex;\
+    flex-direction: column;\
+    align-items: center;\
+    justify-content: center;\
+    gap: 3px;\
+    padding: 8px 2px 6px;\
+    text-decoration: none;\
+    background: none;\
+    border: none;\
+    cursor: pointer;\
+    font-family: "Barlow", sans-serif;\
+    -webkit-tap-highlight-color: transparent;\
+    box-sizing: border-box;\
+}\
+.mbb-icon {\
+    width: 34px;\
+    height: 34px;\
+    display: flex;\
+    align-items: center;\
+    justify-content: center;\
+    overflow: hidden;\
+    flex-shrink: 0;\
+}\
+.mbb-icon svg { width: 100%; height: 100%; display: block; }\
+.mbb-icon-chatgpt {\
+    border-radius: 50%;\
+    background: #fff;\
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);\
+}\
+.mbb-coupang .mbb-icon { border: 1.5px solid #c8c8c8; border-radius: 8px; }\
+.mbb-label {\
+    font-size: 9px;\
+    font-weight: 700;\
+    color: rgb(58, 154, 180);\
+    font-family: "Barlow", sans-serif;\
+    letter-spacing: 0.2px;\
+    user-select: none;\
+    text-align: center;\
+    white-space: nowrap;\
+    line-height: 1.3;\
 }\
 </style>';
 
