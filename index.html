@@ -16,6 +16,32 @@
     <meta name="naver-site-verification" content="aa7e028cfd1ede4b809c3a17d6418edda9446ee0" />
     <meta name="description" content="삼성전자·삼성디지털시티 인근 수원 영통 비즈니스 호텔, 인스타호텔 본점. 기흥·화성 반도체 캠퍼스와 수원화성·한국민속촌 인근으로 출장과 여행 모두 편리합니다.">
     <link rel="canonical" href="https://instarhotel.com/">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Hotel",
+      "name": "INSTA HOTEL (인스타호텔 본점)",
+      "url": "https://instarhotel.com",
+      "telephone": "+82-31-203-4301",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "영통로 94-6",
+        "addressLocality": "수원시 영통구",
+        "addressRegion": "경기도",
+        "addressCountry": "KR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 37.2377421,
+        "longitude": 127.0593218
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "1446"
+      }
+    }
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://use.typekit.net/pab8ndu.css">
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1346,8 +1372,8 @@
 
                 </div>
             </div>
-            <div class="location-map">
-                <iframe src="https://maps.google.com/maps?q=37.2377421,127.0593218&z=17&output=embed&hl=ko" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div class="location-map" id="main-map-wrap">
+                <iframe data-src="https://maps.google.com/maps?q=37.2377421,127.0593218&z=17&output=embed&hl=ko" allowfullscreen="" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;border:none;display:block;"></iframe>
             </div>
         </div>
     </section>
@@ -1440,7 +1466,7 @@
                     </div>
                 </div>
                 <div class="loc-modal-map">
-                    <iframe src="https://maps.google.com/maps?q=37.2377421,127.0593218&z=17&output=embed&hl=ko" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe data-src="https://maps.google.com/maps?q=37.2377421,127.0593218&z=17&output=embed&hl=ko" allowfullscreen="" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;border:none;display:block;"></iframe>
                 </div>
             </div>
         </div>
@@ -3427,8 +3453,11 @@
 
         function openLocationModal(e) {
             e.preventDefault();
-            document.getElementById('locationModal').classList.add('open');
+            var modal = document.getElementById('locationModal');
+            modal.classList.add('open');
             document.body.style.overflow = 'hidden';
+            var mIframe = modal.querySelector('.loc-modal-map iframe[data-src]');
+            if (mIframe) { mIframe.src = mIframe.getAttribute('data-src'); mIframe.removeAttribute('data-src'); }
         }
         function closeLocationModal(e) {
             if (e.target === document.getElementById('locationModal')) {
@@ -3881,6 +3910,26 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="ai-chat.js?v=20260723"></script>
 <script src="taxi-btns.js?v=20260723"></script>
+<script>
+(function () {
+    var wrap = document.getElementById('main-map-wrap');
+    if (!wrap) return;
+    var iframe = wrap.querySelector('iframe[data-src]');
+    if (!iframe) return;
+    function loadMainMap() {
+        iframe.src = iframe.getAttribute('data-src');
+        iframe.removeAttribute('data-src');
+    }
+    if ('IntersectionObserver' in window) {
+        var obs = new IntersectionObserver(function (entries) {
+            if (entries[0].isIntersecting) { loadMainMap(); obs.disconnect(); }
+        }, { rootMargin: '300px' });
+        obs.observe(wrap);
+    } else {
+        loadMainMap();
+    }
+})();
+</script>
 
 </body>
 </html>
