@@ -2,12 +2,20 @@
     // ── AI 챗봇 UI 주입 ──
     var html = `
 <div id="ai-chat-wrap">
-    <!-- 플로팅 버튼 -->
-    <div id="ai-chat-btn-wrap" onclick="toggleAiChat()">
-        <button id="ai-chat-btn" aria-label="AI 컨시어지 열기">
-            <img src="/images/symbol-icon.png" alt="AI">
-        </button>
-        <span id="ai-chat-label">Chat GPT</span>
+    <!-- 플로팅 버튼 행 -->
+    <div id="ai-side-icons-row">
+        <a id="gemini-btn-wrap" href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" aria-label="Gemini">
+            <div id="gemini-btn-icon">
+                <img src="/images/gemini-color.svg" alt="Gemini">
+            </div>
+            <span id="gemini-label">Gemini</span>
+        </a>
+        <div id="ai-chat-btn-wrap" onclick="toggleAiChat()">
+            <button id="ai-chat-btn" aria-label="AI 컨시어지 열기">
+                <img src="/images/symbol-icon.png" alt="AI">
+            </button>
+            <span id="ai-chat-label">Chat GPT</span>
+        </div>
     </div>
 
     <!-- 채팅창 -->
@@ -55,7 +63,48 @@
     gap: 12px;
 }
 
-/* 플로팅 버튼 */
+/* 플로팅 버튼 행 */
+#ai-side-icons-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 12px;
+}
+/* Gemini 버튼 */
+#gemini-btn-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+#gemini-btn-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#gemini-btn-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.2s;
+}
+#gemini-btn-wrap:hover #gemini-btn-icon img { transform: scale(1.08); }
+#gemini-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgb(58, 154, 180);
+    font-family: 'Barlow', sans-serif;
+    letter-spacing: 0.2px;
+    user-select: none;
+    text-align: center;
+    line-height: 1.5;
+}
+/* ChatGPT 플로팅 버튼 */
 #ai-chat-btn-wrap {
     display: flex;
     flex-direction: column;
@@ -244,6 +293,7 @@
     #ai-chat-wrap { bottom: 16px; right: 16px; }
     #ai-chat-box { width: calc(100vw - 32px); height: 70vh; max-height: 520px; }
     #ai-chat-btn { width: 50px; height: 50px; }
+    #gemini-btn-wrap { display: none; }
 }
 </style>
 `;
