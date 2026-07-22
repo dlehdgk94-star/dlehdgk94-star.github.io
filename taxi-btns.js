@@ -133,9 +133,11 @@
     left: 0;\
     right: 0;\
     width: 100%;\
-    background: #fff;\
-    border-top: 1px solid #e8e8e8;\
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.08);\
+    background: rgba(255,255,255,0.82);\
+    -webkit-backdrop-filter: blur(10px);\
+    backdrop-filter: blur(10px);\
+    border-top: 1px solid rgba(0,0,0,0.10);\
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.10);\
     z-index: 99000;\
     padding-bottom: env(safe-area-inset-bottom, 0px);\
     box-sizing: border-box;\
@@ -178,7 +180,7 @@
 .mbb-label {\
     font-size: 9px;\
     font-weight: 700;\
-    color: rgb(58, 154, 180);\
+    color: rgb(30, 110, 140);\
     font-family: "Barlow", sans-serif;\
     letter-spacing: 0.2px;\
     user-select: none;\
