@@ -5,7 +5,7 @@
     <!-- 플로팅 버튼 -->
     <div id="ai-chat-btn-wrap" onclick="toggleAiChat()">
         <button id="ai-chat-btn" aria-label="AI 컨시어지 열기">
-            <img src="${getBase()}images/symbol-icon.png" alt="AI">
+            <img src="/images/symbol-icon.png" alt="AI">
         </button>
         <span id="ai-chat-label">Chat GPT</span>
     </div>
@@ -15,7 +15,7 @@
         <!-- 헤더 -->
         <div id="ai-chat-header">
             <div id="ai-chat-title">
-                <img src="${getBase()}images/symbol-icon.png" alt="AI" id="ai-chat-logo">
+                <img src="/images/symbol-icon.png" alt="AI" id="ai-chat-logo">
                 <div>
                     <div id="ai-chat-title-text">챗GPT</div>
                     <div id="ai-chat-subtitle">인스타 호텔 AI 상담</div>
