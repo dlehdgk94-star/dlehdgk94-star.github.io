@@ -297,8 +297,7 @@
             <h1 class="gal-header-title" data-i18n="nav.gallery">갤러리</h1>
             <p class="gal-header-sub" data-i18n="gal.header.sub">호텔 인스타의 모든 사진을 한눈에 확인하세요</p>
             <div class="gal-tabs">
-                <button class="gal-tab active" data-filter="all" onclick="filterGallery('all')" data-i18n="gal.tab.all">전체</button>
-                <button class="gal-tab" data-filter="rooms" onclick="filterGallery('rooms')" data-i18n="gal.tab.rooms">객실</button>
+                <button class="gal-tab active" data-filter="rooms" onclick="filterGallery('rooms')" data-i18n="gal.tab.rooms">객실</button>
                 <button class="gal-tab" data-filter="nearby" onclick="filterGallery('nearby')" data-i18n="gal.tab.nearby">주변 관광지</button>
             </div>
         </div>
@@ -649,7 +648,7 @@
         };
 
         /* ── 필터 & 렌더링 ── */
-        var _currentFilter = 'all';
+        var _currentFilter = 'rooms';
 
         function filterGallery(filter) {
             _currentFilter = filter;
@@ -780,12 +779,13 @@
             renderCalendar();
             updateDateUI();
             renderGrid();
+            filterGallery('rooms');
         });
     </script>
     <script src="translations.js?v=20260710a"></script>
     <script src="mobile-nav.js?v=20260717"></script>
     
-<script src="ai-chat.js?v=20260719"></script>
-<script src="taxi-btns.js?v=20260719"></script>
+<script src="ai-chat.js?v=20260720"></script>
+<script src="taxi-btns.js?v=20260720"></script>
 </body>
 </html>
