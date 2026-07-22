@@ -1,0 +1,5 @@
+# 원본 이미지 백업 (185MB — GitHub에 올리지 않음, WebP만 커밋)
+images/_original_backup/
+
+# Supabase 임시 파일
+supabase/.temp/
