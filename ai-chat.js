@@ -252,7 +252,7 @@
         var scripts = document.getElementsByTagName('script');
         for (var i = 0; i < scripts.length; i++) {
             if (scripts[i].src && scripts[i].src.indexOf('ai-chat.js') !== -1) {
-                return scripts[i].src.replace('ai-chat.js', '');
+                return scripts[i].src.split('ai-chat.js')[0];
             }
         }
         return '';

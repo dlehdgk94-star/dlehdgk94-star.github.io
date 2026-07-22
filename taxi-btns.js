@@ -7,7 +7,7 @@
         var scripts = document.getElementsByTagName('script');
         for (var i = 0; i < scripts.length; i++) {
             if (scripts[i].src && scripts[i].src.indexOf('taxi-btns.js') !== -1) {
-                return scripts[i].src.replace('taxi-btns.js', '');
+                return scripts[i].src.split('taxi-btns.js')[0];
             }
         }
         return '';
