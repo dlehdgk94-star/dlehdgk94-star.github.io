@@ -524,19 +524,19 @@
         </div>
         <template id="hwCards">
           <div class="promo-pkg-card">
-            <img class="promo-pkg-card-img" src="images/facilities/ways/1.png" alt="욕조">
+            <img class="promo-pkg-card-img" data-src="images/facilities/ways/1.webp" alt="욕조">
           </div>
           <div class="promo-pkg-card">
-            <img class="promo-pkg-card-img" src="images/facilities/ways/2.png" alt="인룸다이닝">
+            <img class="promo-pkg-card-img" data-src="images/facilities/ways/2.webp" alt="인룸다이닝">
           </div>
           <div class="promo-pkg-card">
-            <img class="promo-pkg-card-img" src="images/facilities/ways/3.png" alt="와인">
+            <img class="promo-pkg-card-img" data-src="images/facilities/ways/3.webp" alt="와인">
           </div>
           <div class="promo-pkg-card">
-            <img class="promo-pkg-card-img" src="images/facilities/ways/4.png" alt="인스타그램">
+            <img class="promo-pkg-card-img" data-src="images/facilities/ways/4.webp" alt="인스타그램">
           </div>
           <div class="promo-pkg-card">
-            <img class="promo-pkg-card-img" src="images/facilities/ways/5.jpg" alt="셀카">
+            <img class="promo-pkg-card-img" data-src="images/facilities/ways/5.webp" alt="셀카">
           </div>
         </template>
       </div>
@@ -552,7 +552,7 @@
             <!-- 이코노미 룸 -->
             <div class="room-card" id="edelweiss" data-room-id="edelweiss">
                 <div class="room-card-img-wrap">
-                    <img src="images/rooms/edelweiss/1.jpg" alt="이코노미 룸" onerror="this.parentElement.style.background='#d4c9b8'">
+                    <img src="images/rooms/edelweiss/1.webp" alt="이코노미 룸" loading="lazy" onerror="this.parentElement.style.background='#d4c9b8'">
                     <div class="room-card-expand" onclick="openRoomGallery('edelweiss')"><i class="fa-solid fa-expand"></i></div>
                 </div>
                 <div class="room-card-body">
@@ -582,7 +582,7 @@
             <!-- 스탠다드 룸 (디자인 랜덤배정) -->
             <div class="room-card" id="aurora" data-room-id="aurora">
                 <div class="room-card-img-wrap">
-                    <img src="images/rooms/aurora/1.jpg" alt="스탠다드 룸 (디자인 랜덤배정)" onerror="this.parentElement.style.background='#b8c8d4'">
+                    <img src="images/rooms/aurora/1.webp" alt="스탠다드 룸 (디자인 랜덤배정)" loading="lazy" onerror="this.parentElement.style.background='#b8c8d4'">
                     <div class="room-card-expand" onclick="openRoomGallery('aurora')"><i class="fa-solid fa-expand"></i></div>
                 </div>
                 <div class="room-card-body">
@@ -612,7 +612,7 @@
             <!-- 디럭스 룸 (디자인 랜덤배정) -->
             <div class="room-card" id="glorio" data-room-id="glorio">
                 <div class="room-card-img-wrap">
-                    <img src="images/rooms/glorio/1.jpg" alt="디럭스 룸 (디자인 랜덤배정)" onerror="this.parentElement.style.background='#c8d4b8'">
+                    <img src="images/rooms/glorio/1.webp" alt="디럭스 룸 (디자인 랜덤배정)" loading="lazy" onerror="this.parentElement.style.background='#c8d4b8'">
                     <div class="room-card-expand" onclick="openRoomGallery('glorio')"><i class="fa-solid fa-expand"></i></div>
                 </div>
                 <div class="room-card-body">
@@ -642,7 +642,7 @@
             <!-- 트윈 룸 -->
             <div class="room-card" id="envidion" data-room-id="envidion">
                 <div class="room-card-img-wrap">
-                    <img src="images/rooms/envidion/1.jpg" alt="트윈 룸" onerror="this.parentElement.style.background='#c8b8d4'">
+                    <img src="images/rooms/envidion/1.webp" alt="트윈 룸" loading="lazy" onerror="this.parentElement.style.background='#c8b8d4'">
                     <div class="room-card-expand" onclick="openRoomGallery('envidion')"><i class="fa-solid fa-expand"></i></div>
                 </div>
                 <div class="room-card-body">
@@ -672,7 +672,7 @@
             <!-- 스페셜 -->
             <div class="room-card" id="special" data-room-id="special">
                 <div class="room-card-img-wrap">
-                    <img src="images/rooms/special/1.jpg" alt="스페셜" onerror="this.parentElement.style.background='#d4d0b8'">
+                    <img src="images/rooms/special/1.webp" alt="스페셜" loading="lazy" onerror="this.parentElement.style.background='#d4d0b8'">
                     <div class="room-card-expand" onclick="openRoomGallery('special')"><i class="fa-solid fa-expand"></i></div>
                 </div>
                 <div class="room-card-body">
@@ -702,7 +702,7 @@
             <!-- 루비룸 (애견동반) -->
             <div class="room-card" id="ruby" data-room-id="ruby">
                 <div class="room-card-img-wrap">
-                    <img src="images/rooms/ruby/대표사진.png" alt="루비룸" onerror="this.parentElement.style.background='#d4b8b8'">
+                    <img src="images/rooms/ruby/대표사진.webp" alt="루비룸" loading="lazy" onerror="this.parentElement.style.background='#d4b8b8'">
                     <div class="room-card-expand" onclick="openRoomGallery('ruby')"><i class="fa-solid fa-expand"></i></div>
                 </div>
                 <div class="room-card-body">
@@ -1525,10 +1525,26 @@
             const frag = tpl.content.cloneNode(true);
             const origCards = Array.from(frag.querySelectorAll('.promo-pkg-card'));
             origCards.forEach(c => track.appendChild(c));
-
             origCards.forEach(c => track.appendChild(c.cloneNode(true)));
 
             slider.appendChild(track);
+
+            // 슬라이더 이미지 lazy load (data-src → src)
+            const lazyImgs = Array.from(track.querySelectorAll('img[data-src]'));
+            if ('IntersectionObserver' in window) {
+                const obs = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(e) {
+                        if (!e.isIntersecting) return;
+                        const img = e.target;
+                        img.src = img.dataset.src;
+                        delete img.dataset.src;
+                        obs.unobserve(img);
+                    });
+                }, { rootMargin: '100px 0px' });
+                lazyImgs.forEach(function(img) { obs.observe(img); });
+            } else {
+                lazyImgs.forEach(function(img) { img.src = img.dataset.src; delete img.dataset.src; });
+            }
         })();
     </script>
     <script src="translations.js?v=20260710a"></script>
