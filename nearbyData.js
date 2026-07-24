@@ -182,39 +182,11 @@ const nearbyData = {
           "photo": "images/nearby/attractions/경기아트센터.jpg"
         },
         {
-          "name": "KBS 수원드라마제작센터",
-          "distance": "차량 15분",
-          "url": "https://map.naver.com/p/search/KBS%20%EC%88%98%EC%9B%90%EB%93%9C%EB%9D%BC%EB%A7%88%EC%A0%9C%EC%9E%91%EC%84%BC%ED%84%B0/place/19211605?placePath=%2Fhome%3Fbk_query%3DKBS%20%EC%88%98%EC%9B%90%EB%93%9C%EB%9D%BC%EB%A7%88%EC%A0%9C%EC%9E%91%EC%84%BC%ED%84%B0%26entry%3Dpll%26from%3Dnx%26fromNxList%3Dtrue%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161054%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3DKBS%20%EC%88%98%EC%9B%90%EB%93%9C%EB%9D%BC%EB%A7%88%EC%A0%9C%EC%9E%91%EC%84%BC%ED%84%B0&placeSearchOption=bk_query%3DKBS%2520%25EC%2588%2598%25EC%259B%2590%25EB%2593%259C%25EB%259D%25BC%25EB%25A7%2588%25EC%25A0%259C%25EC%259E%2591%25EC%2584%25BC%25ED%2584%25B0%26entry%3Dpll%26fromNxList%3Dtrue%26originalQuery%3DKBS%2520%25EC%2588%2598%25EC%259B%2590%25EB%2593%259C%25EB%259D%25BC%25EB%25A7%2588%25EC%25A0%259C%25EC%259E%2591%25EC%2584%25BC%25ED%2584%25B0%26x%3D127.057454%26y%3D37.235530&searchType=place&c=15.00,0,0,0,dh",
-          "description": "수많은 사극과 현대극이 촬영된 세트장으로, 사전 예약 시 투어가 가능합니다.",
-          "photo": ""
-        },
-        {
-          "name": "청명산",
-          "distance": "차량 14분",
-          "url": "https://map.naver.com/p/search/%EC%B2%AD%EB%AA%85%EC%82%B0/place/19295695?placePath=%2Fphoto%3Fbk_query%3D%EC%B2%AD%EB%AA%85%EC%82%B0%26entry%3Dpll%26fromNxList%3Dtrue%26fromPanelNum%3D2%26timestamp%3D202607161056%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%AD%EB%AA%85%EC%82%B0%26filterType%3D%EC%97%85%EC%B2%B4&entry=pll&from=nx&fromNxList=true&searchType=place&c=15.15,0,0,0,dh",
-          "description": "영통 도심을 품고 있는 걷기 좋은 도심 속 숲길입니다.",
-          "photo": ""
-        },
-        {
-          "name": "영통사",
-          "distance": "차량 8분",
-          "url": "https://map.naver.com/p/search/%EC%98%81%ED%86%B5%20%EC%A0%88/place/20127096?searchType=place&placePath=%2Fhome%3Fentry%3Dpll%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161057%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%98%81%ED%86%B5%20%EC%A0%88&lng=127.078131&lat=37.2581297&c=15.00,0,0,0,dh",
-          "description": "도심 속에 있는 절로, 접근성이 편합니다.",
-          "photo": ""
-        },
-        {
           "name": "광교푸른숲도서관",
           "distance": "차량 15분",
           "url": "https://map.naver.com/p/search/%EA%B4%91%EA%B5%90%ED%91%B8%EB%A5%B8%EC%88%B2%EB%8F%84%EC%84%9C%EA%B4%80/place/1967683169?placePath=%2Fhome%3Fbk_query%3D%EA%B4%91%EA%B5%90%ED%91%B8%EB%A5%B8%EC%88%B2%EB%8F%84%EC%84%9C%EA%B4%80%26entry%3Dpll%26from%3Dnx%26fromNxList%3Dtrue%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161101%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EA%B4%91%EA%B5%90%ED%91%B8%EB%A5%B8%EC%88%B2%EB%8F%84%EC%84%9C%EA%B4%80&placeSearchOption=bk_query%3D%25EA%25B4%2591%25EA%25B5%2590%25ED%2591%25B8%25EB%25A5%25B8%25EC%2588%25B2%25EB%258F%2584%25EC%2584%259C%25EA%25B4%2580%26entry%3Dpll%26fromNxList%3Dtrue%26originalQuery%3D%25EA%25B4%2591%25EA%25B5%2590%25ED%2591%25B8%25EB%25A5%25B8%25EC%2588%25B2%25EB%258F%2584%25EC%2584%259C%25EA%25B4%2580%26x%3D127.057454%26y%3D37.235530&searchType=place&c=15.00,0,0,0,dh",
           "description": "광교호수공원 산책로와 연결된 숲속 도서관으로 자연 속에서 독서하기 좋습니다.",
           "photo": "images/nearby/attractions/광교푸른숲도서관.jpg"
-        },
-        {
-          "name": "광교산",
-          "distance": "차량 20~25분",
-          "url": "https://map.naver.com/p/entry/place/13491517?lng=127.0344274&lat=37.3449278&placePath=%2Fhome&entry=plt&searchType=place",
-          "description": "수원 시민들이 가장 사랑하는 등산로로, 형제봉까지 오르면 수원 시내가 한눈에 보입니다.",
-          "photo": ""
         },
         {
           "name": "아쿠아플라넷 광교",
@@ -250,6 +222,34 @@ const nearbyData = {
           "url": "https://naver.me/xpBvgS50",
           "description": "대한민국 최초로 개발된 4년 과정의 체계적인 천문 프로그램을 통해 우주 속에 숨은 과학적 지식을 나누며 어두운 밤길을 걸으며 하늘에 있는 별에 관해서 이야기 나눌 수 있는 정보를 제공",
           "photo": "images/nearby/attractions/광교어린이천문대.jpg"
+        },
+        {
+          "name": "KBS 수원드라마제작센터",
+          "distance": "차량 15분",
+          "url": "https://map.naver.com/p/search/KBS%20%EC%88%98%EC%9B%90%EB%93%9C%EB%9D%BC%EB%A7%88%EC%A0%9C%EC%9E%91%EC%84%BC%ED%84%B0/place/19211605?placePath=%2Fhome%3Fbk_query%3DKBS%20%EC%88%98%EC%9B%90%EB%93%9C%EB%9D%BC%EB%A7%88%EC%A0%9C%EC%9E%91%EC%84%BC%ED%84%B0%26entry%3Dpll%26from%3Dnx%26fromNxList%3Dtrue%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161054%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3DKBS%20%EC%88%98%EC%9B%90%EB%93%9C%EB%9D%BC%EB%A7%88%EC%A0%9C%EC%9E%91%EC%84%BC%ED%84%B0&placeSearchOption=bk_query%3DKBS%2520%25EC%2588%2598%25EC%259B%2590%25EB%2593%259C%25EB%259D%25BC%25EB%25A7%2588%25EC%25A0%259C%25EC%259E%2591%25EC%2584%25BC%25ED%2584%25B0%26entry%3Dpll%26fromNxList%3Dtrue%26originalQuery%3DKBS%2520%25EC%2588%2598%25EC%259B%2590%25EB%2593%259C%25EB%259D%25BC%25EB%25A7%2588%25EC%25A0%259C%25EC%259E%2591%25EC%2584%25BC%25ED%2584%25B0%26x%3D127.057454%26y%3D37.235530&searchType=place&c=15.00,0,0,0,dh",
+          "description": "수많은 사극과 현대극이 촬영된 세트장으로, 사전 예약 시 투어가 가능합니다.",
+          "photo": ""
+        },
+        {
+          "name": "청명산",
+          "distance": "차량 14분",
+          "url": "https://map.naver.com/p/search/%EC%B2%AD%EB%AA%85%EC%82%B0/place/19295695?placePath=%2Fphoto%3Fbk_query%3D%EC%B2%AD%EB%AA%85%EC%82%B0%26entry%3Dpll%26fromNxList%3Dtrue%26fromPanelNum%3D2%26timestamp%3D202607161056%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%AD%EB%AA%85%EC%82%B0%26filterType%3D%EC%97%85%EC%B2%B4&entry=pll&from=nx&fromNxList=true&searchType=place&c=15.15,0,0,0,dh",
+          "description": "영통 도심을 품고 있는 걷기 좋은 도심 속 숲길입니다.",
+          "photo": ""
+        },
+        {
+          "name": "영통사",
+          "distance": "차량 8분",
+          "url": "https://map.naver.com/p/search/%EC%98%81%ED%86%B5%20%EC%A0%88/place/20127096?searchType=place&placePath=%2Fhome%3Fentry%3Dpll%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161057%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%98%81%ED%86%B5%20%EC%A0%88&lng=127.078131&lat=37.2581297&c=15.00,0,0,0,dh",
+          "description": "도심 속에 있는 절로, 접근성이 편합니다.",
+          "photo": ""
+        },
+        {
+          "name": "광교산",
+          "distance": "차량 20~25분",
+          "url": "https://map.naver.com/p/entry/place/13491517?lng=127.0344274&lat=37.3449278&placePath=%2Fhome&entry=plt&searchType=place",
+          "description": "수원 시민들이 가장 사랑하는 등산로로, 형제봉까지 오르면 수원 시내가 한눈에 보입니다.",
+          "photo": ""
         }
       ]
     },
@@ -257,13 +257,6 @@ const nearbyData = {
       "id": "restaurants",
       "label": "음식점",
       "places": [
-        {
-          "name": "백년광명순대국 망포본점",
-          "distance": "도보 2분",
-          "url": "https://map.naver.com/p/search/%EC%9D%8C%EC%8B%9D%EC%A0%90/place/1706822340?c=17.20,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161110%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%9D%8C%EC%8B%9D%EC%A0%90",
-          "description": "잡내 없이 깔끔한 순대국의 정석",
-          "photo": ""
-        },
         {
           "name": "화홍칼국수",
           "distance": "도보 1분",
@@ -466,6 +459,13 @@ const nearbyData = {
           "url": "https://map.naver.com/p/search/%EC%9D%8C%EC%8B%9D%EC%A0%90/place/1269776772?c=18.79,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161427%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%9D%8C%EC%8B%9D%EC%A0%90",
           "description": "편하게 먹는 원적외선 직화 돼지갈비",
           "photo": "images/nearby/restaurants/dalguunbaram.jpg"
+        },
+        {
+          "name": "백년광명순대국 망포본점",
+          "distance": "도보 2분",
+          "url": "https://map.naver.com/p/search/%EC%9D%8C%EC%8B%9D%EC%A0%90/place/1706822340?c=17.20,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161110%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%9D%8C%EC%8B%9D%EC%A0%90",
+          "description": "잡내 없이 깔끔한 순대국의 정석",
+          "photo": ""
         }
       ]
     },
@@ -718,13 +718,6 @@ const nearbyData = {
           "photo": "images/nearby/convenience/seven-eleven.jpg"
         },
         {
-          "name": "엘지세탁소",
-          "distance": "도보 5분",
-          "url": "https://map.naver.com/p/search/%EC%84%B8%ED%83%81/place/38582622?c=16.96,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161537%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%84%B8%ED%83%81",
-          "description": "호텔인스타 본점에서 가장 가까운 세탁소",
-          "photo": ""
-        },
-        {
           "name": "위니아24크린샵 망포점",
           "distance": "도보 7분",
           "url": "https://map.naver.com/p/entry/place/1203732209?c=15.74,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607161538%26locale%3Dko%26svcName%3Dmap_pcv5",
@@ -844,6 +837,13 @@ const nearbyData = {
           "photo": "images/nearby/convenience/suwon-post.jpg"
         },
         {
+          "name": "엘지세탁소",
+          "distance": "도보 5분",
+          "url": "https://map.naver.com/p/search/%EC%84%B8%ED%83%81/place/38582622?c=16.96,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161537%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%84%B8%ED%83%81",
+          "description": "호텔인스타 본점에서 가장 가까운 세탁소",
+          "photo": ""
+        },
+        {
           "name": "수원뉴엘지프라자 전기차충전소",
           "distance": "도보 3분",
           "url": "https://map.naver.com/p/search/%EC%A0%84%EA%B8%B0%EC%B0%A8%EC%B6%A9%EC%A0%84%EC%86%8C/place/1214934455?c=16.33,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161715%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%A0%84%EA%B8%B0%EC%B0%A8%EC%B6%A9%EC%A0%84%EC%86%8C",
@@ -897,13 +897,6 @@ const nearbyData = {
           "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/13228777?c=17.24,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161637%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EB%B3%91%EC%9B%90",
           "description": "호텔인스타 본점에서 가장 가까운 의원",
           "photo": "images/nearby/medical/yonsei-family.jpg"
-        },
-        {
-          "name": "삼성메디칼정형외과의원",
-          "distance": "도보 4분",
-          "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/11619795?c=17.54,0,0,0,dh&placePath=%2Freview%3Fentry%3Dbmp%26fromPanelNum%3D2%26locale%3Dko%26searchText%3D%EB%B3%91%EC%9B%90%26svcName%3Dmap_pcv5%26timestamp%3D202607161641",
-          "description": "호텔인스타 본점에서 가장 가까운 정형외과",
-          "photo": ""
         },
         {
           "name": "연세참빛안과의원",
@@ -974,6 +967,13 @@ const nearbyData = {
           "url": "https://map.naver.com/p/search/%EC%98%88%EC%8B%9D%EC%9E%A5/place/13332693?c=13.25,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161915%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%98%88%EC%8B%9D%EC%9E%A5",
           "description": "동탄에 위치한 예식장",
           "photo": "images/nearby/medical/aston-wedding.jpg"
+        },
+        {
+          "name": "삼성메디칼정형외과의원",
+          "distance": "도보 4분",
+          "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/11619795?c=17.54,0,0,0,dh&placePath=%2Freview%3Fentry%3Dbmp%26fromPanelNum%3D2%26locale%3Dko%26searchText%3D%EB%B3%91%EC%9B%90%26svcName%3Dmap_pcv5%26timestamp%3D202607161641",
+          "description": "호텔인스타 본점에서 가장 가까운 정형외과",
+          "photo": ""
         }
       ]
     },
@@ -1059,13 +1059,6 @@ const nearbyData = {
           "photo": "images/nearby/schools/donghak-middle.jpg"
         },
         {
-          "name": "율목초등학교",
-          "distance": "차량 5분",
-          "url": "https://map.naver.com/p/search/%ED%95%99%EA%B5%90/place/12446144?c=15.45,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607170954%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%ED%95%99%EA%B5%90",
-          "description": "호텔인스타 본점에서 가까운 학교",
-          "photo": ""
-        },
-        {
           "name": "서천고등학교",
           "distance": "차량 5분",
           "url": "https://map.naver.com/p/search/%ED%95%99%EA%B5%90/place/31848390?c=15.17,0,0,0,dh&placePath=%2Freview%3FfromPanelNum%3D2%26locale%3Dko%26searchText%3D%ED%95%99%EA%B5%90%26svcName%3Dmap_pcv5%26timestamp%3D202607170956%26type%3Dlist",
@@ -1092,6 +1085,13 @@ const nearbyData = {
           "url": "https://map.naver.com/p/search/%ED%95%99%EA%B5%90/place/19758611?c=15.45,0,0,0,dh&placePath=%2Freview%3Ftype%3Dlist",
           "description": "호텔인스타 본점에서 가까운 학교",
           "photo": "images/nearby/schools/seocheon-middle.jpg"
+        },
+        {
+          "name": "율목초등학교",
+          "distance": "차량 5분",
+          "url": "https://map.naver.com/p/search/%ED%95%99%EA%B5%90/place/12446144?c=15.45,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607170954%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%ED%95%99%EA%B5%90",
+          "description": "호텔인스타 본점에서 가까운 학교",
+          "photo": ""
         }
       ]
     },
@@ -1198,13 +1198,6 @@ const nearbyData = {
           "photo": "images/nearby/business/applied-materials.jpg"
         },
         {
-          "name": "KLA Korea 동탄사업장",
-          "distance": "차량 15분",
-          "url": "",
-          "description": "반도체 검사·계측 장비 기업",
-          "photo": ""
-        },
-        {
           "name": "ASM Korea 화성사업장",
           "distance": "차량 13분",
           "url": "",
@@ -1238,6 +1231,13 @@ const nearbyData = {
           "url": "",
           "description": "반도체·디스플레이 장비 기업",
           "photo": "images/nearby/business/tes-dongtan.jpg"
+        },
+        {
+          "name": "KLA Korea 동탄사업장",
+          "distance": "차량 15분",
+          "url": "",
+          "description": "반도체 검사·계측 장비 기업",
+          "photo": ""
         }
       ]
     },
@@ -1312,62 +1312,6 @@ const nearbyData = {
           "url": "https://map.naver.com/p/search/%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5/place/1383920987?c=18.14,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171055%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5",
           "description": "호텔인스타 본점에서 가장 가까운 24시운영 헬스장",
           "photo": "images/nearby/fitness/kind-gym.jpg"
-        },
-        {
-          "name": "토에르발레학원",
-          "distance": "도보 7분",
-          "url": "https://map.naver.com/p/search/%EC%B2%B4%EC%9C%A1%EA%B4%80/place/2039700791?c=17.41,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171058%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%B4%EC%9C%A1%EA%B4%80",
-          "description": "호텔인스타 본점에서 가장 가까운 발레학원",
-          "photo": ""
-        },
-        {
-          "name": "와일드복싱짐 본관",
-          "distance": "도보 3분",
-          "url": "https://map.naver.com/p/search/%EC%B2%B4%EC%9C%A1%EA%B4%80/place/20421173?c=17.41,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171100%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%B4%EC%9C%A1%EA%B4%80",
-          "description": "호텔인스타 본점에서 가장 가까운 복싱장",
-          "photo": ""
-        },
-        {
-          "name": "타이혼스포츠아카데미 망포점",
-          "distance": "도보 4분",
-          "url": "https://map.naver.com/p/search/%EC%B2%B4%EC%9C%A1%EA%B4%80/place/1376191623?c=17.41,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171107%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%B4%EC%9C%A1%EA%B4%80",
-          "description": "호텔인스타 본점에서 가장 가까운 무에타이",
-          "photo": ""
-        },
-        {
-          "name": "대한검도회 청파검도관",
-          "distance": "도보 3분",
-          "url": "https://map.naver.com/p/search/%EC%B2%B4%EC%9C%A1%EA%B4%80/place/18278638?c=17.41,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171107%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%B4%EC%9C%A1%EA%B4%80",
-          "description": "호텔인스타 본점에서 가장 가까운 검도관",
-          "photo": ""
-        },
-        {
-          "name": "미스터샤크MMA주짓수킥복싱멀티짐",
-          "distance": "도보 3분",
-          "url": "https://map.naver.com/p/search/%EC%B2%B4%EC%9C%A1%EA%B4%80/place/38781012?c=17.41,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171108%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%B4%EC%9C%A1%EA%B4%80",
-          "description": "호텔인스타 본점에서 가장 가까운 MMA",
-          "photo": ""
-        },
-        {
-          "name": "마음수련 명상센터 영통점",
-          "distance": "도보 7분",
-          "url": "https://map.naver.com/p/search/%EC%B2%B4%EC%9C%A1%EA%B4%80/place/18281752?c=16.93,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171109%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%B4%EC%9C%A1%EA%B4%80",
-          "description": "호텔인스타 본점에서 가장 가까운 명상센터",
-          "photo": ""
-        },
-        {
-          "name": "에픽클라임",
-          "distance": "도보 3분",
-          "url": "https://map.naver.com/p/search/%ED%81%B4%EB%9D%BC%EC%9D%B4%EB%B0%8D/place/1693141492?c=17.67,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171110%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%ED%81%B4%EB%9D%BC%EC%9D%B4%EB%B0%8D",
-          "description": "호텔인스타 본점에서 가장 가까운 클라이밍",
-          "photo": ""
-        },
-        {
-          "name": "태풍태권도",
-          "distance": "도보 4분",
-          "url": "https://map.naver.com/p/search/%ED%83%9C%EA%B6%8C%EB%8F%84/place/1832674691?c=16.82,0,0,0,dh&placePath=%2Fphoto%3FfromPanelNum%3D2%26timestamp%3D202607171111%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%ED%83%9C%EA%B6%8C%EB%8F%84",
-          "description": "호텔인스타 본점에서 가장 가까운 태권도장",
-          "photo": ""
         },
         {
           "name": "수원종합운동장실내체육관",
@@ -1459,6 +1403,62 @@ const nearbyData = {
           "url": "https://map.naver.com/p/entry/place/21399220?c=14.85,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171350%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "울창한 수림이 특징",
           "photo": "images/nearby/fitness/giheung-cc.jpg"
+        },
+        {
+          "name": "토에르발레학원",
+          "distance": "도보 7분",
+          "url": "https://map.naver.com/p/search/%EC%B2%B4%EC%9C%A1%EA%B4%80/place/2039700791?c=17.41,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171058%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%B4%EC%9C%A1%EA%B4%80",
+          "description": "호텔인스타 본점에서 가장 가까운 발레학원",
+          "photo": ""
+        },
+        {
+          "name": "와일드복싱짐 본관",
+          "distance": "도보 3분",
+          "url": "https://map.naver.com/p/search/%EC%B2%B4%EC%9C%A1%EA%B4%80/place/20421173?c=17.41,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171100%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%B4%EC%9C%A1%EA%B4%80",
+          "description": "호텔인스타 본점에서 가장 가까운 복싱장",
+          "photo": ""
+        },
+        {
+          "name": "타이혼스포츠아카데미 망포점",
+          "distance": "도보 4분",
+          "url": "https://map.naver.com/p/search/%EC%B2%B4%EC%9C%A1%EA%B4%80/place/1376191623?c=17.41,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171107%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%B4%EC%9C%A1%EA%B4%80",
+          "description": "호텔인스타 본점에서 가장 가까운 무에타이",
+          "photo": ""
+        },
+        {
+          "name": "대한검도회 청파검도관",
+          "distance": "도보 3분",
+          "url": "https://map.naver.com/p/search/%EC%B2%B4%EC%9C%A1%EA%B4%80/place/18278638?c=17.41,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171107%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%B4%EC%9C%A1%EA%B4%80",
+          "description": "호텔인스타 본점에서 가장 가까운 검도관",
+          "photo": ""
+        },
+        {
+          "name": "미스터샤크MMA주짓수킥복싱멀티짐",
+          "distance": "도보 3분",
+          "url": "https://map.naver.com/p/search/%EC%B2%B4%EC%9C%A1%EA%B4%80/place/38781012?c=17.41,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171108%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%B4%EC%9C%A1%EA%B4%80",
+          "description": "호텔인스타 본점에서 가장 가까운 MMA",
+          "photo": ""
+        },
+        {
+          "name": "마음수련 명상센터 영통점",
+          "distance": "도보 7분",
+          "url": "https://map.naver.com/p/search/%EC%B2%B4%EC%9C%A1%EA%B4%80/place/18281752?c=16.93,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171109%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B2%B4%EC%9C%A1%EA%B4%80",
+          "description": "호텔인스타 본점에서 가장 가까운 명상센터",
+          "photo": ""
+        },
+        {
+          "name": "에픽클라임",
+          "distance": "도보 3분",
+          "url": "https://map.naver.com/p/search/%ED%81%B4%EB%9D%BC%EC%9D%B4%EB%B0%8D/place/1693141492?c=17.67,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171110%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%ED%81%B4%EB%9D%BC%EC%9D%B4%EB%B0%8D",
+          "description": "호텔인스타 본점에서 가장 가까운 클라이밍",
+          "photo": ""
+        },
+        {
+          "name": "태풍태권도",
+          "distance": "도보 4분",
+          "url": "https://map.naver.com/p/search/%ED%83%9C%EA%B6%8C%EB%8F%84/place/1832674691?c=16.82,0,0,0,dh&placePath=%2Fphoto%3FfromPanelNum%3D2%26timestamp%3D202607171111%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%ED%83%9C%EA%B6%8C%EB%8F%84",
+          "description": "호텔인스타 본점에서 가장 가까운 태권도장",
+          "photo": ""
         }
       ]
     },
