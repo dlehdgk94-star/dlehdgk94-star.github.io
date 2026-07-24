@@ -982,6 +982,27 @@ const nearbyData = {
       "label": "학교",
       "places": [
         {
+          "name": "경희대학교 국제캠퍼스",
+          "distance": "차량 10분",
+          "url": "https://map.naver.com/p/entry/place/11591495?c=15.45,0,0,0,dh&placePath=%2Fhome%3FadditionalHeight%3D76%26fromPanelNum%3D1%26locale%3Dko%26svcName%3Dmap_pcv5%26timestamp%3D202607171024%26type%3Dlist",
+          "description": "호텔인스타 본점에서 가까운 대학교",
+          "photo": "images/nearby/schools/kyunghee-univ.jpg"
+        },
+        {
+          "name": "아주대학교",
+          "distance": "차량 25분",
+          "url": "https://map.naver.com/p/search/%EC%95%84%EC%A3%BC%EB%8C%80%ED%95%99%EA%B5%90/place/11591599?c=15.00,0,0,0,dh&placePath=%2Fhome%3Fbk_query%3D%EC%95%84%EC%A3%BC%EB%8C%80%ED%95%99%EA%B5%90%26entry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171033%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%95%84%EC%A3%BC%EB%8C%80%ED%95%99%EA%B5%90",
+          "description": "호텔인스타 본점에서 가까운 대학교",
+          "photo": "images/nearby/schools/ajou-univ.jpg"
+        },
+        {
+          "name": "경기대학교 수원캠퍼스",
+          "distance": "차량 30분",
+          "url": "https://map.naver.com/p/search/%EA%B2%BD%EA%B8%B0%EB%8C%80%ED%95%99%EA%B5%90/place/11591483?c=15.00,0,0,0,dh&placePath=%2Fhome%3Fbk_query%3D%EA%B2%BD%EA%B8%B0%EB%8C%80%ED%95%99%EA%B5%90%26entry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171035%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EA%B2%BD%EA%B8%B0%EB%8C%80%ED%95%99%EA%B5%90",
+          "description": "호텔인스타 본점에서 가까운 대학교",
+          "photo": "images/nearby/schools/kyonggi-univ.jpg"
+        },
+        {
           "name": "망포중학교",
           "distance": "도보 10분",
           "url": "https://map.naver.com/p/search/%ED%95%99%EA%B5%90/place/12031445?c=16.24,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161920%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%ED%95%99%EA%B5%90",
@@ -1071,27 +1092,6 @@ const nearbyData = {
           "url": "https://map.naver.com/p/search/%ED%95%99%EA%B5%90/place/19758611?c=15.45,0,0,0,dh&placePath=%2Freview%3Ftype%3Dlist",
           "description": "호텔인스타 본점에서 가까운 학교",
           "photo": "images/nearby/schools/seocheon-middle.jpg"
-        },
-        {
-          "name": "경희대학교 국제캠퍼스",
-          "distance": "차량 10분",
-          "url": "https://map.naver.com/p/entry/place/11591495?c=15.45,0,0,0,dh&placePath=%2Fhome%3FadditionalHeight%3D76%26fromPanelNum%3D1%26locale%3Dko%26svcName%3Dmap_pcv5%26timestamp%3D202607171024%26type%3Dlist",
-          "description": "영통 최대 대학가",
-          "photo": "images/nearby/schools/kyunghee-univ.jpg"
-        },
-        {
-          "name": "아주대학교",
-          "distance": "차량 25분",
-          "url": "https://map.naver.com/p/search/%EC%95%84%EC%A3%BC%EB%8C%80%ED%95%99%EA%B5%90/place/11591599?c=15.00,0,0,0,dh&placePath=%2Fhome%3Fbk_query%3D%EC%95%84%EC%A3%BC%EB%8C%80%ED%95%99%EA%B5%90%26entry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171033%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%95%84%EC%A3%BC%EB%8C%80%ED%95%99%EA%B5%90",
-          "description": "수원에서 가장 유명한 대학가",
-          "photo": "images/nearby/schools/ajou-univ.jpg"
-        },
-        {
-          "name": "경기대학교 수원캠퍼스",
-          "distance": "차량 30분",
-          "url": "https://map.naver.com/p/search/%EA%B2%BD%EA%B8%B0%EB%8C%80%ED%95%99%EA%B5%90/place/11591483?c=15.00,0,0,0,dh&placePath=%2Fhome%3Fbk_query%3D%EA%B2%BD%EA%B8%B0%EB%8C%80%ED%95%99%EA%B5%90%26entry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171035%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EA%B2%BD%EA%B8%B0%EB%8C%80%ED%95%99%EA%B5%90",
-          "description": "서울가는 길에있는 대학교",
-          "photo": "images/nearby/schools/kyonggi-univ.jpg"
         }
       ]
     },
