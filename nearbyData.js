@@ -1104,98 +1104,98 @@ const nearbyData = {
           "distance": "차량 17분",
           "url": "https://map.naver.com/p/search/%EC%88%98%EC%9B%90%EC%BB%A8%EB%B2%A4%EC%85%98%EC%84%BC%ED%84%B0/place/1269127432?placePath=?bk_query=%EC%88%98%EC%9B%90%EC%BB%A8%EB%B2%A4%EC%85%98%EC%84%BC%ED%84%B0&entry=pll&from=nx&fromNxList=true&searchType=place&c=15.00,0,0,0,dh",
           "description": "다양한 산업 전시회, 박람회, 그리고 대형 팝업 행사가 수시로 열리는 마이스(MICE) 산업의 중심지",
-          "photo": ""
+          "photo": "images/nearby/business/suwon-convention.jpg"
         },
         {
           "name": "수원 메쎄",
           "distance": "차량 17분",
           "url": "https://map.naver.com/p/search/%EC%88%98%EC%9B%90%20%EB%A9%94%EC%8E%84/place/1074049310?placePath=%2Fhome%3Fbk_query%3D%EC%88%98%EC%9B%90%20%EB%A9%94%EC%8E%84%26entry%3Dpll%26from%3Dnx%26fromNxList%3Dtrue%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161108%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%88%98%EC%9B%90%20%EB%A9%94%EC%8E%84&entry=pll&from=nx&fromNxList=true&searchType=place&c=15.00,0,0,0,dh",
           "description": "수원 대형 전시컨벤션센터",
-          "photo": ""
+          "photo": "images/nearby/business/suwon-masse.jpg"
         },
         {
           "name": "삼성전자 수원 디지털시티",
           "distance": "차량 8분",
           "url": "",
           "description": "삼성전자 본사 및 연구개발 중심지. 호텔의 가장 중요한 비즈니스 목적지",
-          "photo": ""
+          "photo": "images/nearby/business/samsung-digital-city.jpg"
         },
         {
           "name": "삼성전기 수원사업장·본사",
           "distance": "차량 12분",
           "url": "",
           "description": "MLCC, 카메라 모듈, 반도체 기판 등 전자부품 기업",
-          "photo": ""
+          "photo": "images/nearby/business/samsung-electro-suwon.jpg"
         },
         {
           "name": "삼성SDI 수원연구소",
           "distance": "차량 8분",
           "url": "",
           "description": "배터리·전자재료 관련 연구 거점. 삼성 디지털시티 바로 인근",
-          "photo": ""
+          "photo": "images/nearby/business/samsung-sdi-suwon.jpg"
         },
         {
           "name": "삼성전자 기흥캠퍼스",
           "distance": "차량 10분",
           "url": "",
           "description": "삼성 반도체의 핵심 연구·생산 거점",
-          "photo": ""
+          "photo": "images/nearby/business/samsung-giheung.jpg"
         },
         {
           "name": "삼성디스플레이 기흥사업장",
           "distance": "차량 10분",
           "url": "",
           "description": "OLED·디스플레이 연구개발의 거점",
-          "photo": ""
+          "photo": "images/nearby/business/samsung-display-giheung.jpg"
         },
         {
           "name": "삼성종합기술원 SAIT",
           "distance": "차량 8분",
           "url": "",
           "description": "삼성의 미래기술·첨단소재·반도체 연구기관",
-          "photo": ""
+          "photo": "images/nearby/business/samsung-sait.jpg"
         },
         {
           "name": "삼성SDI 기흥본사",
           "distance": "차량 15분",
           "url": "",
           "description": "삼성SDI 본사와 연구개발 기능이 위치한 사업장",
-          "photo": ""
+          "photo": "images/nearby/business/samsung-sdi-giheung.jpg"
         },
         {
           "name": "삼성전자 화성캠퍼스",
           "distance": "차량 6분",
           "url": "",
           "description": "삼성전자 DS부문의 주요 반도체 생산·연구 사업장",
-          "photo": ""
+          "photo": "images/nearby/business/samsung-hwaseong.jpg"
         },
         {
           "name": "삼성전자 화성 DSR타워",
           "distance": "차량 8분",
           "url": "",
           "description": "반도체 연구개발 인력이 근무하는 대표적인 업무시설",
-          "photo": ""
+          "photo": "images/nearby/business/samsung-dsr-tower.jpg"
         },
         {
           "name": "ASML Korea 화성 본사",
           "distance": "차량 20분",
           "url": "",
           "description": "세계적인 반도체 노광장비 기업의 한국 본사, 삼성과 긴밀히 협업관계",
-          "photo": ""
+          "photo": "images/nearby/business/asml-korea.jpg"
         },
         {
           "name": "도쿄일렉트론코리아",
           "distance": "차량 12분",
           "url": "",
           "description": "반도체 제조장비 연구·개발 및 기술지원 기업",
-          "photo": ""
+          "photo": "images/nearby/business/tokyo-electron.jpg"
         },
         {
           "name": "어플라이드 머티어리얼즈 코리아",
           "distance": "차량 10분",
           "url": "",
           "description": "반도체·디스플레이 장비 및 기술지원 기업",
-          "photo": ""
+          "photo": "images/nearby/business/applied-materials.jpg"
         },
         {
           "name": "KLA Korea 동탄사업장",
@@ -1209,35 +1209,35 @@ const nearbyData = {
           "distance": "차량 13분",
           "url": "",
           "description": "반도체 증착장비 기업",
-          "photo": ""
+          "photo": "images/nearby/business/asm-korea.jpg"
         },
         {
           "name": "램리서치 코리아테크놀로지센터",
           "distance": "차량 20분",
           "url": "",
           "description": "반도체 식각·증착 장비 연구개발 시설",
-          "photo": ""
+          "photo": "images/nearby/business/lam-research.jpg"
         },
         {
           "name": "에스에프에이 SFA",
           "distance": "차량 20분",
           "url": "",
           "description": "반도체·디스플레이·이차전지 자동화 장비와 스마트팩토리 기업",
-          "photo": ""
+          "photo": "images/nearby/business/sfa.jpg"
         },
         {
           "name": "피에스케이 PSK",
           "distance": "차량 10분",
           "url": "",
           "description": "반도체 전공정 장비 전문기업으로 드라이 스트립·세정 장비 등을 생산하는 국내 대표 장비기업",
-          "photo": ""
+          "photo": "images/nearby/business/psk.jpg"
         },
         {
           "name": "테스 TES 동탄사무소",
           "distance": "차량 15분",
           "url": "",
           "description": "반도체·디스플레이 장비 기업",
-          "photo": ""
+          "photo": "images/nearby/business/tes-dongtan.jpg"
         }
       ]
     },
