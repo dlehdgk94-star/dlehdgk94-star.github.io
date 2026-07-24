@@ -857,6 +857,34 @@ const nearbyData = {
       "label": "병원·예식장",
       "places": [
         {
+          "name": "한림대학교동탄성심병원",
+          "distance": "차량 10분",
+          "url": "https://map.naver.com/p/search/%EC%9D%91%EA%B8%89%EC%9D%98%EB%A3%8C%EC%8B%9C%EC%84%A4/place/1543285256?c=15.00,0,0,0,dh&placePath=%2Fhome%3Fbk_query%3D%EC%9D%91%EA%B8%89%EC%9D%98%EB%A3%8C%EC%8B%9C%EC%84%A4%26entry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161721%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%9D%91%EA%B8%89%EC%9D%98%EB%A3%8C%EC%8B%9C%EC%84%A4",
+          "description": "호텔인스타 본점에서 가장 가까운 응급실운영병원",
+          "photo": "images/nearby/medical/hallym-hospital.jpg"
+        },
+        {
+          "name": "아주대학교병원",
+          "distance": "차량 20분",
+          "url": "https://map.naver.com/p/entry/place/12131117?lng=127.0476837&lat=37.2794612&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607161907%26locale%3Dko%26svcName%3Dmap_pcv5&searchType=place&c=15.00,0,0,0,dh",
+          "description": "경기 남부권역을 커버하는 핵심 권역응급의료센터이자 최고 수준의 중증 질환 치료 병원",
+          "photo": "images/nearby/medical/ajou-hospital.jpg"
+        },
+        {
+          "name": "매듭병원",
+          "distance": "도보 10분",
+          "url": "https://map.naver.com/p/search/%EC%95%BC%EA%B0%84%EC%A7%84%EB%A3%8C/place/1854424335?c=16.52,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26fromPanelNum%3D2%26locale%3Dko%26searchText%3D%EC%95%BC%EA%B0%84%EC%A7%84%EB%A3%8C%26svcName%3Dmap_pcv5%26timestamp%3D202607161716",
+          "description": "호텔인스타 본점에서 가장 가까운 야간진료 정형외과 (24시 응급실 운영)",
+          "photo": "images/nearby/medical/maedeup-hospital.jpg"
+        },
+        {
+          "name": "365힐링의원",
+          "distance": "도보 10분",
+          "url": "https://map.naver.com/p/search/%EC%95%BC%EA%B0%84%EC%A7%84%EB%A3%8C/place/31357760?c=16.52,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161718%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%95%BC%EA%B0%84%EC%A7%84%EB%A3%8C",
+          "description": "호텔인스타 본점에서 가장 가까운 야간진료 내과",
+          "photo": "images/nearby/medical/clinic-365.jpg"
+        },
+        {
           "name": "신영통연세치과의원",
           "distance": "도보 1분",
           "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/13228680?c=19.74,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161634%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EB%B3%91%EC%9B%90",
@@ -904,34 +932,6 @@ const nearbyData = {
           "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/21560093?c=18.71,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161713%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EB%B3%91%EC%9B%90",
           "description": "호텔인스타 본점에서 가장 가까운 산부인과 의원",
           "photo": "images/nearby/medical/kim-obgyn.jpg"
-        },
-        {
-          "name": "매듭병원",
-          "distance": "도보 10분",
-          "url": "https://map.naver.com/p/search/%EC%95%BC%EA%B0%84%EC%A7%84%EB%A3%8C/place/1854424335?c=16.52,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26fromPanelNum%3D2%26locale%3Dko%26searchText%3D%EC%95%BC%EA%B0%84%EC%A7%84%EB%A3%8C%26svcName%3Dmap_pcv5%26timestamp%3D202607161716",
-          "description": "호텔인스타 본점에서 가장 가까운 야간진료 정형외과 (24시 응급실 운영)",
-          "photo": "images/nearby/medical/maedeup-hospital.jpg"
-        },
-        {
-          "name": "365힐링의원",
-          "distance": "도보 10분",
-          "url": "https://map.naver.com/p/search/%EC%95%BC%EA%B0%84%EC%A7%84%EB%A3%8C/place/31357760?c=16.52,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161718%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%95%BC%EA%B0%84%EC%A7%84%EB%A3%8C",
-          "description": "호텔인스타 본점에서 가장 가까운 야간진료 내과",
-          "photo": "images/nearby/medical/clinic-365.jpg"
-        },
-        {
-          "name": "한림대학교동탄성심병원",
-          "distance": "차량 10분",
-          "url": "https://map.naver.com/p/search/%EC%9D%91%EA%B8%89%EC%9D%98%EB%A3%8C%EC%8B%9C%EC%84%A4/place/1543285256?c=15.00,0,0,0,dh&placePath=%2Fhome%3Fbk_query%3D%EC%9D%91%EA%B8%89%EC%9D%98%EB%A3%8C%EC%8B%9C%EC%84%A4%26entry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161721%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%9D%91%EA%B8%89%EC%9D%98%EB%A3%8C%EC%8B%9C%EC%84%A4",
-          "description": "호텔인스타 본점에서 가장 가까운 응급실운영병원",
-          "photo": "images/nearby/medical/hallym-hospital.jpg"
-        },
-        {
-          "name": "아주대학교병원",
-          "distance": "차량 20분",
-          "url": "https://map.naver.com/p/entry/place/12131117?lng=127.0476837&lat=37.2794612&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607161907%26locale%3Dko%26svcName%3Dmap_pcv5&searchType=place&c=15.00,0,0,0,dh",
-          "description": "경기 남부권역을 커버하는 핵심 권역응급의료센터이자 최고 수준의 중증 질환 치료 병원",
-          "photo": "images/nearby/medical/ajou-hospital.jpg"
         },
         {
           "name": "재활플러스 요양원",
