@@ -1128,11 +1128,11 @@ const nearbyData = {
           "photo": "images/nearby/business/samsung-electro-suwon.jpg"
         },
         {
-          "name": "삼성SDI 수원연구소",
-          "distance": "차량 8분",
+          "name": "삼성전자 화성캠퍼스",
+          "distance": "차량 6분",
           "url": "",
-          "description": "배터리·전자재료 관련 연구 거점. 삼성 디지털시티 바로 인근",
-          "photo": "images/nearby/business/samsung-sdi-suwon.jpg"
+          "description": "삼성전자 DS부문의 주요 반도체 생산·연구 사업장",
+          "photo": "images/nearby/business/samsung-hwaseong.jpg"
         },
         {
           "name": "삼성전자 기흥캠퍼스",
@@ -1163,11 +1163,11 @@ const nearbyData = {
           "photo": "images/nearby/business/samsung-sdi-giheung.jpg"
         },
         {
-          "name": "삼성전자 화성캠퍼스",
-          "distance": "차량 6분",
+          "name": "삼성SDI 수원연구소",
+          "distance": "차량 8분",
           "url": "",
-          "description": "삼성전자 DS부문의 주요 반도체 생산·연구 사업장",
-          "photo": "images/nearby/business/samsung-hwaseong.jpg"
+          "description": "배터리·전자재료 관련 연구 거점. 삼성 디지털시티 바로 인근",
+          "photo": "images/nearby/business/samsung-sdi-suwon.jpg"
         },
         {
           "name": "삼성전자 화성 DSR타워",
