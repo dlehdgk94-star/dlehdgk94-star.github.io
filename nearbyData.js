@@ -983,7 +983,7 @@ const nearbyData = {
       "places": [
         {
           "name": "경희대학교 국제캠퍼스",
-          "distance": "차량 10분",
+          "distance": "차량 8분",
           "url": "https://map.naver.com/p/entry/place/11591495?c=15.45,0,0,0,dh&placePath=%2Fhome%3FadditionalHeight%3D76%26fromPanelNum%3D1%26locale%3Dko%26svcName%3Dmap_pcv5%26timestamp%3D202607171024%26type%3Dlist",
           "description": "호텔인스타 본점에서 가까운 대학교",
           "photo": "images/nearby/schools/kyunghee-univ.jpg"
@@ -1004,7 +1004,7 @@ const nearbyData = {
         },
         {
           "name": "망포중학교",
-          "distance": "도보 10분",
+          "distance": "도보 8분",
           "url": "https://map.naver.com/p/search/%ED%95%99%EA%B5%90/place/12031445?c=16.24,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161920%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%ED%95%99%EA%B5%90",
           "description": "호텔인스타 본점에서 가장 가까운 학교",
           "photo": "images/nearby/schools/mangpo-middle.jpg"
@@ -1025,7 +1025,7 @@ const nearbyData = {
         },
         {
           "name": "잠원중학교",
-          "distance": "도보 15분",
+          "distance": "차량 4분",
           "url": "https://map.naver.com/p/search/%ED%95%99%EA%B5%90/place/12413494?c=15.79,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161923%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%ED%95%99%EA%B5%90",
           "description": "호텔인스타 본점에서 가까운 학교",
           "photo": "images/nearby/schools/jamwon-middle.jpg"
