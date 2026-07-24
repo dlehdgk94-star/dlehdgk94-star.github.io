@@ -1471,140 +1471,140 @@ const nearbyData = {
           "distance": "차량 22분",
           "url": "https://map.naver.com/p/entry/place/1045275610?c=14.85,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171155%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "수원에서 가장 핫한 초대형 복합 쇼핑몰",
-          "photo": ""
+          "photo": "images/nearby/shopping/starfield-suwon.jpg"
         },
         {
           "name": "갤러리아백화점",
           "distance": "차량 17분",
           "url": "https://map.naver.com/p/search/%EA%B4%91%EA%B5%90%EA%B0%A4%EB%9F%AC%EB%A6%AC%EC%95%84%EB%B0%B1%ED%99%94%EC%A0%90/place/1027110301?c=15.00,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171354%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EA%B4%91%EA%B5%90%EA%B0%A4%EB%9F%AC%EB%A6%AC%EC%95%84%EB%B0%B1%ED%99%94%EC%A0%90",
           "description": "광교 신도시의 랜드마크이자 쇼핑몰",
-          "photo": ""
+          "photo": "images/nearby/shopping/galleria.jpg"
         },
         {
           "name": "판타지움",
           "distance": "차량 5분",
           "url": "https://map.naver.com/p/search/%EC%88%98%EC%9B%90%20%ED%8C%90%ED%83%80%EC%A7%80%EC%9B%80/place/37994161?placePath=%2Fhome%3Fbk_query%3D%EC%88%98%EC%9B%90%20%ED%8C%90%ED%83%80%EC%A7%80%EC%9B%80%26entry%3Dpll%26from%3Dnx%26fromNxList%3Dtrue%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171138%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%88%98%EC%9B%90%20%ED%8C%90%ED%83%80%EC%A7%80%EC%9B%80&placeSearchOption=bk_query%3D%25EC%2588%2598%25EC%259B%2590%2520%25ED%258C%2590%25ED%2583%2580%25EC%25A7%2580%25EC%259B%2580%26entry%3Dpll%26fromNxList%3Dtrue%26originalQuery%3D%25EC%2588%2598%25EC%259B%2590%2520%25ED%258C%2590%25ED%2583%2580%25EC%25A7%2580%25EC%259B%2580%26x%3D127.057454%26y%3D37.235530&searchType=place&c=15.00,0,0,0,dh",
           "description": "망포역 인근에서 가장 사랑받는 도심형 엔터테인먼트 복합 상업시설",
-          "photo": ""
+          "photo": "images/nearby/shopping/fantazium.jpg"
         },
         {
           "name": "골든스퀘어",
           "distance": "차량 5분",
           "url": "https://map.naver.com/p/entry/place/18276557?c=15.00,0,0,0,dh&placePath=%2Fhome%3FfromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171143%26locale%3Dko%26svcName%3Dmap_pcv5%26filterType%3D%EC%97%85%EC%B2%B4",
           "description": "망포역 바로 앞에 위치한 대형 복합 상가 건물",
-          "photo": ""
+          "photo": "images/nearby/shopping/golden-square.jpg"
         },
         {
           "name": "포레스퀘어",
           "distance": "차량 7분",
           "url": "https://map.naver.com/p/entry/place/1904731154?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171147%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "깔끔한 인테리어가 돋보이는 망포동 일대의 중형 상업 시설",
-          "photo": ""
+          "photo": "images/nearby/shopping/fore-square.jpg"
         },
         {
           "name": "유니클로 수원망포점",
           "distance": "차량 6분",
           "url": "https://map.naver.com/p/entry/place/36132922?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171153%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "단독 매장으로 운영되어 매우 넓고 쾌적한 쇼핑 환경",
-          "photo": ""
+          "photo": "images/nearby/shopping/uniqlo.jpg"
         },
         {
           "name": "타임빌라스 수원",
           "distance": "차량 25분",
           "url": "https://map.naver.com/p/entry/place/36011321?c=14.85,0,0,0,dh&placePath=%2Fhome%3FfromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171157%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "롯데백화점이 새롭게 리뉴얼하여 선보인 프리미엄 쇼핑 공간",
-          "photo": ""
+          "photo": "images/nearby/shopping/timevilas-suwon.jpg"
         },
         {
           "name": "AK플라자 수원",
           "distance": "차량 25분",
           "url": "https://map.naver.com/p/entry/place/36097531?c=14.85,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171158%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "수원역과 직접 연결되어 있어 수십 년간 수원의 대표 쇼핑 랜드마크",
-          "photo": ""
+          "photo": "images/nearby/shopping/ak-plaza.jpg"
         },
         {
           "name": "NC백화점 수원터미널점",
           "distance": "차량 15분",
           "url": "https://map.naver.com/p/entry/place/19206564?c=14.85,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171200%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "수원종합버스터미널과 연결되어 있어 편리한 쇼핑",
-          "photo": ""
+          "photo": "images/nearby/shopping/nc-dept.jpg"
         },
         {
           "name": "뉴코아아울렛 동수원점",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/11625349?c=14.85,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171229%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "인계동에 위치해서 둘러보기 좋은",
-          "photo": ""
+          "photo": "images/nearby/shopping/newcore-outlet.jpg"
         },
         {
           "name": "이마트 수원점",
           "distance": "차량 15분",
           "url": "https://map.naver.com/p/search/%EC%9D%B4%EB%A7%88%ED%8A%B8%20%EC%88%98%EC%9B%90%EC%A0%90/place/11605020?c=15.00,0,0,0,dh&isCorrectAnswer=true",
           "description": "수원종합버스터미널 근처에 위치",
-          "photo": ""
+          "photo": "images/nearby/shopping/emart-suwon.jpg"
         },
         {
           "name": "롯데몰 광교점",
           "distance": "차량 25분",
           "url": "https://map.naver.com/p/entry/place/31564934?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171232%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "광교중앙역 인근에 위치한 백화점",
-          "photo": ""
+          "photo": "images/nearby/shopping/lotte-mall-gwanggyo.jpg"
         },
         {
           "name": "아브뉴프랑 광교",
           "distance": "차량 25분",
           "url": "https://map.naver.com/p/entry/place/36668603?c=15.00,0,0,0,dh&placePath=%2Fhome%3FfromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171234%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "이국적인 분위기를 연출하는 스트리트형 쇼핑몰",
-          "photo": ""
+          "photo": "images/nearby/shopping/avenue-franc.jpg"
         },
         {
           "name": "앨리웨이 광교",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/1410191638?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171235%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "광교호수공원 바로 옆에 위치하여 멋진 경관을 자랑하는 쇼핑센터",
-          "photo": ""
+          "photo": "images/nearby/shopping/alleyway-gwanggyo.jpg"
         },
         {
           "name": "롯데백화점 동탄점",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/1438057579?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171252%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "큰규모와 감각적인 아트 전시가 결합된 경기 남부의 대형 백화점",
-          "photo": ""
+          "photo": "images/nearby/shopping/lotte-dept-dongtan.jpg"
         },
         {
           "name": "롯데프리미엄아울렛 기흥",
           "distance": "차량 15분",
           "url": "https://map.naver.com/p/entry/place/1586416290?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171254%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "드넓은 부지 위에 자연 친화적인 컨셉으로 지어진 프리미엄 교외형 아울렛",
-          "photo": ""
+          "photo": "images/nearby/shopping/lotte-premium-giheung.jpg"
         },
         {
           "name": "탑텐 수원망포점",
           "distance": "차량 7분",
           "url": "https://map.naver.com/p/entry/place/1264759163?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171255%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "넓은 건물과 다양한 상품",
-          "photo": ""
+          "photo": "images/nearby/shopping/topten-mangpo.jpg"
         },
         {
           "name": "수원프리미엄아울렛",
           "distance": "차량 15분",
           "url": "https://map.naver.com/p/entry/place/11667794?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171256%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "골프웨어와 아웃도어 브랜드를 둘러보기 좋은 쇼핑 공간",
-          "photo": ""
+          "photo": "images/nearby/shopping/suwon-premium-outlet.jpg"
         },
         {
           "name": "더와이스퀘어",
           "distance": "차량 25분",
           "url": "https://map.naver.com/p/entry/place/1749742847?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171257%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "용인 처인구청 인근의 랜드마크로 떠오른 쾌적한 복합 상업 시설",
-          "photo": ""
+          "photo": "images/nearby/shopping/the-y-square.jpg"
         },
         {
           "name": "블루키",
           "distance": "차량 25분",
           "url": "https://map.naver.com/p/entry/place/1004753432?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171259%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "용인 동백지구에 위치한 중대형 복합 쇼핑 테마파크",
-          "photo": ""
+          "photo": "images/nearby/shopping/bluekey.jpg"
         }
       ]
     }
