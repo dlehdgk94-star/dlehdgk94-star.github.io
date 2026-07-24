@@ -42,6 +42,13 @@ const nearbyData = {
           "photo": "images/nearby/attractions/수원화성박물관.jpg"
         },
         {
+          "name": "삼성이노베이션뮤지엄 (SIM)",
+          "distance": "차량 8분",
+          "url": "https://map.naver.com/p/entry/place/34761205?lng=127.055628&lat=37.2576968&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607161050%26locale%3Dko%26svcName%3Dmap_pcv5&entry=plt&searchType=place&c=15.00,0,0,0,dh",
+          "description": "전자산업의 역사와 미래 기술을 체험할 수 있는 세계 최대 규모의 전자산업사 박물관입니다.",
+          "photo": "images/nearby/attractions/삼성이노베이션뮤지엄.jpg"
+        },
+        {
           "name": "수원박물관",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/search/%EC%88%98%EC%9B%90%EB%B0%95%EB%AC%BC%EA%B4%80/place/2047361170?placePath=%2Fhome%3Fbk_query%3D%EC%88%98%EC%9B%90%EB%B0%95%EB%AC%BC%EA%B4%80%26entry%3Dpll%26from%3Dnx%26fromNxList%3Dtrue%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607160954%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%88%98%EC%9B%90%EB%B0%95%EB%AC%BC%EA%B4%80&placeSearchOption=bk_query%3D%25EC%2588%2598%25EC%259B%2590%25EB%25B0%2595%25EB%25AC%25BC%25EA%25B4%2580%26entry%3Dpll%26fromNxList%3Dtrue&searchType=place&c=15.00,0,0,0,dh",
@@ -159,13 +166,6 @@ const nearbyData = {
           "url": "https://map.naver.com/p/search/%EC%8B%A0%EB%8F%99%EC%88%98%EB%B3%80%EA%B3%B5%EC%9B%90/place/330862615?placePath=%2Fhome%3Fbk_query%3D%EC%8B%A0%EB%8F%99%EC%88%98%EB%B3%80%EA%B3%B5%EC%9B%90%26entry%3Dpll%26from%3Dnx%26fromNxList%3Dtrue%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161047%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%8B%A0%EB%8F%99%EC%88%98%EB%B3%80%EA%B3%B5%EC%9B%90&placeSearchOption=bk_query%3D%25EC%258B%25A0%25EB%258F%2599%25EC%2588%2598%25EB%25B3%2580%25EA%25B3%25B5%25EC%259B%2590%26entry%3Dpll%26fromNxList%3Dtrue%26originalQuery%3D%25EC%258B%25A0%25EB%258F%2599%25EC%2588%2598%25EB%25B3%2580%25EA%25B3%25B5%25EC%259B%2590%26x%3D127.057454%26y%3D37.235530&searchType=place",
           "description": "영통구 신동카페거리 바로 옆에 흐르는 하천을 따라 조성된 산책로입니다.",
           "photo": "images/nearby/attractions/신동수변공원.jpg"
-        },
-        {
-          "name": "삼성이노베이션뮤지엄 (SIM)",
-          "distance": "차량 8분",
-          "url": "https://map.naver.com/p/entry/place/34761205?lng=127.055628&lat=37.2576968&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607161050%26locale%3Dko%26svcName%3Dmap_pcv5&entry=plt&searchType=place&c=15.00,0,0,0,dh",
-          "description": "전자산업의 역사와 미래 기술을 체험할 수 있는 세계 최대 규모의 전자산업사 박물관입니다.",
-          "photo": "images/nearby/attractions/삼성이노베이션뮤지엄.jpg"
         },
         {
           "name": "지도박물관 (국토지리정보원)",
