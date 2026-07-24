@@ -1381,7 +1381,7 @@ const nearbyData = {
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/search/%EC%84%9C%EC%88%98%EC%9B%90%EC%B9%A0%EB%B3%B4%EC%B2%B4%EC%9C%A1%EA%B4%80/place/37568341?placePath=?bk_query=%EC%84%9C%EC%88%98%EC%9B%90%EC%B9%A0%EB%B3%B4%EC%B2%B4%EC%9C%A1%EA%B4%80&entry=pll&from=nx&fromNxList=true&searchType=place&c=15.00,0,0,0,dh",
           "description": "수원 KT 소닉붐의 홈구장",
-          "photo": ""
+          "photo": "images/nearby/fitness/seosuwon-chilbo.jpg"
         },
         {
           "name": "용인미르스타디움",
@@ -1395,7 +1395,7 @@ const nearbyData = {
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/search/%EC%88%98%EC%9B%90%EC%BB%A8%ED%8A%B8%EB%A6%AC%ED%81%B4%EB%9F%BD/place/13374607?c=15.00,0,0,0,dh&placePath=%2Fhome%3Fbk_query%3D%EC%88%98%EC%9B%90%EC%BB%A8%ED%8A%B8%EB%A6%AC%ED%81%B4%EB%9F%BD%26entry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171302%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%88%98%EC%9B%90%EC%BB%A8%ED%8A%B8%EB%A6%AC%ED%81%B4%EB%9F%BD",
           "description": "프라이빗 골프장",
-          "photo": ""
+          "photo": "images/nearby/fitness/suwon-cc.jpg"
         },
         {
           "name": "골드CC",
