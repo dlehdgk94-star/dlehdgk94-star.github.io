@@ -478,210 +478,210 @@ const nearbyData = {
           "distance": "도보 3분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1871534625?c=18.97,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161428%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "언제 어디서나, 부담스럽지 않은 가격과 대용량으로 모든 사람들에게 사랑받는",
-          "photo": ""
+          "photo": "images/nearby/cafes/mega-mgc.jpg"
         },
         {
           "name": "에이바우트커피 망포점",
           "distance": "도보 3분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1744379259?c=18.24,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161431%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "새벽 1시까지 영업하는 카페",
-          "photo": ""
+          "photo": "images/nearby/cafes/about-coffee.jpg"
         },
         {
           "name": "공차 수원태장점",
           "distance": "도보 5분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1565662461?c=19.30,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161437%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "대만의 작은 버블티 매장에서 시작해, 지금은 전 세계 2,100개가 넘는 매장을 운영하는 공차",
-          "photo": ""
+          "photo": "images/nearby/cafes/gongcha.jpg"
         },
         {
           "name": "파리바게뜨 영통벽산점",
           "distance": "도보 2분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/19420029?c=18.43,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161443%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "1988년부터 익숙한 프랜차이즈 브랜드인 파리바게뜨",
-          "photo": ""
+          "photo": "images/nearby/cafes/paris-baguette.jpg"
         },
         {
           "name": "카페 만월경 망포마을점",
           "distance": "도보 3분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1143181159?c=18.13,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26fromPanelNum%3D2%26locale%3Dko%26searchText%3D%EC%B9%B4%ED%8E%98%26svcName%3Dmap_pcv5%26timestamp%3D202607161443",
           "description": "24시 무인카페",
-          "photo": ""
+          "photo": "images/nearby/cafes/manwol.jpg"
         },
         {
           "name": "이디야 수원망포점",
           "distance": "도보 5분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/21535989?c=17.22,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161445%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "커피 한 잔 속에 담긴 수많은 전문가의 노력",
-          "photo": ""
+          "photo": "images/nearby/cafes/ediya.jpg"
         },
         {
           "name": "엠오삼오",
           "distance": "도보 5분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1081422489?c=17.50,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161455%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "고소한 풍미의 깊은 맛 아메리카노",
-          "photo": ""
+          "photo": "images/nearby/cafes/m035.jpg"
         },
         {
           "name": "백억커피 태장사거리점",
           "distance": "도보 7분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1432406367?c=17.50,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161456%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "좋은 이름처럼 좋은 커피도\n사람들의 하루를 기분 좋게 만드는",
-          "photo": ""
+          "photo": "images/nearby/cafes/baekok-coffee.jpg"
         },
         {
           "name": "가비앙",
           "distance": "도보 8분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/36648807?c=17.50,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161501%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "뜨개인 환영카페",
-          "photo": ""
+          "photo": "images/nearby/cafes/gabian.jpg"
         },
         {
           "name": "따듯 공방카페",
           "distance": "도보 7분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1487214431?c=17.79,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161503%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "뜨개와 커피가 공존하는 아늑한 공간",
-          "photo": ""
+          "photo": "images/nearby/cafes/ttadut.jpg"
         },
         {
           "name": "워킨",
           "distance": "도보 7분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1602309691?c=18.04,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161504%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "버터향 가득한 소금빵의 유혹",
-          "photo": ""
+          "photo": "images/nearby/cafes/workin.jpg"
         },
         {
           "name": "우드베어 망포",
           "distance": "도보 7분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1446951188?c=17.58,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161504%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "깔끔한 산미 없는 아이스 아메리카노",
-          "photo": ""
+          "photo": "images/nearby/cafes/woodbear.jpg"
         },
         {
           "name": "Cafe West Roasters",
           "distance": "도보 10분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1379904004?c=17.99,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161506%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "카페라떼가 시그니처인",
-          "photo": ""
+          "photo": "images/nearby/cafes/cafe-west-roasters.jpg"
         },
         {
           "name": "투썸플레이스 태장사거리점",
           "distance": "도보 10분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1265276570?c=18.12,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161507%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "투썸의 아이덴티티에는 커피와 케이크의 만남",
-          "photo": ""
+          "photo": "images/nearby/cafes/twosome.jpg"
         },
         {
           "name": "퍼지데이즈",
           "distance": "도보 7분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/2099076443?c=19.13,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161509%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "촉촉한 도넛과 커피의 달콤한 만남",
-          "photo": ""
+          "photo": "images/nearby/cafes/fuzzy-days.jpg"
         },
         {
           "name": "우지커피 수원망포점",
           "distance": "도보 7분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/2050301958?c=19.13,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161509%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "누구나, 언제든, 부담없이 즐길 수 있는 좋은 커피",
-          "photo": ""
+          "photo": "images/nearby/cafes/uji-coffee.jpg"
         },
         {
           "name": "파파노아이",
           "distance": "도보 10분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1521428222?c=18.05,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161511%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "부드럽고 쫄깃한 탕종식빵의 매력",
-          "photo": ""
+          "photo": "images/nearby/cafes/papa-noai.jpg"
         },
         {
           "name": "오직유과자집",
           "distance": "도보 10분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/482389077?c=18.05,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161512%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "쿠키가 맛있는",
-          "photo": ""
+          "photo": "images/nearby/cafes/ojik-sweets.jpg"
         },
         {
           "name": "하나비",
           "distance": "차량 4분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/2022373368?c=16.40,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161513%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "흑임자 크림라떼로 느끼는 고소한 시간",
-          "photo": ""
+          "photo": "images/nearby/cafes/hanabi.jpg"
         },
         {
           "name": "요거트홈 망포점",
           "distance": "도보 10분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1574700346?c=18.62,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26fromPanelNum%3D2%26locale%3Dko%26searchText%3D%EC%B9%B4%ED%8E%98%26svcName%3Dmap_pcv5%26timestamp%3D202607161513",
           "description": "그릭요거트 맛집",
-          "photo": ""
+          "photo": "images/nearby/cafes/yogurt-home.jpg"
         },
         {
           "name": "킹덤카페",
           "distance": "도보 10분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1998419431?c=19.09,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161515%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "달콤한 코코넛커피의 힐링 타임",
-          "photo": ""
+          "photo": "images/nearby/cafes/kingdom-cafe.jpg"
         },
         {
           "name": "더리터 태장초점",
           "distance": "차량 4분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1650668624?c=17.98,0,0,0,dh&placePath=%2Freview%3Fentry%3Dbmp%26fromPanelNum%3D2%26locale%3Dko%26searchText%3D%EC%B9%B4%ED%8E%98%26svcName%3Dmap_pcv5%26timestamp%3D202607161516",
           "description": "압도적인 양",
-          "photo": ""
+          "photo": "images/nearby/cafes/the-liter.jpg"
         },
         {
           "name": "키키디저트",
           "distance": "차량 4분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1255681557?c=17.83,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161518%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "디저트는 이곳",
-          "photo": ""
+          "photo": "images/nearby/cafes/kiki-dessert.jpg"
         },
         {
           "name": "커피콩",
           "distance": "차량 5분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1363578879?c=17.85,0,0,0,dh&placePath=%2Fmenu%3FfromPanelNum%3D2%26timestamp%3D202607161521%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "핸드드립커피가 맛있는",
-          "photo": ""
+          "photo": "images/nearby/cafes/coffeekong.jpg"
         },
         {
           "name": "쿠로이시로",
           "distance": "차량 5분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1315056034?c=18.06,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161522%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "특색있는 빙수가 있는",
-          "photo": ""
+          "photo": "images/nearby/cafes/kuroishiro.jpg"
         },
         {
           "name": "하루베이크 망포점",
           "distance": "차량 5분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1055822445?c=18.06,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161523%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "에그타르트와 커피의 완벽 조화",
-          "photo": ""
+          "photo": "images/nearby/cafes/haru-bake.jpg"
         },
         {
           "name": "요거트아이스크림의정석 망포반월동점",
           "distance": "도보 7분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1093533148?c=18.35,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161524%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "언제 어디서나 내맘대로 요거트 아이스크림",
-          "photo": ""
+          "photo": "images/nearby/cafes/yogurt-ice.jpg"
         },
         {
           "name": "스타벅스 신영통DT점",
           "distance": "도보 10분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/37408371?c=17.46,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161526%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "커피 이상의 특별한 경험을 소개합니다",
-          "photo": ""
+          "photo": "images/nearby/cafes/starbucks.jpg"
         },
         {
           "name": "화이트리에 망포점",
           "distance": "차량 7분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/1647867911?c=16.68,0,0,0,dh&placePath=%2Fmenu%3Fentry%3Dbmp%26fromPanelNum%3D2%26timestamp%3D202607161527%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "여기서 식빵 드시면, 다른곳에서 못드십니다.",
-          "photo": ""
+          "photo": "images/nearby/cafes/white-rie.jpg"
         },
         {
           "name": "하얀풍차제과점 망포역점",
           "distance": "차량 5분",
           "url": "https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98/place/32290219?c=16.68,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161528%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%B9%B4%ED%8E%98",
           "description": "수원빵집 = 하얀풍차",
-          "photo": ""
+          "photo": "images/nearby/cafes/white-windmill.jpg"
         }
       ]
     },
