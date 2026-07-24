@@ -1255,63 +1255,63 @@ const nearbyData = {
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/13491582?lng=127.0096587&lat=37.300096&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171127%26locale%3Dko%26svcName%3Dmap_pcv5&entry=plt&searchType=place&c=15.00,0,0,0,dh",
           "description": "KT 위즈의 홈구장",
-          "photo": ""
+          "photo": "images/nearby/fitness/kt-wiz-park.jpg"
         },
         {
           "name": "수원종합운동장",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/search/%EC%88%98%EC%9B%90%EC%A2%85%ED%95%A9%EC%9A%B4%EB%8F%99%EC%9E%A5/place/20127073?placePath=%2Fhome%3Fbk_query%3D%EC%88%98%EC%9B%90%EC%A2%85%ED%95%A9%EC%9A%B4%EB%8F%99%EC%9E%A5%26entry%3Dpll%26fromNxList%3Dtrue%26fromPanelNum%3D2%26locale%3Dko%26searchText%3D%EC%88%98%EC%9B%90%EC%A2%85%ED%95%A9%EC%9A%B4%EB%8F%99%EC%9E%A5%26svcName%3Dmap_pcv5%26timestamp%3D202607171115&entry=pll&from=nx&fromNxList=true&searchType=place&c=16.92,0,0,0,dh",
           "description": "수원FC, 수원FC위민의 홈구장",
-          "photo": ""
+          "photo": "images/nearby/fitness/suwon-stadium.jpg"
         },
         {
           "name": "수원월드컵경기장(빅버드)",
           "distance": "차량 25분",
           "url": "https://map.naver.com/p/entry/place/11622953?lng=127.036915&lat=37.2865317&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171113%26locale%3Dko%26svcName%3Dmap_pcv5&entry=plt&searchType=place&c=15.00,0,0,0,dh",
           "description": "수원삼성블루윙즈의 홈구장",
-          "photo": ""
+          "photo": "images/nearby/fitness/worldcup-stadium.jpg"
         },
         {
           "name": "올라잇짐 헬스&PT 망포점",
           "distance": "도보 5분",
           "url": "https://map.naver.com/p/search/%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5/place/2072429164?c=18.14,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171054%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5",
           "description": "호텔인스타 본점 주변 가장 유명한 헬스장",
-          "photo": ""
+          "photo": "images/nearby/fitness/alright-gym.jpg"
         },
         {
           "name": "투펄슨짐 피트니스 PT 헬스 망포점",
           "distance": "도보 1분",
           "url": "https://map.naver.com/p/search/%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5/place/1938896285?c=18.01,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171041%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5",
           "description": "호텔인스타 본점에서 가장 가까운 헬스장",
-          "photo": ""
+          "photo": "images/nearby/fitness/tupulson-gym.jpg"
         },
         {
           "name": "달라짐 PT 헬스 필라테스 수원망포역점",
           "distance": "도보 3분",
           "url": "https://map.naver.com/p/search/%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5/place/1945327159?c=18.16,0,0,0,dh&placePath=%2Fphoto%3FfromPanelNum%3D2%26timestamp%3D202607171044%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5%26filterType%3D%EC%97%85%EC%B2%B4",
           "description": "호텔인스타 본점에서 가장 가까운 필라테스",
-          "photo": ""
+          "photo": "images/nearby/fitness/dalrajim-pt.jpg"
         },
         {
           "name": "메꿀다이어트짐 피트니스 PT 망포점",
           "distance": "도보 2분",
           "url": "https://map.naver.com/p/search/%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5/place/1532087709?c=18.16,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171046%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5",
           "description": "호텔인스타에서 가까운 헬스장",
-          "photo": ""
+          "photo": "images/nearby/fitness/mekkul-gym.jpg"
         },
         {
           "name": "점핑다이어트 망포파워점프",
           "distance": "도보 5분",
           "url": "https://map.naver.com/p/search/%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5/place/1270858642?c=17.27,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dple",
           "description": "호텔인스타 본점에서 가장 가까운 점핑 다이어트",
-          "photo": ""
+          "photo": "images/nearby/fitness/jumping-diet.jpg"
         },
         {
           "name": "카인드짐24시 헬스&PT 망포점",
           "distance": "도보 5분",
           "url": "https://map.naver.com/p/search/%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5/place/1383920987?c=18.14,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607171055%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EA%B7%BC%EC%B2%98%ED%97%AC%EC%8A%A4%EC%9E%A5",
           "description": "호텔인스타 본점에서 가장 가까운 24시운영 헬스장",
-          "photo": ""
+          "photo": "images/nearby/fitness/kind-gym.jpg"
         },
         {
           "name": "토에르발레학원",
@@ -1374,7 +1374,7 @@ const nearbyData = {
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/13445049?placePath=%2Fhome%3Fentry%3Dplt%26from%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171117%26locale%3Dko%26svcName%3Dmap_pcv5&searchType=place&lng=127.0090851&lat=37.2983797&c=15.44,0,0,0,dh",
           "description": "남자배구 한국전력, 여자배구 현대건설의 홈구장",
-          "photo": ""
+          "photo": "images/nearby/fitness/suwon-indoor-gym.jpg"
         },
         {
           "name": "서수원칠보체육관",
@@ -1388,7 +1388,7 @@ const nearbyData = {
           "distance": "차량 25분",
           "url": "https://map.naver.com/p/entry/place/19282938?c=12.87,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171125%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "용인FC의 홈구장",
-          "photo": ""
+          "photo": "images/nearby/fitness/yongin-mir.jpg"
         },
         {
           "name": "수원CC",
@@ -1402,63 +1402,63 @@ const nearbyData = {
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/11612751?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171333%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "경기 남부의 대표적인 구장",
-          "photo": ""
+          "photo": "images/nearby/fitness/gold-cc.jpg"
         },
         {
           "name": "코리아CC",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/11614135?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171334%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "골드CC 바로 옆에 위치하며 접근성이 좋음",
-          "photo": ""
+          "photo": "images/nearby/fitness/korea-cc.jpg"
         },
         {
           "name": "코리아퍼블릭CC",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/13534320?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171336%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "퍼블릭 골프장으로 보다 캐주얼하게 즐기기 좋음",
-          "photo": ""
+          "photo": "images/nearby/fitness/korea-public-cc.jpg"
         },
         {
           "name": "레이크사이드CC",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/37775677?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171338%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "대규모 코스를 자랑하는 골프장",
-          "photo": ""
+          "photo": "images/nearby/fitness/lakeside-cc.jpg"
         },
         {
           "name": "화성상록GC",
           "distance": "차량 25분",
           "url": "https://map.naver.com/p/entry/place/12375785?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171342%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "공무원연금공단에서 운영하여 관리가 철저한 구장",
-          "photo": ""
+          "photo": "images/nearby/fitness/hwaseong-gc.jpg"
         },
         {
           "name": "한원CC",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/1764292119?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171345%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "전통 있는 코스로 골퍼들에게 인기가 많음",
-          "photo": ""
+          "photo": "images/nearby/fitness/hanwon-cc.jpg"
         },
         {
           "name": "남서울CC",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/11612879?c=14.85,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171347%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "대회를 개최하는 골프장",
-          "photo": ""
+          "photo": "images/nearby/fitness/namseoull-cc.jpg"
         },
         {
           "name": "태광CC",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/11614136?c=14.85,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171349%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "흥덕지구 인근에 위치하여 망포에서 이동이 매우 편리",
-          "photo": ""
+          "photo": "images/nearby/fitness/taekwang-cc.jpg"
         },
         {
           "name": "기흥CC",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/21399220?c=14.85,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607171350%26locale%3Dko%26svcName%3Dmap_pcv5",
           "description": "울창한 수림이 특징",
-          "photo": ""
+          "photo": "images/nearby/fitness/giheung-cc.jpg"
         }
       ]
     },
