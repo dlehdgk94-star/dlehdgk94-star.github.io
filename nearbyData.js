@@ -861,14 +861,14 @@ const nearbyData = {
           "distance": "도보 1분",
           "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/13228680?c=19.74,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161634%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EB%B3%91%EC%9B%90",
           "description": "호텔인스타 본점에서 가장 가까운 치과",
-          "photo": ""
+          "photo": "images/nearby/medical/yonsei-dental.jpg"
         },
         {
           "name": "영통연세가정의학과의원",
           "distance": "도보 2분",
           "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/13228777?c=17.24,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161637%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EB%B3%91%EC%9B%90",
           "description": "호텔인스타 본점에서 가장 가까운 의원",
-          "photo": ""
+          "photo": "images/nearby/medical/yonsei-family.jpg"
         },
         {
           "name": "삼성메디칼정형외과의원",
@@ -882,98 +882,98 @@ const nearbyData = {
           "distance": "도보 5분",
           "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/19878056?c=17.82,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161644%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EB%B3%91%EC%9B%90",
           "description": "호텔인스타 본점에서 가장 가까운 안과",
-          "photo": ""
+          "photo": "images/nearby/medical/yonsei-eye.jpg"
         },
         {
           "name": "경희온담한의원 수원망포",
           "distance": "도보 4분",
           "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/50771081?c=17.30,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161709%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EB%B3%91%EC%9B%90",
           "description": "호텔인스타 본점에서 가장 가까운 한의원",
-          "photo": ""
+          "photo": "images/nearby/medical/kyunghee-oriental.jpg"
         },
         {
           "name": "장주은피부과의원",
           "distance": "도보 7분",
           "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/13228685?c=19.77,0,0,0,dh&placePath=%2Freview%3Fentry%3Dbmp%26fromPanelNum%3D2%26locale%3Dko%26searchText%3D%EB%B3%91%EC%9B%90%26svcName%3Dmap_pcv5%26timestamp%3D202607161711",
           "description": "호텔인스타 본점에서 가장 가까운 피부과의원",
-          "photo": ""
+          "photo": "images/nearby/medical/jang-dermatology.jpg"
         },
         {
           "name": "김경희산부인과의원",
           "distance": "도보 6분",
           "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/21560093?c=18.71,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161713%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EB%B3%91%EC%9B%90",
           "description": "호텔인스타 본점에서 가장 가까운 산부인과 의원",
-          "photo": ""
+          "photo": "images/nearby/medical/kim-obgyn.jpg"
         },
         {
           "name": "매듭병원",
           "distance": "도보 10분",
           "url": "https://map.naver.com/p/search/%EC%95%BC%EA%B0%84%EC%A7%84%EB%A3%8C/place/1854424335?c=16.52,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26fromPanelNum%3D2%26locale%3Dko%26searchText%3D%EC%95%BC%EA%B0%84%EC%A7%84%EB%A3%8C%26svcName%3Dmap_pcv5%26timestamp%3D202607161716",
           "description": "호텔인스타 본점에서 가장 가까운 야간진료 정형외과 (24시 응급실 운영)",
-          "photo": ""
+          "photo": "images/nearby/medical/maedeup-hospital.jpg"
         },
         {
           "name": "365힐링의원",
           "distance": "도보 10분",
           "url": "https://map.naver.com/p/search/%EC%95%BC%EA%B0%84%EC%A7%84%EB%A3%8C/place/31357760?c=16.52,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161718%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%95%BC%EA%B0%84%EC%A7%84%EB%A3%8C",
           "description": "호텔인스타 본점에서 가장 가까운 야간진료 내과",
-          "photo": ""
+          "photo": "images/nearby/medical/clinic-365.jpg"
         },
         {
           "name": "한림대학교동탄성심병원",
           "distance": "차량 10분",
           "url": "https://map.naver.com/p/search/%EC%9D%91%EA%B8%89%EC%9D%98%EB%A3%8C%EC%8B%9C%EC%84%A4/place/1543285256?c=15.00,0,0,0,dh&placePath=%2Fhome%3Fbk_query%3D%EC%9D%91%EA%B8%89%EC%9D%98%EB%A3%8C%EC%8B%9C%EC%84%A4%26entry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161721%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%9D%91%EA%B8%89%EC%9D%98%EB%A3%8C%EC%8B%9C%EC%84%A4",
           "description": "호텔인스타 본점에서 가장 가까운 응급실운영병원",
-          "photo": ""
+          "photo": "images/nearby/medical/hallym-hospital.jpg"
         },
         {
           "name": "아주대학교병원",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/entry/place/12131117?lng=127.0476837&lat=37.2794612&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607161907%26locale%3Dko%26svcName%3Dmap_pcv5&searchType=place&c=15.00,0,0,0,dh",
           "description": "경기 남부권역을 커버하는 핵심 권역응급의료센터이자 최고 수준의 중증 질환 치료 병원",
-          "photo": ""
+          "photo": "images/nearby/medical/ajou-hospital.jpg"
         },
         {
           "name": "재활플러스 요양원",
           "distance": "도보 1분",
           "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/264650210?c=18.26,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161636%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EB%B3%91%EC%9B%90",
           "description": "호텔인스타 본점에서 가장 가까운 요양원",
-          "photo": ""
+          "photo": "images/nearby/medical/rehab-plus.jpg"
         },
         {
           "name": "영통효요양병원",
           "distance": "도보 3분",
           "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/1955486200?c=17.24,0,0,0,dh&placePath=%2Fhome%3Fentry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161638%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EB%B3%91%EC%9B%90",
           "description": "호텔인스타 본점에서 가장 가까운 요양병원",
-          "photo": ""
+          "photo": "images/nearby/medical/hyo-nursing.jpg"
         },
         {
           "name": "신영통동물병원",
           "distance": "도보 3분",
           "url": "https://map.naver.com/p/search/%EB%B3%91%EC%9B%90/place/18278127?c=17.98,0,0,0,dh&placePath=%2Fhome%3FfromPanelNum%3D2%26locale%3Dko%26searchText%3D%EB%B3%91%EC%9B%90%26svcName%3Dmap_pcv5%26timestamp%3D202607161639",
           "description": "호텔인스타 본점에서 가장 가까운 동물병원",
-          "photo": ""
+          "photo": "images/nearby/medical/vet-clinic.jpg"
         },
         {
           "name": "SY컨벤션 웨딩홀",
           "distance": "차량 15분",
           "url": "https://map.naver.com/p/search/%EC%98%88%EC%8B%9D%EC%9E%A5/place/1724383702?c=12.98,0,0,0,dh&placePath=%2Fhome%3Fbk_query%3D%EC%98%88%EC%8B%9D%EC%9E%A5%26entry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161909%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%98%88%EC%8B%9D%EC%9E%A5",
           "description": "영통역 주변에 위치한 예식장",
-          "photo": ""
+          "photo": "images/nearby/medical/sy-convention.jpg"
         },
         {
           "name": "파티움하우스 수원",
           "distance": "차량 20분",
           "url": "https://map.naver.com/p/search/%EC%98%88%EC%8B%9D%EC%9E%A5/place/12055125?c=14.20,0,0,0,dh&placePath=%2Fhome%3Fbk_query%3D%EC%98%88%EC%8B%9D%EC%9E%A5%26entry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161913%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%98%88%EC%8B%9D%EC%9E%A5",
           "description": "수원시청역 주변에 위치한 예식장",
-          "photo": ""
+          "photo": "images/nearby/medical/partium-house.jpg"
         },
         {
           "name": "애스톤웨딩하우스",
           "distance": "차량 15분",
           "url": "https://map.naver.com/p/search/%EC%98%88%EC%8B%9D%EC%9E%A5/place/13332693?c=13.25,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D2%26timestamp%3D202607161915%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%EC%98%88%EC%8B%9D%EC%9E%A5",
           "description": "동탄에 위치한 예식장",
-          "photo": ""
+          "photo": "images/nearby/medical/aston-wedding.jpg"
         }
       ]
     },
