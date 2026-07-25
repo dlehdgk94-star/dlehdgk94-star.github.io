@@ -245,6 +245,27 @@
     border-bottom-right-radius: 4px;
 }
 
+/* 출처 링크 (웹 검색 시) */
+.ai-msg-citations {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.ai-msg-citations a {
+    font-size: 12px;
+    color: rgb(58,154,180);
+    text-decoration: none;
+    word-break: break-all;
+    line-height: 1.4;
+}
+.ai-msg-citations a:hover { text-decoration: underline; }
+
+/* 로딩 표시 */
+.ai-msg-loading .ai-msg-bubble { color: #999; font-style: italic; }
+
 /* 입력창 */
 #ai-chat-input-row {
     display: flex;
@@ -327,8 +348,30 @@
         }
     };
 
+    // ── 챗봇 서버 설정 ──
+    var AI_CHAT_ENDPOINT = 'https://lbhdujheuokkmiowobzu.supabase.co/functions/v1/ai-chat';
+    // 기존 Edge Function 호출과 동일한 publishable key 헤더 구조 (로그인 없이 호출)
+    var AI_CHAT_ANON = 'sb_publishable_2X3S_RgN_0ipbUtR-zAV6A_yIp1n5PC';
+    var CLIENT_TIMEOUT_MS = 45000; // 서버 40초보다 조금 길게
+    var CLIENT_ERROR_REPLY = '죄송합니다, 일시적인 오류가 발생했습니다. 프런트(031-203-4301, 24시간)로 문의해 주세요.';
+
+    var chatHistory = [];   // { role, content } — 서버로 보낼 이전 대화
+    var aiChatSending = false;
+
+    function getLang() {
+        try {
+            if (typeof currentLang !== 'undefined' && currentLang) return currentLang;
+            var s = sessionStorage.getItem('siteLang');
+            if (s) return s;
+        } catch (e) {}
+        return 'ko';
+    }
+
     window.aiChatSend = function () {
+        if (aiChatSending) return; // 전송 중 중복 전송 방지
+
         var input = document.getElementById('ai-chat-input');
+        if (!input) return;
         var text = input.value.trim();
         if (!text) return;
 
@@ -336,11 +379,69 @@
         input.value = '';
         input.style.height = 'auto';
 
-        // TODO: OpenAI API 연동 예정
-        setTimeout(function () {
-            addMsg('죄송합니다, 현재 AI 서비스 준비 중입니다. 전화(+82 31-203-4301)로 문의해 주세요.', 'bot');
-        }, 600);
+        aiChatSending = true;
+        setSendEnabled(false);
+
+        // 서버로 보낼 히스토리 (현재 메시지 이전까지, 최근 10개)
+        var historyToSend = chatHistory.slice(-10);
+        chatHistory.push({ role: 'user', content: text });
+
+        var loadingEl = addLoading();
+
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function () { controller.abort(); }, CLIENT_TIMEOUT_MS);
+
+        fetch(AI_CHAT_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + AI_CHAT_ANON
+            },
+            body: JSON.stringify({
+                message: text,
+                history: historyToSend,
+                lang: getLang()
+            }),
+            signal: controller.signal
+        }).then(function (res) {
+            // 본문 파싱 실패는 예외가 아니라 정상 시나리오로 취급
+            // (Supabase 플랫폼이 우리 JSON 없이 429 등을 반환할 수 있음)
+            return res.json().then(function (data) {
+                return { ok: res.ok, data: data };
+            }).catch(function () {
+                return { ok: res.ok, data: null };
+            });
+        }).then(function (result) {
+            var data = result.data;
+            var reply;
+            var citations = null;
+            var usedWebSearch = false;
+
+            if (data && typeof data.reply === 'string' && data.reply) {
+                reply = data.reply;
+                usedWebSearch = data.usedWebSearch === true;
+                if (usedWebSearch && Array.isArray(data.citations)) citations = data.citations;
+            } else {
+                reply = CLIENT_ERROR_REPLY;
+            }
+
+            addMsg(reply, 'bot', (usedWebSearch && citations) ? citations : null);
+            chatHistory.push({ role: 'assistant', content: reply });
+        }).catch(function () {
+            // 네트워크 오류 / 타임아웃(abort) 등
+            addMsg(CLIENT_ERROR_REPLY, 'bot');
+        }).finally(function () {
+            clearTimeout(timeoutId);           // 타이머 정리
+            removeLoading(loadingEl);           // 로딩 DOM 제거 (존재 여부 확인 포함)
+            aiChatSending = false;              // 전송 중 상태 해제
+            setSendEnabled(true);               // 입력 버튼 재활성화
+        });
     };
+
+    function setSendEnabled(enabled) {
+        var btn = document.getElementById('ai-chat-send');
+        if (btn) btn.disabled = !enabled;
+    }
 
     window.aiChatKeydown = function (e) {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -349,16 +450,52 @@
         }
     };
 
-    function addMsg(text, type) {
+    function addMsg(text, type, citations) {
         var messages = document.getElementById('ai-chat-messages');
+        if (!messages) return;
         var div = document.createElement('div');
         div.className = 'ai-msg ai-msg-' + type;
-        div.innerHTML = '<div class="ai-msg-bubble">' + escHtml(text) + '</div>';
+
+        var bubble = document.createElement('div');
+        bubble.className = 'ai-msg-bubble';
+        bubble.textContent = text; // XSS 방지: 텍스트는 textContent 로만 삽입
+
+        // 출처 링크 (웹 검색 결과가 있을 때만)
+        if (Array.isArray(citations) && citations.length > 0) {
+            var cites = document.createElement('div');
+            cites.className = 'ai-msg-citations';
+            for (var i = 0; i < citations.length; i++) {
+                var c = citations[i];
+                if (!c || typeof c.url !== 'string' || !/^https?:\/\//i.test(c.url)) continue;
+                var a = document.createElement('a');
+                a.href = c.url;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                // 외부 URL·제목은 textContent 로만 삽입
+                a.textContent = (c.title && String(c.title).trim()) ? String(c.title) : c.url;
+                cites.appendChild(a);
+            }
+            if (cites.childNodes.length > 0) bubble.appendChild(cites);
+        }
+
+        div.appendChild(bubble);
         messages.appendChild(div);
         messages.scrollTop = messages.scrollHeight;
     }
 
-    function escHtml(str) {
-        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    function addLoading() {
+        var messages = document.getElementById('ai-chat-messages');
+        if (!messages) return null;
+        var div = document.createElement('div');
+        div.className = 'ai-msg ai-msg-bot ai-msg-loading';
+        div.innerHTML = '<div class="ai-msg-bubble">답변을 작성하고 있어요...</div>';
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+        return div;
+    }
+
+    function removeLoading(el) {
+        // 이미 제거됐더라도 오류 없이 동작
+        if (el && el.parentNode) el.parentNode.removeChild(el);
     }
 })();
