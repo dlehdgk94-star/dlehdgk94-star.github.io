@@ -24,7 +24,7 @@
         <div id="ai-chat-header">
             <div id="ai-chat-title">
                 <img src="/images/symbol-icon.png" alt="AI" id="ai-chat-logo">
-                <div id="ai-chat-title-text">챗GPT</div>
+                <div id="ai-chat-title-text">Chat GPT</div>
             </div>
             <button id="ai-chat-close" onclick="toggleAiChat()" aria-label="닫기">
                 <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -42,7 +42,7 @@
 
         <!-- 입력창 -->
         <div id="ai-chat-input-row">
-            <textarea id="ai-chat-input" placeholder="메시지를 입력하세요" rows="1" onkeydown="aiChatKeydown(event)"></textarea>
+            <textarea id="ai-chat-input" placeholder="ChatGPT에게 물어보세요" rows="1" onkeydown="aiChatKeydown(event)"></textarea>
             <button id="ai-chat-send" onclick="aiChatSend()">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9L16 2L9 16L8 10L2 9Z" fill="currentColor"/></svg>
             </button>
