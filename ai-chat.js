@@ -24,26 +24,25 @@
         <div id="ai-chat-header">
             <div id="ai-chat-title">
                 <img src="/images/symbol-icon.png" alt="AI" id="ai-chat-logo">
-                <div>
-                    <div id="ai-chat-title-text">챗GPT</div>
-                    <div id="ai-chat-subtitle">인스타 호텔 AI 상담</div>
-                </div>
+                <div id="ai-chat-title-text">챗GPT</div>
             </div>
             <button id="ai-chat-close" onclick="toggleAiChat()" aria-label="닫기">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             </button>
         </div>
 
         <!-- 메시지 영역 -->
         <div id="ai-chat-messages">
-            <div class="ai-msg ai-msg-bot">
-                <div class="ai-msg-bubble">안녕하세요! 무엇이든 편하게 물어보세요 😊</div>
+            <!-- 첫 진입 안내 (첫 메시지 전송 시 숨김) -->
+            <div id="ai-chat-empty">
+                <img src="/images/symbol-icon.png" alt="AI" id="ai-chat-empty-icon">
+                <div id="ai-chat-empty-text">무엇이든 편하게 물어보세요</div>
             </div>
         </div>
 
         <!-- 입력창 -->
         <div id="ai-chat-input-row">
-            <textarea id="ai-chat-input" placeholder="메시지를 입력하세요..." rows="1" onkeydown="aiChatKeydown(event)"></textarea>
+            <textarea id="ai-chat-input" placeholder="메시지를 입력하세요" rows="1" onkeydown="aiChatKeydown(event)"></textarea>
             <button id="ai-chat-send" onclick="aiChatSend()">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9L16 2L9 16L8 10L2 9Z" fill="currentColor"/></svg>
             </button>
@@ -150,8 +149,8 @@
     height: 720px;
     max-height: calc(100vh - 140px);
     background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.16);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
     overflow: hidden;
     animation: aiChatOpen 0.22s ease;
 }
@@ -167,8 +166,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 16px;
-    background: rgb(28,28,28);
+    height: 56px;
+    padding: 0 16px;
+    background: #ffffff;
+    border-bottom: 1px solid #ececec;
     flex-shrink: 0;
 }
 #ai-chat-title {
@@ -184,28 +185,22 @@
     background: #fff;
 }
 #ai-chat-title-text {
-    font-size: 14px;
-    font-weight: 700;
-    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    color: #202020;
     font-family: 'Barlow', sans-serif;
-}
-#ai-chat-subtitle {
-    font-size: 11px;
-    color: rgba(255,255,255,0.6);
-    font-family: 'Barlow', sans-serif;
-    margin-top: 1px;
 }
 #ai-chat-close {
     background: none;
     border: none;
-    color: rgba(255,255,255,0.7);
+    color: #8e8e8e;
     cursor: pointer;
     padding: 4px;
     display: flex;
     align-items: center;
     transition: color 0.15s;
 }
-#ai-chat-close:hover { color: #fff; }
+#ai-chat-close:hover { color: #202020; }
 #ai-chat-close:focus { outline: none; }
 
 /* 메시지 영역 */
@@ -220,6 +215,27 @@
 }
 #ai-chat-messages::-webkit-scrollbar { width: 4px; }
 #ai-chat-messages::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+
+/* 첫 진입 안내 (세로 중앙) */
+#ai-chat-empty {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#ai-chat-empty-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+#ai-chat-empty-text {
+    margin-top: 16px;
+    font-size: 18px;
+    font-weight: 400;
+    color: #202020;
+    font-family: 'Barlow', sans-serif;
+    text-align: center;
+}
 
 /* 말풍선 (ChatGPT 방식) */
 .ai-msg { display: flex; }
@@ -280,20 +296,20 @@
 /* 로딩 표시 */
 .ai-msg-loading .ai-msg-bubble { color: #999; font-style: italic; }
 
-/* 입력창 — 전송 버튼을 입력창 안 오른쪽에 배치 */
+/* 입력 영역 — 대화창과 같은 흰 배경, 상단 구분선 없음 */
 #ai-chat-input-row {
     position: relative;
-    padding: 12px 14px;
-    border-top: 1px solid #eee;
-    background: #fff;
+    padding: 12px 16px 16px;
+    background: #ffffff;
     flex-shrink: 0;
 }
 #ai-chat-input {
     width: 100%;
     box-sizing: border-box;
     border: 1px solid #e0e0e0;
-    border-radius: 20px;
-    padding: 12px 52px 12px 16px;
+    border-radius: 24px;
+    background: #ffffff;
+    padding: 12px 52px 12px 18px;
     font-size: 15px;
     font-family: 'Barlow', sans-serif;
     resize: none;
@@ -304,14 +320,15 @@
     color: rgb(28,28,28);
     transition: border-color 0.15s;
 }
+#ai-chat-input::placeholder { color: #9e9e9e; }
 #ai-chat-input:focus { border-color: rgb(100,100,100); }
 #ai-chat-send {
     position: absolute;
-    right: 22px;
-    bottom: 19px;
-    width: 36px;
-    height: 36px;
-    background: rgb(28,28,28);
+    right: 24px;
+    bottom: 24px;
+    width: 32px;
+    height: 32px;
+    background: #202020;
     border: none;
     border-radius: 50%;
     color: #fff;
@@ -324,7 +341,8 @@
 }
 #ai-chat-send:hover { background: #444; }
 #ai-chat-send:focus { outline: none; }
-#ai-chat-send:disabled { opacity: 0.4; cursor: default; }
+/* 입력이 비어 있거나 전송 중이면 비활성 표시 */
+#ai-chat-send:disabled { background: #d4d4d4; cursor: default; }
 
 /* 모바일 */
 @media (max-width: 768px) {
@@ -351,6 +369,10 @@
         if (typeof setLanguage === 'function' && typeof currentLang !== 'undefined') {
             setLanguage(currentLang);
         }
+        // 입력 여부에 따라 전송 버튼 활성/비활성 실시간 반영
+        var input = document.getElementById('ai-chat-input');
+        if (input) input.addEventListener('input', refreshSendBtn);
+        refreshSendBtn();
     });
 
     // ── 전역 함수 ──
@@ -392,12 +414,16 @@
         var text = input.value.trim();
         if (!text) return;
 
+        // 첫 메시지 전송 시 안내 화면 숨김
+        var emptyEl = document.getElementById('ai-chat-empty');
+        if (emptyEl) emptyEl.style.display = 'none';
+
         addMsg(text, 'user');
         input.value = '';
         input.style.height = 'auto';
 
         aiChatSending = true;
-        setSendEnabled(false);
+        refreshSendBtn();
 
         // 서버로 보낼 히스토리 (현재 메시지 이전까지, 최근 10개)
         var historyToSend = chatHistory.slice(-10);
@@ -451,13 +477,17 @@
             clearTimeout(timeoutId);           // 타이머 정리
             removeLoading(loadingEl);           // 로딩 DOM 제거 (존재 여부 확인 포함)
             aiChatSending = false;              // 전송 중 상태 해제
-            setSendEnabled(true);               // 입력 버튼 재활성화
+            refreshSendBtn();                   // 입력 버튼 상태 갱신
         });
     };
 
-    function setSendEnabled(enabled) {
+    // 전송 중이거나 입력이 비어 있으면 전송 버튼 비활성
+    function refreshSendBtn() {
         var btn = document.getElementById('ai-chat-send');
-        if (btn) btn.disabled = !enabled;
+        var input = document.getElementById('ai-chat-input');
+        if (!btn) return;
+        var empty = !input || input.value.trim() === '';
+        btn.disabled = aiChatSending || empty;
     }
 
     window.aiChatKeydown = function (e) {
