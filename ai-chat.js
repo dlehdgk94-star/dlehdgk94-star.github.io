@@ -142,12 +142,13 @@
 #ai-chat-btn:focus { outline: none; }
 #ai-chat-btn img { width: 72%; height: 72%; object-fit: contain; border-radius: 0; }
 
-/* 채팅창 */
+/* 채팅창 (데스크탑 769px 이상) */
 #ai-chat-box {
     display: none;
     flex-direction: column;
-    width: 340px;
-    height: 480px;
+    width: 520px;
+    height: 720px;
+    max-height: calc(100vh - 140px);
     background: #fff;
     border-radius: 18px;
     box-shadow: 0 8px 40px rgba(0,0,0,0.16);
@@ -211,51 +212,64 @@
 #ai-chat-messages {
     flex: 1;
     overflow-y: auto;
-    padding: 16px;
+    padding: 20px 22px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    background: #f7f7f7;
+    gap: 16px;
+    background: #fff;
 }
 #ai-chat-messages::-webkit-scrollbar { width: 4px; }
 #ai-chat-messages::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
 
-/* 말풍선 */
+/* 말풍선 (ChatGPT 방식) */
 .ai-msg { display: flex; }
 .ai-msg-bot { justify-content: flex-start; }
 .ai-msg-user { justify-content: flex-end; }
 .ai-msg-bubble {
-    max-width: 80%;
-    padding: 10px 14px;
-    border-radius: 16px;
-    font-size: 13px;
-    line-height: 1.55;
+    font-size: 15px;
+    line-height: 1.7;
     font-family: 'Barlow', sans-serif;
     word-break: break-word;
 }
+/* 봇: 배경 없이 왼쪽 정렬 평문 */
 .ai-msg-bot .ai-msg-bubble {
-    background: #fff;
+    max-width: 100%;
     color: rgb(28,28,28);
-    border-bottom-left-radius: 4px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
 }
+/* 사용자: 오른쪽 정렬, 연한 회색 버블 */
 .ai-msg-user .ai-msg-bubble {
-    background: rgb(28,28,28);
-    color: #fff;
-    border-bottom-right-radius: 4px;
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 18px;
+    background: #f0f0f0;
+    color: rgb(28,28,28);
 }
+
+/* 봇 답변 내부 마크다운 요소 */
+.ai-msg-bot .ai-msg-bubble a {
+    color: rgb(58,154,180);
+    text-decoration: none;
+    word-break: break-all;
+}
+.ai-msg-bot .ai-msg-bubble a:hover { text-decoration: underline; }
+.ai-msg-bot .ai-msg-bubble strong { font-weight: 700; }
+.ai-md-list {
+    margin: 6px 0;
+    padding-left: 20px;
+}
+.ai-md-list li { margin: 2px 0; }
 
 /* 출처 링크 (웹 검색 시) */
 .ai-msg-citations {
-    margin-top: 8px;
-    padding-top: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
     border-top: 1px solid #eee;
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 .ai-msg-citations a {
-    font-size: 12px;
+    font-size: 13px;
     color: rgb(58,154,180);
     text-decoration: none;
     word-break: break-all;
@@ -266,33 +280,35 @@
 /* 로딩 표시 */
 .ai-msg-loading .ai-msg-bubble { color: #999; font-style: italic; }
 
-/* 입력창 */
+/* 입력창 — 전송 버튼을 입력창 안 오른쪽에 배치 */
 #ai-chat-input-row {
-    display: flex;
-    align-items: flex-end;
-    gap: 8px;
+    position: relative;
     padding: 12px 14px;
     border-top: 1px solid #eee;
     background: #fff;
     flex-shrink: 0;
 }
 #ai-chat-input {
-    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
     border: 1px solid #e0e0e0;
     border-radius: 20px;
-    padding: 9px 14px;
-    font-size: 13px;
+    padding: 12px 52px 12px 16px;
+    font-size: 15px;
     font-family: 'Barlow', sans-serif;
     resize: none;
     outline: none;
     line-height: 1.4;
-    max-height: 80px;
+    max-height: 96px;
     overflow-y: auto;
     color: rgb(28,28,28);
     transition: border-color 0.15s;
 }
 #ai-chat-input:focus { border-color: rgb(100,100,100); }
 #ai-chat-send {
+    position: absolute;
+    right: 22px;
+    bottom: 19px;
     width: 36px;
     height: 36px;
     background: rgb(28,28,28);
@@ -308,6 +324,7 @@
 }
 #ai-chat-send:hover { background: #444; }
 #ai-chat-send:focus { outline: none; }
+#ai-chat-send:disabled { opacity: 0.4; cursor: default; }
 
 /* 모바일 */
 @media (max-width: 768px) {
@@ -450,6 +467,53 @@
         }
     };
 
+    // ── 최소 마크다운 → 안전한 HTML 변환 (봇 답변용) ──
+    function escHtml(str) {
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // 한 줄 내부 인라인 요소 변환 (입력은 이미 이스케이프된 문자열)
+    function mdInline(s) {
+        // [제목](URL) → 링크 : http/https URL 만 허용
+        s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, function (m, label, url) {
+            return '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + label + '</a>';
+        });
+        // 맨 URL 자동 링크 : 앞 문자가 따옴표/꺾쇠/= (이미 만든 링크 내부)면 제외
+        s = s.replace(/(^|[^"'>=\]])(https?:\/\/[^\s<]+)/g, function (m, pre, url) {
+            return pre + '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + url + '</a>';
+        });
+        // **굵게** → <strong>
+        s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        return s;
+    }
+
+    function renderMarkdown(raw) {
+        // 1) 먼저 이스케이프 (XSS 방지 — 순서 중요)
+        var esc = escHtml(raw);
+        // 2) 줄 단위로 불릿/일반 줄 처리
+        var lines = esc.split('\n');
+        var parts = [];
+        var i = 0;
+        while (i < lines.length) {
+            if (/^\s*-\s+/.test(lines[i])) {
+                var items = [];
+                while (i < lines.length && /^\s*-\s+/.test(lines[i])) {
+                    items.push('<li>' + mdInline(lines[i].replace(/^\s*-\s+/, '')) + '</li>');
+                    i++;
+                }
+                parts.push('<ul class="ai-md-list">' + items.join('') + '</ul>');
+            } else {
+                var textLines = [];
+                while (i < lines.length && !/^\s*-\s+/.test(lines[i])) {
+                    textLines.push(mdInline(lines[i]));
+                    i++;
+                }
+                parts.push(textLines.join('<br>'));
+            }
+        }
+        return parts.join('');
+    }
+
     function addMsg(text, type, citations) {
         var messages = document.getElementById('ai-chat-messages');
         if (!messages) return;
@@ -458,7 +522,13 @@
 
         var bubble = document.createElement('div');
         bubble.className = 'ai-msg-bubble';
-        bubble.textContent = text; // XSS 방지: 텍스트는 textContent 로만 삽입
+        if (type === 'bot') {
+            // 봇 답변만 마크다운 렌더링 (이스케이프 후 허용 패턴만 태그화)
+            bubble.innerHTML = renderMarkdown(text);
+        } else {
+            // 사용자 입력은 변환 없이 textContent 로만 표시
+            bubble.textContent = text;
+        }
 
         // 출처 링크 (웹 검색 결과가 있을 때만)
         if (Array.isArray(citations) && citations.length > 0) {

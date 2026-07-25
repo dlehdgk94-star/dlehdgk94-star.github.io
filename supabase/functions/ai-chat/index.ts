@@ -36,8 +36,8 @@ const IS_DEV = Deno.env.get('AI_CHAT_ENV') === 'development';
 /* ── 손님에게 노출하는 문구 (내부 사정 비노출) ── */
 const ERROR_REPLY =
   '죄송합니다, 일시적인 오류가 발생했습니다. 프런트(031-203-4301, 24시간)로 문의해 주세요.';
-const NO_SOURCE_REPLY =
-  '최신 정보를 확인했지만 신뢰할 수 있는 출처를 함께 제공하지 못했습니다. 방문 전 공식 채널에서 다시 확인해 주세요.';
+const NO_SOURCE_NOTE =
+  '\n\n※ 실시간 정보라 변동될 수 있으니 방문 전 다시 확인해 주세요.';
 
 /* ══════════════════════════════════════════════════════════
    시스템 프롬프트 (instructions)
@@ -321,16 +321,24 @@ serve(async (req) => {
     const citations: { title: string; url: string }[] = [];
     const seenUrls = new Set<string>();
 
+    // 진단 로그용 수집 (개인정보 제외 — type/개수만)
+    const outputTypes: string[] = [];
+
     for (const rawItem of output) {
       const item = rawItem as Record<string, unknown>;
+      outputTypes.push(String(item?.type ?? 'unknown'));
       if (item?.type !== 'message') continue;
       const contentArr = Array.isArray(item.content) ? (item.content as unknown[]) : [];
+      const contentTypes: string[] = [];
       for (const rawC of contentArr) {
         const c = rawC as Record<string, unknown>;
+        contentTypes.push(String(c?.type ?? 'unknown'));
         if (c?.type !== 'output_text') continue;
         if (typeof c.text === 'string') text += c.text;
 
         const annotations = Array.isArray(c.annotations) ? (c.annotations as unknown[]) : [];
+        const annTypes = annotations.map((a) => String((a as Record<string, unknown>)?.type ?? 'unknown'));
+        console.log('[ai-chat] output_text ann', annotations.length, annTypes);
         for (const rawAnn of annotations) {
           const ann = rawAnn as Record<string, unknown>;
           if (ann?.type !== 'url_citation') continue;
@@ -342,26 +350,28 @@ serve(async (req) => {
           citations.push({ title, url });
         }
       }
+      console.log('[ai-chat] message content types', contentTypes);
     }
+    console.log('[ai-chat] output types', outputTypes);
     text = text.trim();
 
-    /* message/output_text 없음 → 안전한 오류 안내 */
+    /* 답변 텍스트가 비었거나 incomplete → 일반 오류 안내
+       (incomplete 는 위에서 이미 처리됨) */
     if (!text) {
       console.error('[ai-chat] output_text 없음');
       return errorReply(500, origin);
     }
 
-    /* 검색했으나 유효한 출처가 하나도 없음 → 단정하지 않고 안내 */
+    /* 모델 답변은 항상 그대로 반환한다.
+       검색했으나 유효한 출처가 없으면 답변을 버리지 않고, 끝에 안내
+       한 줄만 덧붙인다. */
+    let reply = text;
     if (usedWebSearch && citations.length === 0) {
-      return jsonReply(
-        { reply: NO_SOURCE_REPLY, citations: [], usedWebSearch: true },
-        200,
-        origin,
-      );
+      reply += NO_SOURCE_NOTE;
     }
 
     return jsonReply(
-      { reply: text, citations: usedWebSearch ? citations : [], usedWebSearch },
+      { reply, citations: usedWebSearch ? citations : [], usedWebSearch },
       200,
       origin,
     );
