@@ -153,14 +153,10 @@
         .nb-empty-msg{ grid-column:1/-1; text-align:center; padding:60px 0; font-size:15px; color:rgb(112,112,112); }
         /* 대중교통: 텍스트 전용 목록 (사진 카드 없이) */
         .nb-card-grid.nb-transit-mode{ display:grid; grid-template-columns:repeat(3,1fr); gap:0 40px; }
-        .nb-transit-item{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 4px; border-bottom:1px solid #eee; }
-        .nb-transit-name{ font-size:14px; color:rgb(40,40,40); }
-        .nb-transit-dist{ font-size:12px; font-weight:600; color:rgb(112,112,112); white-space:nowrap; flex-shrink:0; }
+        .nb-transit-item{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:12px 4px; border-bottom:1px solid #eee; }
+        .nb-transit-name{ font-size:14px; color:rgb(40,40,40); word-break:keep-all; }
+        .nb-transit-dist{ font-size:12px; font-weight:600; color:rgb(112,112,112); text-align:right; word-break:keep-all; }
         .nb-transit-dist i{ font-size:10px; margin-right:2px; color:#bbb; }
-        /* 앞부분 핵심 교통 안내: 전체 폭 + 설명 줄바꿈 허용 */
-        .nb-transit-item.featured{ grid-column:1/-1; align-items:baseline; gap:16px; padding:13px 4px; border-bottom:1px solid #ececec; }
-        .nb-transit-item.featured .nb-transit-name{ font-size:15px; font-weight:700; color:rgb(28,28,28); flex-shrink:0; }
-        .nb-transit-item.featured .nb-transit-dist{ font-size:13px; font-weight:500; color:rgb(80,80,80); white-space:normal; text-align:right; }
         @media (max-width:900px){ .nb-card-grid{ grid-template-columns:repeat(2,1fr); } .nb-card-grid.nb-transit-mode{ grid-template-columns:repeat(2,1fr); } }
         @media (max-width:540px){ .nb-card-grid{ grid-template-columns:1fr; } .nb-card-grid.nb-transit-mode{ grid-template-columns:1fr; } }
             /* ── 언어 선택 ── */
@@ -506,13 +502,7 @@
                     nameEl.textContent = place.name;
                     var distEl = document.createElement('span');
                     distEl.className = 'nb-transit-dist';
-                    if (place.featured) {
-                        // 앞부분 핵심 교통 안내: 전체 폭, 설명 텍스트 그대로
-                        item.classList.add('featured');
-                        distEl.textContent = place.detail || place.distance || '';
-                    } else {
-                        distEl.innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + place.distance;
-                    }
+                    distEl.innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + place.distance;
                     item.appendChild(nameEl);
                     item.appendChild(distEl);
                     grid.appendChild(item);
@@ -593,7 +583,7 @@
         function selectLang(el){ var lang=el.dataset.code.toLowerCase(); if(typeof setLanguage==='function'){ setLanguage(lang); } document.getElementById('langDropdown').classList.remove('open'); }
         document.addEventListener('click', function(){ var d=document.getElementById('langDropdown'); if(d)d.classList.remove('open'); });
     </script>
-    <script src="nearbyData.js?v=26"></script>
+    <script src="nearbyData.js?v=27"></script>
     <script src="translations.js?v=20260723a"></script>
     <script src="mobile-nav.js?v=20260717"></script>
     

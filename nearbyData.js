@@ -1247,74 +1247,46 @@ const nearbyData = {
       "places": [
         {
           "name": "시내버스 (호텔 앞 정류장)",
-          "detail": "7-1 / 7-1A (동탄1차고지↔경기대정문 등) · 13-5 (동탄1차고지↔당수동) · 20-2 (망포역↔신영통현대아파트단지 순환) · 34 / 34-1 (수원동부차고지↔병점역/왕림리) · 62-1 (동탄↔성균관대역) · 92-1 (동탄차고지↔성균관대역) · 98 (이목동차고지↔반월동)",
-          "featured": true
-        },
+          "distance": "7-1 / 7-1A (동탄1차고지↔경기대정문 등) · 13-5 (동탄1차고지↔당수동) · 20-2 (망포역↔신영통현대아파트단지 순환) · 34 / 34-1 (수원동부차고지↔병점역/왕림리) · 62-1 (동탄↔성균관대역) · 92-1 (동탄차고지↔성균관대역) · 98 (이목동차고지↔반월동)"        },
         {
           "name": "망포역",
-          "detail": "도보 이동 가능 · 버스 5분 · 차량 3분",
-          "featured": true
-        },
+          "distance": "도보 이동 가능 · 버스 5분 · 차량 3분"        },
         {
           "name": "인천공항",
-          "detail": "망포역 7번 출구 공항버스정류장 4100번",
-          "featured": true
-        },
+          "distance": "망포역 7번 출구 공항버스정류장 4100번"        },
         {
           "name": "김포공항",
-          "detail": "차량 1시간",
-          "featured": true
-        },
+          "distance": "차량 1시간"        },
         {
           "name": "동탄역 (SRT)",
-          "detail": "차량 17분",
-          "featured": true
-        },
+          "distance": "차량 17분"        },
         {
           "name": "수원역 (KTX)",
-          "detail": "차량 17분",
-          "featured": true
-        },
+          "distance": "차량 17분"        },
         {
           "name": "강남역",
-          "detail": "호텔 앞 정류장 1550-1번 직행버스 · 30분",
-          "featured": true
-        },
+          "distance": "호텔 앞 정류장 1550-1번 직행버스 · 30분"        },
         {
           "name": "남산타워",
-          "detail": "차량 40분",
-          "featured": true
-        },
+          "distance": "차량 40분"        },
         {
           "name": "삼성역·코엑스",
-          "detail": "차량 40분",
-          "featured": true
-        },
+          "distance": "차량 40분"        },
         {
           "name": "명동",
-          "detail": "차량 40분",
-          "featured": true
-        },
+          "distance": "차량 40분"        },
         {
           "name": "홍대입구역",
-          "detail": "차량 50분",
-          "featured": true
-        },
+          "distance": "차량 50분"        },
         {
           "name": "종로",
-          "detail": "차량 40분",
-          "featured": true
-        },
+          "distance": "차량 40분"        },
         {
           "name": "광화문",
-          "detail": "차량 45분",
-          "featured": true
-        },
+          "distance": "차량 45분"        },
         {
           "name": "이태원",
-          "detail": "차량 45분",
-          "featured": true
-        },
+          "distance": "차량 45분"        },
         {
           "name": "수원화성",
           "distance": "차량 20분",
