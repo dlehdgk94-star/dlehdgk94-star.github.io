@@ -271,9 +271,23 @@
 .ai-msg-bot .ai-msg-bubble strong { font-weight: 700; }
 .ai-md-list {
     margin: 6px 0;
-    padding-left: 20px;
+    padding-left: 18px;
 }
-.ai-md-list li { margin: 2px 0; }
+.ai-md-list li { margin: 4px 0; }
+/* 헤딩 (### / ##) → h4 */
+.ai-msg-bot .ai-msg-bubble .ai-md-h {
+    margin: 14px 0 6px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: rgb(28,28,28);
+}
+/* 구분선 --- */
+.ai-msg-bot .ai-msg-bubble .ai-md-hr {
+    border: none;
+    border-top: 1px solid #ececec;
+    margin: 12px 0;
+}
 
 /* 출처 링크 (웹 검색 시) */
 .ai-msg-citations {
@@ -384,8 +398,8 @@
 
     // 두 챗봇 설정 (엔드포인트/헤더 타이틀/로고)
     var BOTS = {
-        chatgpt: { endpoint: SUPA_FN + 'ai-chat',     title: 'Chat GPT', logo: '/images/symbol-icon.png' },
-        gemini:  { endpoint: SUPA_FN + 'gemini-chat', title: 'Gemini',   logo: '/images/gemini-color.svg' }
+        chatgpt: { endpoint: SUPA_FN + 'ai-chat',     title: 'Chat GPT', logo: '/images/symbol-icon.png',  placeholder: 'ChatGPT에게 물어보세요' },
+        gemini:  { endpoint: SUPA_FN + 'gemini-chat', title: 'Gemini',   logo: '/images/gemini-color.svg', placeholder: 'Gemini에게 물어보세요' }
     };
     // 봇별 대화 기록 (서로 분리). { role: 'user'|'bot', text, citations }
     var convo = { chatgpt: [], gemini: [] };
@@ -437,6 +451,8 @@
         if (t) t.textContent = BOTS[bot].title;
         var lg = document.getElementById('ai-chat-logo');
         if (lg) lg.src = BOTS[bot].logo;
+        var inp = document.getElementById('ai-chat-input');
+        if (inp) inp.placeholder = BOTS[bot].placeholder;
     }
 
     // 현재 봇의 대화를 메시지 영역에 다시 그림 (빈 화면 포함)
@@ -584,29 +600,52 @@
         return s;
     }
 
+    // 특수 줄 판별 헬퍼 (이스케이프된 문자열 기준)
+    function isBulletLine(ln) { return /^\s*[-*]\s+/.test(ln); }      // "- " 또는 "* "
+    function isHrLine(ln) { return /^\s*-{3,}\s*$/.test(ln); }        // "---" 만 있는 줄
+    function isHeadingLine(ln) { return /^\s*#{2,}\s+/.test(ln); }    // "## " 이상
+
     function renderMarkdown(raw) {
         // 1) 먼저 이스케이프 (XSS 방지 — 순서 중요)
         var esc = escHtml(raw);
-        // 2) 줄 단위로 불릿/일반 줄 처리
+        // 2) 줄 단위로 헤딩/구분선/불릿/일반 줄 처리
         var lines = esc.split('\n');
         var parts = [];
         var i = 0;
         while (i < lines.length) {
-            if (/^\s*-\s+/.test(lines[i])) {
+            var line = lines[i];
+
+            // 구분선 "---" (불릿 "- " 보다 먼저 판별)
+            if (isHrLine(line)) {
+                parts.push('<hr class="ai-md-hr">');
+                i++;
+                continue;
+            }
+            // 헤딩 "## " 이상 → <h4> (#### 이상도 h4로 통일)
+            var h = line.match(/^\s*#{2,}\s+(.*)$/);
+            if (h) {
+                parts.push('<h4 class="ai-md-h">' + mdInline(h[1]) + '</h4>');
+                i++;
+                continue;
+            }
+            // 불릿 "- " 또는 "* " → <ul><li>
+            if (isBulletLine(line)) {
                 var items = [];
-                while (i < lines.length && /^\s*-\s+/.test(lines[i])) {
-                    items.push('<li>' + mdInline(lines[i].replace(/^\s*-\s+/, '')) + '</li>');
+                while (i < lines.length && isBulletLine(lines[i]) && !isHrLine(lines[i])) {
+                    items.push('<li>' + mdInline(lines[i].replace(/^\s*[-*]\s+/, '')) + '</li>');
                     i++;
                 }
                 parts.push('<ul class="ai-md-list">' + items.join('') + '</ul>');
-            } else {
-                var textLines = [];
-                while (i < lines.length && !/^\s*-\s+/.test(lines[i])) {
-                    textLines.push(mdInline(lines[i]));
-                    i++;
-                }
-                parts.push(textLines.join('<br>'));
+                continue;
             }
+            // 일반 텍스트 — 다음 특수 줄 전까지 <br> 로 연결
+            var textLines = [];
+            while (i < lines.length &&
+                   !isBulletLine(lines[i]) && !isHrLine(lines[i]) && !isHeadingLine(lines[i])) {
+                textLines.push(mdInline(lines[i]));
+                i++;
+            }
+            parts.push(textLines.join('<br>'));
         }
         return parts.join('');
     }
