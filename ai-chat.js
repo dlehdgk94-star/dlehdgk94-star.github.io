@@ -445,6 +445,10 @@
     window.toggleAiChat = function () {
         window.openBot('chatgpt');
     };
+    // 모바일 하단 바의 Gemini 버튼 호환 — Gemini 열기/토글
+    window.toggleGeminiChat = function () {
+        window.openBot('gemini');
+    };
 
     function applyBotHeader(bot) {
         var t = document.getElementById('ai-chat-title-text');

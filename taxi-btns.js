@@ -61,10 +61,10 @@
         <div class="mbb-icon"><img src="/images/coupang-eats1.svg" alt="쿠팡이츠" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
         <span class="mbb-label">Food</span>\
     </button>\
-    <a class="mbb-item" href="https://gemini.google.com" target="_blank" rel="noopener" aria-label="Gemini">\
+    <button class="mbb-item" onclick="window.toggleGeminiChat&&window.toggleGeminiChat()" aria-label="Gemini">\
         <div class="mbb-icon"><img src="/images/gemini-color.svg" alt="Gemini" style="width:100%;height:100%;object-fit:contain;display:block;"></div>\
         <span class="mbb-label">Gemini</span>\
-    </a>\
+    </button>\
     <button class="mbb-item mbb-chatgpt" onclick="window.toggleAiChat&&window.toggleAiChat()">\
         <div class="mbb-icon mbb-icon-chatgpt"><img src="/images/symbol-icon.png" alt="ChatGPT" style="width:72%;height:72%;object-fit:contain;display:block;"></div>\
         <span class="mbb-label">Chat GPT</span>\
