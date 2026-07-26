@@ -1244,7 +1244,1113 @@ const nearbyData = {
     {
       "id": "transit",
       "label": "대중교통",
-      "places": []
+      "places": [
+        {
+          "name": "수원화성",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "화성행궁",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "한국민속촌",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "팔달문",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "수원화성박물관",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "삼성이노베이션뮤지엄 (SIM)",
+          "distance": "차량 8분",
+          "description": ""
+        },
+        {
+          "name": "수원박물관",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "수원광교박물관",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "에버랜드",
+          "distance": "차량 25~30분",
+          "description": ""
+        },
+        {
+          "name": "캐리비안 베이",
+          "distance": "차량 25~30분",
+          "description": ""
+        },
+        {
+          "name": "광교호수공원",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "일월수목원",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "영흥수목원",
+          "distance": "차량 10분",
+          "description": ""
+        },
+        {
+          "name": "효원공원월화원",
+          "distance": "차량 10분",
+          "description": ""
+        },
+        {
+          "name": "연무대",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "황구지천",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "만석공원",
+          "distance": "차량 20~25분",
+          "description": ""
+        },
+        {
+          "name": "행리단길",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "플라잉수원",
+          "distance": "차량 17분",
+          "description": ""
+        },
+        {
+          "name": "수원시립미술관",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "해우재박물관",
+          "distance": "차량 25분",
+          "description": ""
+        },
+        {
+          "name": "행궁동벽화마을",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "신동수변공원",
+          "distance": "차량 8분",
+          "description": ""
+        },
+        {
+          "name": "지도박물관 (국토지리정보원)",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "경기아트센터",
+          "distance": "차량 12분",
+          "description": ""
+        },
+        {
+          "name": "광교푸른숲도서관",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "아쿠아플라넷 광교",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "국립농업박물관",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "수원용화사",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "대한불교조계종 봉녕사",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "광교어린이천문대",
+          "distance": "차량 25분",
+          "description": ""
+        },
+        {
+          "name": "KBS 수원드라마제작센터",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "청명산",
+          "distance": "차량 14분",
+          "description": ""
+        },
+        {
+          "name": "영통사",
+          "distance": "차량 8분",
+          "description": ""
+        },
+        {
+          "name": "광교산",
+          "distance": "차량 20~25분",
+          "description": ""
+        },
+        {
+          "name": "화홍칼국수",
+          "distance": "도보 1분",
+          "description": ""
+        },
+        {
+          "name": "까치식당 망포점",
+          "distance": "도보 2분",
+          "description": ""
+        },
+        {
+          "name": "명가원설농탕신영통점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "배서방족발집 망포본점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "긴자 신영통점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "천애부히쇼우 망포 본점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "24시전주명가콩나물국밥 망포점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "포동이네 수원본점",
+          "distance": "도보 2분",
+          "description": ""
+        },
+        {
+          "name": "수산포차청해",
+          "distance": "도보 2분",
+          "description": ""
+        },
+        {
+          "name": "병천청년순대국 수원망포점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "후라이드참잘하는집 망포반월점",
+          "distance": "도보 4분",
+          "description": ""
+        },
+        {
+          "name": "버거킹 수원망포점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "태장식당 망포 직영점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "동대문엽기떡볶이 수원망포점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "소문난대구왕뽈찜",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "5.5닭갈비 경기지사",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "권선동황소곱창2호점",
+          "distance": "도보 6분",
+          "description": ""
+        },
+        {
+          "name": "3월3일 반월 본점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "먹고보자양꼬치 신영통점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "우설화 신영통점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "본가신림동백순대맛집 본점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "정철황소곱창 본점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "항아리보쌈본점",
+          "distance": "도보 6분",
+          "description": ""
+        },
+        {
+          "name": "벽적골황소곱창 망포본점",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "십년한우실비집 수원망포점",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "일보스시 망포점",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "금화루",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "가마치통닭 수원망포역점",
+          "distance": "도보 15분 (차량 5분)",
+          "description": ""
+        },
+        {
+          "name": "달구운바람 돼지갈비 영통망포점",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "백년광명순대국 망포본점",
+          "distance": "도보 2분",
+          "description": ""
+        },
+        {
+          "name": "메가MGC커피 망포늘푸른벽산점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "에이바우트커피 망포점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "공차 수원태장점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "파리바게뜨 영통벽산점",
+          "distance": "도보 2분",
+          "description": ""
+        },
+        {
+          "name": "카페 만월경 망포마을점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "이디야 수원망포점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "엠오삼오",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "백억커피 태장사거리점",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "가비앙",
+          "distance": "도보 8분",
+          "description": ""
+        },
+        {
+          "name": "따듯 공방카페",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "워킨",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "우드베어 망포",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "Cafe West Roasters",
+          "distance": "도보 10분",
+          "description": ""
+        },
+        {
+          "name": "투썸플레이스 태장사거리점",
+          "distance": "도보 10분",
+          "description": ""
+        },
+        {
+          "name": "퍼지데이즈",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "우지커피 수원망포점",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "파파노아이",
+          "distance": "도보 10분",
+          "description": ""
+        },
+        {
+          "name": "오직유과자집",
+          "distance": "도보 10분",
+          "description": ""
+        },
+        {
+          "name": "하나비",
+          "distance": "차량 4분",
+          "description": ""
+        },
+        {
+          "name": "요거트홈 망포점",
+          "distance": "도보 10분",
+          "description": ""
+        },
+        {
+          "name": "킹덤카페",
+          "distance": "도보 10분",
+          "description": ""
+        },
+        {
+          "name": "더리터 태장초점",
+          "distance": "차량 4분",
+          "description": ""
+        },
+        {
+          "name": "키키디저트",
+          "distance": "차량 4분",
+          "description": ""
+        },
+        {
+          "name": "커피콩",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "쿠로이시로",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "하루베이크 망포점",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "요거트아이스크림의정석 망포반월동점",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "스타벅스 신영통DT점",
+          "distance": "도보 10분",
+          "description": ""
+        },
+        {
+          "name": "화이트리에 망포점",
+          "distance": "차량 7분",
+          "description": ""
+        },
+        {
+          "name": "하얀풍차제과점 망포역점",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "GS25 망포벽산점",
+          "distance": "도보 1분",
+          "description": ""
+        },
+        {
+          "name": "CU 망포자이점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "이마트24 영통벽산점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "세븐일레븐 망포원룸점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "위니아24크린샵 망포점",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "올리브영 수원망포점",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "태안농협 망포지점",
+          "distance": "도보 1분",
+          "description": ""
+        },
+        {
+          "name": "하나은행 신영통지점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "신한은행 신영통",
+          "distance": "도보 8분",
+          "description": ""
+        },
+        {
+          "name": "KB국민은행 망포역",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "우리은행 망포역지점",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "IBK기업은행 영통",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "망포약국",
+          "distance": "도보 2분",
+          "description": ""
+        },
+        {
+          "name": "수원대형약국",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "다이소 수원망포점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "이마트에브리데이 신영통점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "트레이더스 홀세일클럽 수원점",
+          "distance": "차량 10분",
+          "description": ""
+        },
+        {
+          "name": "스피드메이트 수원망포점",
+          "distance": "도보 30초",
+          "description": ""
+        },
+        {
+          "name": "HD현대오일뱅크 나눔에너지",
+          "distance": "차량 3분",
+          "description": ""
+        },
+        {
+          "name": "망포1동행정복지센터",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "수원영통동우체국",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "엘지세탁소",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "수원뉴엘지프라자 전기차충전소",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "한림대학교동탄성심병원",
+          "distance": "차량 10분",
+          "description": ""
+        },
+        {
+          "name": "아주대학교병원",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "매듭병원",
+          "distance": "도보 10분",
+          "description": ""
+        },
+        {
+          "name": "365힐링의원",
+          "distance": "도보 10분",
+          "description": ""
+        },
+        {
+          "name": "신영통연세치과의원",
+          "distance": "도보 1분",
+          "description": ""
+        },
+        {
+          "name": "영통연세가정의학과의원",
+          "distance": "도보 2분",
+          "description": ""
+        },
+        {
+          "name": "연세참빛안과의원",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "경희온담한의원 수원망포",
+          "distance": "도보 4분",
+          "description": ""
+        },
+        {
+          "name": "장주은피부과의원",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "김경희산부인과의원",
+          "distance": "도보 6분",
+          "description": ""
+        },
+        {
+          "name": "재활플러스 요양원",
+          "distance": "도보 1분",
+          "description": ""
+        },
+        {
+          "name": "영통효요양병원",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "신영통동물병원",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "SY컨벤션 웨딩홀",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "파티움하우스 수원",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "애스톤웨딩하우스",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "삼성메디칼정형외과의원",
+          "distance": "도보 4분",
+          "description": ""
+        },
+        {
+          "name": "경희대학교 국제캠퍼스",
+          "distance": "차량 8분",
+          "description": ""
+        },
+        {
+          "name": "아주대학교",
+          "distance": "차량 25분",
+          "description": ""
+        },
+        {
+          "name": "경기대학교 수원캠퍼스",
+          "distance": "차량 30분",
+          "description": ""
+        },
+        {
+          "name": "망포중학교",
+          "distance": "도보 8분",
+          "description": ""
+        },
+        {
+          "name": "태장초등학교",
+          "distance": "도보 10분",
+          "description": ""
+        },
+        {
+          "name": "잠원초등학교",
+          "distance": "도보 10분",
+          "description": ""
+        },
+        {
+          "name": "잠원중학교",
+          "distance": "차량 4분",
+          "description": ""
+        },
+        {
+          "name": "망포초등학교",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "영동중학교",
+          "distance": "차량 10분",
+          "description": ""
+        },
+        {
+          "name": "대선초등학교",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "동학중학교",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "서천고등학교",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "동학초등학교",
+          "distance": "차량 3분",
+          "description": ""
+        },
+        {
+          "name": "서천초등학교",
+          "distance": "차량 8분",
+          "description": ""
+        },
+        {
+          "name": "서천중학교",
+          "distance": "차량 8분",
+          "description": ""
+        },
+        {
+          "name": "율목초등학교",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "수원컨벤션센터",
+          "distance": "차량 17분",
+          "description": ""
+        },
+        {
+          "name": "수원 메쎄",
+          "distance": "차량 17분",
+          "description": ""
+        },
+        {
+          "name": "삼성전자 수원 디지털시티",
+          "distance": "차량 8분",
+          "description": ""
+        },
+        {
+          "name": "삼성전기 수원사업장·본사",
+          "distance": "차량 12분",
+          "description": ""
+        },
+        {
+          "name": "삼성전자 화성캠퍼스",
+          "distance": "차량 6분",
+          "description": ""
+        },
+        {
+          "name": "삼성전자 기흥캠퍼스",
+          "distance": "차량 10분",
+          "description": ""
+        },
+        {
+          "name": "삼성디스플레이 기흥사업장",
+          "distance": "차량 10분",
+          "description": ""
+        },
+        {
+          "name": "삼성종합기술원 SAIT",
+          "distance": "차량 8분",
+          "description": ""
+        },
+        {
+          "name": "삼성SDI 기흥본사",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "삼성SDI 수원연구소",
+          "distance": "차량 8분",
+          "description": ""
+        },
+        {
+          "name": "삼성전자 화성 DSR타워",
+          "distance": "차량 8분",
+          "description": ""
+        },
+        {
+          "name": "ASML Korea 화성 본사",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "도쿄일렉트론코리아",
+          "distance": "차량 12분",
+          "description": ""
+        },
+        {
+          "name": "어플라이드 머티어리얼즈 코리아",
+          "distance": "차량 10분",
+          "description": ""
+        },
+        {
+          "name": "ASM Korea 화성사업장",
+          "distance": "차량 13분",
+          "description": ""
+        },
+        {
+          "name": "램리서치 코리아테크놀로지센터",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "에스에프에이 SFA",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "피에스케이 PSK",
+          "distance": "차량 10분",
+          "description": ""
+        },
+        {
+          "name": "테스 TES 동탄사무소",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "KLA Korea 동탄사업장",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "수원KT위즈파크",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "수원종합운동장",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "수원월드컵경기장(빅버드)",
+          "distance": "차량 25분",
+          "description": ""
+        },
+        {
+          "name": "올라잇짐 헬스&PT 망포점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "투펄슨짐 피트니스 PT 헬스 망포점",
+          "distance": "도보 1분",
+          "description": ""
+        },
+        {
+          "name": "달라짐 PT 헬스 필라테스 수원망포역점",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "메꿀다이어트짐 피트니스 PT 망포점",
+          "distance": "도보 2분",
+          "description": ""
+        },
+        {
+          "name": "점핑다이어트 망포파워점프",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "카인드짐24시 헬스&PT 망포점",
+          "distance": "도보 5분",
+          "description": ""
+        },
+        {
+          "name": "수원종합운동장실내체육관",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "서수원칠보체육관",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "용인미르스타디움",
+          "distance": "차량 25분",
+          "description": ""
+        },
+        {
+          "name": "수원CC",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "골드CC",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "코리아CC",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "코리아퍼블릭CC",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "레이크사이드CC",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "화성상록GC",
+          "distance": "차량 25분",
+          "description": ""
+        },
+        {
+          "name": "한원CC",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "남서울CC",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "태광CC",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "기흥CC",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "토에르발레학원",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "와일드복싱짐 본관",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "타이혼스포츠아카데미 망포점",
+          "distance": "도보 4분",
+          "description": ""
+        },
+        {
+          "name": "대한검도회 청파검도관",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "미스터샤크MMA주짓수킥복싱멀티짐",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "마음수련 명상센터 영통점",
+          "distance": "도보 7분",
+          "description": ""
+        },
+        {
+          "name": "에픽클라임",
+          "distance": "도보 3분",
+          "description": ""
+        },
+        {
+          "name": "태풍태권도",
+          "distance": "도보 4분",
+          "description": ""
+        },
+        {
+          "name": "스타필드 수원",
+          "distance": "차량 22분",
+          "description": ""
+        },
+        {
+          "name": "갤러리아백화점",
+          "distance": "차량 17분",
+          "description": ""
+        },
+        {
+          "name": "판타지움",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "골든스퀘어",
+          "distance": "차량 5분",
+          "description": ""
+        },
+        {
+          "name": "포레스퀘어",
+          "distance": "차량 7분",
+          "description": ""
+        },
+        {
+          "name": "유니클로 수원망포점",
+          "distance": "차량 6분",
+          "description": ""
+        },
+        {
+          "name": "타임빌라스 수원",
+          "distance": "차량 25분",
+          "description": ""
+        },
+        {
+          "name": "AK플라자 수원",
+          "distance": "차량 25분",
+          "description": ""
+        },
+        {
+          "name": "NC백화점 수원터미널점",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "뉴코아아울렛 동수원점",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "이마트 수원점",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "롯데몰 광교점",
+          "distance": "차량 25분",
+          "description": ""
+        },
+        {
+          "name": "아브뉴프랑 광교",
+          "distance": "차량 25분",
+          "description": ""
+        },
+        {
+          "name": "앨리웨이 광교",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "롯데백화점 동탄점",
+          "distance": "차량 20분",
+          "description": ""
+        },
+        {
+          "name": "롯데프리미엄아울렛 기흥",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "탑텐 수원망포점",
+          "distance": "차량 7분",
+          "description": ""
+        },
+        {
+          "name": "수원프리미엄아울렛",
+          "distance": "차량 15분",
+          "description": ""
+        },
+        {
+          "name": "더와이스퀘어",
+          "distance": "차량 25분",
+          "description": ""
+        },
+        {
+          "name": "블루키",
+          "distance": "차량 25분",
+          "description": ""
+        }
+      ]
     },
     {
       "id": "fitness",
