@@ -1,16 +1,18 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 
 /* ══════════════════════════════════════════════════════════
-   인스타호텔 본점 AI 컨시어지 — 실시간 검색형 챗봇
-   OpenAI Responses API + web_search
+   인스타호텔 본점 AI 컨시어지 — 실시간 검색형 챗봇 (Gemini)
+   Google Gemini generateContent + google_search
+   · ai-chat 과 동일한 구조. 모델 호출부만 Gemini 로 교체.
+   · RAG 임베딩은 여전히 OpenAI text-embedding-3-small 사용
+     (knowledge_base 적재 모델과 반드시 동일해야 함)
    · 로그인 없는 방문자 누구나 호출 (기존 함수와 동일한
      publishable key 헤더 구조로 프런트에서 호출)
-   · 애플리케이션 레벨 호출 제한 없음 — 금전적 상한은
-     OpenAI Hard spend limit이 담당
 ══════════════════════════════════════════════════════════ */
 
-const MODEL = 'gpt-5.6-terra'; // 별칭 'gpt-5.6'(Sol)은 절대 사용 금지
-const OPENAI_URL = 'https://api.openai.com/v1/responses';
+const GEMINI_MODEL = 'gemini-3.5-flash';
+const GEMINI_URL =
+  `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const SERVER_TIMEOUT_MS = 40_000;
 
 /* ── RAG(지식베이스 검색) 설정 ── */
@@ -199,12 +201,12 @@ async function matchKnowledge(
       clearTimeout(tid);
     }
     if (!res.ok) {
-      console.error('[ai-chat] RAG_LOOKUP_FAILED', 'rpc_http_' + res.status);
+      console.error('[gemini-chat] RAG_LOOKUP_FAILED', 'rpc_http_' + res.status);
       return null;
     }
     const rows = await res.json();
     if (!Array.isArray(rows)) {
-      console.error('[ai-chat] RAG_LOOKUP_FAILED', 'rpc_bad_shape');
+      console.error('[gemini-chat] RAG_LOOKUP_FAILED', 'rpc_bad_shape');
       return null;
     }
     return rows
@@ -219,7 +221,7 @@ async function matchKnowledge(
       })
       .sort((a, b) => b.similarity - a.similarity); // 유사도 높은 순
   } catch {
-    console.error('[ai-chat] RAG_LOOKUP_FAILED', 'rpc_error');
+    console.error('[gemini-chat] RAG_LOOKUP_FAILED', 'rpc_error');
     return null;
   }
 }
@@ -235,7 +237,7 @@ async function ragLookup(
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
   if (!supabaseUrl || !serviceKey) {
-    console.error('[ai-chat] RAG_LOOKUP_FAILED', 'missing_supabase_env');
+    console.error('[gemini-chat] RAG_LOOKUP_FAILED', 'missing_supabase_env');
     return EMPTY;
   }
 
@@ -256,7 +258,7 @@ async function ragLookup(
       clearTimeout(tid);
     }
     if (!res.ok) {
-      console.error('[ai-chat] RAG_LOOKUP_FAILED', 'embed_http_' + res.status);
+      console.error('[gemini-chat] RAG_LOOKUP_FAILED', 'embed_http_' + res.status);
       return EMPTY;
     }
     const data = await res.json();
@@ -264,11 +266,11 @@ async function ragLookup(
     const first = Array.isArray(dataArr) ? (dataArr[0] as Record<string, unknown>) : undefined;
     embedding = first?.embedding;
     if (!Array.isArray(embedding)) {
-      console.error('[ai-chat] RAG_LOOKUP_FAILED', 'embed_no_vector');
+      console.error('[gemini-chat] RAG_LOOKUP_FAILED', 'embed_no_vector');
       return EMPTY;
     }
   } catch {
-    console.error('[ai-chat] RAG_LOOKUP_FAILED', 'embed_error');
+    console.error('[gemini-chat] RAG_LOOKUP_FAILED', 'embed_error');
     return EMPTY;
   }
 
@@ -322,7 +324,7 @@ async function recordChatRow(
   row: Record<string, unknown>,
 ): Promise<void> {
   if (!supabaseUrl || !serviceKey) {
-    console.error('[ai-chat] CHAT_LOG_FAILED', 'missing_supabase_env');
+    console.error('[gemini-chat] CHAT_LOG_FAILED', 'missing_supabase_env');
     return;
   }
   const insert = async () => {
@@ -341,12 +343,12 @@ async function recordChatRow(
           body: JSON.stringify(row),
           signal: ctrl.signal,
         });
-        if (!res.ok) console.error('[ai-chat] CHAT_LOG_FAILED', 'http_' + res.status);
+        if (!res.ok) console.error('[gemini-chat] CHAT_LOG_FAILED', 'http_' + res.status);
       } finally {
         clearTimeout(tid);
       }
     } catch {
-      console.error('[ai-chat] CHAT_LOG_FAILED', 'insert_error');
+      console.error('[gemini-chat] CHAT_LOG_FAILED', 'insert_error');
     }
   };
 
@@ -358,11 +360,11 @@ async function recordChatRow(
   await insert(); // waitUntil 미지원 → 3초 타임아웃 걸린 insert 를 await
 }
 
-/* OpenAI 응답에서 usage 토큰 추출 (없으면 null) */
+/* Gemini 응답에서 usageMetadata 토큰 추출 (없으면 null) */
 function tokensOf(data: unknown): { input: number | null; output: number | null } {
-  const u = (data as Record<string, unknown>)?.usage as Record<string, unknown> | undefined;
-  const input = Number(u?.input_tokens);
-  const output = Number(u?.output_tokens);
+  const u = (data as Record<string, unknown>)?.usageMetadata as Record<string, unknown> | undefined;
+  const input = Number(u?.promptTokenCount);
+  const output = Number(u?.candidatesTokenCount);
   return {
     input: Number.isFinite(input) ? input : null,
     output: Number.isFinite(output) ? output : null,
@@ -453,7 +455,7 @@ serve(async (req) => {
   /* ── OPENAI_API_KEY ── */
   const apiKey = Deno.env.get('OPENAI_API_KEY');
   if (!apiKey) {
-    console.error('[ai-chat] OPENAI_API_KEY 미설정');
+    console.error('[gemini-chat] OPENAI_API_KEY 미설정');
     return errorReply(500, origin);
   }
 
@@ -462,7 +464,7 @@ serve(async (req) => {
   const rag = await ragLookup(message, apiKey);
   const ragResults = rag.results;
   const decidedSource = rag.source;
-  console.log('[ai-chat] RAG', decidedSource ?? 'none', 'hits', ragResults.length, 'top', ragResults[0]?.similarity ?? 0);
+  console.log('[gemini-chat] RAG', decidedSource ?? 'none', 'hits', ragResults.length, 'top', ragResults[0]?.similarity ?? 0);
 
   /* ── 질문 로그 준비 ── 응답 반환 직전에 chat_log 로 백그라운드 insert.
      base 필드는 여기서 고정하고, 각 반환 경로에서 status/답변/토큰만 채운다. */
@@ -514,27 +516,25 @@ serve(async (req) => {
     }
   }
 
+  /* ── Gemini contents 구성 (OpenAI 'assistant' → Gemini 'model') ── */
+  const contents = input.map((m) => ({
+    role: m.role === 'assistant' ? 'model' : 'user',
+    parts: [{ text: m.content }],
+  }));
+
+  /* ── GEMINI_API_KEY (모델 호출용. 임베딩은 OPENAI_API_KEY 사용) ── */
+  const geminiKey = Deno.env.get('GEMINI_API_KEY');
+  if (!geminiKey) {
+    console.error('[gemini-chat] GEMINI_API_KEY 미설정');
+    await recordChat('error', null, false, null, null);
+    return errorReply(500, origin);
+  }
+
   const payload = {
-    model: MODEL,
-    instructions,
-    input,
-    reasoning: { effort: 'low' },
-    store: false,
-    max_output_tokens: 10000,
-    tools: [
-      {
-        type: 'web_search',
-        external_web_access: true,
-        search_context_size: 'low',
-        user_location: {
-          type: 'approximate',
-          country: 'KR',
-          city: 'Suwon',
-          region: 'Gyeonggi-do',
-        },
-      },
-    ],
-    tool_choice: 'auto',
+    systemInstruction: { parts: [{ text: instructions }] },
+    contents,
+    tools: [{ google_search: {} }],
+    generationConfig: { maxOutputTokens: 10000 },
   };
 
   /* ── 서버 40초 타임아웃 (필수) + 클라이언트 이탈 신호 병합 ──
@@ -544,12 +544,12 @@ serve(async (req) => {
   const signal = AbortSignal.any([timeoutController.signal, req.signal]);
 
   try {
-    let openaiRes: Response;
+    let geminiRes: Response;
     try {
-      openaiRes = await fetch(OPENAI_URL, {
+      geminiRes = await fetch(GEMINI_URL, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${apiKey}`,
+          'x-goog-api-key': geminiKey,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
@@ -560,32 +560,32 @@ serve(async (req) => {
       if (req.signal.aborted) return errorReply(500, origin);
       // 서버 40초 타임아웃
       if (timeoutController.signal.aborted) {
-        console.error('[ai-chat] 서버 타임아웃 (40s)');
+        console.error('[gemini-chat] 서버 타임아웃 (40s)');
         await recordChat('timeout', null, false, null, null);
         return errorReply(504, origin);
       }
-      console.error('[ai-chat] OpenAI 네트워크 오류');
+      console.error('[gemini-chat] Gemini 네트워크 오류');
       await recordChat('error', null, false, null, null);
       return errorReply(500, origin);
     }
 
-    /* ── OpenAI 오류 응답: 원문을 클라이언트에 전달하지 않는다 ── */
-    if (!openaiRes.ok) {
-      const status = openaiRes.status;
+    /* ── Gemini 오류 응답: 원문을 클라이언트에 전달하지 않는다 ── */
+    if (!geminiRes.ok) {
+      const status = geminiRes.status;
       let code = '';
       try {
-        const errBody = await openaiRes.json();
+        const errBody = await geminiRes.json();
         const e = (errBody as Record<string, unknown>)?.error as Record<string, unknown> | undefined;
-        code = String(e?.code ?? e?.type ?? '');
+        code = String(e?.status ?? e?.code ?? '');
       } catch { /* 본문 파싱 실패는 무시 */ }
 
       // 예산 소진 · 레이트리밋 구분 로그
-      if (status === 429 || code === 'insufficient_quota' || code === 'rate_limit_exceeded') {
-        console.error('[ai-chat] OPENAI_QUOTA_OR_RATE_LIMIT', status, code);
+      if (status === 429 || code === 'RESOURCE_EXHAUSTED') {
+        console.error('[gemini-chat] GEMINI_QUOTA_OR_RATE_LIMIT', status);
       } else {
-        console.error('[ai-chat] OpenAI 오류 status:', status);
+        console.error('[gemini-chat] Gemini 오류 status:', status);
       }
-      // OpenAI 상태 코드를 그대로 전달하지 않고 500 으로 변환
+      // Gemini 상태 코드를 그대로 전달하지 않고 500 으로 변환
       await recordChat('error', null, false, null, null);
       return errorReply(500, origin);
     }
@@ -593,70 +593,59 @@ serve(async (req) => {
     /* ── 성공 응답 파싱 ── */
     let data: Record<string, unknown>;
     try {
-      data = await openaiRes.json();
+      data = await geminiRes.json();
     } catch {
-      console.error('[ai-chat] OpenAI 응답 파싱 실패');
+      console.error('[gemini-chat] Gemini 응답 파싱 실패');
       await recordChat('error', null, false, null, null);
       return errorReply(500, origin);
     }
 
-    /* status: incomplete → 정상 처리하지 않음 */
-    if (data?.status === 'incomplete') {
-      const details = data?.incomplete_details as Record<string, unknown> | undefined;
-      console.error('[ai-chat] incomplete reason:', String(details?.reason ?? 'unknown'));
+    /* candidates[0] 추출 */
+    const candidates = Array.isArray(data?.candidates) ? (data.candidates as unknown[]) : [];
+    const cand0 = (candidates[0] ?? {}) as Record<string, unknown>;
+    const finishReason = String(cand0?.finishReason ?? '');
+
+    /* finishReason MAX_TOKENS → 잘린 응답, 정상 처리하지 않음 */
+    if (finishReason === 'MAX_TOKENS') {
+      console.error('[gemini-chat] finishReason MAX_TOKENS');
       const tk = tokensOf(data);
       await recordChat('error', null, false, tk.input, tk.output);
       return errorReply(500, origin);
     }
 
-    /* ── output 배열에서 텍스트/검색여부/citation 추출 ── */
-    const output = Array.isArray(data?.output) ? (data.output as unknown[]) : [];
-    const usedWebSearch = output.some(
-      (it) => (it as Record<string, unknown>)?.type === 'web_search_call',
-    );
+    /* groundingMetadata → usedWebSearch / citations */
+    const gm = cand0?.groundingMetadata as Record<string, unknown> | undefined;
+    const groundingChunks = Array.isArray(gm?.groundingChunks) ? (gm!.groundingChunks as unknown[]) : [];
+    const usedWebSearch = !!gm && groundingChunks.length > 0;
 
-    let text = '';
     const citations: { title: string; url: string }[] = [];
     const seenUrls = new Set<string>();
-
-    // 진단 로그용 수집 (개인정보 제외 — type/개수만)
-    const outputTypes: string[] = [];
-
-    for (const rawItem of output) {
-      const item = rawItem as Record<string, unknown>;
-      outputTypes.push(String(item?.type ?? 'unknown'));
-      if (item?.type !== 'message') continue;
-      const contentArr = Array.isArray(item.content) ? (item.content as unknown[]) : [];
-      const contentTypes: string[] = [];
-      for (const rawC of contentArr) {
-        const c = rawC as Record<string, unknown>;
-        contentTypes.push(String(c?.type ?? 'unknown'));
-        if (c?.type !== 'output_text') continue;
-        if (typeof c.text === 'string') text += c.text;
-
-        const annotations = Array.isArray(c.annotations) ? (c.annotations as unknown[]) : [];
-        const annTypes = annotations.map((a) => String((a as Record<string, unknown>)?.type ?? 'unknown'));
-        console.log('[ai-chat] output_text ann', annotations.length, annTypes);
-        for (const rawAnn of annotations) {
-          const ann = rawAnn as Record<string, unknown>;
-          if (ann?.type !== 'url_citation') continue;
-          const url = ann.url;
-          if (typeof url !== 'string' || !/^https?:\/\//i.test(url)) continue; // http/https 만
-          if (seenUrls.has(url) || citations.length >= 5) continue; // 중복 제거, 최대 5개
-          seenUrls.add(url);
-          const title = typeof ann.title === 'string' ? ann.title : '';
-          citations.push({ title, url });
-        }
-      }
-      console.log('[ai-chat] message content types', contentTypes);
+    for (const rawCh of groundingChunks) {
+      const web = (rawCh as Record<string, unknown>)?.web as Record<string, unknown> | undefined;
+      const url = web?.uri;
+      // vertexaisearch 리다이렉트 주소여도 http/https 면 그대로 사용
+      if (typeof url !== 'string' || !/^https?:\/\//i.test(url)) continue;
+      if (seenUrls.has(url) || citations.length >= 5) continue; // 중복 제거, 최대 5개
+      seenUrls.add(url);
+      const title = typeof web?.title === 'string' ? web.title : '';
+      citations.push({ title, url });
     }
-    console.log('[ai-chat] output types', outputTypes);
+
+    /* content.parts[] 의 text 를 순서대로 합침 */
+    const content = cand0?.content as Record<string, unknown> | undefined;
+    const parts = Array.isArray(content?.parts) ? (content!.parts as unknown[]) : [];
+    let text = '';
+    for (const rawP of parts) {
+      const p = rawP as Record<string, unknown>;
+      if (typeof p?.text === 'string') text += p.text;
+    }
     text = text.trim();
 
-    /* 답변 텍스트가 비었거나 incomplete → 일반 오류 안내
-       (incomplete 는 위에서 이미 처리됨) */
+    console.log('[gemini-chat] finishReason', finishReason || 'none', 'grounding', groundingChunks.length);
+
+    /* 답변 텍스트가 비면 일반 오류 안내 */
     if (!text) {
-      console.error('[ai-chat] output_text 없음');
+      console.error('[gemini-chat] 응답 텍스트 없음');
       const tk = tokensOf(data);
       await recordChat('error', null, usedWebSearch, tk.input, tk.output);
       return errorReply(500, origin);
@@ -682,11 +671,11 @@ serve(async (req) => {
     // 손님 이탈(다운스트림 abort): 로그 남기지 않음
     if (req.signal.aborted) return errorReply(500, origin);
     if (timeoutController.signal.aborted) {
-      console.error('[ai-chat] 서버 타임아웃 (40s)');
+      console.error('[gemini-chat] 서버 타임아웃 (40s)');
       await recordChat('timeout', null, false, null, null);
       return errorReply(504, origin);
     }
-    console.error('[ai-chat] 예기치 못한 예외');
+    console.error('[gemini-chat] 예기치 못한 예외');
     await recordChat('error', null, false, null, null);
     return errorReply(500, origin);
   } finally {

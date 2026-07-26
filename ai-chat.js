@@ -4,14 +4,14 @@
 <div id="ai-chat-wrap">
     <!-- 플로팅 버튼 행 -->
     <div id="ai-side-icons-row">
-        <a id="gemini-btn-wrap" href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" aria-label="Gemini">
+        <div id="gemini-btn-wrap" onclick="openBot('gemini')" role="button" tabindex="0" aria-label="Gemini 컨시어지 열기">
             <div id="gemini-btn-icon">
                 <img src="/images/gemini-color.svg" alt="Gemini">
             </div>
             <span id="gemini-label">Gemini</span>
-        </a>
-        <div id="ai-chat-btn-wrap" onclick="toggleAiChat()">
-            <button id="ai-chat-btn" aria-label="AI 컨시어지 열기">
+        </div>
+        <div id="ai-chat-btn-wrap" onclick="openBot('chatgpt')">
+            <button id="ai-chat-btn" aria-label="Chat GPT 컨시어지 열기">
                 <img src="/images/symbol-icon.png" alt="AI">
             </button>
             <span id="ai-chat-label">Chat GPT</span>
@@ -26,7 +26,7 @@
                 <img src="/images/symbol-icon.png" alt="AI" id="ai-chat-logo">
                 <div id="ai-chat-title-text">Chat GPT</div>
             </div>
-            <button id="ai-chat-close" onclick="toggleAiChat()" aria-label="닫기">
+            <button id="ai-chat-close" onclick="closeAiChat()" aria-label="닫기">
                 <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             </button>
         </div>
@@ -375,26 +375,21 @@
         refreshSendBtn();
     });
 
-    // ── 전역 함수 ──
-    window.toggleAiChat = function () {
-        var box = document.getElementById('ai-chat-box');
-        if (!box) return;
-        box.classList.toggle('open');
-        if (box.classList.contains('open')) {
-            setTimeout(function () {
-                document.getElementById('ai-chat-input').focus();
-            }, 100);
-        }
-    };
-
     // ── 챗봇 서버 설정 ──
-    var AI_CHAT_ENDPOINT = 'https://lbhdujheuokkmiowobzu.supabase.co/functions/v1/ai-chat';
+    var SUPA_FN = 'https://lbhdujheuokkmiowobzu.supabase.co/functions/v1/';
     // 기존 Edge Function 호출과 동일한 publishable key 헤더 구조 (로그인 없이 호출)
     var AI_CHAT_ANON = 'sb_publishable_2X3S_RgN_0ipbUtR-zAV6A_yIp1n5PC';
     var CLIENT_TIMEOUT_MS = 45000; // 서버 40초보다 조금 길게
     var CLIENT_ERROR_REPLY = '죄송합니다, 일시적인 오류가 발생했습니다. 프런트(031-203-4301, 24시간)로 문의해 주세요.';
 
-    var chatHistory = [];   // { role, content } — 서버로 보낼 이전 대화
+    // 두 챗봇 설정 (엔드포인트/헤더 타이틀/로고)
+    var BOTS = {
+        chatgpt: { endpoint: SUPA_FN + 'ai-chat',     title: 'Chat GPT', logo: '/images/symbol-icon.png' },
+        gemini:  { endpoint: SUPA_FN + 'gemini-chat', title: 'Gemini',   logo: '/images/gemini-color.svg' }
+    };
+    // 봇별 대화 기록 (서로 분리). { role: 'user'|'bot', text, citations }
+    var convo = { chatgpt: [], gemini: [] };
+    var currentBot = 'chatgpt';
     var aiChatSending = false;
 
     function getLang() {
@@ -406,6 +401,71 @@
         return 'ko';
     }
 
+    // ── 전역 함수 ──
+    // 버튼으로 챗봇 열기 (같은 봇 재클릭 시 닫기, 다른 봇이면 전환 — 한 번에 하나만)
+    window.openBot = function (bot) {
+        if (!BOTS[bot]) return;
+        var box = document.getElementById('ai-chat-box');
+        if (!box) return;
+        if (box.classList.contains('open') && currentBot === bot) {
+            box.classList.remove('open');
+            return;
+        }
+        currentBot = bot;
+        applyBotHeader(bot);
+        renderConvo(bot);
+        box.classList.add('open');
+        setTimeout(function () {
+            var i = document.getElementById('ai-chat-input');
+            if (i) i.focus();
+            refreshSendBtn();
+        }, 100);
+    };
+
+    // 닫기 (헤더 X 버튼)
+    window.closeAiChat = function () {
+        var box = document.getElementById('ai-chat-box');
+        if (box) box.classList.remove('open');
+    };
+    // 모바일 하단 바(taxi-btns.js)의 ChatGPT 버튼 호환 — Chat GPT 열기/토글
+    window.toggleAiChat = function () {
+        window.openBot('chatgpt');
+    };
+
+    function applyBotHeader(bot) {
+        var t = document.getElementById('ai-chat-title-text');
+        if (t) t.textContent = BOTS[bot].title;
+        var lg = document.getElementById('ai-chat-logo');
+        if (lg) lg.src = BOTS[bot].logo;
+    }
+
+    // 현재 봇의 대화를 메시지 영역에 다시 그림 (빈 화면 포함)
+    function renderConvo(bot) {
+        var messages = document.getElementById('ai-chat-messages');
+        if (!messages) return;
+        messages.innerHTML = '';
+        var list = convo[bot];
+        if (!list.length) {
+            var empty = document.createElement('div');
+            empty.id = 'ai-chat-empty';
+            var icon = document.createElement('img');
+            icon.id = 'ai-chat-empty-icon';
+            icon.src = BOTS[bot].logo;
+            icon.alt = BOTS[bot].title;
+            var txt = document.createElement('div');
+            txt.id = 'ai-chat-empty-text';
+            txt.textContent = '무엇이든 편하게 물어보세요';
+            empty.appendChild(icon);
+            empty.appendChild(txt);
+            messages.appendChild(empty);
+            return;
+        }
+        for (var i = 0; i < list.length; i++) {
+            addMsg(list[i].text, list[i].role, list[i].citations);
+        }
+        messages.scrollTop = messages.scrollHeight;
+    }
+
     window.aiChatSend = function () {
         if (aiChatSending) return; // 전송 중 중복 전송 방지
 
@@ -414,11 +474,15 @@
         var text = input.value.trim();
         if (!text) return;
 
+        var bot = currentBot;          // 전송 시점의 봇 고정 (도중 전환 대비)
+        var cfg = BOTS[bot];
+
         // 첫 메시지 전송 시 안내 화면 숨김
         var emptyEl = document.getElementById('ai-chat-empty');
         if (emptyEl) emptyEl.style.display = 'none';
 
         addMsg(text, 'user');
+        convo[bot].push({ role: 'user', text: text, citations: null });
         input.value = '';
         input.style.height = 'auto';
 
@@ -426,15 +490,16 @@
         refreshSendBtn();
 
         // 서버로 보낼 히스토리 (현재 메시지 이전까지, 최근 10개)
-        var historyToSend = chatHistory.slice(-10);
-        chatHistory.push({ role: 'user', content: text });
+        var historyToSend = convo[bot].slice(0, -1).slice(-10).map(function (m) {
+            return { role: m.role === 'bot' ? 'assistant' : 'user', content: m.text };
+        });
 
         var loadingEl = addLoading();
 
         var controller = new AbortController();
         var timeoutId = setTimeout(function () { controller.abort(); }, CLIENT_TIMEOUT_MS);
 
-        fetch(AI_CHAT_ENDPOINT, {
+        fetch(cfg.endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -468,11 +533,13 @@
                 reply = CLIENT_ERROR_REPLY;
             }
 
-            addMsg(reply, 'bot', (usedWebSearch && citations) ? citations : null);
-            chatHistory.push({ role: 'assistant', content: reply });
+            var cites = (usedWebSearch && citations) ? citations : null;
+            convo[bot].push({ role: 'bot', text: reply, citations: cites });
+            if (bot === currentBot) addMsg(reply, 'bot', cites); // 다른 봇으로 전환했으면 저장만
         }).catch(function () {
             // 네트워크 오류 / 타임아웃(abort) 등
-            addMsg(CLIENT_ERROR_REPLY, 'bot');
+            convo[bot].push({ role: 'bot', text: CLIENT_ERROR_REPLY, citations: null });
+            if (bot === currentBot) addMsg(CLIENT_ERROR_REPLY, 'bot');
         }).finally(function () {
             clearTimeout(timeoutId);           // 타이머 정리
             removeLoading(loadingEl);           // 로딩 DOM 제거 (존재 여부 확인 포함)
