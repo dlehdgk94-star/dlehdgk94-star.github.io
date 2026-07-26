@@ -151,8 +151,14 @@
         .nb-card-link:hover{ text-decoration:underline; text-underline-offset:2px; }
         .nb-card-link i{ font-size:10px; }
         .nb-empty-msg{ grid-column:1/-1; text-align:center; padding:60px 0; font-size:15px; color:rgb(112,112,112); }
-        @media (max-width:900px){ .nb-card-grid{ grid-template-columns:repeat(2,1fr); } }
-        @media (max-width:540px){ .nb-card-grid{ grid-template-columns:1fr; } }
+        /* 대중교통: 텍스트 전용 목록 (사진 카드 없이) */
+        .nb-card-grid.nb-transit-mode{ display:grid; grid-template-columns:repeat(3,1fr); gap:0 40px; }
+        .nb-transit-item{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 4px; border-bottom:1px solid #eee; }
+        .nb-transit-name{ font-size:14px; color:rgb(40,40,40); }
+        .nb-transit-dist{ font-size:12px; font-weight:600; color:rgb(112,112,112); white-space:nowrap; flex-shrink:0; }
+        .nb-transit-dist i{ font-size:10px; margin-right:2px; color:#bbb; }
+        @media (max-width:900px){ .nb-card-grid{ grid-template-columns:repeat(2,1fr); } .nb-card-grid.nb-transit-mode{ grid-template-columns:repeat(2,1fr); } }
+        @media (max-width:540px){ .nb-card-grid{ grid-template-columns:1fr; } .nb-card-grid.nb-transit-mode{ grid-template-columns:1fr; } }
             /* ── 언어 선택 ── */
         .lang-selector{ position:relative; }
         .lang-btn{ display:flex; align-items:center; gap:6px; background:none; border:1px solid #d0d0d0; border-radius:20px; padding:6px 12px; font-size:13px; font-weight:600; cursor:pointer; color:rgb(112,112,112); font-family:'Barlow',sans-serif; transition:border-color 0.2s,color 0.2s; }
@@ -477,11 +483,30 @@
             var cat = (typeof nearbyData !== 'undefined') && nearbyData.categories.find(function(c) { return c.id === catId; });
             var grid = document.getElementById('nbCardGrid');
             grid.innerHTML = '';
+            grid.classList.remove('nb-transit-mode');
             if (!cat || !cat.places || cat.places.length === 0) {
                 var msg = document.createElement('div');
                 msg.className = 'nb-empty-msg';
                 msg.textContent = '준비 중입니다';
                 grid.appendChild(msg);
+                return;
+            }
+            // 대중교통: 사진 카드 대신 간결한 텍스트 목록
+            if (catId === 'transit') {
+                grid.classList.add('nb-transit-mode');
+                cat.places.forEach(function(place) {
+                    var item = document.createElement('div');
+                    item.className = 'nb-transit-item';
+                    var nameEl = document.createElement('span');
+                    nameEl.className = 'nb-transit-name';
+                    nameEl.textContent = place.name;
+                    var distEl = document.createElement('span');
+                    distEl.className = 'nb-transit-dist';
+                    distEl.innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + place.distance;
+                    item.appendChild(nameEl);
+                    item.appendChild(distEl);
+                    grid.appendChild(item);
+                });
                 return;
             }
             cat.places.forEach(function(place) {
