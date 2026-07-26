@@ -1248,7 +1248,7 @@ const nearbyData = {
     },
     {
       "id": "fitness",
-      "label": "운동시설·경기장",
+      "label": "운동시설·경기장·골프CC",
       "places": [
         {
           "name": "수원KT위즈파크",

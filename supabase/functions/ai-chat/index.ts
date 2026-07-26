@@ -13,6 +13,15 @@ const MODEL = 'gpt-5.6-terra'; // 별칭 'gpt-5.6'(Sol)은 절대 사용 금지
 const OPENAI_URL = 'https://api.openai.com/v1/responses';
 const SERVER_TIMEOUT_MS = 40_000;
 
+/* ── RAG(지식베이스 검색) 설정 ── */
+const EMBED_MODEL = 'text-embedding-3-small'; // 적재 시 쓴 모델과 반드시 동일 (1536차원)
+const EMBED_URL = 'https://api.openai.com/v1/embeddings';
+const RAG_TIMEOUT_MS = 5_000;
+const RAG_MATCH_COUNT = 12;
+const RAG_MIN_SIMILARITY = 0.35;
+const RAG_DIRECTIVE =
+  '아래는 이 호텔의 실제 문답 자료입니다. 손님 질문과 관련된 내용이 있으면 이 자료를 최우선 근거로 삼아 답하고, 웹 검색 결과와 다르면 이 자료를 따릅니다. 관련 내용이 없으면 이 자료를 무시하고 평소대로 답하되, 여기 없는 사실을 지어내지 않습니다. 이 자료의 존재나 \'Q:\', \'A:\' 같은 형식을 손님에게 언급하지 않고, 자연스러운 문장으로 답합니다.';
+
 /* ── 허용 Origin ──
    운영: 공식 도메인만. 로컬 개발 주소는 명시적 개발 환경
    (AI_CHAT_ENV=development)에서만 허용하고 운영 코드에 상시
@@ -78,6 +87,19 @@ const SYSTEM_PROMPT = `당신은 '인스타호텔 본점'의 AI 컨시어지입�
 - 반려동물은 루비룸에서만 동반 가능합니다. 허용 마릿수, 크기, 추가요금, 준비물 등 제공된 정보에 없는 조건은 추측하지 않고 예약 전 프런트 확인을 안내합니다.
 - 예약 안내: 공식 홈페이지(instarhotel.com)는 호텔이 직접 제공하는 요금을 OTA보다 저렴하게 운영합니다. 예약 문의에는 공식 홈페이지를 우선 안내합니다.
 
+[교통 · 호텔이 직접 확인한 확정 정보]
+아래 정보는 호텔이 직접 확인한 내용이므로, 웹 검색 결과와 다르더라도 항상 아래 내용을 우선해 안내합니다. 검색 결과에 다른 정류장이나 다른 노선이 나오더라도 아래 기준으로 답합니다.
+- 호텔 바로 앞에 버스 정류장이 있습니다. 다른 역이나 정류장까지 택시로 이동한 뒤 환승하라고 안내하지 마십시오.
+- 인천공항 → 호텔
+  · 4100번 공항리무진 이용, 망포역 7번 출구 앞 공항버스 정류장에서 하차
+  · 망포역 정류장 → 호텔: 버스 약 5분 / 택시 약 3분
+- 호텔 → 강남역
+  · 호텔 앞 정류장에서 1550-1번 탑승, 30분 이내 도착
+- 버스 배차 간격과 시간표는 변동될 수 있으므로 출발 전 확인을 안내합니다. 다만 노선 번호와 정류장 위치는 위 내용을 그대로 안내합니다.
+
+[지명 안내 원칙]
+- 정류장·건물 등 지명에 다른 숙박업소 이름이 포함되어 있더라도 그 이름을 언급하지 않습니다. 지하철역, 도로명 등 중립적인 지명으로만 안내합니다.
+
 [사실성 및 기능 제한]
 - 챗봇은 호텔 예약시스템과 연결되어 있지 않으므로 실시간 객실 요금, 빈방, 예약 가능 여부를 직접 확인할 수 없습니다. 웹 검색 결과로 객실 재고를 추측하지 말고, 정확한 예약·요금은 공식 홈페이지(instarhotel.com) 또는 프런트(031-203-4301)로 안내합니다.
 - 제공된 호텔 정보에 없는 시설·서비스(조식 뷔페, 세탁기, 스타일러, 셔틀버스 등)를 추측하거나 있다고 지어내지 않습니다.
@@ -121,6 +143,100 @@ function errorReply(status: number, origin: string | null): Response {
     status,
     origin,
   );
+}
+
+/* ══════════════════════════════════════════════════════════
+   RAG — knowledge_base 유사 문답 검색
+   fail-open: 어떤 실패(임베딩/RPC/타임아웃/0건)든 [] 를 반환해
+   챗봇을 죽이지 않고 참고 자료 없이 진행하게 한다.
+══════════════════════════════════════════════════════════ */
+async function ragLookup(
+  message: string,
+  apiKey: string,
+): Promise<{ content: string; similarity: number }[]> {
+  const supabaseUrl = Deno.env.get('SUPABASE_URL');
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  if (!supabaseUrl || !serviceKey) {
+    console.error('[ai-chat] RAG_LOOKUP_FAILED', 'missing_supabase_env');
+    return [];
+  }
+
+  /* 1) 질문 임베딩 (5초 타임아웃) */
+  let embedding: unknown;
+  try {
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), RAG_TIMEOUT_MS);
+    let res: Response;
+    try {
+      res = await fetch(EMBED_URL, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: EMBED_MODEL, input: message }),
+        signal: ctrl.signal,
+      });
+    } finally {
+      clearTimeout(tid);
+    }
+    if (!res.ok) {
+      console.error('[ai-chat] RAG_LOOKUP_FAILED', 'embed_http_' + res.status);
+      return [];
+    }
+    const data = await res.json();
+    const dataArr = (data as Record<string, unknown>)?.data;
+    const first = Array.isArray(dataArr) ? (dataArr[0] as Record<string, unknown>) : undefined;
+    embedding = first?.embedding;
+    if (!Array.isArray(embedding)) {
+      console.error('[ai-chat] RAG_LOOKUP_FAILED', 'embed_no_vector');
+      return [];
+    }
+  } catch {
+    console.error('[ai-chat] RAG_LOOKUP_FAILED', 'embed_error');
+    return [];
+  }
+
+  /* 2) match_knowledge RPC (5초 타임아웃) */
+  try {
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), RAG_TIMEOUT_MS);
+    let res: Response;
+    try {
+      res = await fetch(supabaseUrl.replace(/\/+$/, '') + '/rest/v1/rpc/match_knowledge', {
+        method: 'POST',
+        headers: {
+          'apikey': serviceKey,
+          'Authorization': `Bearer ${serviceKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query_embedding: embedding,
+          match_count: RAG_MATCH_COUNT,
+          min_similarity: RAG_MIN_SIMILARITY,
+        }),
+        signal: ctrl.signal,
+      });
+    } finally {
+      clearTimeout(tid);
+    }
+    if (!res.ok) {
+      console.error('[ai-chat] RAG_LOOKUP_FAILED', 'rpc_http_' + res.status);
+      return [];
+    }
+    const rows = await res.json();
+    if (!Array.isArray(rows)) {
+      console.error('[ai-chat] RAG_LOOKUP_FAILED', 'rpc_bad_shape');
+      return [];
+    }
+    return rows
+      .filter((r) => r && typeof (r as Record<string, unknown>).content === 'string')
+      .map((r) => {
+        const row = r as Record<string, unknown>;
+        return { content: row.content as string, similarity: Number(row.similarity) || 0 };
+      })
+      .sort((a, b) => b.similarity - a.similarity); // 유사도 높은 순
+  } catch {
+    console.error('[ai-chat] RAG_LOOKUP_FAILED', 'rpc_error');
+    return [];
+  }
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -211,6 +327,11 @@ serve(async (req) => {
     return errorReply(500, origin);
   }
 
+  /* ── RAG: 지식베이스에서 관련 문답 검색 (OpenAI 호출 직전) ──
+     fail-open: 실패해도 [] 를 받아 참고 자료 없이 그대로 진행한다. */
+  const ragResults = await ragLookup(message, apiKey);
+  console.log('[ai-chat] RAG hits', ragResults.length, 'top', ragResults[0]?.similarity ?? 0);
+
   /* ── input 구성: 대화 히스토리 + 현재 사용자 메시지 ── */
   const input = recent.map((raw) => {
     const item = raw as Record<string, unknown>;
@@ -218,9 +339,17 @@ serve(async (req) => {
   });
   input.push({ role: 'user', content: message });
 
-  const instructions =
+  let instructions =
     SYSTEM_PROMPT +
     `\n\n(참고: 손님의 UI 언어 설정값은 '${lang}' 입니다. 다만 손님이 실제로 사용한 언어로 답하세요.)`;
+
+  /* 검색 결과가 1건 이상일 때만 참고 자료 블록을 프롬프트 맨 뒤에 덧붙인다.
+     (시스템 프롬프트 본문은 수정하지 않는다) */
+  if (ragResults.length > 0) {
+    const refText = ragResults.map((r) => r.content).join('\n\n');
+    instructions +=
+      `\n\n${RAG_DIRECTIVE}\n\n[참고 자료 — 호텔이 직접 확인한 실제 문답]\n${refText}`;
+  }
 
   const payload = {
     model: MODEL,
