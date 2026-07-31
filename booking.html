@@ -400,6 +400,8 @@
               <div class="policy-row"><span class="day" data-i18n="bk.policy.d2">${_t('bk.policy.d2')}</span><span data-i18n="bk.policy.d2_val">${_t('bk.policy.d2_val')}</span></div>
               <div class="policy-row"><span class="day" data-i18n="bk.policy.d1">${_t('bk.policy.d1')}</span><span data-i18n="bk.policy.d1_val">${_t('bk.policy.d1_val')}</span></div>
               <div class="policy-note" data-i18n-html="bk.policy.note">${_t('bk.policy.note')}</div>
+              <!-- USD 환불 통화 안내 (EN/JA/ZH 에서만 노출, KO 제외) -->
+              <div id="refundCurrencyNotice" style="display:none;font-size:12px;color:#7a6000;background:#fffbf0;border:1px solid #ffe082;border-radius:6px;padding:10px 12px;margin-top:10px;line-height:1.65;"></div>
             </div>
           </div>
 
@@ -682,7 +684,17 @@
                 zh:'没有 PayPal 账户？请联系我们 —',
                 ko:'PayPal 계정이 없으신가요? 문의해 주세요 —'
             },
-            chatBtn: { en:'Ask chatbot', ja:'チャットで質問', zh:'咨询聊天机器人', ko:'챗봇 문의' }
+            chatBtn: { en:'Ask chatbot', ja:'チャットで質問', zh:'咨询聊天机器人', ko:'챗봇 문의' },
+            refundCurrency: {
+                en:"Refunds for payments made in USD are processed in USD. The amount you receive in your local currency may differ from the original charge due to exchange rate fluctuations and your payment provider's conversion policy.",
+                ja:'USDでのお支払いはUSDで返金されます。為替レートの変動およびご利用の決済サービスの換算方針により、実際にお受け取りになる現地通貨の金額がお支払い時と異なる場合があります。',
+                zh:'以美元支付的款项将以美元退款。由于汇率波动及您所用支付服务商的换算政策，您实际收到的本国货币金额可能与支付时有所不同。'
+            },
+            paypalKrRestrict: {
+                en:'PayPal accounts registered in South Korea cannot be used for this payment. Please contact us directly for alternative arrangements.',
+                ja:'韓国で登録されたPayPalアカウントはご利用いただけません。別のお支払い方法については直接お問い合わせください。',
+                zh:'在韩国注册的PayPal账户无法用于此付款。如需其他付款方式，请直接与我们联系。'
+            }
         };
         return (M[key] && (M[key][L] || M[key].en)) || '';
     }
@@ -696,6 +708,8 @@
         var usdArea    = document.getElementById('usdPayArea');
         var nameEnGrp  = document.getElementById('nameEnGroup');
         if (!usdArea) return;
+
+        _renderRefundNotice();   // 취소정책 내 USD 환불통화 안내 (언어별 표시/숨김)
 
         if (usd) {
             if (payBtn)     payBtn.style.display = 'none';
@@ -724,10 +738,21 @@
         }
     }
 
+    // 취소정책 내 USD 환불통화 안내 — EN/JA/ZH 만 노출, KO 는 숨김(해당 없음)
+    function _renderRefundNotice() {
+        var el = document.getElementById('refundCurrencyNotice');
+        if (!el) return;
+        if (_lang() === 'ko') { el.style.display = 'none'; el.textContent = ''; return; }
+        el.textContent = _usdText('refundCurrency');
+        el.style.display = 'block';
+    }
+
     function _renderUsdFallback() {
         var el = document.getElementById('usdFallback');
         if (!el) return;
         el.innerHTML =
+            // PayPal 한국 계정 제약 사전 안내 (폴백 연락처 바로 위, 작은 글씨)
+            '<div style="font-size:12px;color:#c0392b;margin-bottom:8px;line-height:1.6;"><i class="fa-solid fa-triangle-exclamation"></i> ' + _usdText('paypalKrRestrict') + '</div>' +
             '<i class="fa-regular fa-circle-question"></i> ' + _usdText('fallback') +
             ' <a href="tel:+82312034301" style="color:#00768e;font-weight:600;white-space:nowrap;">+82 31-203-4301</a>' +
             ' <button type="button" onclick="if(window.openBot)openBot(\'gemini\');" ' +
@@ -753,7 +778,7 @@
             _usdWidgets = tossPayments.widgets({ customerKey: _customerKey() });
             await _usdWidgets.setAmount({ currency: 'USD', value: usdAmount });
             await _usdWidgets.renderPaymentMethods({ selector: '#payment-method', variantKey: 'paypalUSD' });
-            await _usdWidgets.renderAgreement({ selector: '#agreement' });
+            await _usdWidgets.renderAgreement({ selector: '#agreement', variantKey: 'AGREEMENT' });
             _usdWidgetReady = true;
         } catch (e) {
             console.error('[USD widget] 렌더 실패:', e);
