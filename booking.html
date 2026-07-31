@@ -193,7 +193,14 @@
     <!-- 번역 -->
     <script src="translations.js?v=20260731b"></script>
     <!-- 토스페이먼츠 SDK -->
+    <!-- ★ Toss v1(원화 결제창)·v2(USD 위젯) 공존 — 로드 순서/복원 중요 (헤드리스로 검증)
+         v2 를 먼저 로드하면 v2 가 기존 v1 을 window.TossPaymentsV1 에 보존하고, 위젯은
+         window.NewTossPayments 로 노출한다. 이후 v1 을 로드하고 window.TossPayments 를 v1 으로
+         복원 → 원화 결제창(requestCardPayment)은 window.TossPayments(v1) 를 '수정 없이' 그대로 사용,
+         USD 위젯은 window.NewTossPayments(v2) 사용. (v1 만 있으면 window.TossPayments 는 계속 v1) -->
+    <script src="https://js.tosspayments.com/v2/standard"></script>
     <script src="https://js.tosspayments.com/v1/payment"></script>
+    <script>if (window.TossPaymentsV1) window.TossPayments = window.TossPaymentsV1;</script>
     <script>
     /* ── 현재 언어를 저장소에서 미리 동기화 (localStorage 우선, sessionStorage 폴백) ── */
     (function() {
@@ -203,6 +210,28 @@
             currentLang = saved;
         }
     })();
+
+    /* ══════════════════════════════════════════════════════════════════════
+       USD(PayPal) 결제위젯 — 통화(언어)에 따라 원화 결제창(v1)과 분기해서 사용.
+       ★ 라이브 전환 시 아래 위젯 클라이언트 키 한 곳만 교체하면 된다.
+       ══════════════════════════════════════════════════════════════════════ */
+    const TOSS_WIDGET_CLIENT_KEY = 'test_gck_5OWRapdA8dWxXDaaeEBRro1zEqZK';
+    let _usdWidgets = null;      // Toss 위젯 인스턴스
+    let _usdWidgetReady = false; // 렌더 완료 여부(중복 렌더 방지)
+
+    // 손님 식별용 customerKey (위젯 요구값) — 브라우저별 1회 생성해 재사용
+    function _customerKey() {
+        let ck = localStorage.getItem('instaCustomerKey');
+        if (!ck) {
+            ck = 'insta_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+            localStorage.setItem('instaCustomerKey', ck);
+        }
+        return ck;
+    }
+
+    function _isUsdMode() {
+        return (typeof getCurrency === 'function') ? getCurrency() === 'USD' : false;
+    }
 
     /* ── 객실 이미지 경로 ── */
     const ROOM_IMG = {
@@ -284,6 +313,7 @@
         const checkout = new Date(b.checkout);
         render(b, checkin, checkout);
         initUI();
+        applyBookingCurrencyUI();   // 통화(언어)에 따라 KRW/USD 결제 UI 전환
     }
 
     function render(b, checkin, checkout) {
@@ -343,6 +373,14 @@
               <div class="form-group">
                 <label class="form-label"><span data-i18n="bk.label.request">${_t('bk.label.request')}</span> <span class="opt" data-i18n="bk.opt.optional">${_t('bk.opt.optional')}</span></label>
                 <input class="form-input" id="iRequest" type="text" placeholder="">
+              </div>
+            </div>
+            <!-- 영문 이름 (USD 결제 시 필수 — 차지백 대응·PayPal 판매자 보호) -->
+            <div class="form-row" id="nameEnGroup" style="display:none;">
+              <div class="form-group">
+                <label class="form-label"><span id="nameEnLabel">Full name in English</span> <span class="req">*</span></label>
+                <input class="form-input" id="iNameEn" type="text" placeholder="Gil-dong Hong" autocomplete="off">
+                <p id="nameEnHelp" style="font-size:12px;color:#888;margin-top:6px;line-height:1.5;"></p>
               </div>
             </div>
           </div>
@@ -446,6 +484,15 @@
               <div class="paypal-wrap" id="paypalWrap">
                 <div id="paypalBtnWrap"></div>
               </div>
+              <!-- USD(PayPal 위젯) 결제 영역 — USD 모드에서만 표시 -->
+              <div id="usdPayArea" style="display:none;">
+                <div id="payment-method"></div>
+                <div id="agreement"></div>
+                <button class="pay-btn" id="usdPayBtn" onclick="requestUsdPayment()">
+                  <span id="usdPayBtnText">Pay with PayPal</span>
+                </button>
+                <div id="usdFallback" style="margin-top:12px;font-size:12.5px;color:#666;line-height:1.7;background:#f8f8f8;border-radius:8px;padding:12px 14px;"></div>
+              </div>
               <div class="secure-note"><i class="fa-solid fa-lock"></i> <span data-i18n="bk.sum.secure">${_t('bk.sum.secure')}</span></div>
             </div>
           </div>
@@ -508,13 +555,15 @@
     }
 
     function saveGuestInfo() {
+        var nameEnEl = document.getElementById('iNameEn');
         localStorage.setItem('instaHotelGuest', JSON.stringify({
             name:      document.getElementById('iName').value.trim(),
             email:     document.getElementById('iEmail').value.trim(),
             phone:     document.getElementById('iPhone').value.trim().replace(/-/g, ''),
             country:   document.getElementById('iCountry').value,
             instagram: document.getElementById('iInstagram').value.trim(),
-            request:   document.getElementById('iRequest').value.trim()
+            request:   document.getElementById('iRequest').value.trim(),
+            nameEn:    nameEnEl ? nameEnEl.value.trim() : ''   // USD 결제 영문명(없으면 빈값)
         }));
     }
 
@@ -575,6 +624,172 @@
             });
         } catch (err) {
             if (err.code !== 'USER_CANCEL') alert(_t('bk.card.error') + '\n' + err.message);
+        }
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════
+       USD(PayPal) 결제 경로 — 통화가 USD 일 때만 사용. 원화 로직은 건드리지 않음.
+       ══════════════════════════════════════════════════════════════════════ */
+    function _lang() { return (typeof currentLang !== 'undefined' && currentLang) ? currentLang : 'ko'; }
+
+    // "Pay $88.00 with PayPal" (4개 언어, "PayPal"은 원문 유지)
+    function fmtUsdPayBtn(usd) {
+        var amt = '$' + Number(usd).toFixed(2);
+        switch (_lang()) {
+            case 'ja': return amt + ' を PayPal で支払う';
+            case 'zh': return '使用 PayPal 支付 ' + amt;
+            case 'ko': return amt + ' PayPal로 결제';
+            default:   return 'Pay ' + amt + ' with PayPal';
+        }
+    }
+    // USD 모드 문구(영문명 라벨/도움말/경고, 폴백 안내, 챗봇 버튼)
+    function _usdText(key) {
+        var L = _lang();
+        var M = {
+            nameEnLabel: { en:'Full name in English', ja:'英語氏名', zh:'英文姓名', ko:'영문 이름' },
+            nameEnHelp:  {
+                en:'As printed on your passport. Required for PayPal buyer/seller protection.',
+                ja:'パスポート記載のローマ字氏名。PayPalの保護のため必須です。',
+                zh:'与护照一致的英文姓名。PayPal 买卖双方保护所需。',
+                ko:'여권 표기와 동일한 영문 이름. PayPal 결제 보호를 위해 필수입니다.'
+            },
+            nameEnAlert: {
+                en:'Please enter your full name in English (letters only).',
+                ja:'英語（アルファベット）で氏名を入力してください。',
+                zh:'请输入英文姓名（仅限字母）。',
+                ko:'영문 이름을 영문자로 입력해 주세요.'
+            },
+            fallback: {
+                en:'No PayPal account? Contact us —',
+                ja:'PayPalアカウントがない場合はお問い合わせください —',
+                zh:'没有 PayPal 账户？请联系我们 —',
+                ko:'PayPal 계정이 없으신가요? 문의해 주세요 —'
+            },
+            chatBtn: { en:'Ask chatbot', ja:'チャットで質問', zh:'咨询聊天机器人', ko:'챗봇 문의' }
+        };
+        return (M[key] && (M[key][L] || M[key].en)) || '';
+    }
+
+    // 통화에 따라 결제 UI 전환 (KRW=기존, USD=위젯). render/initUI 후 + 언어 변경 시 호출.
+    function applyBookingCurrencyUI() {
+        var usd = _isUsdMode();
+        var payBtn     = document.getElementById('payBtn');
+        var paypalWrap = document.getElementById('paypalWrap');
+        var payGrid    = document.querySelector('.pay-grid');
+        var usdArea    = document.getElementById('usdPayArea');
+        var nameEnGrp  = document.getElementById('nameEnGroup');
+        if (!usdArea) return;
+
+        if (usd) {
+            if (payBtn)     payBtn.style.display = 'none';
+            if (paypalWrap) paypalWrap.style.display = 'none';
+            if (payGrid)    payGrid.style.display = 'none';   // ② 결제수단 라디오는 USD에서 숨김(섹션 DOM 은 유지)
+            usdArea.style.display = 'block';
+            if (nameEnGrp)  nameEnGrp.style.display = 'flex';
+
+            var lbl = document.getElementById('nameEnLabel'); if (lbl) lbl.textContent = _usdText('nameEnLabel');
+            var hlp = document.getElementById('nameEnHelp');  if (hlp) hlp.textContent  = _usdText('nameEnHelp');
+            _renderUsdFallback();
+
+            var b = JSON.parse(localStorage.getItem('instaHotelBooking') || 'null');
+            var btnTxt = document.getElementById('usdPayBtnText');
+            if (btnTxt && b && typeof krwToUsd === 'function') btnTxt.textContent = fmtUsdPayBtn(krwToUsd(b.totalPrice));
+            if (b) setupUsdWidget(b);
+        } else {
+            if (payGrid)   payGrid.style.display = '';
+            usdArea.style.display = 'none';
+            if (nameEnGrp) nameEnGrp.style.display = 'none';
+            // KRW: payBtn/paypalWrap 표시는 기존 결제수단 라디오 상태에 위임
+            var selected = document.querySelector('.pay-option.selected');
+            var isPaypal = selected && selected.dataset.m === 'paypal';
+            if (payBtn)     payBtn.style.display     = isPaypal ? 'none' : 'block';
+            if (paypalWrap) paypalWrap.style.display = isPaypal ? 'block' : 'none';
+        }
+    }
+
+    function _renderUsdFallback() {
+        var el = document.getElementById('usdFallback');
+        if (!el) return;
+        el.innerHTML =
+            '<i class="fa-regular fa-circle-question"></i> ' + _usdText('fallback') +
+            ' <a href="tel:+82312034301" style="color:#00768e;font-weight:600;white-space:nowrap;">+82 31-203-4301</a>' +
+            ' <button type="button" onclick="if(window.openBot)openBot(\'gemini\');" ' +
+            'style="margin-left:6px;border:1px solid #ccc;background:#fff;border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;">' +
+            '<i class="fa-regular fa-comments"></i> ' + _usdText('chatBtn') + '</button>';
+    }
+
+    // Toss 결제위젯 렌더 (paypalUSD)
+    async function setupUsdWidget(b) {
+        if (_usdWidgetReady) {
+            try { if (_usdWidgets && typeof krwToUsd === 'function') await _usdWidgets.setAmount({ currency: 'USD', value: krwToUsd(b.totalPrice) }); } catch (e) {}
+            return;
+        }
+        // ★ USD 는 v2 위젯 SDK(window.NewTossPayments) 사용 — 원화(window.TossPayments, v1)와 공존
+        if (typeof window.NewTossPayments !== 'function' || typeof krwToUsd !== 'function') return;
+        try {
+            const usdAmount = krwToUsd(b.totalPrice);
+            const tossPayments = window.NewTossPayments(TOSS_WIDGET_CLIENT_KEY);
+            _usdWidgets = tossPayments.widgets({ customerKey: _customerKey() });
+            await _usdWidgets.setAmount({ currency: 'USD', value: usdAmount });
+            await _usdWidgets.renderPaymentMethods({ selector: '#payment-method', variantKey: 'paypalUSD' });
+            await _usdWidgets.renderAgreement({ selector: '#agreement' });
+            _usdWidgetReady = true;
+        } catch (e) {
+            console.error('[USD widget] 렌더 실패:', e);
+            var pm = document.getElementById('payment-method');
+            if (pm) pm.innerHTML = '<p style="color:#e74c3c;font-size:13px;">PayPal 위젯을 불러오지 못했습니다.</p>';
+            _renderUsdFallback();
+        }
+    }
+
+    // 영문명 검증 (필수 + 영문자/공백/.'- 만)
+    function _validateNameEn() {
+        var el = document.getElementById('iNameEn');
+        var v = (el ? el.value : '').trim();
+        if (!v || !/^[A-Za-z\s.'-]+$/.test(v)) {
+            alert(_usdText('nameEnAlert'));
+            if (el) el.focus();
+            return false;
+        }
+        return true;
+    }
+
+    // USD 결제 요청 — 예약자 정보·영문명 검증 후 위젯 requestPayment
+    async function requestUsdPayment() {
+        if (!validate()) return;            // 공통 필수값(이름/연락처/이메일/국가/약관)
+        if (!_validateNameEn()) return;     // 영문명 필수
+        saveGuestInfo();
+
+        const b = JSON.parse(localStorage.getItem('instaHotelBooking'));
+        if (_exceedsBookingLimit(b && b.checkout)) {
+            alert('예약은 오늘로부터 1년 이내만 가능합니다. 날짜를 다시 선택해 주세요.');
+            return;
+        }
+        if (!_usdWidgetReady) { await setupUsdWidget(b); }
+        if (!_usdWidgets) { _renderUsdFallback(); alert('PayPal 위젯을 불러오지 못했습니다.'); return; }
+
+        const roomName = typeof getRoomName === 'function' ? getRoomName(b.roomId) : b.roomId;
+        const orderId  = makeOrderId();
+        const base     = window.location.href.replace(/[^\/]*$/, '');
+        const name  = document.getElementById('iName').value.trim();
+        const email = document.getElementById('iEmail').value.trim();
+
+        try {
+            await _usdWidgets.setAmount({ currency: 'USD', value: krwToUsd(b.totalPrice) });
+            // ★ successUrl/failUrl 에 currency=USD 포함 → booking-success 가 통화 인지
+            await _usdWidgets.requestPayment({
+                orderId:       orderId,
+                orderName:     roomName + ' ' + fmtNightsText(b.nights),
+                successUrl:    base + 'booking-success.html?currency=USD',
+                failUrl:       base + 'booking-fail.html?currency=USD',
+                customerEmail: email,
+                customerName:  name,
+            });
+        } catch (err) {
+            if (err && err.code === 'USER_CANCEL') { _renderUsdFallback(); return; }
+            console.error('[USD requestPayment]', err);
+            alert((err && err.message) ? err.message : 'PayPal 결제를 시작할 수 없습니다.');
+            _renderUsdFallback();
         }
     }
 
@@ -691,6 +906,9 @@
             var defOpt = iCountry.querySelector('option[value=""]');
             if (defOpt) defOpt.textContent = _t('bk.ph.country');
         }
+
+        // 통화(언어) 변경 시 결제 UI(KRW/USD)·문구 재적용
+        if (typeof applyBookingCurrencyUI === 'function') applyBookingCurrencyUI();
     }
 
     /* ── 언어 선택기 ── */
