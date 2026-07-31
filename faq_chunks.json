@@ -1488,5 +1488,125 @@
   "source": "qa",
   "category": "분실물/기타",
   "content": "Q: 분실물 나온 거 있나요?\nA: 확인해보도록 하겠습니다."
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 해외에서 어떻게 결제하나요?\nA: 한국어 외 언어로 이용하시면 PayPal(USD) 결제가 제공됩니다."
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: How can I pay from overseas?\nA: When you use the site in a language other than Korean, PayPal (USD) payment is available."
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 海外からどのように支払えますか？\nA: 韓国語以外の言語でご利用の場合、PayPal（USD）決済がご利用いただけます。"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 在海外如何付款？\nA: 使用韩语以外的语言浏览时，可使用 PayPal（美元）付款。"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: PayPal 계정이 없는데 예약할 수 있나요?\nA: 프론트로 직접 연락 주시면 예약을 도와드립니다. (+82 31-203-4301) 현장 결제 등 다른 방법으로 예약이 가능합니다."
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: I don't have a PayPal account. Can I still book?\nA: Please contact our front desk directly and we will help you book. (+82 31-203-4301) Booking is also possible through other methods, such as payment on-site."
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: PayPalアカウントがありませんが予約できますか？\nA: フロントまで直接ご連絡いただければ、ご予約をお手伝いします。（+82 31-203-4301）現地決済など、他の方法でもご予約いただけます。"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 我没有 PayPal 账户，可以预订吗？\nA: 请直接联系前台，我们将协助您预订。（+82 31-203-4301）也可通过现场付款等其他方式预订。"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 한국에서 만든 PayPal 계정으로 결제가 안 됩니다.\nA: PayPal 정책상 한국에서 발행된 계정은 한국 가맹점 결제가 제한됩니다. 프론트로 연락 주시면 대안을 안내드립니다. (+82 31-203-4301)"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: My PayPal account created in Korea cannot be used for payment.\nA: Under PayPal's policy, accounts registered in South Korea are restricted from paying Korean merchants. Please contact our front desk and we will guide you through the alternatives. (+82 31-203-4301)"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 韓国で作成したPayPalアカウントで決済ができません。\nA: PayPalのポリシー上、韓国で発行されたアカウントは韓国の加盟店での決済が制限されます。フロントまでご連絡いただければ、代替方法をご案内します。（+82 31-203-4301）"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 用在韩国注册的 PayPal 账户无法付款。\nA: 根据 PayPal 政策，在韩国注册的账户在韩国商户付款受到限制。请联系前台，我们将为您介绍替代方案。（+82 31-203-4301）"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 왜 요금이 달러로 표시되나요?\nA: 해외 고객을 위한 결제 통화입니다. 한국어로 전환하시면 원화로 표시됩니다."
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: Why are the prices shown in US dollars?\nA: This is the payment currency for international guests. If you switch to Korean, prices are shown in Korean won."
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: なぜ料金がドルで表示されるのですか？\nA: 海外のお客様向けの決済通貨です。韓国語に切り替えると、韓国ウォンで表示されます。"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 为什么价格以美元显示？\nA: 这是面向海外顾客的付款货币。切换为韩语后，价格将以韩元显示。"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 환불은 어떻게 되나요?\nA: 결제하신 통화 그대로 환불됩니다. USD 결제는 USD로 환불되며, 환율 변동에 따라 실제 수령 금액이 결제 시점과 다를 수 있습니다."
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: How do refunds work?\nA: Refunds are issued in the same currency you paid in. USD payments are refunded in USD, and the amount you actually receive may differ from the time of payment due to exchange rate fluctuations."
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 返金はどのようになりますか？\nA: お支払いいただいた通貨のまま返金されます。USD決済はUSDで返金され、為替レートの変動により、実際にお受け取りになる金額がお支払い時と異なる場合があります。"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 退款如何处理？\nA: 将以您付款时的货币原样退款。美元付款将以美元退款，由于汇率波动，您实际收到的金额可能与付款时有所不同。"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 결제 수수료가 있나요?\nA: 표시된 금액이 최종 결제 금액이며, 별도 수수료는 없습니다."
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: Are there any payment fees?\nA: The amount shown is the final payment amount, with no additional fees."
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 決済手数料はかかりますか？\nA: 表示された金額が最終的なお支払い金額で、別途手数料はかかりません。"
+ },
+ {
+  "source": "qa",
+  "category": "예약/결제",
+  "content": "Q: 有付款手续费吗？\nA: 显示的金额即为最终付款金额，不收取额外手续费。"
  }
 ]
