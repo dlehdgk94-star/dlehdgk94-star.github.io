@@ -151,6 +151,7 @@
         .lang-option.active{ color:rgb(28,28,28); font-weight:700; }
     </style>
     <link rel="stylesheet" href="responsive.css">
+    <script src="js/currency.js?v=20260731"></script>
 </head>
 <body>
     <div class="top-util-bar">
@@ -190,13 +191,14 @@
     <div class="booking-page" id="bookingPage"></div>
 
     <!-- 번역 -->
-    <script src="translations.js?v=20260731a"></script>
+    <script src="translations.js?v=20260731b"></script>
     <!-- 토스페이먼츠 SDK -->
     <script src="https://js.tosspayments.com/v1/payment"></script>
     <script>
-    /* ── 현재 언어를 sessionStorage에서 미리 동기화 ── */
+    /* ── 현재 언어를 저장소에서 미리 동기화 (localStorage 우선, sessionStorage 폴백) ── */
     (function() {
-        var saved = sessionStorage.getItem('siteLang');
+        var saved = null;
+        try { saved = localStorage.getItem('siteLang') || sessionStorage.getItem('siteLang'); } catch (e) {}
         if (saved && typeof translations !== 'undefined' && translations[saved]) {
             currentLang = saved;
         }
@@ -246,9 +248,9 @@
 
     /* ── 금액 표시 (KRW + 환산) ── */
     function fmtPriceDisplay(krw) {
-        var lang = typeof currentLang !== 'undefined' ? currentLang : 'ko';
-        if (lang !== 'ko' && typeof _convertPrice === 'function') {
-            return '₩' + krw.toLocaleString('ko-KR') + ' (~' + _convertPrice(krw, lang) + ')';
+        // 통화 단독 표시(원화 병기 없음): KRW → '49,500원', USD → '$40.50'
+        if (typeof formatPrice === 'function') {
+            return formatPrice(krw, (typeof getCurrency === 'function' ? getCurrency() : 'KRW'));
         }
         return krw.toLocaleString('ko-KR') + '원';
     }
@@ -707,12 +709,18 @@
 
     /* ── DOMContentLoaded: 저장된 언어 동기화 ── */
     document.addEventListener('DOMContentLoaded', function() {
-        var saved = (sessionStorage.getItem('siteLang') || 'ko').toUpperCase();
+        var saved = (localStorage.getItem('siteLang') || sessionStorage.getItem('siteLang') || 'ko').toUpperCase();
         var langCode = document.getElementById('langCode');
         if (langCode) langCode.textContent = saved;
         document.querySelectorAll('.lang-option').forEach(function(o) {
             o.classList.toggle('active', o.getAttribute('data-code') === saved);
         });
+        // 통화 설정 1회 로드(REST) 후 요약 금액 재렌더링
+        if (typeof loadCurrencyConfig === 'function') {
+            loadCurrencyConfig().then(function(){
+                if (typeof syncBookingLang === 'function') syncBookingLang();
+            });
+        }
     });
     </script>
 

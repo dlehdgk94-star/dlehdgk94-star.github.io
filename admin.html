@@ -576,7 +576,10 @@ function _rEsc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&a
 // USD = Math.ceil((KRW * markup / rate) * 2) / 2  (0.50 단위 올림)
 function usdFromKrw(krw, rate, markup){
     if(!krw || !rate || !markup) return null;
-    return Math.ceil((krw * markup / rate) * 2) / 2;
+    // 정수 연산 기반(currency.js krwToUsd 와 동일): markup 적용액을 원 단위로 먼저 반올림해
+    // 부동소수점 노이즈 제거 → 108000 이 $88.50이 아닌 $88.00 으로 정확히 계산됨.
+    var won = Math.round(krw * markup);
+    return Math.ceil((won / rate) * 2) / 2;
 }
 function fmtUsd(v){ return v==null ? '-' : '$' + v.toFixed(2); }
 

@@ -1375,7 +1375,9 @@ function t(key) {
 function setLanguage(lang) {
   if (!translations[lang]) return;
   currentLang = lang;
-  sessionStorage.setItem('siteLang', lang);
+  // 언어를 localStorage 에 저장(재방문·탭 재열기 후에도 유지). sessionStorage 도 병행(기존 코드 호환).
+  try { localStorage.setItem('siteLang', lang); } catch (e) {}
+  try { sessionStorage.setItem('siteLang', lang); } catch (e) {}
 
   // data-i18n 텍스트 교체
   document.querySelectorAll('[data-i18n]').forEach(function(el) {
@@ -1438,6 +1440,10 @@ function setLanguage(lang) {
 }
 
 function _updateRoomPrices(lang) {
+  // currency.js 가 로드된 페이지: 통화 단독 표시(원화 병기 제거).
+  var _hasCurrency = (typeof getCurrency === 'function' && typeof krwToUsd === 'function');
+  var _useUsd = _hasCurrency && getCurrency() === 'USD';
+
   document.querySelectorAll('.room-card').forEach(function(card) {
     var roomId = card.getAttribute('data-room-id');
     if (!roomId || !roomPrices[roomId]) return;
@@ -1449,18 +1455,29 @@ function _updateRoomPrices(lang) {
       if (idx >= dayKeys.length) return;
       var krw = prices[dayKeys[idx]];
 
-      // 환산 금액 span 추가/제거
-      var convSpan = item.querySelector('.price-conv');
-      if (lang === 'ko') {
-        if (convSpan) convSpan.remove();
-      } else {
-        var conv = _convertPrice(krw, lang);
-        if (!convSpan) {
-          convSpan = document.createElement('span');
-          convSpan.className = 'price-conv';
-          item.appendChild(convSpan);
+      if (_hasCurrency) {
+        // 통화 단독: <strong> 숫자 자체를 KRW(원 없음) / USD 로 교체, 병기 span 제거
+        var strong = item.querySelector('strong');
+        if (strong) {
+          strong.setAttribute('data-price-krw', krw);
+          strong.textContent = _useUsd ? ('$' + krwToUsd(krw).toFixed(2)) : krw.toLocaleString('ko-KR');
         }
-        convSpan.textContent = ' (~' + conv + ')';
+        var cs = item.querySelector('.price-conv');
+        if (cs) cs.remove();
+      } else {
+        // (currency.js 미로드 페이지) 기존 환산 병기 동작 유지
+        var convSpan = item.querySelector('.price-conv');
+        if (lang === 'ko') {
+          if (convSpan) convSpan.remove();
+        } else {
+          var conv = _convertPrice(krw, lang);
+          if (!convSpan) {
+            convSpan = document.createElement('span');
+            convSpan.className = 'price-conv';
+            item.appendChild(convSpan);
+          }
+          convSpan.textContent = ' (~' + conv + ')';
+        }
       }
     });
 
@@ -1532,6 +1549,15 @@ function getRoomName(id) {
 function fmtNightTotal(nights, krwTotal) {
   var won = krwTotal.toLocaleString();
   if (currentLang === 'ko') return nights + '박 총 ' + won + '원';
+  // currency.js 로드 시: USD 단독(병기 없음)
+  if (typeof getCurrency === 'function' && typeof formatPrice === 'function' && getCurrency() === 'USD') {
+    var amt = formatPrice(krwTotal, 'USD'); // "$40.50"
+    if (currentLang === 'en') return 'Total for ' + nights + ' night' + (nights > 1 ? 's' : '') + ': ' + amt;
+    if (currentLang === 'ja') return nights + '泊合計: ' + amt;
+    if (currentLang === 'zh') return nights + '晚总价: ' + amt;
+    return amt;
+  }
+  // (currency.js 미로드 페이지) 기존 환산 병기 동작 유지
   var conv = _convertPrice(krwTotal, currentLang);
   if (currentLang === 'en') return 'Total for ' + nights + ' night' + (nights > 1 ? 's' : '') + ': ~' + conv;
   if (currentLang === 'ja') return nights + '泊合計: ~' + conv;
@@ -1575,8 +1601,9 @@ function _syncBookingBarLang(lang) {
   if (mobGuests)    mobGuests.textContent    = fmtGuestCount(r, a);
 }
 
-// 페이지 로드 시 저장된 언어 적용 (sessionStorage: 탭을 닫으면 초기화 → 새 방문 시 항상 한국어)
+// 페이지 로드 시 저장된 언어 적용 (localStorage 우선, 없으면 sessionStorage 폴백 → 기존 세션 보호)
 document.addEventListener('DOMContentLoaded', function() {
-  var saved = sessionStorage.getItem('siteLang') || 'ko';
+  var saved = 'ko';
+  try { saved = localStorage.getItem('siteLang') || sessionStorage.getItem('siteLang') || 'ko'; } catch (e) {}
   setLanguage(saved);
 });

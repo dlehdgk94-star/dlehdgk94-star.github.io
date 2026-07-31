@@ -371,6 +371,7 @@
     </style>
     <link rel="stylesheet" href="responsive.css?v=4">
     <script src="js/roomPricing.js?v=20260731"></script>
+    <script src="js/currency.js?v=20260731"></script>
 </head>
 <body onclick="closeDropdowns(event)">
 
@@ -1111,6 +1112,12 @@
 
         window.addEventListener('DOMContentLoaded', function(){
             renderCalendar(); updateDateUI();
+            // 통화 설정 1회 로드(REST) 후 가격 재렌더링
+            if (typeof loadCurrencyConfig === 'function') {
+                loadCurrencyConfig().then(function(){
+                    if (typeof setLanguage === 'function') setLanguage(typeof currentLang !== 'undefined' ? currentLang : (localStorage.getItem('siteLang') || sessionStorage.getItem('siteLang') || 'ko'));
+                });
+            }
             if(location.hash){
                 const target=document.querySelector(location.hash);
                 if(target){ setTimeout(function(){ target.scrollIntoView({behavior:'smooth',block:'center'}); }, 300); }
@@ -1340,12 +1347,12 @@
             var numPrices = (typeof roomPrices !== 'undefined' && roomPrices[roomId]) ? roomPrices[roomId] : {};
             document.getElementById('modalRoomPrice').innerHTML = (data.price || []).map(function(p, idx) {
                 var dayLabel = typeof t === 'function' ? t(dayKeys[idx] || '') : p[0];
-                var convHtml = '';
-                if (typeof _convertPrice === 'function' && typeof currentLang !== 'undefined' && currentLang !== 'ko') {
-                    var krwNum = numPrices[priceKeys[idx]];
-                    if (krwNum) { var conv = _convertPrice(krwNum, currentLang); if (conv) convHtml = ' <span class="price-conv">(~' + conv + ')</span>'; }
+                var krwNum = numPrices[priceKeys[idx]];
+                var amount = p[1];
+                if (typeof getCurrency === 'function' && getCurrency() === 'USD' && krwNum) {
+                    amount = '$' + krwToUsd(krwNum).toFixed(2);
                 }
-                return '<span class="modal-price-item">' + dayLabel + ' <strong>' + p[1] + '</strong>' + convHtml + '</span>';
+                return '<span class="modal-price-item">' + dayLabel + ' <strong>' + amount + '</strong></span>';
             }).join('');
             document.getElementById('modalBookBtn').onclick = function() { closeRoomModal(); openBookingCalendar(roomId); };
 
@@ -1538,7 +1545,7 @@
             }
         })();
     </script>
-    <script src="translations.js?v=20260731a"></script>
+    <script src="translations.js?v=20260731b"></script>
     <script>function toggleLangDropdown(e){e.stopPropagation();document.getElementById("langDropdown").classList.toggle("open");}function selectLang(el){var lang=el.dataset.code.toLowerCase();if(typeof setLanguage==='function'){setLanguage(lang);}else{document.getElementById("langCode").textContent=el.dataset.code;document.querySelectorAll(".lang-option").forEach(function(o){o.classList.remove("active");});el.classList.add("active");}document.getElementById("langDropdown").classList.remove("open");}document.addEventListener("click",function(){var d=document.getElementById("langDropdown");if(d)d.classList.remove("open");});</script>
     <script src="mobile-nav.js?v=20260717"></script>
 
