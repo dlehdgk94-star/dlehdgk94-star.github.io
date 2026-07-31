@@ -216,8 +216,9 @@
        ★ 라이브 전환 시 아래 위젯 클라이언트 키 한 곳만 교체하면 된다.
        ══════════════════════════════════════════════════════════════════════ */
     const TOSS_WIDGET_CLIENT_KEY = 'test_gck_5OWRapdA8dWxXDaaeEBRro1zEqZK';
-    let _usdWidgets = null;      // Toss 위젯 인스턴스
-    let _usdWidgetReady = false; // 렌더 완료 여부(중복 렌더 방지)
+    let _usdWidgets = null;         // Toss 위젯 인스턴스
+    let _usdWidgetReady = false;    // 렌더 완료 여부
+    let _usdWidgetRendering = false; // 렌더 진행 중(동시 호출 중복 렌더 방지)
 
     // 손님 식별용 customerKey (위젯 요구값) — 브라우저별 1회 생성해 재사용
     function _customerKey() {
@@ -757,8 +758,12 @@
             try { if (_usdWidgets && typeof krwToUsd === 'function') await _usdWidgets.setAmount({ currency: 'USD', value: krwToUsd(b.totalPrice) }); } catch (e) {}
             return;
         }
+        // ★ 동시 호출 중복 렌더 방지 — 위젯은 renderPaymentMethods 를 1회만 호출해야 함
+        //   (applyBookingCurrencyUI 가 init·언어변경 등으로 여러 번 불릴 수 있음)
+        if (_usdWidgetRendering) return;
         // ★ USD 는 v2 위젯 SDK(window.NewTossPayments) 사용 — 원화(window.TossPayments, v1)와 공존
         if (typeof window.NewTossPayments !== 'function' || typeof krwToUsd !== 'function') return;
+        _usdWidgetRendering = true;
         try {
             const usdAmount = krwToUsd(b.totalPrice);
             const tossPayments = window.NewTossPayments(TOSS_WIDGET_CLIENT_KEY);
@@ -772,6 +777,8 @@
             var pm = document.getElementById('payment-method');
             if (pm) pm.innerHTML = '<p style="color:#e74c3c;font-size:13px;">PayPal 위젯을 불러오지 못했습니다.</p>';
             _renderUsdFallback();
+        } finally {
+            _usdWidgetRendering = false;
         }
     }
 
