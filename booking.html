@@ -190,7 +190,7 @@
     <div class="booking-page" id="bookingPage"></div>
 
     <!-- 번역 -->
-    <script src="translations.js?v=20260723a"></script>
+    <script src="translations.js?v=20260731a"></script>
     <!-- 토스페이먼츠 SDK -->
     <script src="https://js.tosspayments.com/v1/payment"></script>
     <script>
@@ -522,12 +522,33 @@
         return id;
     }
 
+    // ★ PayPal 입점 요건: 예약 가능 기간(체크아웃 기준) 1년 이내 제한
+    // ★ 손님 브라우저에 남은 예전 localStorage 값이 달력을 거치지 않고 결제로 가는 경우 차단
+    const MAX_BOOKING_DAYS = 360;
+    function _exceedsBookingLimit(checkoutStr) {
+        if (!checkoutStr) return false;
+        var parts = String(checkoutStr).split('-');
+        if (parts.length !== 3) return false;
+        var co = new Date(+parts[0], +parts[1] - 1, +parts[2]);
+        co.setHours(0, 0, 0, 0);
+        // ★ 날짜 계산은 반드시 Asia/Seoul 기준 (UTC로 계산하면 하루 어긋남)
+        var kst = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+        var kp = kst.split('-');
+        var max = new Date(+kp[0], +kp[1] - 1, +kp[2]);
+        max.setDate(max.getDate() + MAX_BOOKING_DAYS);
+        return co > max;
+    }
+
     /* ── 신용/체크카드 결제 (토스페이먼츠) ── */
     async function requestCardPayment() {
         if (!validate()) return;
         saveGuestInfo();
 
         const b    = JSON.parse(localStorage.getItem('instaHotelBooking'));
+        if (_exceedsBookingLimit(b && b.checkout)) {
+            alert('예약은 오늘로부터 1년 이내만 가능합니다. 날짜를 다시 선택해 주세요.');
+            return;
+        }
         const roomName = typeof getRoomName === 'function' ? getRoomName(b.roomId) : b.roomId;
         const name  = document.getElementById('iName').value.trim();
         const email = document.getElementById('iEmail').value.trim();
@@ -584,6 +605,10 @@
             paypal.Buttons({
                 style: { layout:'vertical', color:'gold', shape:'rect', label:'pay', height:50 },
                 onClick: function(data, actions) {
+                    if (_exceedsBookingLimit(b && b.checkout)) {
+                        alert('예약은 오늘로부터 1년 이내만 가능합니다. 날짜를 다시 선택해 주세요.');
+                        return actions.reject();
+                    }
                     if (!validate()) return actions.reject();
                     saveGuestInfo();
                     return actions.resolve();

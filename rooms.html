@@ -775,6 +775,11 @@
     <script>
         const _today=new Date(); _today.setHours(0,0,0,0);
         const _tomorrow=new Date(_today); _tomorrow.setDate(_today.getDate()+1);
+        // ★ PayPal 입점 요건: 예약 가능 기간(=체크아웃 기준)을 1년 이내로 제한
+        const MAX_BOOKING_DAYS=360;
+        // ★ 날짜 계산은 반드시 Asia/Seoul 기준 (UTC로 계산하면 하루 어긋남)
+        function _kstMidnightToday(){ var p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()); var parts=p.split('-'); return new Date(+parts[0],+parts[1]-1,+parts[2]); }
+        const _maxBookingDate=_kstMidnightToday(); _maxBookingDate.setDate(_maxBookingDate.getDate()+MAX_BOOKING_DAYS);
         let checkinDate=_today, checkoutDate=_tomorrow;
         let calViewYear=_today.getFullYear(), calViewMonth=_today.getMonth();
         const DAY_NAMES=['일','월','화','수','목','금','토'];
@@ -911,7 +916,7 @@
                 for(let d=1;d<=days;d++){
                     const date=new Date(yr,m,d);
                     const s=document.createElement('span'); s.className='cal-date'; s.textContent=d;
-                    if(date<_today) s.classList.add('faded');
+                    if(date<_today || date>_maxBookingDate) s.classList.add('faded');
                     else{
                         if(checkinDate&&date.getTime()===checkinDate.getTime()) s.classList.add('selected-start');
                         if(checkoutDate&&date.getTime()===checkoutDate.getTime()) s.classList.add('selected-end');
@@ -926,7 +931,7 @@
         let datesUserSelected=false;
         let _autoAdvDate=true;
         let _datesExplicitlySet=false;
-        function selectDate(d){ if(pickingCheckin||d<=checkinDate){ checkinDate=d; checkoutDate=null; pickingCheckin=false; datesUserSelected=false; selectedRoomId=null; const el=document.getElementById('min-price-text'); if(el) el.textContent=typeof t==='function'?t('booking.min_price'):'최저 요금'; document.getElementById('pricePopup').classList.remove('active'); } else{ checkoutDate=d; pickingCheckin=true; datesUserSelected=true; _datesExplicitlySet=true; updateDateUI(); updateRoomPrices(); syncMobPanel(); if(_autoAdvDate){ setTimeout(function(){ document.getElementById('calendarPopup').classList.remove('active'); document.getElementById('guestPopup').classList.add('active'); },350); } } renderCalendar(); }
+        function selectDate(d){ if(d>_maxBookingDate) return; if(pickingCheckin||d<=checkinDate){ checkinDate=d; checkoutDate=null; pickingCheckin=false; datesUserSelected=false; selectedRoomId=null; const el=document.getElementById('min-price-text'); if(el) el.textContent=typeof t==='function'?t('booking.min_price'):'최저 요금'; document.getElementById('pricePopup').classList.remove('active'); } else{ checkoutDate=d; pickingCheckin=true; datesUserSelected=true; _datesExplicitlySet=true; updateDateUI(); updateRoomPrices(); syncMobPanel(); if(_autoAdvDate){ setTimeout(function(){ document.getElementById('calendarPopup').classList.remove('active'); document.getElementById('guestPopup').classList.add('active'); },350); } } renderCalendar(); }
         function changeMonth(dir){ calViewMonth+=dir; if(calViewMonth<0){calViewMonth=11;calViewYear--;} if(calViewMonth>11){calViewMonth=0;calViewYear++;} renderCalendar(); }
         function toggleCalendarPopup(e){ e.stopPropagation(); var opening=!document.getElementById('calendarPopup').classList.contains('active'); if(opening&&checkinDate&&checkoutDate&&_datesExplicitlySet) _autoAdvDate=false; else if(opening) _autoAdvDate=true; document.getElementById('guestPopup').classList.remove('active'); document.getElementById('calendarPopup').classList.toggle('active'); }
         function toggleGuestPopup(e){ e.stopPropagation(); document.getElementById('calendarPopup').classList.remove('active'); document.getElementById('guestPopup').classList.toggle('active'); }
@@ -1546,7 +1551,7 @@
             }
         })();
     </script>
-    <script src="translations.js?v=20260723a"></script>
+    <script src="translations.js?v=20260731a"></script>
     <script>function toggleLangDropdown(e){e.stopPropagation();document.getElementById("langDropdown").classList.toggle("open");}function selectLang(el){var lang=el.dataset.code.toLowerCase();if(typeof setLanguage==='function'){setLanguage(lang);}else{document.getElementById("langCode").textContent=el.dataset.code;document.querySelectorAll(".lang-option").forEach(function(o){o.classList.remove("active");});el.classList.add("active");}document.getElementById("langDropdown").classList.remove("open");}document.addEventListener("click",function(){var d=document.getElementById("langDropdown");if(d)d.classList.remove("open");});</script>
     <script src="mobile-nav.js?v=20260717"></script>
 
