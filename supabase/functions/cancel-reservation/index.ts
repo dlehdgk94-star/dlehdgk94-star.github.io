@@ -119,9 +119,10 @@ serve(async (req) => {
      (실패 시 DB를 절대 변경하지 않음)
   ════════════════════════════════════════ */
   const encoded = btoa(TOSS_SECRET + ':');
-  // 취소 요청 본문 — USD 부분 취소는 currency:"USD" 필수, 전체 취소는 기존과 동일(currency 불필요)
+  // 취소 요청 본문 — USD 결제는 전액/부분 취소 모두 currency:"USD" 필수.
+  //   (미포함 시 Toss 가 INVALID_CURRENCY 로 거부함 — E2E 로 확인됨. 원화는 currency 불필요.)
   const cancelBody: Record<string, unknown> = { cancelReason, cancelAmount };
-  if (isUsd && Math.abs(cancelAmount - Number(r.paid_amount)) >= 0.01) {
+  if (isUsd) {
     cancelBody.currency = 'USD';
   }
   console.log(`[cancel-reservation] STEP2 Toss 취소 요청: paymentKey=${r.payment_key}, amount=${cancelAmount}, provider=${r.payment_provider}, currency=${cancelBody.currency ?? '(full)'}`);
