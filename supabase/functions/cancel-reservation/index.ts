@@ -40,16 +40,12 @@ serve(async (req) => {
   /* ── 환경변수 ── */
   const SUPABASE_URL  = Deno.env.get('SUPABASE_URL');
   const SERVICE_KEY   = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-  const TOSS_SECRET   = Deno.env.get('TOSS_SECRET_KEY');
 
   if (!SUPABASE_URL || !SERVICE_KEY) {
     console.error('[cancel-reservation] Supabase 환경변수 미설정');
     return json({ ok: false, error: '서버 설정 오류 (Supabase)' }, 500);
   }
-  if (!TOSS_SECRET) {
-    console.error('[cancel-reservation] TOSS_SECRET_KEY 미설정');
-    return json({ ok: false, error: '서버 설정 오류 (Toss)' }, 500);
-  }
+  // Toss 시크릿 키는 통화(payment_provider) 확정 후 선택한다(STEP1 아래).
 
   const sbHeaders = {
     'apikey':        SERVICE_KEY,
@@ -89,11 +85,33 @@ serve(async (req) => {
   if (!r.payment_key) {
     return json({ ok: false, error: 'payment_key가 없습니다. 수동으로 처리해 주세요.' }, 400);
   }
-  if (cancelAmount > Number(r.total_price)) {
-    return json({
-      ok: false,
-      error: `환불 금액(${cancelAmount.toLocaleString()}원)이 결제 금액(${Number(r.total_price).toLocaleString()}원)을 초과합니다.`,
-    }, 400);
+
+  /* ── 통화 분기: payment_provider 기준 (기존 원화 예약은 'toss_krw' → 기존 동작 유지) ── */
+  const isUsd = r.payment_provider === 'toss_paypal';
+  const TOSS_SECRET = isUsd
+    ? Deno.env.get('TOSS_WIDGET_SECRET_KEY')
+    : Deno.env.get('TOSS_SECRET_KEY');
+  if (!TOSS_SECRET) {
+    console.error(`[cancel-reservation] ${isUsd ? 'TOSS_WIDGET_SECRET_KEY' : 'TOSS_SECRET_KEY'} 미설정`);
+    return json({ ok: false, error: '서버 설정 오류 (Toss)' }, 500);
+  }
+
+  // 취소 상한 검증 — USD 는 paid_amount(USD) 기준(원화 재환산 금지), 원화는 total_price 기준
+  if (isUsd) {
+    // USD 소수점 오차 대비 — === 금지, 허용오차 비교
+    if (cancelAmount - Number(r.paid_amount) > 0.01) {
+      return json({
+        ok: false,
+        error: `환불 금액($${cancelAmount.toFixed(2)})이 결제 금액($${Number(r.paid_amount).toFixed(2)})을 초과합니다.`,
+      }, 400);
+    }
+  } else {
+    if (cancelAmount > Number(r.total_price)) {
+      return json({
+        ok: false,
+        error: `환불 금액(${cancelAmount.toLocaleString()}원)이 결제 금액(${Number(r.total_price).toLocaleString()}원)을 초과합니다.`,
+      }, 400);
+    }
   }
 
   /* ════════════════════════════════════════
@@ -101,7 +119,12 @@ serve(async (req) => {
      (실패 시 DB를 절대 변경하지 않음)
   ════════════════════════════════════════ */
   const encoded = btoa(TOSS_SECRET + ':');
-  console.log(`[cancel-reservation] STEP2 Toss 취소 요청: paymentKey=${r.payment_key}, amount=${cancelAmount}`);
+  // 취소 요청 본문 — USD 부분 취소는 currency:"USD" 필수, 전체 취소는 기존과 동일(currency 불필요)
+  const cancelBody: Record<string, unknown> = { cancelReason, cancelAmount };
+  if (isUsd && Math.abs(cancelAmount - Number(r.paid_amount)) >= 0.01) {
+    cancelBody.currency = 'USD';
+  }
+  console.log(`[cancel-reservation] STEP2 Toss 취소 요청: paymentKey=${r.payment_key}, amount=${cancelAmount}, provider=${r.payment_provider}, currency=${cancelBody.currency ?? '(full)'}`);
 
   let tossRes: Response;
   try {
@@ -113,7 +136,7 @@ serve(async (req) => {
           'Authorization': `Basic ${encoded}`,
           'Content-Type':  'application/json',
         },
-        body: JSON.stringify({ cancelReason, cancelAmount }),
+        body: JSON.stringify(cancelBody),
       },
     );
   } catch (err) {
