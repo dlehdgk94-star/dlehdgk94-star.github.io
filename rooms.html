@@ -370,6 +370,7 @@
         .review-more-btn:hover { border-color: rgb(112,112,112); }
     </style>
     <link rel="stylesheet" href="responsive.css?v=4">
+    <script src="js/roomPricing.js?v=20260731"></script>
 </head>
 <body onclick="closeDropdowns(event)">
 
@@ -805,28 +806,14 @@
             document.getElementById('checkout-date-text').textContent = checkoutDate ? fmtDate(checkoutDate) : '';
         }
 
-        const ROOM_PRICE_TABLE = {
-            edelweiss: { prices: [49500, 58500, 72000],  maxGuests: 2 },
-            aurora:    { prices: [58000, 67000, 81000],  maxGuests: 2 },
-            glorio:    { prices: [67000, 76000, 99000],  maxGuests: 2 },
-            envidion:  { prices: [76000, 85000, 108000], maxGuests: 3 },
-            special:   { prices: [99000, 108000, 126000],maxGuests: 4 },
-            ruby:      { prices: [76000, 85000, 108000], maxGuests: 2 }
-        };
-        function getNightRate(roomId, date) {
-            const r = ROOM_PRICE_TABLE[roomId]; if (!r) return 0;
-            const p = r.prices;
-            const d = date.getDay();
-            return d === 6 ? p[2] : d === 5 ? p[1] : p[0];
-        }
+        // 요금표(ROOM_PRICING)·요일요금(getNightRate)·객실순서(ROOM_ORDER)는 js/roomPricing.js 로 단일화됨
         function fmtWon(n) { return n.toLocaleString('ko-KR'); }
         function renderStaticPrice(roomId) {
-            const p = ROOM_PRICE_TABLE[roomId]; if (!p) return '';
+            const p = ROOM_PRICING[roomId]; if (!p) return '';
             return '<span class="room-card-price-item">(일~목) <strong>'+fmtWon(p[0])+'</strong></span>'+
                    '<span class="room-card-price-item">(금) <strong>'+fmtWon(p[1])+'</strong></span>'+
                    '<span class="room-card-price-item">(토) <strong>'+fmtWon(p[2])+'</strong></span>';
         }
-        const ROOM_ORDER = ['edelweiss','aurora','glorio','envidion','special','ruby'];
         function populatePricePopup() {
             if (!checkinDate || !checkoutDate) return;
             const listEl = document.getElementById('pricePopupList');
@@ -838,7 +825,7 @@
             var roomIds = window._bookingPinnedRoomId ? [window._bookingPinnedRoomId] : (window.innerWidth <= 768 && _mobRoom ? [_mobRoom] : ROOM_ORDER);
             listEl.innerHTML = roomIds.map(function(id) {
                 const room = ROOM_DATA[id]; if (!room) return '';
-                const pt = ROOM_PRICE_TABLE[id];
+                const pt = ROOM_PRICING[id];
                 const available = pt && adultCount <= pt.maxGuests * roomCount;
                 let total = 0;
                 for (let i = 0; i < nights; i++) { const d = new Date(checkinDate); d.setDate(d.getDate()+i); total += getNightRate(id, d); }

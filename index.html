@@ -730,6 +730,7 @@
         .modal-amenity-item-click:hover{ background:#e8f6f8; color:#00768e; }
     </style>
     <link rel="stylesheet" href="responsive.css?v=4">
+    <script src="js/roomPricing.js?v=20260731"></script>
 </head>
 <body>
 
@@ -2751,7 +2752,7 @@
                 var d2  = new Date(checkinDate); d2.setDate(d2.getDate() + i);
                 var ds2 = dateStrs[i];
                 var inv2= invByDate[ds2];
-                total  += (inv2 && inv2.price) ? inv2.price : getNightRateI(selectedRoomId, d2);
+                total  += (inv2 && inv2.price) ? inv2.price : getNightRate(selectedRoomId, d2);
             }
             total *= roomCount;
 
@@ -3132,18 +3133,9 @@
         }
 
         let selectedRoomId = null;
-        const ROOM_PRICE_TABLE_I = {
-            edelweiss:{prices:[49500,58500,72000],maxGuests:2},
-            aurora:   {prices:[58000,67000,81000],maxGuests:2},
-            glorio:   {prices:[67000,76000,99000],maxGuests:2},
-            envidion: {prices:[76000,85000,108000],maxGuests:3},
-            special:  {prices:[99000,108000,126000],maxGuests:4},
-            ruby:     {prices:[76000,85000,108000],maxGuests:2}
-        };
+        // 요금표(ROOM_PRICING)·요일요금(getNightRate)·객실순서(ROOM_ORDER)는 js/roomPricing.js 로 단일화됨
         const ROOM_NAMES_I={edelweiss:'이코노미 룸',aurora:'스탠다드 룸 (디자인 랜덤배정)',glorio:'디럭스 룸 (디자인 랜덤배정)',envidion:'트윈 룸',special:'스페셜 룸',ruby:'루비 룸'};
-        const ROOM_ORDER_I=['edelweiss','aurora','glorio','envidion','special','ruby'];
         function fmtWon(n){ return n.toLocaleString('ko-KR'); }
-        function getNightRateI(id,date){ var r=ROOM_PRICE_TABLE_I[id]; if(!r) return 0; var d=date.getDay(); return d===6?r.prices[2]:d===5?r.prices[1]:r.prices[0]; }
 
         /* ── Supabase: 날짜별 요금·재고 조회 ── */
         var _sbI = null;
@@ -3191,11 +3183,11 @@
             var nights=Math.round((checkoutDate-checkinDate)/86400000);
             var roomCount=guests?guests.room:1, adultCount=guests?guests.adult:1;
             // 특정 객실 카드에서 예약하기를 클릭한 경우 해당 객실만 표시
-            var roomIds = window._bookingPinnedRoomId ? [window._bookingPinnedRoomId] : ROOM_ORDER_I;
+            var roomIds = window._bookingPinnedRoomId ? [window._bookingPinnedRoomId] : ROOM_ORDER;
             listEl.innerHTML=roomIds.map(function(id){
-                var pt=ROOM_PRICE_TABLE_I[id]; var title=getRoomName(id);
+                var pt=ROOM_PRICING[id]; var title=getRoomName(id);
                 var available=pt&&adultCount<=pt.maxGuests*roomCount;
-                var total=0; for(var i=0;i<nights;i++){ var nd=new Date(checkinDate); nd.setDate(nd.getDate()+i); total+=getNightRateI(id,nd); } total*=roomCount;
+                var total=0; for(var i=0;i<nights;i++){ var nd=new Date(checkinDate); nd.setDate(nd.getDate()+i); total+=getNightRate(id,nd); } total*=roomCount;
                 if(!available) return '<div class="price-popup-row price-popup-unavail"><span class="price-popup-name">'+title+'</span><span class="price-popup-total" style="color:rgb(180,180,180);">'+fmtUnavailMax(pt.maxGuests*roomCount)+'</span></div>';
                 return '<div class="price-popup-row" onclick="selectRoom(\''+id+'\')"><span class="price-popup-name">'+title+'</span><span class="price-popup-total">'+fmtNightTotal(nights,total)+'</span></div>';
             }).join('');
@@ -3207,7 +3199,7 @@
                 if(selectedRoomId){
                     var nights=Math.round((checkoutDate-checkinDate)/86400000);
                     var roomCount=guests?guests.room:1; var total=0;
-                    for(var i=0;i<nights;i++){ var nd=new Date(checkinDate); nd.setDate(nd.getDate()+i); total+=getNightRateI(selectedRoomId,nd); } total*=roomCount;
+                    for(var i=0;i<nights;i++){ var nd=new Date(checkinDate); nd.setDate(nd.getDate()+i); total+=getNightRate(selectedRoomId,nd); } total*=roomCount;
                     el.textContent=getRoomName(selectedRoomId)+' · '+fmtNightTotal(nights,total);
                 }
             } else { el.textContent=t('booking.price_select'); document.getElementById('pricePopup').classList.remove('active'); }
@@ -3217,7 +3209,7 @@
             if(checkinDate&&checkoutDate){
                 var nights=Math.round((checkoutDate-checkinDate)/86400000);
                 var roomCount=guests?guests.room:1; var total=0;
-                for(var i=0;i<nights;i++){ var nd=new Date(checkinDate); nd.setDate(nd.getDate()+i); total+=getNightRateI(roomId,nd); } total*=roomCount;
+                for(var i=0;i<nights;i++){ var nd=new Date(checkinDate); nd.setDate(nd.getDate()+i); total+=getNightRate(roomId,nd); } total*=roomCount;
                 document.getElementById('min-price-text').textContent=getRoomName(roomId)+' · '+fmtNightTotal(nights,total);
             }
             // 모바일 패널 동기화

@@ -220,6 +220,7 @@
             .cal-cell{ min-height:80px; padding:7px 8px; }
         }
     </style>
+    <script src="js/roomPricing.js?v=20260731"></script>
 </head>
 <body>
 
@@ -249,6 +250,7 @@
         <button class="tab-btn active" onclick="switchTab('dashboard')"><i class="fa-solid fa-gauge"></i>대시보드</button>
         <button class="tab-btn" onclick="switchTab('reservations')"><i class="fa-solid fa-list"></i>예약 목록</button>
         <button class="tab-btn" onclick="switchTab('inventory')"><i class="fa-solid fa-calendar-days"></i>재고·요금 관리</button>
+        <button class="tab-btn" onclick="switchTab('rates')"><i class="fa-solid fa-dollar-sign"></i>환율 설정</button>
     </nav>
 
     <div class="admin-body">
@@ -338,6 +340,51 @@
                     <div id="invSheetArea">
                         <div class="inv-loading"><i class="fa-solid fa-circle-notch"></i><p>불러오는 중...</p></div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ───── 환율 설정 ───── -->
+        <div class="tab-panel" id="panel-rates">
+            <div class="table-card" style="margin-bottom:20px;">
+                <div class="table-card-header">
+                    <span class="table-card-title">USD 환율 · 마크업 설정</span>
+                    <button class="refresh-btn" onclick="loadRates()"><i class="fa-solid fa-arrows-rotate"></i> 새로고침</button>
+                </div>
+                <div style="padding:20px 22px;">
+                    <div id="ratesCurrent" style="display:flex;gap:28px;flex-wrap:wrap;font-size:14px;color:#333;margin-bottom:22px;">
+                        <span>불러오는 중...</span>
+                    </div>
+
+                    <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;">
+                        <div>
+                            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">환율 (usd_rate, 500~3000)</label>
+                            <input class="login-input" id="rateInput" type="number" step="1" min="500" max="3000" style="width:180px;height:44px;" oninput="renderRatePreview()">
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">마크업 (usd_markup, 1.0~2.0)</label>
+                            <input class="login-input" id="markupInput" type="number" step="0.01" min="1.0" max="2.0" style="width:180px;height:44px;" oninput="renderRatePreview()">
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">관리자 비밀번호</label>
+                            <input class="login-input" id="ratePwInput" type="password" placeholder="비밀번호 입력" autocomplete="off" style="width:200px;height:44px;">
+                        </div>
+                        <button class="bulk-btn" id="rateSaveBtn" onclick="saveRates()" style="height:44px;"><i class="fa-solid fa-floppy-disk"></i> 저장</button>
+                    </div>
+                    <p style="font-size:12px;color:#888;margin-top:12px;line-height:1.6;">
+                        비밀번호는 저장 시 서버(Edge Function)에서만 검증되며 저장·기록되지 않습니다.<br>
+                        계산식: <code>USD = Math.ceil((KRW × 마크업 ÷ 환율) × 2) / 2</code> (0.50 단위 올림)
+                    </p>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-card-header">
+                    <span class="table-card-title">객실별 KRW → USD 환산 미리보기</span>
+                    <span class="filter-count" id="ratePreviewNote"></span>
+                </div>
+                <div id="ratePreviewArea">
+                    <div class="loading-state"><i class="fa-solid fa-circle-notch"></i><p>불러오는 중...</p></div>
                 </div>
             </div>
         </div>
@@ -461,16 +508,9 @@ const _sb = window.supabase.createClient(
     'sb_publishable_2X3S_RgN_0ipbUtR-zAV6A_yIp1n5PC'
 );
 
-const ROOM_DEFAULTS = {
-    edelweiss: { name:'이코노미 룸', prices:[49500,  58500,  72000],  stock:5 },
-    aurora:    { name:'스탠다드 룸 (디자인 랜덤배정)', prices:[58000,  67000,  81000],  stock:5 },
-    glorio:    { name:'디럭스 룸 (디자인 랜덤배정)',  prices:[67000,  76000,  99000],  stock:3 },
-    envidion:  { name:'트윈 룸',    prices:[76000,  85000,  108000], stock:3 },
-    special:   { name:'스페셜 룸',  prices:[99000,  108000, 126000], stock:2 },
-    ruby:      { name:'루비 룸',    prices:[76000,  85000,  108000], stock:2 }
-};
+// 요금표(ROOM_PRICING)·객실순서(ROOM_ORDER)·요일요금(getNightRate)는 js/roomPricing.js 로 단일화됨
 function defPrice(roomId, dateStr){
-    const p = ROOM_DEFAULTS[roomId].prices;
+    const p = ROOM_PRICING[roomId].prices;
     const dow = new Date(dateStr+'T00:00:00').getDay();
     return dow===6 ? p[2] : dow===5 ? p[1] : p[0];
 }
@@ -510,11 +550,178 @@ if(sessionStorage.getItem('adminAuth')==='1'){
    탭 전환
 ════════════════════════════════════════ */
 function switchTab(id){
-    document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['dashboard','reservations','inventory'][i]===id));
+    document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['dashboard','reservations','inventory','rates'][i]===id));
     document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
     document.getElementById('panel-'+id).classList.add('active');
     sessionStorage.setItem('adminTab', id);
     if (id === 'inventory') setTimeout(_applyInvScroll, 0);
+    if (id === 'rates') loadRates();
+}
+
+/* ════════════════════════════════════════
+   환율 설정 (usd_rate / usd_markup)
+   - 조회: anon SELECT (app_settings, rooms)
+   - 저장: update-app-setting Edge Function (service_role) 경유
+════════════════════════════════════════ */
+const UPDATE_SETTING_URL = 'https://lbhdujheuokkmiowobzu.supabase.co/functions/v1/update-app-setting';
+let _ratesData = { usd_rate: null, usd_markup: null, updated_at: null };
+// ★ 미리보기 요금 출처 = 실제 결제와 '동일한' 공용 요금표(js/roomPricing.js 의 ROOM_PRICING) + 동일한 요일 로직.
+//   · 실제 청구(index.html/rooms.html): 숙박일마다 room_inventory.price 가 있으면 그 값,
+//     없으면 이 공용 기본표로 fallback (index/rooms/admin 이 동일 파일을 참조).
+//   · 요일 로직(getNightRate/defPrice 와 동일): 토=prices[2], 금=prices[1], 그 외 평일=prices[0].
+//   · rooms 테이블 base_price/weekend_price 는 이 결제 플로우 어디에서도 참조되지 않는 미사용 컬럼.
+
+function _rEsc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// USD = Math.ceil((KRW * markup / rate) * 2) / 2  (0.50 단위 올림)
+function usdFromKrw(krw, rate, markup){
+    if(!krw || !rate || !markup) return null;
+    return Math.ceil((krw * markup / rate) * 2) / 2;
+}
+function fmtUsd(v){ return v==null ? '-' : '$' + v.toFixed(2); }
+
+async function loadRates(){
+    document.getElementById('ratesCurrent').innerHTML = '<span>불러오는 중...</span>';
+    document.getElementById('ratePreviewArea').innerHTML =
+        '<div class="loading-state"><i class="fa-solid fa-circle-notch"></i><p>불러오는 중...</p></div>';
+
+    const { data:settings, error:sErr } =
+        await _sb.from('app_settings').select('key,value,updated_at').in('key', ['usd_rate','usd_markup']);
+
+    if(sErr){
+        document.getElementById('ratesCurrent').innerHTML =
+            '<span style="color:#e74c3c;">환율 설정 조회 실패: ' + _rEsc(sErr.message) + '</span>';
+        return;
+    }
+
+    let updatedAt = null;
+    (settings||[]).forEach(row => {
+        if(row.key === 'usd_rate')   _ratesData.usd_rate   = Number(row.value);
+        if(row.key === 'usd_markup') _ratesData.usd_markup = Number(row.value);
+        if(row.updated_at && (!updatedAt || row.updated_at > updatedAt)) updatedAt = row.updated_at;
+    });
+    _ratesData.updated_at = updatedAt;
+
+    const updLabel = updatedAt ? new Date(updatedAt).toLocaleString('ko-KR', { timeZone:'Asia/Seoul' }) : '-';
+    document.getElementById('ratesCurrent').innerHTML =
+        '<span><strong>현재 환율</strong> · usd_rate = <b style="font-size:16px;">' + (_ratesData.usd_rate ?? '-') + '</b></span>' +
+        '<span><strong>현재 마크업</strong> · usd_markup = <b style="font-size:16px;">' + (_ratesData.usd_markup ?? '-') + '</b></span>' +
+        '<span style="color:#888;"><i class="fa-regular fa-clock"></i> 마지막 수정: ' + _rEsc(updLabel) + '</span>';
+
+    // 입력 필드 기본값 = 현재값
+    document.getElementById('rateInput').value   = _ratesData.usd_rate ?? '';
+    document.getElementById('markupInput').value = _ratesData.usd_markup ?? '';
+
+    renderRatePreview();
+}
+
+function renderRatePreview(){
+    const rate   = parseFloat(document.getElementById('rateInput').value);
+    const markup = parseFloat(document.getElementById('markupInput').value);
+    const area = document.getElementById('ratePreviewArea');
+    const note = document.getElementById('ratePreviewNote');
+
+    const dirty = (rate !== _ratesData.usd_rate) || (markup !== _ratesData.usd_markup);
+    note.textContent = dirty ? '※ 미저장 입력값 기준 미리보기' : '저장된 값 기준';
+    note.style.color = dirty ? '#e67e22' : '#888';
+
+    if(!(rate>0) || !(markup>0)){
+        area.innerHTML = '<div class="loading-state"><p>환율·마크업 값을 입력하세요.</p></div>';
+        return;
+    }
+
+    // ROOM_PRICING[id].prices = [평일, 금, 토] — 공용 js/roomPricing.js (실제 청구와 동일)
+    const cell = (krw) => Number(krw).toLocaleString('ko-KR') + '원 → <b>' + fmtUsd(usdFromKrw(krw, rate, markup)) + '</b>';
+    let rows = '';
+    ROOM_ORDER.forEach(id => {
+        const rd = ROOM_PRICING[id];
+        if(!rd) return;
+        const p = rd.prices;
+        rows +=
+            '<tr style="border-bottom:1px solid #f0f0f0;">' +
+            '<td style="padding:10px 14px;font-weight:600;">' + _rEsc(rd.name) + '</td>' +
+            '<td style="padding:10px 14px;text-align:right;">' + cell(p[0]) + '</td>' +
+            '<td style="padding:10px 14px;text-align:right;">' + cell(p[1]) + '</td>' +
+            '<td style="padding:10px 14px;text-align:right;">' + cell(p[2]) + '</td>' +
+            '</tr>';
+    });
+    area.innerHTML =
+        '<table style="width:100%;border-collapse:collapse;font-size:14px;">' +
+        '<thead><tr style="border-bottom:2px solid #eee;color:#666;font-size:12px;">' +
+        '<th style="padding:10px 14px;text-align:left;">객실</th>' +
+        '<th style="padding:10px 14px;text-align:right;">평일 (KRW → USD)</th>' +
+        '<th style="padding:10px 14px;text-align:right;">금요일</th>' +
+        '<th style="padding:10px 14px;text-align:right;">토요일</th>' +
+        '</tr></thead><tbody>' + rows + '</tbody></table>' +
+        '<p style="font-size:12px;color:#888;padding:12px 14px 0;line-height:1.6;">' +
+        '실제 결제와 동일한 <b>기본 요금표</b> 기준입니다. 특정 날짜에 <b>room_inventory</b> 가격이 설정돼 있으면 그 날짜는 해당 가격으로 청구됩니다.</p>';
+}
+
+async function saveRates(){
+    const rate   = parseFloat(document.getElementById('rateInput').value);
+    const markup = parseFloat(document.getElementById('markupInput').value);
+    const pw     = document.getElementById('ratePwInput').value;
+
+    // 클라이언트측 사전 검증 (서버가 최종 검증)
+    if(!(Number.isFinite(rate)) || rate < 500 || rate > 3000){
+        alert('환율(usd_rate)은 500 이상 3000 이하여야 합니다.'); return;
+    }
+    if(!(Number.isFinite(markup)) || markup < 1.0 || markup > 2.0){
+        alert('마크업(usd_markup)은 1.0 이상 2.0 이하여야 합니다.'); return;
+    }
+    if(!pw){ alert('관리자 비밀번호를 입력하세요.'); document.getElementById('ratePwInput').focus(); return; }
+
+    // 변경된 키만 전송
+    const changes = [];
+    if(rate   !== _ratesData.usd_rate)   changes.push({ key:'usd_rate',   value:rate });
+    if(markup !== _ratesData.usd_markup) changes.push({ key:'usd_markup', value:markup });
+    if(!changes.length){ alert('변경사항이 없습니다.'); return; }
+
+    // 적용 후 예상 USD 가격 확인 (오입력 방지) — 실제 결제와 동일한 기본 요금표 기준
+    let preview = ROOM_ORDER.map(id => {
+        const rd = ROOM_PRICING[id]; if(!rd) return null;
+        const p = rd.prices;
+        return '· ' + rd.name + ': 평일 ' + fmtUsd(usdFromKrw(p[0], rate, markup)) +
+               ' / 금 ' + fmtUsd(usdFromKrw(p[1], rate, markup)) +
+               ' / 토 ' + fmtUsd(usdFromKrw(p[2], rate, markup));
+    }).filter(Boolean).join('\n');
+    const ok = confirm(
+        '다음 값으로 저장합니다.\n\n' +
+        'usd_rate = ' + rate + '\nusd_markup = ' + markup + '\n\n' +
+        '── 적용 후 예상 USD 가격 ──\n' + preview + '\n\n진행하시겠습니까?'
+    );
+    if(!ok) return;
+
+    const btn = document.getElementById('rateSaveBtn');
+    btn.disabled = true; const btnHtml = btn.innerHTML; btn.textContent = '저장 중...';
+
+    try{
+        for(const ch of changes){
+            const res = await fetch(UPDATE_SETTING_URL, {
+                method:'POST',
+                headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer sb_publishable_2X3S_RgN_0ipbUtR-zAV6A_yIp1n5PC' },
+                body: JSON.stringify({ key:ch.key, value:ch.value, adminPassword:pw }),
+            });
+            const result = await res.json().catch(()=>({}));
+            if(!res.ok || !result.ok){
+                if(res.status === 401){
+                    alert('비밀번호가 올바르지 않습니다.');
+                } else {
+                    alert('저장 실패 (' + ch.key + '): ' + (result.error || ('HTTP '+res.status)));
+                }
+                btn.disabled = false; btn.innerHTML = btnHtml;
+                return; // 실패 시 중단 (이미 성공한 키는 반영됨 → 새로고침으로 최신화)
+            }
+        }
+        document.getElementById('ratePwInput').value = ''; // 비밀번호 흔적 제거
+        if(typeof showToast === 'function') showToast('환율 설정이 저장되었습니다 ✓'); else alert('저장되었습니다.');
+        await loadRates(); // 미리보기 즉시 갱신
+    } catch(err){
+        console.error('[saveRates]', err);
+        alert('네트워크 오류가 발생했습니다. 다시 시도해 주세요.');
+    } finally {
+        btn.disabled = false; btn.innerHTML = btnHtml;
+    }
 }
 
 /* ════════════════════════════════════════
@@ -775,7 +982,6 @@ async function submitCancel(){
 /* ════════════════════════════════════════
    재고·요금 관리 (전체 객실 스프레드시트)
 ════════════════════════════════════════ */
-const ROOM_IDS = ['edelweiss','aurora','glorio','envidion','special','ruby'];
 let invYear  = new Date().getFullYear();
 let invMonth = new Date().getMonth();
 let invData  = {}; // { roomId: { 'YYYY-MM-DD': { is_available, price, stock } } }
@@ -836,7 +1042,7 @@ async function loadInventory(){
         .gte('date', startDate).lte('date', endDate);
 
     invData = {};
-    ROOM_IDS.forEach(id => invData[id] = {});
+    ROOM_ORDER.forEach(id => invData[id] = {});
     if(data) data.forEach(r => {
         const nameEn = roomNameMap[r.room_id] || r.room_id;
         if(!invData[nameEn]) invData[nameEn] = {};
@@ -866,8 +1072,8 @@ function renderSheet(){
     thead += '</tr>';
 
     /* 객실 행 */
-    const tbody = ROOM_IDS.map(roomId => {
-        const def = ROOM_DEFAULTS[roomId];
+    const tbody = ROOM_ORDER.map(roomId => {
+        const def = ROOM_PRICING[roomId];
         let cells = `<td class="td-room">${def.name}<span>${roomId.toUpperCase()}</span></td>`;
 
         for(let d = 1; d <= lastDay; d++){
@@ -926,7 +1132,7 @@ function _applyInvScroll(){
 /* ── 날짜 편집 모달 ── */
 function openDateModal(roomId, dateStr){
     const d   = new Date(dateStr+'T00:00:00');
-    const def = ROOM_DEFAULTS[roomId];
+    const def = ROOM_PRICING[roomId];
     const rec = invData[roomId]?.[dateStr];
 
     editingRoomId  = roomId;
@@ -1009,7 +1215,7 @@ async function applyBulkEdit(){
             if(selectedDows.includes(cur.getDay())){
                 const dateStr  = toDateStr(cur.getFullYear(), cur.getMonth(), cur.getDate());
                 const existing = invData[roomId]?.[dateStr];
-                const def      = ROOM_DEFAULTS[roomId];
+                const def      = ROOM_PRICING[roomId];
                 const price    = priceVal !== '' ? parseInt(priceVal) : (existing?.price ?? def.price);
                 const stock    = stockVal !== '' ? parseInt(stockVal) : (existing?.stock ?? def.stock);
                 rows.push({ room_id:roomUuid, date:dateStr, is_available:isAvail, price, stock });
