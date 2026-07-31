@@ -386,26 +386,9 @@
             </div>
           </div>
 
-          <!-- 2. 결제 수단 -->
+          <!-- 2. 취소·환불 정책 (결제수단 섹션 제거로 번호 재정렬 ③→②) -->
           <div class="form-section">
-            <div class="section-title"><div class="section-num">2</div><span data-i18n="bk.sec2">${_t('bk.sec2')}</span></div>
-            <div class="pay-grid">
-              <label class="pay-option selected" data-m="card">
-                <input type="radio" name="pm" value="card" checked>
-                <div class="pay-logo logo-card"><i class="fa-solid fa-credit-card" style="font-size:19px;"></i></div>
-                <span class="pay-name" data-i18n="bk.pay.card">${_t('bk.pay.card')}</span>
-              </label>
-              <label class="pay-option" data-m="paypal">
-                <input type="radio" name="pm" value="paypal">
-                <div class="pay-logo logo-paypal">Pay<span>Pal</span></div>
-                <span class="pay-name">PayPal</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- 3. 취소·환불 정책 -->
-          <div class="form-section">
-            <div class="section-title"><div class="section-num">3</div><span data-i18n="bk.sec3">${_t('bk.sec3')}</span></div>
+            <div class="section-title"><div class="section-num">2</div><span data-i18n="bk.sec3">${_t('bk.sec3')}</span></div>
             <div class="policy-box" style="margin-bottom:12px;">
               <div class="policy-title" data-i18n="bk.policy.checkinout">${_t('bk.policy.checkinout')}</div>
               <div class="policy-row"><span class="day" data-i18n="bk.policy.checkin_day">${_t('bk.policy.checkin_day')}</span><span data-i18n="bk.policy.checkin_time">${_t('bk.policy.checkin_time')}</span></div>
@@ -420,9 +403,9 @@
             </div>
           </div>
 
-          <!-- 4. 약관 동의 -->
+          <!-- 3. 약관 동의 (번호 재정렬 ④→③) -->
           <div class="form-section">
-            <div class="section-title"><div class="section-num">4</div><span data-i18n="bk.sec4">${_t('bk.sec4')}</span></div>
+            <div class="section-title"><div class="section-num">3</div><span data-i18n="bk.sec4">${_t('bk.sec4')}</span></div>
             <div class="terms-all-row" onclick="toggleAll(this)">
               <div class="chk" id="chkAll"></div>
               <span class="terms-all-text" data-i18n="bk.terms.all">${_t('bk.terms.all')}</span>
