@@ -64,9 +64,14 @@ function buildMessage(r: Record<string, unknown>): string {
     ? rawPhone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3')
     : '-';
 
-  const price = r.total_price != null
+  // ── 통화 분기 (직원용) — USD 는 원화 병기(내부 정산 참고용). KRW 는 기존 그대로. ──
+  const isUsd = r.currency === 'USD' && r.paid_amount != null;
+  const krwStr = r.total_price != null
     ? Number(r.total_price).toLocaleString('ko-KR') + '원'
     : '-';
+  const price = isUsd
+    ? `$${Number(r.paid_amount).toFixed(2)} (약 ${krwStr})`
+    : krwStr;
 
   const specialReq =
     r.special_request && String(r.special_request).trim()
@@ -89,6 +94,8 @@ function buildMessage(r: Record<string, unknown>): string {
     '─────────────────',
     `결제금액: ${price}`,
   ];
+  // USD(PayPal) 결제는 결제수단을 명시 (직원이 해외결제임을 인지)
+  if (isUsd) lines.push('결제수단: PayPal (해외결제)');
   return lines.join('\n');
 }
 
@@ -136,9 +143,10 @@ function buildEmailContent(
   const roomCount  = r.room_count  ? String(r.room_count)  : '-';
   const adultCount = r.adult_count ? String(r.adult_count) : '-';
   const guestName  = String(r.guest_name ?? '-');
-  const price      = r.total_price != null
-    ? '₩' + Number(r.total_price).toLocaleString('ko-KR')
-    : '-';
+  // ── 통화 분기 (고객용) — 결제 통화 단독 표시(원화 병기 금지). USD 는 paid_amount, KRW 는 기존. ──
+  const price      = (r.currency === 'USD' && r.paid_amount != null)
+    ? '$' + Number(r.paid_amount).toFixed(2)
+    : (r.total_price != null ? '₩' + Number(r.total_price).toLocaleString('ko-KR') : '-');
 
   /* ── 호텔 정보 (주소는 placeholder) ── */
   const HOTEL_ADDRESS = '경기도 수원시 영통구 영통로 94-6 (호텔인스타)';
