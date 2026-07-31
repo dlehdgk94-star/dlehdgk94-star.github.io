@@ -107,8 +107,25 @@ async function finalizeReservation(
     body: JSON.stringify(insBody),
   });
   if (!insRes.ok) {
-    // ★수동복구필요★ 결제는 승인됐으나 예약이 저장되지 않음 → orderId/paymentKey 를 반드시 남긴다
     const errText = await insRes.text();
+
+    // ── UNIQUE 위반(23505): 동시 재호출로 다른 요청이 먼저 저장함 → 에러가 아니라 정상(중복)으로 처리 ──
+    //    이 분기는 INSERT 실패 시점이므로 재고 차감은 실행되지 않는다(아래 재고 로직 미도달).
+    if (insRes.status === 409 || errText.includes('23505') || errText.includes('duplicate key')) {
+      console.log(`[confirm-payment] order_id UNIQUE 충돌(23505) → 기존 예약 반환 (idempotent) — orderId=${data.orderId}`);
+      let existing: Record<string, unknown> | undefined;
+      const exRes2 = await fetch(
+        `${sbUrl}/rest/v1/reservations?order_id=eq.${encodeURIComponent(data.orderId)}&select=*`,
+        { headers },
+      );
+      if (exRes2.ok) {
+        const rows = await exRes2.json() as Record<string, unknown>[];
+        existing = rows[0];
+      }
+      return { inserted: false, overbooked: false, reason: 'duplicate', reservation: existing };
+    }
+
+    // ★수동복구필요★ 그 외 실패 — 결제는 승인됐으나 예약 저장 실패 → orderId/paymentKey 를 반드시 남긴다
     console.error(
       `[confirm-payment] ★수동복구필요★ 결제 승인됨 but reservations INSERT 실패 — ` +
       `orderId=${data.orderId}, paymentKey=${data.paymentKey}, currency=${data.currency}, ` +
