@@ -198,8 +198,8 @@
          window.NewTossPayments 로 노출한다. 이후 v1 을 로드하고 window.TossPayments 를 v1 으로
          복원 → 원화 결제창(requestCardPayment)은 window.TossPayments(v1) 를 '수정 없이' 그대로 사용,
          USD 위젯은 window.NewTossPayments(v2) 사용. (v1 만 있으면 window.TossPayments 는 계속 v1) -->
-    <script src="https://js.tosspayments.com/v2/standard"></script>
-    <script src="https://js.tosspayments.com/v1/payment"></script>
+    <script src="https://js.tosspayments.com/v2/standard" onerror="window.__tossV2Failed=true;console.error('[Toss] v2 위젯 SDK 로드 실패');"></script>
+    <script src="https://js.tosspayments.com/v1/payment" onerror="window.__tossV1Failed=true;console.error('[Toss] v1 원화 결제창 SDK 로드 실패');"></script>
     <script>if (window.TossPaymentsV1) window.TossPayments = window.TossPaymentsV1;</script>
     <script>
     /* ── 현재 언어를 저장소에서 미리 동기화 (localStorage 우선, sessionStorage 폴백) ── */
@@ -478,7 +478,7 @@
                 <span class="summary-total-price" id="sumTotalPrice">${fmtPriceDisplay(b.totalPrice)}</span>
               </div>
               <div class="tax-note" data-i18n="bk.sum.tax">${_t('bk.sum.tax')}</div>
-              <button class="pay-btn" id="payBtn" onclick="requestCardPayment()">
+              <button class="pay-btn" id="payBtn" onclick="krwPay()">
                 <span id="payBtnText">${fmtPayBtnText(b.totalPrice)}</span>
               </button>
               <div class="paypal-wrap" id="paypalWrap">
@@ -625,6 +625,39 @@
         } catch (err) {
             if (err.code !== 'USER_CANCEL') alert(_t('bk.card.error') + '\n' + err.message);
         }
+    }
+
+    /* ── 원화 결제 SDK 견고성 가드 (결제 직전 v1 검증) ──────────────────────────
+       v2 위젯 SDK 가 전역 TossPayments 를 점유했거나 v1 로드 실패 시, 원화 결제를
+       'v2 객체로' 호출하는 사고를 원천 차단한다. requestCardPayment 자체는 무수정. */
+    function _krwSdkReady() {
+        try {
+            // v2 가 전역 TossPayments 를 점유했으면 v1(별칭 TossPaymentsV1)으로 복원
+            if (window.TossPaymentsV1 && window.TossPayments !== window.TossPaymentsV1) {
+                window.TossPayments = window.TossPaymentsV1;
+            }
+            if (typeof window.TossPayments !== 'function') return false;
+            // v1 결제창이면 인스턴스에 requestPayment 가 있고, v2 위젯 객체면 없음 → 확실히 구분
+            var inst = window.TossPayments('live_ck_6bJXmgo28e7p2RKp4BqjVLAnGKWx');
+            return typeof inst.requestPayment === 'function';
+        } catch (e) { return false; }
+    }
+    function _krwSdkErrText() {
+        switch (_lang()) {
+            case 'en': return 'The payment module failed to load. Please refresh and try again, or contact the front desk (+82 31-203-4301).';
+            case 'ja': return '決済モジュールの読み込みに失敗しました。ページを再読み込みするか、フロント(+82 31-203-4301)へお問い合わせください。';
+            case 'zh': return '支付模块加载失败。请刷新页面重试，或联系前台(+82 31-203-4301)。';
+            default:   return '결제 모듈을 불러오지 못했습니다. 페이지를 새로고침 후 다시 시도하시거나 프론트(+82 31-203-4301)로 문의해 주세요.';
+        }
+    }
+    // 원화 결제 진입 가드 — v1 결제창이 확실할 때만 requestCardPayment 실행
+    function krwPay() {
+        if (!_krwSdkReady()) {
+            console.error('[krwPay] window.TossPayments 가 v1 결제창이 아님(로드 실패/전역 점유) — 원화 결제 차단');
+            alert(_krwSdkErrText());
+            return;
+        }
+        requestCardPayment();  // 기존 함수/SDK 호출부는 수정하지 않음
     }
 
     /* ══════════════════════════════════════════════════════════════════════
