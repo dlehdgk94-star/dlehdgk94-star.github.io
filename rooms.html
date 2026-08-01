@@ -127,6 +127,9 @@
         .cal-date.selected-start{ background:#000; color:#fff; border-radius:20px 0 0 20px; }
         .cal-date.selected-end{ background:#000; color:#fff; border-radius:0 20px 20px 0; }
         .cal-date.in-range{ background:#FAFAFA; border-radius:0; }
+        .cal-date.cal-closed{ background:#e8e8e8; color:#bbb; cursor:not-allowed; }
+        .cal-date.cal-closed s{ text-decoration:line-through; color:#ccc; }
+        .cal-closed-label{ display:block; font-size:9px; font-weight:700; color:#aaa; margin-top:1px; line-height:1; }
         .guest-dropdown{ width:420px; left:-20px; }
         .guest-notice{ font-size:11px; color:rgb(112,112,112); margin-bottom:20px; }
         .guest-row{ display:flex; justify-content:space-between; align-items:center; padding:20px 0; border-bottom:1px solid #f0f0f0; }
@@ -372,6 +375,7 @@
     <link rel="stylesheet" href="responsive.css?v=4">
     <script src="js/roomPricing.js?v=20260731"></script>
     <script src="js/currency.js?v=20260731"></script>
+    <script src="js/roomAvailability.js?v=20260802"></script>
 </head>
 <body onclick="closeDropdowns(event)">
 
@@ -888,6 +892,14 @@
             syncMobPanel();
             var _sb=document.querySelector('.search-btn'); if(_sb){ _sb.classList.add('auto-highlight'); setTimeout(function(){ _sb.classList.remove('auto-highlight'); },3000); }
         }
+        /* 마감일 조회·판정은 js/roomAvailability.js 공용 모듈로 단일화됨(index.html 과 공용).
+           rooms 는 모듈 내장 Supabase 클라이언트·UUID 맵을 사용한다. */
+        async function _fetchClosedDates(roomId){
+            if(!window.RoomAvailability){ renderCalendar(); return; }
+            var uuid = RoomAvailability.uuidOf(roomId);
+            await RoomAvailability.fetchClosedDates(RoomAvailability.getClient(), uuid);
+            renderCalendar();
+        }
         function renderCalendar(){
             var _days = typeof calDayNames === 'function' ? calDayNames() : DAY_NAMES;
             ['left','right'].forEach(function(side,idx){
@@ -906,10 +918,16 @@
                     const s=document.createElement('span'); s.className='cal-date'; s.textContent=d;
                     if(date<_today || date>_maxBookingDate) s.classList.add('faded');
                     else{
-                        if(checkinDate&&date.getTime()===checkinDate.getTime()) s.classList.add('selected-start');
-                        if(checkoutDate&&date.getTime()===checkoutDate.getTime()) s.classList.add('selected-end');
-                        if(checkinDate&&checkoutDate&&date>checkinDate&&date<checkoutDate) s.classList.add('in-range');
-                        s.onclick=function(){ selectDate(date); };
+                        var _ds=date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
+                        if(window.RoomAvailability && RoomAvailability.isClosed(_ds)){
+                            s.classList.add('cal-closed'); s.title='예약 마감';
+                            s.innerHTML='<s>'+d+'</s><span class="cal-closed-label">마감</span>';
+                        } else {
+                            if(checkinDate&&date.getTime()===checkinDate.getTime()) s.classList.add('selected-start');
+                            if(checkoutDate&&date.getTime()===checkoutDate.getTime()) s.classList.add('selected-end');
+                            if(checkinDate&&checkoutDate&&date>checkinDate&&date<checkoutDate) s.classList.add('in-range');
+                            s.onclick=function(){ selectDate(date); };
+                        }
                     }
                     grid.appendChild(s);
                 }
@@ -927,12 +945,18 @@
         function closeDropdowns(e){ document.getElementById('calendarPopup').classList.remove('active'); document.getElementById('guestPopup').classList.remove('active'); if(!datesUserSelected) document.getElementById('pricePopup').classList.remove('active'); }
         function calendarDone(e){ if(e) e.stopPropagation(); document.getElementById('calendarPopup').classList.remove('active'); document.getElementById('pricePopup').classList.remove('active'); if(checkinDate&&checkoutDate){ setTimeout(function(){ document.getElementById('guestPopup').classList.add('active'); },150); } }
         function guestDone(e){ closeDropdowns(e); if(checkinDate&&checkoutDate){ setTimeout(function(){ goToBooking(); },200); } }
-        function goToBooking(){
+        async function goToBooking(){
             if(!checkinDate||!checkoutDate){ document.getElementById('guestPopup').classList.remove('active'); document.getElementById('calendarPopup').classList.add('active'); return; }
             const nights=Math.round((checkoutDate-checkinDate)/86400000);
             const roomCount=guests?guests.room:1;
             const adultCount=guests?guests.adult:1;
             const effectiveRoomId=selectedRoomId||_mobPreSelectedRoomId||null;
+            /* 마감 날짜 검증 (index.html goToBooking 과 동일) */
+            if(effectiveRoomId && window.RoomAvailability){
+                var _ds=[]; for(let i=0;i<nights;i++){ const dd=new Date(checkinDate); dd.setDate(dd.getDate()+i); _ds.push(dd.getFullYear()+'-'+String(dd.getMonth()+1).padStart(2,'0')+'-'+String(dd.getDate()).padStart(2,'0')); }
+                var _closedDate=await RoomAvailability.firstClosedInRange(RoomAvailability.getClient(), RoomAvailability.uuidOf(effectiveRoomId), _ds);
+                if(_closedDate){ alert('선택하신 날짜 중 마감된 날짜가 있습니다.\n\n마감일: '+_closedDate+'\n\n다른 날짜를 선택해 주세요.'); return; }
+            }
             let total=0;
             if(effectiveRoomId&&typeof getNightRate==='function'){ for(let i=0;i<nights;i++){ const d=new Date(checkinDate); d.setDate(d.getDate()+i); total+=getNightRate(effectiveRoomId,d); } total*=roomCount; }
             const roomName=effectiveRoomId&&ROOM_DATA&&ROOM_DATA[effectiveRoomId]?ROOM_DATA[effectiveRoomId].roomTitle:'';
@@ -1061,6 +1085,7 @@
                 document.getElementById('pricePopup').classList.remove('active');
             }
             if (roomId) { selectedRoomId = roomId; _mobPreSelectedRoomId = roomId; }
+            if (selectedRoomId) _fetchClosedDates(selectedRoomId);
             if (window.innerWidth <= 768) {
                 setTimeout(function() {
                     var panel = document.getElementById('mob-book-panel');
@@ -1083,7 +1108,7 @@
                 document.getElementById('calendarPopup').classList.add('active');
             }, 0);
         }
-        function handleBookingBtn() {
+        async function handleBookingBtn() {
             if (!checkinDate || !checkoutDate) {
                 openBookingCalendar(); return;
             }
@@ -1097,6 +1122,12 @@
             const nights = Math.round((checkoutDate - checkinDate) / 86400000);
             const roomCount = guests ? guests.room : 1;
             const adultCount = guests ? guests.adult : 1;
+            /* 마감 날짜 검증 (index.html goToBooking 과 동일) */
+            if(window.RoomAvailability){
+                var _ds=[]; for(let i=0;i<nights;i++){ const dd=new Date(checkinDate); dd.setDate(dd.getDate()+i); _ds.push(dd.getFullYear()+'-'+String(dd.getMonth()+1).padStart(2,'0')+'-'+String(dd.getDate()).padStart(2,'0')); }
+                var _closedDate=await RoomAvailability.firstClosedInRange(RoomAvailability.getClient(), RoomAvailability.uuidOf(effectiveRoomId), _ds);
+                if(_closedDate){ alert('선택하신 날짜 중 마감된 날짜가 있습니다.\n\n마감일: '+_closedDate+'\n\n다른 날짜를 선택해 주세요.'); return; }
+            }
             let total = 0;
             for (let i = 0; i < nights; i++) { const d = new Date(checkinDate); d.setDate(d.getDate()+i); total += getNightRate(effectiveRoomId, d); }
             total *= roomCount;
@@ -1112,6 +1143,8 @@
 
         window.addEventListener('DOMContentLoaded', function(){
             renderCalendar(); updateDateUI();
+            // 마감일 조회용 rooms UUID 맵 사전 로드(공용 모듈)
+            if (window.RoomAvailability) RoomAvailability.loadRoomUuids();
             // 통화 설정 1회 로드(REST) 후 가격 재렌더링
             if (typeof loadCurrencyConfig === 'function') {
                 loadCurrencyConfig().then(function(){
@@ -1549,6 +1582,7 @@
     <script>function toggleLangDropdown(e){e.stopPropagation();document.getElementById("langDropdown").classList.toggle("open");}function selectLang(el){var lang=el.dataset.code.toLowerCase();if(typeof setLanguage==='function'){setLanguage(lang);}else{document.getElementById("langCode").textContent=el.dataset.code;document.querySelectorAll(".lang-option").forEach(function(o){o.classList.remove("active");});el.classList.add("active");}document.getElementById("langDropdown").classList.remove("open");}document.addEventListener("click",function(){var d=document.getElementById("langDropdown");if(d)d.classList.remove("open");});</script>
     <script src="mobile-nav.js?v=20260717"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="ai-chat.js?v=20260733"></script>
 <script src="taxi-btns.js?v=20260733"></script>
 
