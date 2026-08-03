@@ -31,45 +31,11 @@
                 link('gallery.html', '갤러리', 'nav.gallery') +
                 link('nearby.html', '주변안내', 'nav.nearby') +
             '</ul>' +
-            '<div class="mob-nav-lang">' +
-                '<button class="mob-lang-btn" onclick="toggleMobLangDropdown(event)">' +
-                    '<i class="fa-solid fa-globe"></i>' +
-                    '<span id="mobLangCode">KO</span>' +
-                    '<i class="fa-solid fa-chevron-down mob-lang-chevron"></i>' +
-                '</button>' +
-                '<div class="mob-lang-dropdown" id="mobLangDropdown">' +
-                    '<span class="mob-lang-option active" data-code="KO" onclick="mobSelectLang(this)">한국어</span>' +
-                    '<span class="mob-lang-option" data-code="EN" onclick="mobSelectLang(this)">English</span>' +
-                    '<span class="mob-lang-option" data-code="JA" onclick="mobSelectLang(this)">日本語</span>' +
-                    '<span class="mob-lang-option" data-code="ZH" onclick="mobSelectLang(this)">中文</span>' +
-                '</div>' +
-            '</div>' +
             '<div class="mob-nav-footer">' +
                 '<a href="https://www.instagram.com/instar_hotel_/" target="_blank"><i class="fa-brands fa-instagram"></i></a>' +
                 '<div class="mob-nav-contact">+82 31-203-4301</div>' +
             '</div>' +
         '</div>';
-
-    window.toggleMobLangDropdown = function(e) {
-        e.stopPropagation();
-        var dd = document.getElementById('mobLangDropdown');
-        dd.classList.toggle('open');
-    };
-
-    window.mobSelectLang = function(el) {
-        var code = el.getAttribute('data-code');
-        document.getElementById('mobLangDropdown').classList.remove('open');
-        if (typeof setLanguage === 'function') {
-            setLanguage(code.toLowerCase());
-        }
-        // setLanguage가 .lang-option / #langCode 업데이트를 담당하므로
-        // 모바일 드롭다운 활성 표시만 별도로 갱신
-        overlay.querySelectorAll('.mob-lang-option').forEach(function(o){
-            o.classList.toggle('active', o.getAttribute('data-code') === code);
-        });
-        var mobCode = document.getElementById('mobLangCode');
-        if (mobCode) mobCode.textContent = code;
-    };
 
     function openNav() {
         overlay.classList.add('open');
@@ -468,6 +434,18 @@
             }
         }
 
+        // ── 모바일: 언어 선택 버튼을 상단 유틸바 햄버거 오른쪽으로 이동 ──
+        // 기존 .lang-selector 노드를 그대로 옮겨 전환 로직/드롭다운(#langDropdown)을 재사용한다.
+        // 데스크탑(769px 이상)에서는 이동하지 않으므로 헤더 레이아웃이 그대로 유지된다.
+        if (window.innerWidth <= 768) {
+            var utilBar = document.querySelector('.top-util-bar');
+            var langSelector = document.querySelector('.lang-selector');
+            var hamEl = utilBar ? utilBar.querySelector('.hamburger-menu') : null;
+            if (utilBar && langSelector && hamEl) {
+                utilBar.insertBefore(langSelector, hamEl.nextSibling);
+            }
+        }
+
         var hamburger = document.querySelector('.hamburger-menu');
         if (hamburger) hamburger.addEventListener('click', function (e) {
             e.stopPropagation();
@@ -483,14 +461,6 @@
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') closeNav();
         });
-
-        // 저장된 언어를 모바일 드롭다운 활성 표시에 반영
-        var savedLang = (sessionStorage.getItem('siteLang') || 'ko').toUpperCase();
-        overlay.querySelectorAll('.mob-lang-option').forEach(function(o) {
-            o.classList.toggle('active', o.getAttribute('data-code') === savedLang);
-        });
-        var mobCode = document.getElementById('mobLangCode');
-        if (mobCode) mobCode.textContent = savedLang;
     });
 
     // 후기 모달 폴백 - index.html에 이미 정의된 경우는 그대로 사용
