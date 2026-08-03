@@ -470,6 +470,66 @@
 
         /* ── 주변 카드 그리드 ── */
         var _activeNbCat = '';
+        var _nbLang = 'ko';   // 'ko' = 한국어, 'en' = 영문 (en/ja/zh 공통)
+
+        /* 저장된 언어 → 렌더 언어. translations.js 의 setLanguage 보다 먼저 렌더될 수 있으므로
+           currentLang 이 아직 초기화되기 전에도 올바른 언어로 그리도록 저장값을 우선 참조한다. */
+        function nbInitLang() {
+            var l = null;
+            try { l = localStorage.getItem('siteLang') || sessionStorage.getItem('siteLang'); } catch (e) {}
+            if (!l && typeof currentLang === 'string') l = currentLang;
+            _nbLang = (l && l !== 'ko') ? 'en' : 'ko';
+        }
+
+        /* transit 의 { ref: id } 복제본을 원본 장소로 해석 */
+        var _nbById = null;
+        function nbResolve(p) {
+            if (!p || !p.ref) return p;
+            if (!_nbById) {
+                _nbById = {};
+                nearbyData.categories.forEach(function(c) {
+                    c.places.forEach(function(x) { if (x && x.id) _nbById[x.id] = x; });
+                });
+            }
+            return _nbById[p.ref] || null;
+        }
+
+        /* 표시 문자열 — 영문 모드에서도 장소명은 한국어를 유지하고 영문을 병기한다
+           (택시 기사에게 보여주거나 지도 검색할 때 한국어가 필요하기 때문) */
+        function nbName(p) {
+            if (_nbLang === 'ko' || !p.name_en) return p.name;
+            // 어느 한쪽에 이미 괄호가 있으면 괄호 중첩을 피해 가운뎃점으로 병기한다
+            // 예) "동탄역 (SRT) · Dongtan Station (SRT)", "GS25 망포벽산점 · GS25 (Mangpo Byeoksan)"
+            return (p.name.indexOf('(') !== -1 || p.name_en.indexOf('(') !== -1)
+                ? p.name + ' · ' + p.name_en
+                : p.name + ' (' + p.name_en + ')';
+        }
+        function nbDesc(p) {
+            return (_nbLang !== 'ko' && p.description_en) ? p.description_en : (p.description || '');
+        }
+        function nbDistance(p) {
+            var d = p.distance;
+            if (d && typeof d === 'object') {
+                if (_nbLang === 'ko') {
+                    var uKo = d.unit === 'sec' ? '초' : d.unit === 'hour' ? '시간' : '분';
+                    return (d.mode === 'car' ? '차량 ' : '도보 ') +
+                           (d.valueTo ? d.value + '~' + d.valueTo : d.value) + uKo;
+                }
+                var uEn = d.unit === 'sec' ? ' sec' : d.unit === 'hour' ? ' hr' : ' min';
+                return (d.valueTo ? d.value + '–' + d.valueTo : d.value) + uEn +
+                       (d.mode === 'car' ? ' by car' : ' walk');
+            }
+            return (_nbLang !== 'ko' && p.distance_en) ? p.distance_en : (d || '');
+        }
+        function nbCatLabel(cat) {
+            return (_nbLang !== 'ko' && cat.label_en) ? cat.label_en : cat.label;
+        }
+        // 거리 앞 위치 아이콘 (거리 문자열은 textContent 로 넣으므로 아이콘만 별도 생성)
+        function nbPinIcon() {
+            var i = document.createElement('i');
+            i.className = 'fa-solid fa-location-dot';
+            return i;
+        }
 
         function switchNbTab(id) {
             _activeNbCat = id;
@@ -477,6 +537,15 @@
                 btn.classList.toggle('active', btn.dataset.id === id);
             });
             renderNbCards(id);
+        }
+
+        /* 탭 라벨만 현재 언어로 갱신 (active 상태·순서는 유지) */
+        function renderNbTabLabels() {
+            if (typeof nearbyData === 'undefined') return;
+            document.querySelectorAll('.nb-tab-btn').forEach(function(btn) {
+                var cat = nearbyData.categories.find(function(c) { return c.id === btn.dataset.id; });
+                if (cat) btn.textContent = nbCatLabel(cat);
+            });
         }
 
         function renderNbCards(catId) {
@@ -487,29 +556,34 @@
             if (!cat || !cat.places || cat.places.length === 0) {
                 var msg = document.createElement('div');
                 msg.className = 'nb-empty-msg';
-                msg.textContent = '준비 중입니다';
+                msg.textContent = _nbLang === 'ko' ? '준비 중입니다' : 'Coming soon';
                 grid.appendChild(msg);
                 return;
             }
             // 대중교통: 사진 카드 대신 간결한 텍스트 목록
             if (catId === 'transit') {
                 grid.classList.add('nb-transit-mode');
-                cat.places.forEach(function(place) {
+                cat.places.forEach(function(raw) {
+                    var place = nbResolve(raw);
+                    if (!place) return;
                     var item = document.createElement('div');
                     item.className = 'nb-transit-item';
                     var nameEl = document.createElement('span');
                     nameEl.className = 'nb-transit-name';
-                    nameEl.textContent = place.name;
+                    nameEl.textContent = nbName(place);
                     var distEl = document.createElement('span');
                     distEl.className = 'nb-transit-dist';
-                    distEl.innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + place.distance;
+                    distEl.appendChild(nbPinIcon());
+                    distEl.appendChild(document.createTextNode(' ' + nbDistance(place)));
                     item.appendChild(nameEl);
                     item.appendChild(distEl);
                     grid.appendChild(item);
                 });
                 return;
             }
-            cat.places.forEach(function(place) {
+            cat.places.forEach(function(raw) {
+                var place = nbResolve(raw);
+                if (!place) return;
                 var card = document.createElement('div');
                 card.className = 'nb-card';
                 if (place.url) {
@@ -539,16 +613,17 @@
                 headerRow.className = 'nb-card-header-row';
                 var nameEl = document.createElement('span');
                 nameEl.className = 'nb-card-name';
-                nameEl.textContent = place.name;
+                nameEl.textContent = nbName(place);
                 var distEl = document.createElement('span');
                 distEl.className = 'nb-card-distance';
-                distEl.innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + place.distance;
+                distEl.appendChild(nbPinIcon());
+                distEl.appendChild(document.createTextNode(' ' + nbDistance(place)));
                 headerRow.appendChild(nameEl);
                 headerRow.appendChild(distEl);
 
                 var descEl = document.createElement('p');
                 descEl.className = 'nb-card-desc';
-                descEl.textContent = place.description;
+                descEl.textContent = nbDesc(place);
 
                 body.appendChild(headerRow);
                 body.appendChild(descEl);
@@ -564,12 +639,13 @@
             updateDateUI();
 
             if (typeof nearbyData !== 'undefined') {
+                nbInitLang();
                 var tabsEl = document.getElementById('nbTabs');
                 nearbyData.categories.forEach(function(cat, idx) {
                     var btn = document.createElement('button');
                     btn.className = 'nb-tab-btn' + (idx === 0 ? ' active' : '');
                     btn.dataset.id = cat.id;
-                    btn.textContent = cat.label;
+                    btn.textContent = nbCatLabel(cat);
                     btn.onclick = function() { switchNbTab(cat.id); };
                     tabsEl.appendChild(btn);
                 });
@@ -577,13 +653,43 @@
                 renderNbCards(_activeNbCat);
             }
         });
+
+        /* ── 언어 변경 훅 ──
+           translations.js 의 setLanguage 는 [data-i18n] 요소만 교체하므로,
+           JS 로 그려지는 탭/카드는 언어 전환 시 여기서 다시 그린다.
+           (훅이 없으면 탭을 전환하는 순간 한국어로 되돌아간다) */
+        (function() {
+            function applyNbLang(lang) {
+                _nbLang = (lang && lang !== 'ko') ? 'en' : 'ko';
+                if (typeof nearbyData === 'undefined') return;
+                if (!document.getElementById('nbTabs')) return;
+                renderNbTabLabels();
+                if (_activeNbCat) renderNbCards(_activeNbCat);
+            }
+            function wrap() {
+                if (typeof window.setLanguage !== 'function' || window.setLanguage.__nbWrapped) return false;
+                var orig = window.setLanguage;
+                var wrapped = function(lang) {
+                    var r = orig.apply(this, arguments);
+                    applyNbLang(lang);
+                    return r;
+                };
+                wrapped.__nbWrapped = true;
+                window.setLanguage = wrapped;
+                return true;
+            }
+            // translations.js 가 이 스크립트보다 뒤에 로드되므로 로드 완료 후에도 한 번 더 시도.
+            // 이 리스너는 translations.js 의 DOMContentLoaded 리스너보다 먼저 등록되므로
+            // translations.js 가 setLanguage(저장된 언어) 를 부르기 전에 래핑이 끝난다.
+            if (!wrap()) window.addEventListener('DOMContentLoaded', wrap);
+        })();
     </script>
     <script>
         function toggleLangDropdown(e){ e.stopPropagation(); document.getElementById('langDropdown').classList.toggle('open'); }
         function selectLang(el){ var lang=el.dataset.code.toLowerCase(); if(typeof setLanguage==='function'){ setLanguage(lang); } document.getElementById('langDropdown').classList.remove('open'); }
         document.addEventListener('click', function(){ var d=document.getElementById('langDropdown'); if(d)d.classList.remove('open'); });
     </script>
-    <script src="nearbyData.js?v=27"></script>
+    <script src="nearbyData.js?v=28"></script>
     <script src="translations.js?v=20260723a"></script>
     <script src="mobile-nav.js?v=20260803"></script>
     
