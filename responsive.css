@@ -336,7 +336,21 @@
     /* ── 상단 유틸리티 바 ── */
     .top-util-bar { padding: 0 14px; height: 44px; }
     .util-promo   { display: none; }
-    .util-login-btn { font-size: 10px; padding: 4px 10px; }
+    .util-login-btn { font-size: 10px; padding: 4px 10px; flex-shrink: 0; }
+
+    /* 햄버거 버튼: 터치 타겟 44x44 확보 (아이콘은 가운데 정렬, 시각 위치는 기존과 동일) */
+    .hamburger-menu {
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+        margin-left: -8px;
+        flex-shrink: 0;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .hamburger-menu span { width: 18px; height: 2px; }
 
     /* ── 헤더 ── */
     .top-header { padding: 0 14px; height: 56px; }
