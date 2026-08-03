@@ -18,23 +18,55 @@ function localDateStr(d: Date): string {
     String(d.getDate()).padStart(2, '0');
 }
 
+/**
+ * 비ASCII 문자를 \uXXXX 이스케이프로 바꾼 JSON 문자열을 만든다.
+ * 결과가 순수 ASCII 이므로 수신측이 charset 을 무엇으로 해석하든(UTF-8/EUC-KR/latin-1)
+ * 동일한 문자열로 복원된다. — Toss 취소 API 의 cancelReason 한글 깨짐 대응.
+ */
+function toAsciiJson(obj: unknown): string {
+  const s = JSON.stringify(obj);
+  let out = '';
+  for (let i = 0; i < s.length; i++) {
+    const code = s.charCodeAt(i);
+    // ASCII 범위는 그대로, 그 외(한글 등)은 \uXXXX 로 이스케이프
+    out += code < 0x80
+      ? s[i]
+      : '\\u' + code.toString(16).padStart(4, '0');
+  }
+  return out;
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
   if (req.method !== 'POST') return json({ ok: false, error: 'Method not allowed' }, 405);
 
-  /* ── 1. 요청 파싱 ── */
-  let orderId: string, cancelAmount: number, cancelReason: string;
+  /* ── 1. 요청 파싱 ──
+     cancelAmount 는 선택값이다. 아예 생략하면 전체 취소로 처리하고,
+     결제 금액과 같은 값이 들어와도 전체 취소로 간주한다(STEP2 참고).
+     단 0 이나 음수 등 명시적으로 잘못된 값은 오입력이므로 400 으로 거부한다
+     (전체 환불로 자동 승격시키지 않는다). */
+  let orderId: string, cancelReason: string;
+  let cancelAmountRaw: unknown;
   try {
     const body = await req.json();
-    orderId      = String(body.orderId      ?? '');
-    cancelAmount = Number(body.cancelAmount ?? 0);
-    cancelReason = String(body.cancelReason ?? '관리자 취소');
+    orderId         = String(body.orderId ?? '');
+    cancelAmountRaw = body.cancelAmount;
+    cancelReason    = String(body.cancelReason ?? '관리자 취소');
   } catch {
     return json({ ok: false, error: 'Invalid JSON body' }, 400);
   }
 
-  if (!orderId || !cancelAmount) {
-    return json({ ok: false, error: 'orderId, cancelAmount는 필수입니다.' }, 400);
+  if (!orderId) {
+    return json({ ok: false, error: 'orderId는 필수입니다.' }, 400);
+  }
+
+  const hasCancelAmount =
+    cancelAmountRaw !== undefined && cancelAmountRaw !== null && cancelAmountRaw !== '' &&
+    Number.isFinite(Number(cancelAmountRaw)) && Number(cancelAmountRaw) > 0;
+  const cancelAmount = hasCancelAmount ? Number(cancelAmountRaw) : 0;
+
+  if (cancelAmountRaw !== undefined && cancelAmountRaw !== null && cancelAmountRaw !== '' && !hasCancelAmount) {
+    return json({ ok: false, error: 'cancelAmount가 올바르지 않습니다.' }, 400);
   }
 
   /* ── 환경변수 ── */
@@ -96,36 +128,46 @@ serve(async (req) => {
     return json({ ok: false, error: '서버 설정 오류 (Toss)' }, 500);
   }
 
-  // 취소 상한 검증 — USD 는 paid_amount(USD) 기준(원화 재환산 금지), 원화는 total_price 기준
-  if (isUsd) {
-    // USD 소수점 오차 대비 — === 금지, 허용오차 비교
-    if (cancelAmount - Number(r.paid_amount) > 0.01) {
-      return json({
-        ok: false,
-        error: `환불 금액($${cancelAmount.toFixed(2)})이 결제 금액($${Number(r.paid_amount).toFixed(2)})을 초과합니다.`,
-      }, 400);
-    }
-  } else {
-    if (cancelAmount > Number(r.total_price)) {
-      return json({
-        ok: false,
-        error: `환불 금액(${cancelAmount.toLocaleString()}원)이 결제 금액(${Number(r.total_price).toLocaleString()}원)을 초과합니다.`,
-      }, 400);
-    }
+  // 결제 금액 — USD 는 paid_amount(USD) 기준(원화 재환산 금지), 원화는 total_price 기준
+  const paidAmount = isUsd ? Number(r.paid_amount) : Number(r.total_price);
+  // 금액 비교 허용오차 — USD 는 소수점 오차 대비, 원화는 정수이므로 0.5
+  const tolerance = isUsd ? 0.01 : 0.5;
+
+  // 취소 상한 검증 (cancelAmount 가 들어온 경우에만)
+  if (hasCancelAmount && cancelAmount - paidAmount > tolerance) {
+    return json({
+      ok: false,
+      error: isUsd
+        ? `환불 금액($${cancelAmount.toFixed(2)})이 결제 금액($${paidAmount.toFixed(2)})을 초과합니다.`
+        : `환불 금액(${cancelAmount.toLocaleString()}원)이 결제 금액(${paidAmount.toLocaleString()}원)을 초과합니다.`,
+    }, 400);
   }
+
+  /* 전체 취소 판정 — cancelAmount 미지정이거나 결제 금액 전액이면 전체 취소.
+     Toss 기술팀 회신: "전체 취소라도 금액을 넣으면 부분취소로 인식됩니다.
+     전체취소는 금액없이 호출하시면 됩니다." (KRW/USD 동일) */
+  const isFullCancel = !hasCancelAmount || Math.abs(cancelAmount - paidAmount) <= tolerance;
 
   /* ════════════════════════════════════════
      STEP 2 — Toss 결제 취소 API 호출
      (실패 시 DB를 절대 변경하지 않음)
   ════════════════════════════════════════ */
   const encoded = btoa(TOSS_SECRET + ':');
-  // 취소 요청 본문 — USD 결제는 전액/부분 취소 모두 currency:"USD" 필수.
-  //   (미포함 시 Toss 가 INVALID_CURRENCY 로 거부함 — E2E 로 확인됨. 원화는 currency 불필요.)
-  const cancelBody: Record<string, unknown> = { cancelReason, cancelAmount };
-  if (isUsd) {
-    cancelBody.currency = 'USD';
+  /* 취소 요청 본문
+     · 전체 취소 → cancelReason 만. cancelAmount / currency 를 넣으면 Toss 가 부분취소로 인식한다.
+     · 부분 취소 → cancelAmount 포함, USD 결제는 currency:"USD" 도 필수
+       (미포함 시 Toss 가 INVALID_CURRENCY 로 거부함 — E2E 로 확인됨. 원화는 currency 불필요.) */
+  const cancelBody: Record<string, unknown> = { cancelReason };
+  if (!isFullCancel) {
+    cancelBody.cancelAmount = cancelAmount;
+    if (isUsd) cancelBody.currency = 'USD';
   }
-  console.log(`[cancel-reservation] STEP2 Toss 취소 요청: paymentKey=${r.payment_key}, amount=${cancelAmount}, provider=${r.payment_provider}, currency=${cancelBody.currency ?? '(full)'}`);
+  console.log(`[cancel-reservation] STEP2 Toss 취소 요청: paymentKey=${r.payment_key}, type=${isFullCancel ? '전체취소(금액 미지정)' : `부분취소(${cancelAmount})`}, provider=${r.payment_provider}, currency=${cancelBody.currency ?? '(미지정)'}`);
+
+  /* 본문은 비ASCII 를 \uXXXX 로 이스케이프한 순수 ASCII JSON 을 UTF-8 바이트로 전송한다.
+     (cancelReason 한글이 수신측 charset 해석에 따라 깨지던 문제 대응 — Toss 기술팀 지적) */
+  const cancelBodyText  = toAsciiJson(cancelBody);
+  const cancelBodyBytes = new TextEncoder().encode(cancelBodyText);
 
   let tossRes: Response;
   try {
@@ -135,9 +177,10 @@ serve(async (req) => {
         method: 'POST',
         headers: {
           'Authorization': `Basic ${encoded}`,
-          'Content-Type':  'application/json',
+          'Content-Type':  'application/json; charset=utf-8',
         },
-        body: JSON.stringify(cancelBody),
+        // Uint8Array 본문 — Content-Length 는 런타임이 정확히 계산한다(수동 지정 금지)
+        body: cancelBodyBytes,
       },
     );
   } catch (err) {
@@ -253,7 +296,8 @@ serve(async (req) => {
   return json({
     ok:                   true,
     orderId,
-    cancelAmount,
+    fullCancel:           isFullCancel,
+    cancelAmount:         isFullCancel ? paidAmount : cancelAmount,
     failedInventoryDates: failedDates,
     message:              failedDates.length > 0
       ? `취소 완료. 일부 날짜 재고 복원 실패 (수동 확인 필요): ${failedDates.join(', ')}`

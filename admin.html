@@ -83,6 +83,7 @@
         tbody tr:last-child td{ border-bottom:none; }
         .order-id-cell{ font-family:monospace; font-size:11px; color:rgb(112,112,112); max-width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .room-cell{ color:#00768e; font-weight:600; }
+        .cur-tag{ display:inline-block; margin-left:5px; background:#eef4f6; color:#00768e; font-size:10px; font-weight:700; padding:1px 5px; border-radius:4px; vertical-align:1px; letter-spacing:0.3px; }
         .badge-paid{ display:inline-block; background:#eafaf1; color:#27ae60; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
         .badge-pending{ display:inline-block; background:#fef9e7; color:#f39c12; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
         .badge-cancelled{ display:inline-block; background:#fdf2f2; color:#e74c3c; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
@@ -731,6 +732,16 @@ async function saveRates(){
    유틸
 ════════════════════════════════════════ */
 function fmtWon(n){ return n!=null ? Number(n).toLocaleString('ko-KR')+'원' : '-'; }
+/* 예약 1건의 결제 금액 표시(HTML) — 통화 분기는 취소 폼과 동일한 resCancelCurrency 기준을 재사용한다.
+   · USD 예약: paid_amount → "$XX.XX" + USD 태그
+   · 원화 예약: total_price → "X,XXX원" (기존과 동일, 태그 없음)
+   · 금액이 없으면 기존과 같이 '-' (태그도 붙이지 않는다) */
+function fmtResAmount(r){
+    const cur = resCancelCurrency(r);
+    const raw = cur.isUsd ? (r && r.paid_amount) : (r && r.total_price);
+    if(raw == null) return '-';
+    return cur.fmt(Number(raw)) + (cur.isUsd ? '<span class="cur-tag">USD</span>' : '');
+}
 function fmtDate(s){ if(!s) return '-'; const d=new Date(s+'T00:00:00'); return `${d.getMonth()+1}월 ${d.getDate()}일`; }
 function fmtDateTime(s){ if(!s) return '-'; const d=new Date(s); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
 function statusBadge(s){ if(s==='paid') return '<span class="badge-paid">결제완료</span>'; if(s==='cancelled') return '<span class="badge-cancelled">취소됨</span>'; if(s==='overbooked') return '<span class="badge-overbooked">⚠ 오버부킹</span>'; return '<span class="badge-pending">대기중</span>'; }
@@ -802,7 +813,7 @@ function buildTableHTML(data, areaId){
             <td>${fmtDate(r.checkin_date)}</td>
             <td>${fmtDate(r.checkout_date)}</td>
             <td>${r.nights ? r.nights+'박' : '-'}</td>
-            <td class="amount-cell" style="font-weight:700;">${fmtWon(r.total_price)}</td>
+            <td class="amount-cell" style="font-weight:700;">${fmtResAmount(r)}</td>
             <td>${statusBadge(r.payment_status)}</td>
             <td style="color:rgb(112,112,112);font-size:12px;">${fmtDateTime(r.created_at)}</td>
         </tr>`).join('');
@@ -887,7 +898,7 @@ function openResModal(r){
         </div>
         <div class="modal-section">
             <div class="modal-section-title">결제 정보</div>
-            <div class="modal-row"><span class="modal-key">결제 금액</span><span class="modal-val" style="font-size:17px;font-weight:800;">${fmtWon(r.total_price)}</span></div>
+            <div class="modal-row"><span class="modal-key">결제 금액</span><span class="modal-val" style="font-size:17px;font-weight:800;">${fmtResAmount(r)}</span></div>
             <div class="modal-row"><span class="modal-key">결제 상태</span><span class="modal-val">${statusBadge(r.payment_status)}</span></div>
             ${r.payment_key?`<div class="modal-row"><span class="modal-key">결제 키</span><span class="modal-val" style="font-family:monospace;font-size:11px;color:rgb(112,112,112);">${r.payment_key}</span></div>`:''}
             <div class="modal-row"><span class="modal-key">예약 일시</span><span class="modal-val">${fmtDateTime(r.created_at)}</span></div>
@@ -904,19 +915,34 @@ function openResModal(r){
 }
 function closeResModal(){ document.getElementById('resModal').classList.remove('open'); document.body.style.overflow=''; _currentRes=null; }
 
+/* ── 취소 폼 통화 분기 ──
+   USD 예약(payment_provider='toss_paypal')은 실제 결제액이 paid_amount(USD)이므로
+   원화 total_price 로 취소하면 Edge Function 이 "결제 금액 초과"로 거부한다.
+   원화 예약은 기존과 동일하게 total_price(원) 기준. */
+function resCancelCurrency(r){
+    const isUsd = !!r && r.payment_provider === 'toss_paypal';
+    return isUsd
+        ? { isUsd:true,  paid:Number(r.paid_amount||0), label:'환불 금액 (USD)', min:'0.01', step:'0.01',
+            fmt:(v)=>'$'+Number(v).toFixed(2) }
+        : { isUsd:false, paid:Number((r&&r.total_price)||0), label:'환불 금액 (원)', min:'1', step:'1',
+            fmt:(v)=>Number(v).toLocaleString('ko-KR')+'원' };
+}
+
 /* ── 취소 확인 폼 표시 ── */
 function showCancelConfirm(){
     if(!_currentRes) return;
     const existing = document.getElementById('cancelSection');
     if(existing) existing.remove();
+    const cur = resCancelCurrency(_currentRes);
     const section = document.createElement('div');
     section.id = 'cancelSection';
     section.className = 'cancel-confirm-section';
     section.innerHTML =
         '<div class="cancel-confirm-title"><i class="fa-solid fa-triangle-exclamation"></i> 예약 취소 — 이 작업은 되돌릴 수 없습니다</div>' +
-        '<div class="cancel-warning">Toss 결제가 실제로 취소(환불)됩니다.<br>금액과 사유를 확인한 뒤 취소 확정을 눌러주세요.</div>' +
-        '<div class="cancel-field"><label>환불 금액 (원)</label>' +
-        '<input type="number" id="cancelAmountInput" value="' + (_currentRes.total_price||0) + '" min="1" max="' + (_currentRes.total_price||0) + '"></div>' +
+        '<div class="cancel-warning">Toss 결제가 실제로 취소(환불)됩니다.<br>금액과 사유를 확인한 뒤 취소 확정을 눌러주세요.' +
+        (cur.isUsd ? '<br>이 예약은 USD 결제입니다 — 금액은 달러로 입력해 주세요.' : '') + '</div>' +
+        '<div class="cancel-field"><label>' + cur.label + '</label>' +
+        '<input type="number" id="cancelAmountInput" value="' + cur.paid + '" min="' + cur.min + '" max="' + cur.paid + '" step="' + cur.step + '"></div>' +
         '<div class="cancel-field"><label>취소 사유 (선택)</label>' +
         '<input type="text" id="cancelReasonInput" placeholder="예: 고객 요청 취소"></div>';
     document.getElementById('resModalBody').appendChild(section);
@@ -935,18 +961,24 @@ function hideCancelConfirm(){
 
 async function submitCancel(){
     if(!_currentRes) return;
-    const cancelAmount = parseInt(document.getElementById('cancelAmountInput').value)||0;
+    const cur = resCancelCurrency(_currentRes);
+    const rawAmount = parseFloat(document.getElementById('cancelAmountInput').value);
+    // USD 는 센트 단위로 반올림, 원화는 기존 parseInt 와 동일하게 정수 절사
+    const cancelAmount = cur.isUsd
+        ? Math.round((Number.isFinite(rawAmount) ? rawAmount : 0) * 100) / 100
+        : Math.trunc(Number.isFinite(rawAmount) ? rawAmount : 0);
     const cancelReason = (document.getElementById('cancelReasonInput').value||'').trim() || '관리자 취소';
     if(!cancelAmount || cancelAmount <= 0){ alert('환불 금액을 입력해 주세요.'); return; }
-    if(cancelAmount > (_currentRes.total_price||0)){
-        alert('환불 금액이 결제 금액(' + Number(_currentRes.total_price).toLocaleString('ko-KR') + '원)을 초과할 수 없습니다.');
+    // USD 는 부동소수 오차 대비 허용치를 둔다
+    if(cancelAmount - cur.paid > (cur.isUsd ? 0.005 : 0)){
+        alert('환불 금액이 결제 금액(' + cur.fmt(cur.paid) + ')을 초과할 수 없습니다.');
         return;
     }
     const confirmed = confirm(
         '[취소 확인]\n\n' +
         '예약번호: ' + (_currentRes.order_id||'-') + '\n' +
         '예약자:   ' + (_currentRes.guest_name||'-') + '\n' +
-        '환불 금액: ' + cancelAmount.toLocaleString('ko-KR') + '원\n' +
+        '환불 금액: ' + cur.fmt(cancelAmount) + '\n' +
         '취소 사유: ' + cancelReason + '\n\n' +
         '실제 결제가 취소됩니다. 진행하시겠습니까?'
     );
