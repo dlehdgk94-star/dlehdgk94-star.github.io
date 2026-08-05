@@ -10,6 +10,14 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HZRJY260XX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HZRJY260XX');
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -324,6 +332,53 @@
     }
 
     /* ── 페이지 진입점: Edge Function으로 결제 확인 후 처리 ── */
+    /* ── GA4 purchase 이벤트 ──
+       · confirm-payment 가 ok 를 돌려준 뒤(=결제 실제 승인) 에만 호출된다.
+         payKey 없음 / result.ok=false / fetch 예외는 모두 그 앞에서 return 되므로
+         실패한 결제에서는 전송되지 않는다.
+       · 새로고침·재방문 중복 전송 방지: orderId 단위 플래그를 localStorage 에 남긴다. */
+    function sendPurchaseEvent() {
+        try {
+            if (typeof gtag !== 'function') return;                 // GA 차단 등
+            if (!orderId || orderId === '-') return;                // 주문번호 없으면 스킵
+
+            var flagKey = 'ga4_purchase_' + orderId;
+            if (localStorage.getItem(flagKey)) {
+                console.log('[GA4] purchase 이미 전송됨 — 스킵:', orderId);
+                return;
+            }
+
+            var roomId   = b.roomId || '';
+            var roomName = b.roomName
+                || (typeof getRoomName === 'function' ? getRoomName(roomId) : '')
+                || roomId || '객실';
+            var qty      = Number(b.roomCount) > 0 ? Number(b.roomCount) : 1;
+            var value    = Number(total) || 0;
+            // 1실 단가 — KRW 는 정수, USD 는 센트 단위
+            var unit     = currency === 'USD'
+                ? Math.round((value / qty) * 100) / 100
+                : Math.round(value / qty);
+
+            gtag('event', 'purchase', {
+                transaction_id: orderId,
+                value:          value,
+                currency:       currency,          // 실제 결제 통화 (KRW / USD)
+                items: [{
+                    item_id:       roomId,
+                    item_name:     roomName,
+                    item_category: '객실',
+                    quantity:      qty,
+                    price:         unit
+                }]
+            });
+
+            localStorage.setItem(flagKey, String(Date.now()));
+            console.log('[GA4] purchase 전송 —', orderId, value, currency, roomName, 'x' + qty);
+        } catch (e) {
+            console.warn('[GA4] purchase 전송 실패:', e);          // 분석 코드가 결제 흐름을 막지 않도록
+        }
+    }
+
     (async function initPage() {
         // 확인 중 로딩 표시
         document.getElementById('cardBody').innerHTML =
@@ -387,6 +442,7 @@
 
         // 확인 완료 → 성공 UI
         renderSuccessCard();
+        sendPurchaseEvent();   // 결제 승인 확정 후에만 GA4 purchase 전송
         // ★ USD 는 confirm-payment 가 이미 예약을 INSERT 함 → saveReservation 호출 금지(이중 예약 방지)
         //    KRW 는 기존대로 클라이언트가 저장.
         if (currency === 'USD') {
