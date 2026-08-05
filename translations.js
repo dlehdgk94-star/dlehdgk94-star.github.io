@@ -345,6 +345,7 @@ const translations = {
     "suc.err.no_payment": "유효한 결제 정보가 없습니다. 결제 페이지에서 다시 시도해 주세요.",
     "suc.err.approve_failed": "결제 승인에 실패했습니다.",
     "suc.err.network": "결제 확인 서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.",
+    "suc.issue.notice": "예약 확정에 문제가 있습니다. 호텔로 문의해 주세요 (031-203-4301)",
     // booking-fail.html
     "fail.title": "결제에 실패했습니다",
     "fail.msg": "결제 처리 중 문제가 발생했습니다.<br>입력하신 정보를 확인 후 다시 시도해 주세요.",
@@ -682,6 +683,7 @@ const translations = {
     "suc.err.no_payment": "No valid payment information was found. Please try again from the booking page.",
     "suc.err.approve_failed": "The payment could not be approved.",
     "suc.err.network": "We could not reach the payment confirmation server. Please try again in a moment.",
+    "suc.issue.notice": "There was a problem finalizing your booking. Please contact the hotel (+82 31-203-4301).",
     // booking-fail.html
     "fail.title": "Payment Failed",
     "fail.msg": "A problem occurred during payment.<br>Please check your information and try again.",
@@ -1019,6 +1021,7 @@ const translations = {
     "suc.err.no_payment": "有効な決済情報がありません。予約ページからもう一度お試しください。",
     "suc.err.approve_failed": "決済の承認に失敗しました。",
     "suc.err.network": "決済確認サーバーに接続できません。しばらくしてからもう一度お試しください。",
+    "suc.issue.notice": "ご予約の確定に問題が発生しました。ホテルまでお問い合わせください（+82 31-203-4301）。",
     // booking-fail.html
     "fail.title": "お支払いに失敗しました",
     "fail.msg": "決済処理中に問題が発生しました。<br>入力情報をご確認のうえ、もう一度お試しください。",
@@ -1356,6 +1359,7 @@ const translations = {
     "suc.err.no_payment": "未找到有效的支付信息。请从预订页面重新尝试。",
     "suc.err.approve_failed": "支付未能通过审批。",
     "suc.err.network": "无法连接支付确认服务器。请稍后再试。",
+    "suc.issue.notice": "预订确认出现问题。请联系酒店（+82 31-203-4301）。",
     // booking-fail.html
     "fail.title": "支付失败",
     "fail.msg": "支付处理过程中出现问题。<br>请确认输入信息后重试。",

@@ -238,6 +238,34 @@
                 <button class="btn-primary" onclick="location.href='index.html'" data-i18n="suc.btn.home">${_t('suc.btn.home')}</button>
             </div>
         `;
+        // 예약 확정에 문제가 있었다면 카드를 다시 그릴 때(언어 변경 등)도 안내가 유지되어야 한다
+        if (_bookingIssue) paintBookingIssueNotice();
+    }
+
+    /* ── 예약 확정 이상 안내 ──
+       재고 차감/상태 기록이 실패했는데 결제는 이미 승인된 상태.
+       손님이 "정상 예약"으로만 알고 넘어가지 않도록 성공 카드 안에 경고를 띄운다. */
+    var _bookingIssue = false;
+
+    function showBookingIssueNotice() {
+        _bookingIssue = true;
+        paintBookingIssueNotice();
+    }
+
+    function paintBookingIssueNotice() {
+        const body = document.getElementById('cardBody');
+        if (!body) return;
+        const prev = document.getElementById('bookingIssueNotice');
+        if (prev) prev.remove();
+        const box = document.createElement('div');
+        box.id = 'bookingIssueNotice';
+        box.setAttribute('data-i18n', 'suc.issue.notice');
+        box.style.cssText = 'background:#fdf2f2;border:1px solid #e74c3c;border-radius:8px;' +
+            'padding:16px 18px;margin-bottom:24px;font-size:13.5px;font-weight:700;' +
+            'color:#c0392b;line-height:1.7;text-align:center;';
+        box.textContent = _t('suc.issue.notice');
+        // 결제는 이미 승인된 상태의 경고이므로 스크롤 없이 바로 보이도록 카드 최상단에 둔다
+        body.insertBefore(box, body.firstChild);
     }
     /* ── 언어 선택기 ── */
     function toggleLangDropdown(e) { e.stopPropagation(); document.getElementById('langDropdown').classList.toggle('open'); }
@@ -335,17 +363,47 @@
 
             if (inv.stock < rc) { overbooked = true; break; }
 
-            const { data: updated } = await _sb.from('room_inventory')
+            const { data: updated, error: updErr } = await _sb.from('room_inventory')
                 .update({ stock: inv.stock - rc })
                 .eq('room_id', roomUuid).eq('date', dateStr)
                 .eq('stock', inv.stock).gte('stock', rc)
                 .select();
-            if (!updated || updated.length === 0) { overbooked = true; break; }
+            // 0행이면 그 사이 다른 예약이 선점했거나 UPDATE 권한이 없는 것 — 둘 다 오버부킹으로 처리
+            if (updErr || !updated || updated.length === 0) {
+                console.error('[재고] 차감 실패 — 오버부킹으로 처리합니다.', {
+                    orderId: orderId, date: dateStr, 요청실수: rc, 조회당시stock: inv.stock,
+                    영향행수: updated ? updated.length : 0,
+                    error: updErr ? updErr.message : null
+                });
+                overbooked = true;
+                break;
+            }
         }
 
         if (overbooked) {
-            await _sb.from('reservations').update({ payment_status: 'overbooked' }).eq('order_id', orderId);
-            console.warn('[재고] 오버부킹 감지 — 관리자 확인 필요:', orderId);
+            /* 상태 기록도 결과를 반드시 검사한다.
+               reservations 에 anon UPDATE 정책이 없으면 RLS 가 대상 행을 걸러내
+               "오류 없이 0행"(HTTP 200, [])이 돌아온다 → 조용히 실패하던 지점. */
+            const { data: flagged, error: flagErr } = await _sb.from('reservations')
+                .update({ payment_status: 'overbooked' })
+                .eq('order_id', orderId)
+                .select();
+
+            if (flagErr || !flagged || flagged.length === 0) {
+                console.error(
+                    '[재고] ⚠ 오버부킹 상태 기록 실패 — reservations.payment_status 가 paid 로 남아 있습니다. ' +
+                    '관리자 화면에 오버부킹으로 표시되지 않으므로 즉시 수동 확인이 필요합니다.',
+                    {
+                        orderId: orderId,
+                        영향행수: flagged ? flagged.length : 0,
+                        error: flagErr ? flagErr.message : null,
+                        추정원인: 'reservations 테이블에 anon 역할 UPDATE 정책이 없으면 오류 없이 0행이 반환됩니다.'
+                    }
+                );
+                showBookingIssueNotice();   // 손님에게도 안내 노출
+            } else {
+                console.warn('[재고] 오버부킹 감지 — 관리자 확인 필요:', orderId, '(상태 overbooked 로 기록됨)');
+            }
         }
     }
 
