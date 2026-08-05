@@ -190,7 +190,14 @@
         return fmtPriceDisplay(total);
     }
 
+    /* 결제 확인 실패 상태 — 한 번 실패하면 이 페이지가 살아있는 동안 유지된다.
+       translations.js 의 setLanguage() 가 언어 변경 때마다 renderSuccessCard() 를
+       무조건 호출하기 때문에, 이 플래그가 없으면 에러 카드가 성공 카드로 덮어써진다. */
+    var _errorState = null;   // { msg, key } | null
+
     function renderSuccessCard() {
+        // 실패 상태에서는 성공 카드를 그리지 않고, 에러 카드를 현재 언어로 다시 그린다
+        if (_errorState) { paintErrorCard(); return; }
         var roomName = typeof getRoomName === 'function' ? getRoomName(b.roomId) : (b.roomId || '-');
         document.getElementById('cardBody').innerHTML = `
             <div class="order-num-box">
@@ -246,17 +253,28 @@
     });
 
     /* ── 에러 카드 ── */
-    function renderErrorCard(msg) {
+    /* 에러 카드 표시 — msgKey 를 주면 언어에 따라 번역되고,
+       msgKey 없이 msg 만 주면(서버가 내려준 오류 메시지) 그 문구를 그대로 쓴다. */
+    function renderErrorCard(msg, msgKey) {
+        _errorState = { msg: msg || '', key: msgKey || null };
+        paintErrorCard();
+    }
+
+    /* 실제 그리기 — 언어가 바뀔 때마다 다시 호출되어 문구가 갱신된다 */
+    function paintErrorCard() {
+        if (!_errorState) return;
         const circle = document.querySelector('.check-circle');
         if (circle) circle.innerHTML = '<i class="fa-solid fa-xmark" style="color:#e74c3c;"></i>';
         const title = document.querySelector('.success-title');
-        if (title) { title.textContent = '결제 확인에 실패했습니다'; title.removeAttribute('data-i18n'); }
+        if (title) { title.textContent = _t('suc.err.title'); title.removeAttribute('data-i18n'); }
         const sub = document.querySelector('.success-sub');
-        if (sub) { sub.textContent = '카드사 또는 관리자에게 문의해 주세요.'; sub.removeAttribute('data-i18n-html'); }
+        if (sub) { sub.textContent = _t('suc.err.sub'); sub.removeAttribute('data-i18n-html'); }
+
+        const body = _errorState.key ? _t(_errorState.key) : _errorState.msg;
         document.getElementById('cardBody').innerHTML = `
-            <p style="font-size:14px;color:#666;text-align:center;padding:8px 0 4px;">${msg}</p>
+            <p style="font-size:14px;color:#666;text-align:center;padding:8px 0 4px;">${body}</p>
             <div style="text-align:center;margin-top:20px;">
-                <button class="btn-secondary" onclick="history.back()">이전으로 돌아가기</button>
+                <button class="btn-secondary" onclick="history.back()">${_t('suc.err.back')}</button>
             </div>`;
     }
 
@@ -388,7 +406,7 @@
 
         // paymentKey 없으면 직접 URL 접근 → 거절
         if (!payKey) {
-            renderErrorCard('유효한 결제 정보가 없습니다. 결제 페이지에서 다시 시도해 주세요.');
+            renderErrorCard('', 'suc.err.no_payment');
             return;
         }
 
@@ -431,12 +449,12 @@
             const result = await res.json();
             console.log('[initPage] confirm-payment 응답:', result);
             if (!result.ok) {
-                renderErrorCard(result.error || '결제 승인에 실패했습니다.');
+                renderErrorCard(result.error || '', result.error ? null : 'suc.err.approve_failed');
                 return;
             }
         } catch (err) {
             console.error('[confirm-payment] 호출 실패:', err);
-            renderErrorCard('결제 확인 서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.');
+            renderErrorCard('', 'suc.err.network');
             return;
         }
 
