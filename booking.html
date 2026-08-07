@@ -706,6 +706,12 @@
                 en:'PayPal accounts registered in South Korea cannot be used for this payment. Please contact us directly for alternative arrangements.',
                 ja:'韓国で登録されたPayPalアカウントはご利用いただけません。別のお支払い方法については直接お問い合わせください。',
                 zh:'在韩国注册的PayPal账户无法用于此付款。如需其他付款方式，请直接与我们联系。'
+            },
+            widgetFail: {
+                en:'The PayPal payment window could not be loaded. Please contact us by phone to complete your booking.',
+                ja:'PayPalの決済ウィンドウを読み込めませんでした。お電話にてご予約を承ります。',
+                zh:'无法加载 PayPal 付款窗口。请致电我们完成预订。',
+                ko:'PayPal 결제창을 불러오지 못했습니다. 전화로 예약을 도와드리겠습니다.'
             }
         };
         return (M[key] && (M[key][L] || M[key].en)) || '';
@@ -781,25 +787,87 @@
         // ★ 동시 호출 중복 렌더 방지 — 위젯은 renderPaymentMethods 를 1회만 호출해야 함
         //   (applyBookingCurrencyUI 가 init·언어변경 등으로 여러 번 불릴 수 있음)
         if (_usdWidgetRendering) return;
-        // ★ USD 는 v2 위젯 SDK(window.NewTossPayments) 사용 — 원화(window.TossPayments, v1)와 공존
-        if (typeof window.NewTossPayments !== 'function' || typeof krwToUsd !== 'function') return;
+
+        // ★ USD 는 v2 위젯 SDK 사용 — 원화(v1)는 건드리지 않는다.
+        //   v2 전역 이름은 SDK 버전에 따라 달라져 왔으므로(TossPaymentsV2 / NewTossPayments)
+        //   폴백 체인으로 찾고, 못 찾으면 조용히 넘어가지 말고 폴백 안내를 띄운다.
+        const TossV2 = _resolveTossV2();
+        if (typeof TossV2 !== 'function') {
+            console.error(
+                '[USD widget] v2 위젯 SDK 전역을 찾지 못했습니다 — 위젯을 렌더할 수 없습니다.',
+                {
+                    'window.TossPaymentsV2':  typeof window.TossPaymentsV2,
+                    'window.NewTossPayments': typeof window.NewTossPayments,
+                    'window.TossPayments':    typeof window.TossPayments,
+                    'window.TossPaymentsV1':  typeof window.TossPaymentsV1,
+                    'v2 SDK 로드 실패(onerror)': !!window.__tossV2Failed
+                }
+            );
+            _showUsdWidgetError();
+            return;
+        }
+        if (typeof krwToUsd !== 'function') {
+            console.error('[USD widget] krwToUsd 가 정의되지 않았습니다 (js/currency.js 로드 실패 추정) — 위젯을 렌더할 수 없습니다.');
+            _showUsdWidgetError();
+            return;
+        }
+
         _usdWidgetRendering = true;
+        let step = 'init';
         try {
             const usdAmount = krwToUsd(b.totalPrice);
-            const tossPayments = window.NewTossPayments(TOSS_WIDGET_CLIENT_KEY);
+            step = 'TossPayments()';
+            const tossPayments = TossV2(TOSS_WIDGET_CLIENT_KEY);
+            step = 'widgets()';
             _usdWidgets = tossPayments.widgets({ customerKey: _customerKey() });
+            step = 'setAmount()';
             await _usdWidgets.setAmount({ currency: 'USD', value: usdAmount });
+            step = 'renderPaymentMethods(variantKey=paypalUSD)';
             await _usdWidgets.renderPaymentMethods({ selector: '#payment-method', variantKey: 'paypalUSD' });
-            await _usdWidgets.renderAgreement({ selector: '#agreement', variantKey: 'AGREEMENT' });
+            // 결제수단 위젯이 뜨면 결제 가능 상태로 본다.
+            // 약관 위젯은 부가 요소이므로 여기서 실패해도 결제 자체를 막지 않는다(로그만 남김).
             _usdWidgetReady = true;
+            step = 'renderAgreement(variantKey=AGREEMENT)';
+            try {
+                await _usdWidgets.renderAgreement({ selector: '#agreement', variantKey: 'AGREEMENT' });
+            } catch (agErr) {
+                console.error('[USD widget] 약관 위젯 렌더 실패 — 결제 흐름은 계속 진행합니다.',
+                              { error: agErr && agErr.message, raw: agErr });
+            }
         } catch (e) {
-            console.error('[USD widget] 렌더 실패:', e);
-            var pm = document.getElementById('payment-method');
-            if (pm) pm.innerHTML = '<p style="color:#e74c3c;font-size:13px;">PayPal 위젯을 불러오지 못했습니다.</p>';
-            _renderUsdFallback();
+            console.error(
+                '[USD widget] 렌더 실패 — 실패 단계: ' + step +
+                (step.indexOf('renderPaymentMethods') === 0
+                    ? ' (해당 단계 실패는 변형키 paypalUSD 미등록/클라이언트키 불일치 가능성이 큽니다)'
+                    : ''),
+                { 단계: step, 금액KRW: b && b.totalPrice, error: e && e.message, raw: e }
+            );
+            _usdWidgets = null;      // 부분 초기화 상태로 남기지 않는다(결제 시도 차단)
+            _showUsdWidgetError();
         } finally {
             _usdWidgetRendering = false;
         }
+    }
+
+    /* v2 위젯 생성자 탐색 — v1(window.TossPaymentsV1)과 구분되는 것만 채택 */
+    function _resolveTossV2() {
+        if (typeof window.TossPaymentsV2 === 'function')  return window.TossPaymentsV2;
+        if (typeof window.NewTossPayments === 'function') return window.NewTossPayments;
+        // v1 이 로드되지 않아 전역이 v2 그대로인 경우
+        if (typeof window.TossPayments === 'function' && window.TossPayments !== window.TossPaymentsV1) {
+            return window.TossPayments;
+        }
+        return null;
+    }
+
+    /* 위젯 실패 시 손님이 빈 화면을 보지 않도록 — 안내 + 폴백 연락처를 반드시 노출 */
+    function _showUsdWidgetError() {
+        var pm = document.getElementById('payment-method');
+        if (pm) {
+            pm.innerHTML = '<p style="color:#e74c3c;font-size:13px;line-height:1.7;margin:0;">' +
+                           _usdText('widgetFail') + '</p>';
+        }
+        _renderUsdFallback();    // 전화번호 안내
     }
 
     // 영문명 검증 (필수 + 영문자/공백/.'- 만)
@@ -826,7 +894,18 @@
             return;
         }
         if (!_usdWidgetReady) { await setupUsdWidget(b); }
-        if (!_usdWidgets) { _renderUsdFallback(); alert('PayPal 위젯을 불러오지 못했습니다.'); return; }
+        // 차단 조건은 "위젯 인스턴스 자체가 없을 때"로만 둔다.
+        // (렌더 실패 시 setupUsdWidget 이 _usdWidgets 를 null 로 되돌린다)
+        // _usdWidgetReady 까지 요구하면, 렌더는 됐는데 SDK 핸드셰이크만 늦는 경우
+        // 정상 결제까지 막을 수 있어 조건에 넣지 않는다 — 그 경우는 아래 requestPayment 의
+        // catch 가 Toss 오류 메시지와 폴백 안내를 그대로 보여준다.
+        if (!_usdWidgets) {
+            console.error('[USD widget] 위젯 인스턴스가 없어 결제를 진행할 수 없습니다.',
+                          { widgets: !!_usdWidgets, ready: _usdWidgetReady });
+            _showUsdWidgetError();               // 안내 + 전화번호 폴백 노출
+            alert(_usdText('widgetFail'));       // 손님 언어로 안내
+            return;
+        }
 
         const roomName = typeof getRoomName === 'function' ? getRoomName(b.roomId) : b.roomId;
         const orderId  = makeOrderId();
