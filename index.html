@@ -745,6 +745,7 @@
     <link rel="stylesheet" href="responsive.css?v=6">
     <script src="js/roomPricing.js?v=20260731"></script>
     <script src="js/roomAvailability.js?v=20260802"></script>
+    <script src="js/bookingQuote.js?v=20260904"></script>
     <script src="js/currency.js?v=20260731"></script>
 </head>
 <body>
@@ -978,7 +979,7 @@
                             <h3 class="room-card-name" data-i18n="room.economy">이코노미 룸</h3>
                             <p class="room-card-sub" data-i18n="room.economy.sub">기준 2인 · 퀸 침대 1개</p>
                         </div>
-                        <button class="room-card-book" onclick="openBookingCalendar('edelweiss', event)" data-i18n="room.book">예약하기</button>
+                        <button class="room-card-book" onclick="goToBookingDirect('edelweiss', event)" data-i18n="room.book">예약하기</button>
                         <div class="room-card-price">
                             <span class="room-card-price-item"><span data-i18n="price.weekday">(일~목)</span> <strong>49,500</strong></span>
                             <span class="room-card-price-item"><span data-i18n="price.fri">(금)</span> <strong>58,500</strong></span>
@@ -1007,7 +1008,7 @@
                             <h3 class="room-card-name"><span data-i18n="room.standard">스탠다드 룸</span> <span class="room-name-badge" data-i18n="room.standard.badge">(디자인 랜덤배정)</span></h3>
                             <p class="room-card-sub"><span data-i18n="room.standard.sub">기준 2인 · 퀸 침대 1개</span><span class="room-sub-badge" data-i18n="room.standard.badge"> (디자인 랜덤배정)</span></p>
                         </div>
-                        <button class="room-card-book" onclick="openBookingCalendar('aurora', event)" data-i18n="room.book">예약하기</button>
+                        <button class="room-card-book" onclick="goToBookingDirect('aurora', event)" data-i18n="room.book">예약하기</button>
                         <div class="room-card-price">
                             <span class="room-card-price-item"><span data-i18n="price.weekday">(일~목)</span> <strong>58,000</strong></span>
                             <span class="room-card-price-item"><span data-i18n="price.fri">(금)</span> <strong>67,000</strong></span>
@@ -1036,7 +1037,7 @@
                             <h3 class="room-card-name"><span data-i18n="room.deluxe">디럭스 룸</span> <span class="room-name-badge" data-i18n="room.deluxe.badge">(디자인 랜덤배정)</span></h3>
                             <p class="room-card-sub"><span data-i18n="room.deluxe.sub">기준 2인 · 퀸 침대 1개</span><span class="room-sub-badge" data-i18n="room.deluxe.badge"> (디자인 랜덤배정)</span></p>
                         </div>
-                        <button class="room-card-book" onclick="openBookingCalendar('glorio', event)" data-i18n="room.book">예약하기</button>
+                        <button class="room-card-book" onclick="goToBookingDirect('glorio', event)" data-i18n="room.book">예약하기</button>
                         <div class="room-card-price">
                             <span class="room-card-price-item"><span data-i18n="price.weekday">(일~목)</span> <strong>67,000</strong></span>
                             <span class="room-card-price-item"><span data-i18n="price.fri">(금)</span> <strong>76,000</strong></span>
@@ -1065,7 +1066,7 @@
                             <h3 class="room-card-name" data-i18n="room.twin">트윈 룸</h3>
                             <p class="room-card-sub" data-i18n="room.twin.sub">기준 2인 / 최대 3인까지 · 퀸 침대 1개 / 싱글 침대 1개</p>
                         </div>
-                        <button class="room-card-book" onclick="openBookingCalendar('envidion', event)" data-i18n="room.book">예약하기</button>
+                        <button class="room-card-book" onclick="goToBookingDirect('envidion', event)" data-i18n="room.book">예약하기</button>
                         <div class="room-card-price">
                             <span class="room-card-price-item"><span data-i18n="price.weekday">(일~목)</span> <strong>76,000</strong></span>
                             <span class="room-card-price-item"><span data-i18n="price.fri">(금)</span> <strong>85,000</strong></span>
@@ -1094,7 +1095,7 @@
                             <h3 class="room-card-name" data-i18n="room.special">스페셜</h3>
                             <p class="room-card-sub" data-i18n="room.special.sub">기준 2인 / 최대 4인까지 · 퀸 침대 1개 / 싱글 침대 2개</p>
                         </div>
-                        <button class="room-card-book" onclick="openBookingCalendar('special', event)" data-i18n="room.book">예약하기</button>
+                        <button class="room-card-book" onclick="goToBookingDirect('special', event)" data-i18n="room.book">예약하기</button>
                         <div class="room-card-price">
                             <span class="room-card-price-item"><span data-i18n="price.weekday">(일~목)</span> <strong>99,000</strong></span>
                             <span class="room-card-price-item"><span data-i18n="price.fri">(금)</span> <strong>108,000</strong></span>
@@ -1123,7 +1124,7 @@
                             <h3 class="room-card-name" data-i18n="room.ruby">루비룸 (애견동반)</h3>
                             <p class="room-card-sub" data-i18n="room.ruby.sub">기준 2인 / 최대 2인 · 퀸 침대 1개</p>
                         </div>
-                        <button class="room-card-book" onclick="openBookingCalendar('ruby', event)" data-i18n="room.book">예약하기</button>
+                        <button class="room-card-book" onclick="goToBookingDirect('ruby', event)" data-i18n="room.book">예약하기</button>
                         <div class="room-card-price">
                             <span class="room-card-price-item"><span data-i18n="price.weekday">(일~목)</span> <strong>76,000</strong></span>
                             <span class="room-card-price-item"><span data-i18n="price.fri">(금)</span> <strong>85,000</strong></span>
@@ -3047,52 +3048,49 @@
             var roomCount = guests ? guests.room  : 1;
             var adultCount= guests ? guests.adult : 1;
 
-            /* 날짜 문자열 배열 생성 (체크인 당일 ~ 마지막 박) */
-            var dateStrs = [];
-            for (var i = 0; i < nights; i++) {
-                var d = new Date(checkinDate); d.setDate(d.getDate() + i);
-                dateStrs.push(_localDateStr(d));
-            }
+            /* 금액 계산은 js/bookingQuote.js 로 단일화됨 (booking.html 과 공용) */
+            var q = await BookingQuote.quote({
+                sb:          _getSbI(),
+                roomUuid:    _roomUuidMapI[selectedRoomId],
+                roomId:      selectedRoomId,
+                checkinDate: checkinDate,
+                nights:      nights,
+                roomCount:   roomCount
+            });
 
-            /* room_inventory 조회 */
-            var invByDate = {};
-            var roomUuid  = _roomUuidMapI[selectedRoomId];
-            if (_getSbI() && roomUuid) {
-                try {
-                    var res = await _getSbI().from('room_inventory')
-                        .select('date, price, is_available, stock')
-                        .eq('room_id', roomUuid)
-                        .gte('date', dateStrs[0])
-                        .lte('date', dateStrs[dateStrs.length - 1]);
-                    if (res.data) res.data.forEach(function(r){ invByDate[r.date] = r; });
-                } catch(e) { console.warn('room_inventory 조회 실패, 기본 요금 사용', e); }
-            }
-
-            /* 마감 날짜 체크 */
-            for (var i = 0; i < nights; i++) {
-                var ds  = dateStrs[i];
-                var inv = invByDate[ds];
-                if (inv && (inv.is_available === false || inv.stock === 0)) {
-                    alert('선택하신 날짜 중 마감된 날짜가 있습니다.\n\n마감일: ' + ds + '\n\n다른 날짜를 선택해 주세요.');
-                    return;
+            if (!q.ok) {
+                if (q.reason === 'closed') {
+                    alert('선택하신 날짜 중 마감된 날짜가 있습니다.\n\n마감일: ' + q.closedDate + '\n\n다른 날짜를 선택해 주세요.');
                 }
+                return;
             }
-
-            /* 요금 계산: room_inventory 우선, 없으면 하드코딩 fallback */
-            var total = 0;
-            for (var i = 0; i < nights; i++) {
-                var d2  = new Date(checkinDate); d2.setDate(d2.getDate() + i);
-                var ds2 = dateStrs[i];
-                var inv2= invByDate[ds2];
-                total  += (inv2 && inv2.price) ? inv2.price : getNightRate(selectedRoomId, d2);
-            }
-            total *= roomCount;
 
             var roomName = ROOM_NAMES_I[selectedRoomId] || selectedRoomId;
             localStorage.setItem('instaHotelBooking', JSON.stringify({
                 roomId: selectedRoomId, roomName: roomName,
                 checkin: _localDateStr(checkinDate), checkout: _localDateStr(checkoutDate),
-                nights: nights, roomCount: roomCount, adultCount: adultCount, totalPrice: total
+                nights: nights, roomCount: roomCount, adultCount: adultCount, totalPrice: q.total
+            }));
+            window.location.href = 'booking.html';
+        }
+
+        /* 객실카드 [예약하기] → 달력을 열지 않고 예약결제 페이지로 바로 이동.
+           날짜·객실·인원은 예약결제 페이지의 '숙박 정보' 섹션에서 고른다. */
+        function goToBookingDirect(roomId, e) {
+            if (e) e.stopPropagation();
+            var prev = null;
+            try { prev = JSON.parse(localStorage.getItem('instaHotelBooking') || 'null'); } catch (err) {}
+            /* 같은 객실을 다시 눌렀고 날짜가 이미 있으면 그 날짜를 유지, 아니면 비운 채로 시작 */
+            var keep = prev && prev.roomId === roomId && prev.checkin && prev.checkout;
+            localStorage.setItem('instaHotelBooking', JSON.stringify({
+                roomId:     roomId,
+                roomName:   ROOM_NAMES_I[roomId] || roomId,
+                checkin:    keep ? prev.checkin  : null,
+                checkout:   keep ? prev.checkout : null,
+                nights:     keep ? prev.nights   : 0,
+                roomCount:  (prev && prev.roomCount)  || 1,
+                adultCount: (prev && prev.adultCount) || 1,
+                totalPrice: keep ? prev.totalPrice : 0
             }));
             window.location.href = 'booking.html';
         }
@@ -3369,18 +3367,8 @@
                 }
             });
 
-            // 데스크탑: 예약하기 클릭 시 예약바를 카드 바로 아래로 이동
-            document.querySelectorAll('.room-card-title-row .room-card-book').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    if (window.innerWidth < 769) return;
-                    var card = btn.closest('.room-card');
-                    if (window._pinnedCard === card) { unpinBookingBar(); return; }
-                    var roomId = card.dataset.roomId;
-                    pinBookingBarToCard(card, roomId, function() {
-                        openBookingCalendar(roomId);
-                    });
-                });
-            });
+            /* 객실카드 [예약하기] 는 이제 예약결제 페이지로 바로 이동하므로
+               예약바를 카드 아래로 옮기던 데스크탑 전용 동작은 제거함 */
 
             // 스크롤 시 위치 업데이트
             window.addEventListener('scroll', function() {
