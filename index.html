@@ -4021,7 +4021,7 @@
                 }
                 return '<span class="modal-price-item">' + dayLabel + ' <strong>' + amount + '</strong></span>';
             }).join('');
-            document.getElementById('modalBookBtn').onclick = function() { closeRoomModal(); openBookingCalendar(roomId); };
+            document.getElementById('modalBookBtn').onclick = function() { closeRoomModal(); goToBookingDirect(roomId); };
 
             var track = document.getElementById('modalSliderTrack');
             track.innerHTML = '';
@@ -4117,7 +4117,7 @@
                     '<span>' + (_rgIdx + 1) + ' / ' + _rgImages.length + '</span>' +
                     '<span class="rg-sep">|</span>' +
                     '<span class="rg-title">' + getRoomName(_rgRoomId) + '</span>' +
-                    '<button class="rg-book-btn" onclick="closeRoomGallery();pinBookingBarToRoom(\'' + _rgRoomId + '\',true)">' + t('room.book') + '</button>' +
+                    '<button class="rg-book-btn" onclick="closeRoomGallery();goToBookingDirect(\'' + _rgRoomId + '\')">' + t('room.book') + '</button>' +
                 '</div>' +
                 '<button class="rg-detail-btn" onclick="closeRoomGallery();openRoomModal(\'' + _rgRoomId + '\')">' + t('rg.detail_btn') + '</button>';
         }
