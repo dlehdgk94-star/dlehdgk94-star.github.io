@@ -98,6 +98,7 @@
             <li><a href="rooms.html" data-i18n="nav.rooms">객실예약</a></li>
             <li><a href="gallery.html" data-i18n="nav.gallery">갤러리</a></li>
             <li><a href="nearby.html" data-i18n="nav.nearby">주변안내</a></li>
+            <li><a href="local.html" data-i18n="nav.local">로컬 가이드</a></li>
             <li class="lang-selector" onclick="event.stopPropagation()">
                 <button class="lang-btn" onclick="toggleLangDropdown(event)"><i class="fa-solid fa-globe"></i><span id="langCode">KO</span><i class="fa-solid fa-chevron-down lang-chevron"></i></button>
                 <div class="lang-dropdown" id="langDropdown">
@@ -309,7 +310,12 @@
     /* ── 예약 저장 + 재고 차감 (결제 확인 성공 후에만 호출) ── */
     async function saveReservation() {
         console.log('[saveReservation] 시작 — orderId:', orderId, '| roomId:', b.roomId, '| guestName:', g.name);
-        if (!b.roomId && !g.name) { console.warn('[saveReservation] roomId·guestName 모두 없음 → 중단'); return; }
+        /* 중단은 "만들 수 있는 행이 아예 없을 때"로만 한정한다.
+           ★ || 로 바꾸지 말 것 — 이름만 없어도 return 하면 결제는 승인됐는데 예약 행이
+           생기지 않고, Solapi 알림은 INSERT 웹훅 기반이라 아무도 인지하지 못한다.
+           이름·연락처가 비는 부분 유실은 저장을 강행한 뒤 notify-reservation 의
+           "[확인필요] 예약자 정보 누락" 문자와 admin 행 강조로 잡는다. */
+        if (!b.roomId && !g.name && !g.phone) { console.warn('[saveReservation] roomId·guestName·guestPhone 모두 없음 → 중단'); return; }
         const roomNameKo = typeof getRoomName === 'function' ? getRoomName(b.roomId) : (b.roomId || '-');
 
         const { data: existing } = await _sb

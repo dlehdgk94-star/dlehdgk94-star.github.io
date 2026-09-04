@@ -60,8 +60,8 @@ function buildMessage(r: Record<string, unknown>): string {
     COUNTRIES[r.guest_country as string] || r.guest_country || '-';
 
   const rawPhone = String(r.guest_phone ?? '');
-  const phone = rawPhone
-    ? rawPhone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3')
+  const phone = rawPhone.trim()
+    ? rawPhone.trim().replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3')
     : '-';
 
   // ── 통화 분기 (직원용) — USD 는 원화 병기(내부 정산 참고용). KRW 는 기존 그대로. ──
@@ -78,7 +78,27 @@ function buildMessage(r: Record<string, unknown>): string {
       ? String(r.special_request).trim()
       : '없음';
 
-  const lines = [
+  /* ── 예약자 정보 누락 감지 ──
+     결제는 승인됐는데 손님 브라우저의 localStorage(instaHotelGuest)가 유실돼
+     이름·연락처가 비어 저장되는 경우가 있다. 행은 그대로 두고(결제 유실 방지),
+     프런트가 즉시 인지하도록 문자 맨 앞에 경고를 붙인다. */
+  const blank = (v: unknown) => !v || !String(v).trim();
+  const nameMissing  = blank(r.guest_name);
+  const phoneMissing = blank(r.guest_phone);
+  const emailMissing = blank(r.guest_email);
+
+  const lines: string[] = [];
+  if (nameMissing || phoneMissing) {
+    const missing = [
+      nameMissing  ? '예약자명' : null,
+      phoneMissing ? '연락처'   : null,
+    ].filter(Boolean).join(', ');
+    lines.push('[확인필요] 예약자 정보 누락');
+    lines.push(`누락 항목: ${missing} — 예약번호로 결제 내역 확인 후 손님에게 연락하세요.`);
+    lines.push('');
+  }
+
+  lines.push(
     '[INSTA HOTEL] 새 예약 알림',
     '─────────────────',
     `예약번호: ${r.order_id ?? '-'}`,
@@ -92,10 +112,15 @@ function buildMessage(r: Record<string, unknown>): string {
     `국가: ${country}`,
     `특별요청: ${specialReq}`,
     '─────────────────',
-    `결제금액: ${price}`,
-  ];
+    `결제금액: ${price}`
+  );
   // USD(PayPal) 결제는 결제수단을 명시 (직원이 해외결제임을 인지)
   if (isUsd) lines.push('결제수단: PayPal (해외결제)');
+  // 이메일이 비어 있으면 아래 sendGuestEmail 이 skip 된다 → 손님이 예약확인 메일을 못 받음
+  if (emailMissing) {
+    lines.push('─────────────────');
+    lines.push('※ 이메일 미입력 — 예약확인 메일이 발송되지 않았습니다. 손님에게 직접 안내해 주세요.');
+  }
   return lines.join('\n');
 }
 

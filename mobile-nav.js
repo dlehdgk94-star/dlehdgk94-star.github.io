@@ -4,10 +4,11 @@
     var base = isSubfolder ? '../' : '';
 
     function isActive(page) {
-        if (page === 'index.html') return /index\.html$|\/insta-hotel-html\/?$|\/[^/]*$/.test(path) && !isSubfolder && !/rooms\.html|gallery\.html|nearby\.html|booking/.test(path);
+        if (page === 'index.html') return /index\.html$|\/insta-hotel-html\/?$|\/[^/]*$/.test(path) && !isSubfolder && !/rooms\.html|gallery\.html|nearby\.html|local\.html|booking/.test(path);
         if (page === 'rooms.html') return /rooms\.html$/.test(path) || isSubfolder;
         if (page === 'gallery.html') return /gallery\.html$/.test(path);
         if (page === 'nearby.html') return /nearby\.html$/.test(path);
+        if (page === 'local.html') return /local\.html$/.test(path);
         return false;
     }
 
@@ -30,6 +31,7 @@
                 link('rooms.html', '객실예약', 'nav.rooms') +
                 link('gallery.html', '갤러리', 'nav.gallery') +
                 link('nearby.html', '주변안내', 'nav.nearby') +
+                link('local.html', '로컬 가이드', 'nav.local') +
             '</ul>' +
             '<div class="mob-nav-footer">' +
                 '<a href="https://www.instagram.com/instar_hotel_/" target="_blank"><i class="fa-brands fa-instagram"></i></a>' +
@@ -50,8 +52,9 @@
         if (taxiBtns) taxiBtns.style.display = '';
     }
 
-    var isIndexPage = /index\.html$|\/insta-hotel-html\/?$|\/[^/]*$/.test(path) && !isSubfolder && !/rooms\.html|gallery\.html|nearby\.html|booking/.test(path);
-    var isGalleryOrNearby = /gallery\.html$|nearby\.html$|rooms\.html$/.test(path) || isSubfolder;
+    var isIndexPage = /index\.html$|\/insta-hotel-html\/?$|\/[^/]*$/.test(path) && !isSubfolder && !/rooms\.html|gallery\.html|nearby\.html|local\.html|booking/.test(path);
+    // 모바일 예약바를 주입하지 않는 정보 페이지
+    var isGalleryOrNearby = /gallery\.html$|nearby\.html$|rooms\.html$|local\.html$/.test(path) || isSubfolder;
 
     document.addEventListener('DOMContentLoaded', function () {
         document.body.appendChild(overlay);

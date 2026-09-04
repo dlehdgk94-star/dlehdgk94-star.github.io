@@ -25,3 +25,9 @@ yarn-error.log*
 
 # ── Supabase 임시 파일 ──
 supabase/.temp/
+
+# ── 작업 중 생긴 임시 파일 (커밋 안 함) ──
+*.bak
+*.bak[0-9]
+*.bak[0-9][0-9]
+Claude outputs/

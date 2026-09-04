@@ -85,6 +85,10 @@
         tbody tr{ cursor:pointer; transition:background .15s; }
         tbody tr:hover{ background:#fafafa; }
         tbody tr:last-child td{ border-bottom:none; }
+        /* 예약자명·연락처가 비어 저장된 행 — 프런트가 즉시 확인해야 함 */
+        tbody tr.row-missing-guest{ background:#fdf2f2; box-shadow:inset 3px 0 0 #e74c3c; }
+        tbody tr.row-missing-guest:hover{ background:#fbe6e6; }
+        tbody tr.row-missing-guest td{ color:#c0392b; }
         .order-id-cell{ font-family:monospace; font-size:11px; color:rgb(112,112,112); max-width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .room-cell{ color:#00768e; font-weight:600; }
         .cur-tag{ display:inline-block; margin-left:5px; background:#eef4f6; color:#00768e; font-size:10px; font-weight:700; padding:1px 5px; border-radius:4px; vertical-align:1px; letter-spacing:0.3px; }
@@ -808,8 +812,10 @@ function updateStats(data){
 
 function buildTableHTML(data, areaId){
     if(!data.length) return '<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>예약 내역이 없습니다.</p></div>';
+    // 예약자명 또는 연락처가 비어 저장된 행은 배경색으로 강조 (결제는 됐는데 손님 정보 없음)
+    const _blank = v => !v || !String(v).trim();
     const rows=data.map(r=>`
-        <tr data-id="${r.id||''}">
+        <tr data-id="${r.id||''}"${(_blank(r.guest_name)||_blank(r.guest_phone))?' class="row-missing-guest" title="예약자 정보 누락 — 확인 필요"':''}>
             <td><div class="order-id-cell" title="${r.order_id||''}">${r.order_id||'-'}</div></td>
             <td style="font-weight:600;">${r.guest_name||'-'}</td>
             <td>${r.guest_phone ? r.guest_phone.replace(/(\d{3})(\d{3,4})(\d{4})/,'$1-$2-$3') : '-'}</td>
