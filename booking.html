@@ -210,6 +210,7 @@
     <script src="js/roomAvailability.js?v=20260802"></script>
     <script src="js/bookingQuote.js?v=20260904"></script>
     <script src="js/bookingStay.js?v=20260904"></script>
+    <script src="js/bookingSurvey.js?v=20260904"></script>
     <!-- 번역 -->
     <script src="translations.js?v=20260731b"></script>
     <!-- 토스페이먼츠 SDK -->
@@ -339,12 +340,19 @@
             <a href="rooms.html" class="back-link" data-i18n="bk.empty.btn">${_t('bk.empty.btn')}</a></div>`;
     } else {
         const b = JSON.parse(raw);
+        /* 할인 전 객실요금을 반드시 따로 보관 — 없으면 할인이 중복 적용된다 */
+        if (b.baseTotal == null) {
+            b.baseTotal = b.totalPrice || 0;
+            b.discount  = b.discount || 0;
+            localStorage.setItem('instaHotelBooking', JSON.stringify(b));
+        }
         const checkin  = b.checkin  ? new Date(b.checkin)  : null;   // 날짜 미선택 허용
         const checkout = b.checkout ? new Date(b.checkout) : null;
         render(b, checkin, checkout);
         initUI();
         applyBookingCurrencyUI();   // 통화(언어)에 따라 KRW/USD 결제 UI 전환
         mountStayWidget(b);         // 숙박정보(날짜·객실·인원) 위젯
+        mountSurveyWidget(b);       // 설문 참여 할인 위젯
         if (!b.checkin || !b.checkout) lockPayUntilDates();
     }
 
@@ -389,6 +397,8 @@
             } catch (e) { console.warn('rooms UUID 로드 실패', e); }
         }
 
+        /* 마운트 후 정가를 한 번 다시 계산한다.
+           localStorage 에 남아 있던 '할인 후 금액'을 정가로 착각해 할인이 누적되는 것을 막는다. */
         window._stayWidget = BookingStay.mount({
             container:  host,
             roomId:     b.roomId,
@@ -401,6 +411,10 @@
             onChange:   onStayChange,
             openPanel:  (!b.checkin || !b.checkout) ? 'date' : null
         });
+
+        if (b.checkin && b.checkout && window._stayWidget._emit) {
+            window._stayWidget._emit();     // 정가 재계산 → baseTotal 을 서버 요금으로 덮어씀
+        }
     }
 
     function onStayChange(v) {
@@ -424,28 +438,71 @@
         b.nights     = v.nights;
         b.roomCount  = v.roomCount;
         b.adultCount = v.adultCount;
-        b.totalPrice = v.totalPrice;
+        b.baseTotal  = v.totalPrice;                 // 할인 전 객실요금
+        b.totalPrice = applyDiscount(b);             // 실제 결제금액
         localStorage.setItem('instaHotelBooking', JSON.stringify(b));
 
         if (typeof syncBookingLang === 'function') syncBookingLang();
     }
 
+    /* =====================================================================
+     * 설문 참여 할인 — 문항당 1,000원, 최대 3,000원.
+     * 답한 즉시 우측 합계와 결제 버튼 금액이 깎입니다.
+     * ===================================================================== */
+    function applyDiscount(b) {
+        var base = (b.baseTotal != null) ? b.baseTotal : (b.totalPrice || 0);
+        var d    = Math.min(b.discount || 0, (window.BookingSurvey ? BookingSurvey.MAX : 3000));
+        if (d > base) d = base;                      // 요금보다 크게 깎이지 않도록
+        b.discount = d;
+        return Math.max(base - d, 0);
+    }
+
+    function mountSurveyWidget(b) {
+        var host = document.getElementById('surveyWidget');
+        if (!host || !window.BookingSurvey) return;
+        window._surveyWidget = BookingSurvey.mount({
+            container: host,
+            value:     b.survey || null,
+            onChange:  onSurveyChange
+        });
+    }
+
+    function onSurveyChange(v) {
+        var raw = localStorage.getItem('instaHotelBooking');
+        if (!raw) return;
+        var b = JSON.parse(raw);
+        b.survey     = v;
+        b.discount   = v.discount;
+        b.totalPrice = applyDiscount(b);
+        localStorage.setItem('instaHotelBooking', JSON.stringify(b));
+        if (typeof syncBookingLang === 'function') syncBookingLang();
+    }
+
     function render(b, checkin, checkout) {
+        var baseTotal = (b.baseTotal != null) ? b.baseTotal : (b.totalPrice || 0);
+        var discount  = b.discount || 0;
         var roomImg  = ROOM_IMG[b.roomId] || ROOM_IMG['edelweiss'];
         var roomName = typeof getRoomName === 'function' ? getRoomName(b.roomId) : b.roomId;
         var roomSub  = typeof getRoomSub  === 'function' ? getRoomSub(b.roomId)  : '';
         wrap.innerHTML = `
         <div class="booking-form-area">
 
-          <!-- 1. 숙박 정보 (날짜·객실·인원) -->
+          <!-- 1. 객실 예약 (날짜·객실·인원) -->
           <div class="form-section">
-            <div class="section-title"><div class="section-num">1</div><span>숙박 정보</span></div>
+            <div class="section-title"><div class="section-num">1</div><span>객실 예약</span></div>
             <div id="stayWidget"></div>
           </div>
 
-          <!-- 2. 예약자 정보 -->
+          <!-- 2. 특가 할인 (설문 참여) -->
           <div class="form-section">
-            <div class="section-title"><div class="section-num">2</div><span data-i18n="bk.sec1">${_t('bk.sec1')}</span></div>
+            <div class="section-title"><div class="section-num">2</div><span>특가 할인</span>
+              <span style="margin-left:auto;font-size:12.5px;font-weight:600;color:#8a8a8a;">최대 3,000원</span></div>
+            <div id="surveyWidget"></div>
+          </div>
+
+          <!-- 3. 예약자 정보 -->
+          <div class="form-section">
+            <div class="section-title"><div class="section-num">3</div><span data-i18n="bk.sec1">${_t('bk.sec1')}</span></div>
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label"><span data-i18n="bk.label.name">${_t('bk.label.name')}</span> <span class="req">*</span></label>
@@ -503,7 +560,7 @@
 
           <!-- 2. 취소·환불 정책 (결제수단 섹션 제거로 번호 재정렬 ③→②) -->
           <div class="form-section">
-            <div class="section-title"><div class="section-num">3</div><span data-i18n="bk.sec3">${_t('bk.sec3')}</span></div>
+            <div class="section-title"><div class="section-num">4</div><span data-i18n="bk.sec3">${_t('bk.sec3')}</span></div>
             <!-- 체크인·체크아웃 시간 박스는 우측 예약 요약에 이미 표시되어 중복이라 제거함 -->
             <div class="policy-box">
               <div class="policy-title" data-i18n="bk.policy.cancel_title">${_t('bk.policy.cancel_title')}</div>
@@ -518,7 +575,7 @@
 
           <!-- 3. 약관 동의 (번호 재정렬 ④→③) -->
           <div class="form-section">
-            <div class="section-title"><div class="section-num">4</div><span data-i18n="bk.sec4">${_t('bk.sec4')}</span></div>
+            <div class="section-title"><div class="section-num">5</div><span data-i18n="bk.sec4">${_t('bk.sec4')}</span></div>
             <div class="terms-all-row" onclick="toggleAll(this)">
               <div class="chk" id="chkAll"></div>
               <span class="terms-all-text" data-i18n="bk.terms.all">${_t('bk.terms.all')}</span>
@@ -568,7 +625,11 @@
               <hr class="summary-hr">
               <div class="s-row">
                 <span class="s-label" data-i18n="bk.sum.room_price">${_t('bk.sum.room_price')}</span>
-                <span class="s-value" id="sumRoomPrice">${fmtPriceDisplay(b.totalPrice)}</span>
+                <span class="s-value" id="sumRoomPrice">${fmtPriceDisplay(baseTotal)}</span>
+              </div>
+              <div class="s-row" id="sumDiscountRow" style="display:${discount ? 'flex' : 'none'};">
+                <span class="s-label">특가 할인</span>
+                <span class="s-value" id="sumDiscount" style="color:#c0392b;">− ${discount.toLocaleString('ko-KR')}원</span>
               </div>
               <div class="summary-total">
                 <span class="summary-total-label" data-i18n="bk.sum.total">${_t('bk.sum.total')}</span>
@@ -636,6 +697,21 @@
 
     /* ── 유효성 검사 ── */
     function validate() {
+        /* 날짜·금액 안전장치 — 버튼이 잠겨 있어도 혹시 모를 경로로 결제가 시작되지 않도록 */
+        try {
+            var _b = JSON.parse(localStorage.getItem('instaHotelBooking') || 'null');
+            if (!_b || !_b.checkin || !_b.checkout || !_b.nights) {
+                alert('먼저 체크인·체크아웃 날짜를 선택해 주세요.');
+                var _w = document.getElementById('stayWidget');
+                if (_w) _w.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return false;
+            }
+            if (!(_b.totalPrice > 0)) {
+                alert('결제 금액을 계산하지 못했습니다. 날짜를 다시 선택해 주세요.');
+                return false;
+            }
+        } catch (e) {}
+
         const name  = document.getElementById('iName').value.trim();
         const phone = document.getElementById('iPhone').value.trim();
         const email = document.getElementById('iEmail').value.trim();
@@ -651,6 +727,30 @@
         return true;
     }
 
+    /* ── 설문 결과를 예약 정보에 실어 보내기 ──
+       Q3 계정은 기존 guest_instagram 칸에, Q1·Q2 답변은 특별요청 뒤에 덧붙입니다.
+       (Supabase 테이블에 설문 전용 칸을 만들기 전까지의 방식) */
+    function _surveyValue() {
+        try { return (JSON.parse(localStorage.getItem('instaHotelBooking')) || {}).survey || null; }
+        catch (e) { return null; }
+    }
+    function _surveyInstagram() {
+        var v = _surveyValue();
+        return (v && v.instagram) ? v.instagram : '';
+    }
+    function _requestWithSurvey() {
+        var base = document.getElementById('iRequest').value.trim();
+        var v = _surveyValue();
+        if (!v) return base;
+        var parts = [];
+        if (v.source)  parts.push('알게된 경로: ' + v.source);
+        if (v.purpose) parts.push('숙박 목적: ' + v.purpose);
+        if (v.instagram) parts.push('인스타(팔로워 500+ 자가신고): ' + v.instagram);
+        if (!parts.length) return base;
+        var tag = '[설문] ' + parts.join(' / ');
+        return base ? (base + '\n' + tag) : tag;
+    }
+
     function saveGuestInfo() {
         var nameEnEl = document.getElementById('iNameEn');
         localStorage.setItem('instaHotelGuest', JSON.stringify({
@@ -658,7 +758,9 @@
             email:     document.getElementById('iEmail').value.trim(),
             phone:     document.getElementById('iPhone').value.trim().replace(/-/g, ''),
             country:   document.getElementById('iCountry').value,
-            request:   document.getElementById('iRequest').value.trim(),
+            instagram: _surveyInstagram(),
+            request:   _requestWithSurvey(),
+            survey:    _surveyValue(),
             nameEn:    nameEnEl ? nameEnEl.value.trim() : ''   // USD 결제 영문명(없으면 빈값)
         }));
     }
@@ -1126,8 +1228,16 @@
         el = document.getElementById('sumRoomGuest');
         if (el) el.textContent = fmtRoomGuest(b.roomCount, b.adultCount);
 
+        var _base = (b.baseTotal != null) ? b.baseTotal : (b.totalPrice || 0);
+        var _disc = b.discount || 0;
+
         el = document.getElementById('sumRoomPrice');
-        if (el) el.textContent = fmtPriceDisplay(b.totalPrice);
+        if (el) el.textContent = fmtPriceDisplay(_base);
+
+        el = document.getElementById('sumDiscountRow');
+        if (el) el.style.display = _disc ? 'flex' : 'none';
+        el = document.getElementById('sumDiscount');
+        if (el) el.textContent = '− ' + _disc.toLocaleString('ko-KR') + '원';
 
         el = document.getElementById('sumTotalPrice');
         if (el) el.textContent = fmtPriceDisplay(b.totalPrice);

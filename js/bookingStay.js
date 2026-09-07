@@ -40,6 +40,8 @@
     '.bs-d.bs-closed{color:#ccc;cursor:default;}',
     '.bs-d.bs-closed s{text-decoration:line-through;}',
     '.bs-clabel{position:absolute;bottom:2px;left:0;right:0;text-align:center;font-size:8.5px;color:#c9a0a0;}',
+    '.bs-d.bs-checkout-ok{color:#6b7681;border:1px dashed #d5d5d5;}',
+    '.bs-d.bs-checkout-ok:hover{background:#f0f0f0;}',
     '.bs-d.bs-in{background:#ebebeb;border-radius:0;}',
     '.bs-d.bs-start,.bs-d.bs-end,.bs-d.bs-only{background:var(--bs-ink);color:#fff;font-weight:700;}',
     '.bs-d.bs-start{border-radius:7px 0 0 7px;}',
@@ -244,9 +246,19 @@
       if (d < this.today || d > this.maxDate) {
         h += '<div class="bs-d bs-off">' + n + '</div>'; continue;
       }
+      /* 마감일은 '숙박'이 불가할 뿐, 그날 아침에 나가는 '체크아웃'은 가능하다.
+         체크인만 고른 상태이고 그 사이에 마감이 없으면 체크아웃으로 선택할 수 있게 연다. */
       if (this._isClosed(ds)) {
-        h += '<div class="bs-d bs-closed" title="예약 마감"><s>' + n + '</s>' +
-             '<span class="bs-clabel">마감</span></div>'; continue;
+        var okAsCheckout = this.checkin && !this.checkout &&
+                           d > this.checkin && !this._closedBetween(this.checkin, d);
+        if (okAsCheckout) {
+          h += '<div class="bs-d bs-checkout-ok" data-bs="day" data-d="' + ds + '"' +
+               ' title="체크아웃만 가능 (이날 숙박은 마감)">' + n + '</div>';
+        } else {
+          h += '<div class="bs-d bs-closed" title="예약 마감"><s>' + n + '</s>' +
+               '<span class="bs-clabel">마감</span></div>';
+        }
+        continue;
       }
       var ci = this.checkin, co = this.checkout;
       if (ci && d.getTime() === ci.getTime()) cls += co ? ' bs-start' : ' bs-only';

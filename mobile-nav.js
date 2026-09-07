@@ -54,7 +54,10 @@
 
     var isIndexPage = /index\.html$|\/insta-hotel-html\/?$|\/[^/]*$/.test(path) && !isSubfolder && !/rooms\.html|gallery\.html|nearby\.html|local\.html|booking/.test(path);
     // 모바일 예약바를 주입하지 않는 정보 페이지
-    var isGalleryOrNearby = /gallery\.html$|nearby\.html$|rooms\.html$|local\.html$/.test(path) || isSubfolder;
+    // 예약바를 주입하지 않는 페이지. booking* 는 자체 날짜·인원 선택 UI가 있으므로 반드시 제외한다
+    // (주입하면 진행 중이던 예약·설문 할인이 통째로 덮어써진다)
+    var isBookingFlow = /booking(-success|-fail)?\.html$/.test(path);
+    var isGalleryOrNearby = /gallery\.html$|nearby\.html$|rooms\.html$|local\.html$/.test(path) || isSubfolder || isBookingFlow;
 
     document.addEventListener('DOMContentLoaded', function () {
         document.body.appendChild(overlay);

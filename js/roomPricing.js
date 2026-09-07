@@ -36,3 +36,9 @@ function getNightRate(roomId, date) {
   const d = date.getDay();
   return d === 6 ? r.prices[2] : d === 5 ? r.prices[1] : r.prices[0];
 }
+
+/* ── 다른 파일(js/bookingStay.js 등)에서 쓸 수 있게 전역에 올린다 ──
+   최상위 const 는 window 프로퍼티가 되지 않아 window.ROOM_PRICING 이 undefined 였고,
+   그 탓에 모든 객실의 최대 인원이 2인으로 떨어지는 문제가 있었다. */
+window.ROOM_PRICING = ROOM_PRICING;
+window.ROOM_ORDER   = ROOM_ORDER;
