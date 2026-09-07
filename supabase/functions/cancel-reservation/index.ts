@@ -1,14 +1,26 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+// ── CORS: instarhotel.com 도메인만 허용 (update-app-setting 과 동일) ──
+const ALLOWED_ORIGINS = [
+  'https://instarhotel.com',
+  'https://www.instarhotel.com',
+];
 
-function json(body: unknown, status = 200) {
+function corsHeaders(origin: string | null) {
+  // 허용 목록에 있으면 해당 Origin 을 그대로 echo, 아니면 대표 도메인으로 고정
+  const allow = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    'Access-Control-Allow-Origin': allow,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Vary': 'Origin',
+  };
+}
+
+function json(body: unknown, status: number, origin: string | null) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { ...CORS, 'Content-Type': 'application/json' },
+    headers: { ...corsHeaders(origin), 'Content-Type': 'application/json' },
   });
 }
 
@@ -37,27 +49,30 @@ function toAsciiJson(obj: unknown): string {
 }
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
-  if (req.method !== 'POST') return json({ ok: false, error: 'Method not allowed' }, 405);
+  const origin = req.headers.get('Origin');
+
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders(origin) });
+  if (req.method !== 'POST') return json({ ok: false, error: 'Method not allowed' }, 405, origin);
 
   /* ── 1. 요청 파싱 ──
      cancelAmount 는 선택값이다. 아예 생략하면 전체 취소로 처리하고,
      결제 금액과 같은 값이 들어와도 전체 취소로 간주한다(STEP2 참고).
      단 0 이나 음수 등 명시적으로 잘못된 값은 오입력이므로 400 으로 거부한다
      (전체 환불로 자동 승격시키지 않는다). */
-  let orderId: string, cancelReason: string;
+  let orderId: string, cancelReason: string, adminPassword: string;
   let cancelAmountRaw: unknown;
   try {
     const body = await req.json();
     orderId         = String(body.orderId ?? '');
     cancelAmountRaw = body.cancelAmount;
     cancelReason    = String(body.cancelReason ?? '관리자 취소');
+    adminPassword   = String(body.adminPassword ?? '');
   } catch {
-    return json({ ok: false, error: 'Invalid JSON body' }, 400);
+    return json({ ok: false, error: 'Invalid JSON body' }, 400, origin);
   }
 
   if (!orderId) {
-    return json({ ok: false, error: 'orderId는 필수입니다.' }, 400);
+    return json({ ok: false, error: 'orderId는 필수입니다.' }, 400, origin);
   }
 
   const hasCancelAmount =
@@ -66,16 +81,31 @@ serve(async (req) => {
   const cancelAmount = hasCancelAmount ? Number(cancelAmountRaw) : 0;
 
   if (cancelAmountRaw !== undefined && cancelAmountRaw !== null && cancelAmountRaw !== '' && !hasCancelAmount) {
-    return json({ ok: false, error: 'cancelAmount가 올바르지 않습니다.' }, 400);
+    return json({ ok: false, error: 'cancelAmount가 올바르지 않습니다.' }, 400, origin);
   }
 
   /* ── 환경변수 ── */
-  const SUPABASE_URL  = Deno.env.get('SUPABASE_URL');
-  const SERVICE_KEY   = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const ADMIN_PASSWORD = Deno.env.get('ADMIN_PASSWORD');
+  const SUPABASE_URL   = Deno.env.get('SUPABASE_URL');
+  const SERVICE_KEY    = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
+  /* ADMIN_PASSWORD 가 없으면 비밀번호를 대조할 방법이 없다.
+     이때 통과시키면 인증이 통째로 우회되므로 요청 자체를 막는다. */
+  if (!ADMIN_PASSWORD) {
+    console.error('[cancel-reservation] ADMIN_PASSWORD 미설정 — 요청 거부');
+    return json({ ok: false, error: '서버 설정 오류' }, 500, origin);
+  }
   if (!SUPABASE_URL || !SERVICE_KEY) {
     console.error('[cancel-reservation] Supabase 환경변수 미설정');
-    return json({ ok: false, error: '서버 설정 오류 (Supabase)' }, 500);
+    return json({ ok: false, error: '서버 설정 오류 (Supabase)' }, 500, origin);
+  }
+
+  /* ── 관리자 인증 ──
+     Toss 환불·DB 변경은 물론 예약 조회보다도 먼저 막는다.
+     (인증 없는 호출에 orderId 존재 여부가 드러나지 않도록) */
+  if (!adminPassword || adminPassword !== ADMIN_PASSWORD) {
+    console.warn(`[cancel-reservation] 인증 실패 — orderId=${orderId}`);
+    return json({ ok: false, error: '인증에 실패했습니다.' }, 401, origin);
   }
   // Toss 시크릿 키는 통화(payment_provider) 확정 후 선택한다(STEP1 아래).
 
@@ -97,25 +127,25 @@ serve(async (req) => {
   if (!resRes.ok) {
     const err = await resRes.text();
     console.error('[cancel-reservation] 예약 조회 실패:', err);
-    return json({ ok: false, error: '예약 조회 중 오류가 발생했습니다.' }, 500);
+    return json({ ok: false, error: '예약 조회 중 오류가 발생했습니다.' }, 500, origin);
   }
 
   const reservations = await resRes.json() as Record<string, unknown>[];
   if (!reservations || reservations.length === 0) {
-    return json({ ok: false, error: '예약을 찾을 수 없습니다.' }, 404);
+    return json({ ok: false, error: '예약을 찾을 수 없습니다.' }, 404, origin);
   }
 
   const r = reservations[0];
   console.log(`[cancel-reservation] 예약 확인: payment_status=${r.payment_status}`);
 
   if (r.payment_status === 'cancelled') {
-    return json({ ok: false, error: '이미 취소된 예약입니다.' }, 400);
+    return json({ ok: false, error: '이미 취소된 예약입니다.' }, 400, origin);
   }
   if (r.payment_status !== 'paid') {
-    return json({ ok: false, error: `취소할 수 없는 상태입니다: ${r.payment_status}` }, 400);
+    return json({ ok: false, error: `취소할 수 없는 상태입니다: ${r.payment_status}` }, 400, origin);
   }
   if (!r.payment_key) {
-    return json({ ok: false, error: 'payment_key가 없습니다. 수동으로 처리해 주세요.' }, 400);
+    return json({ ok: false, error: 'payment_key가 없습니다. 수동으로 처리해 주세요.' }, 400, origin);
   }
 
   /* ── 통화 분기: payment_provider 기준 (기존 원화 예약은 'toss_krw' → 기존 동작 유지) ── */
@@ -125,7 +155,7 @@ serve(async (req) => {
     : Deno.env.get('TOSS_SECRET_KEY');
   if (!TOSS_SECRET) {
     console.error(`[cancel-reservation] ${isUsd ? 'TOSS_WIDGET_SECRET_KEY' : 'TOSS_SECRET_KEY'} 미설정`);
-    return json({ ok: false, error: '서버 설정 오류 (Toss)' }, 500);
+    return json({ ok: false, error: '서버 설정 오류 (Toss)' }, 500, origin);
   }
 
   // 결제 금액 — USD 는 paid_amount(USD) 기준(원화 재환산 금지), 원화는 total_price 기준
@@ -140,7 +170,7 @@ serve(async (req) => {
       error: isUsd
         ? `환불 금액($${cancelAmount.toFixed(2)})이 결제 금액($${paidAmount.toFixed(2)})을 초과합니다.`
         : `환불 금액(${cancelAmount.toLocaleString()}원)이 결제 금액(${paidAmount.toLocaleString()}원)을 초과합니다.`,
-    }, 400);
+    }, 400, origin);
   }
 
   /* 전체 취소 판정 — cancelAmount 미지정이거나 결제 금액 전액이면 전체 취소.
@@ -185,7 +215,7 @@ serve(async (req) => {
     );
   } catch (err) {
     console.error('[cancel-reservation] Toss API 네트워크 오류:', err);
-    return json({ ok: false, error: 'Toss API 연결 실패 — DB는 변경되지 않았습니다.' }, 502);
+    return json({ ok: false, error: 'Toss API 연결 실패 — DB는 변경되지 않았습니다.' }, 502, origin);
   }
 
   const tossData = await tossRes.json();
@@ -195,7 +225,7 @@ serve(async (req) => {
       ok:    false,
       error: tossData.message || 'Toss 결제 취소 실패 — DB는 변경되지 않았습니다.',
       code:  tossData.code,
-    }, 400);
+    }, 400, origin);
   }
 
   console.log('[cancel-reservation] STEP2 Toss 취소 성공 ✓');
@@ -222,7 +252,7 @@ serve(async (req) => {
     return json({
       ok:    false,
       error: 'Toss 취소는 완료됐지만 DB 상태 업데이트에 실패했습니다. 수동으로 payment_status를 cancelled로 변경해 주세요.',
-    }, 500);
+    }, 500, origin);
   }
 
   console.log('[cancel-reservation] STEP3 payment_status 업데이트 완료 ✓');
@@ -302,5 +332,5 @@ serve(async (req) => {
     message:              failedDates.length > 0
       ? `취소 완료. 일부 날짜 재고 복원 실패 (수동 확인 필요): ${failedDates.join(', ')}`
       : '취소 및 재고 복원이 완료되었습니다.',
-  });
+  }, 200, origin);
 });

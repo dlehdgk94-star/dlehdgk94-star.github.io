@@ -954,7 +954,11 @@ function showCancelConfirm(){
         '<div class="cancel-field"><label>' + cur.label + '</label>' +
         '<input type="number" id="cancelAmountInput" value="' + cur.paid + '" min="' + cur.min + '" max="' + cur.paid + '" step="' + cur.step + '"></div>' +
         '<div class="cancel-field"><label>취소 사유 (선택)</label>' +
-        '<input type="text" id="cancelReasonInput" placeholder="예: 고객 요청 취소"></div>';
+        '<input type="text" id="cancelReasonInput" placeholder="예: 고객 요청 취소"></div>' +
+        '<div class="cancel-field"><label>관리자 비밀번호</label>' +
+        '<input type="password" id="cancelPwInput" placeholder="비밀번호 입력" autocomplete="off"></div>' +
+        '<p style="font-size:12px;color:#888;margin-top:-4px;line-height:1.6;">' +
+        '비밀번호는 서버(Edge Function)에서만 검증되며 저장·기록되지 않습니다.</p>';
     document.getElementById('resModalBody').appendChild(section);
     section.scrollIntoView({behavior:'smooth', block:'nearest'});
     document.getElementById('resModalFoot').innerHTML =
@@ -984,6 +988,8 @@ async function submitCancel(){
         alert('환불 금액이 결제 금액(' + cur.fmt(cur.paid) + ')을 초과할 수 없습니다.');
         return;
     }
+    const pw = document.getElementById('cancelPwInput').value;
+    if(!pw){ alert('관리자 비밀번호를 입력하세요.'); document.getElementById('cancelPwInput').focus(); return; }
     const confirmed = confirm(
         '[취소 확인]\n\n' +
         '예약번호: ' + (_currentRes.order_id||'-') + '\n' +
@@ -1001,12 +1007,18 @@ async function submitCancel(){
             {
                 method:'POST',
                 headers:{'Content-Type':'application/json','Authorization':'Bearer sb_publishable_2X3S_RgN_0ipbUtR-zAV6A_yIp1n5PC'},
-                body:JSON.stringify({orderId:_currentRes.order_id, cancelAmount, cancelReason}),
+                /* 비밀번호는 관리자가 직접 입력한 값만 보낸다. 소스에 박힌 ADMIN_PW 상수는 쓰지 않는다
+                   (그 값은 공개 소스에 노출돼 있어 인증 근거가 될 수 없다). */
+                body:JSON.stringify({orderId:_currentRes.order_id, cancelAmount, cancelReason, adminPassword:pw}),
             }
         );
-        const result = await res.json();
-        if(!result.ok){
-            alert('취소 실패: ' + (result.error||'알 수 없는 오류'));
+        const result = await res.json().catch(()=>({}));
+        if(!res.ok || !result.ok){
+            if(res.status === 401){
+                alert('비밀번호가 올바르지 않습니다.');
+            } else {
+                alert('취소 실패: ' + (result.error||('HTTP '+res.status)));
+            }
             if(btn){ btn.textContent='취소 확정'; btn.disabled=false; }
             return;
         }
