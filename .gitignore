@@ -31,9 +31,3 @@ supabase/.temp/
 *.bak[0-9]
 *.bak[0-9][0-9]
 Claude outputs/
-
-# ── 관리자 페이지 (깃허브에 올리지 않음) ──
-# GitHub Pages 는 정적 사이트라 올리는 순간 instarhotel.com/admin.html 로 누구나 접속하고,
-# 소스에 적힌 비밀번호가 그대로 보인다. 파일은 이 폴더에 그대로 두고,
-# Live Server 로 127.0.0.1:5500/admin.html 에서만 연다.
-admin.html

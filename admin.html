@@ -1,0 +1,1309 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 - INSTA HOTEL</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:'Barlow',sans-serif; }
+        body{ background:#f0f2f5; color:rgb(28,28,28); -webkit-font-smoothing:antialiased; }
+
+        /* ── 로그인 ── */
+        #loginScreen{ display:flex; align-items:center; justify-content:center; min-height:100vh; background:rgb(28,28,28); }
+        .login-box{ background:#fff; border-radius:16px; padding:48px 44px; width:380px; }
+        .login-logo{ font-size:22px; font-weight:800; letter-spacing:2px; margin-bottom:6px; }
+        .login-sub{ font-size:13px; color:rgb(112,112,112); margin-bottom:32px; }
+        .login-label{ font-size:13px; font-weight:600; margin-bottom:7px; display:block; }
+        .login-input{ width:100%; height:48px; border:1.5px solid #ddd; border-radius:8px; padding:0 14px; font-size:15px; font-family:'Barlow',sans-serif; outline:none; transition:border-color .2s; }
+        .login-input:focus{ border-color:rgb(28,28,28); }
+        .login-btn{ width:100%; height:50px; background:rgb(28,28,28); color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:700; cursor:pointer; margin-top:20px; font-family:'Barlow',sans-serif; }
+        .login-btn:hover{ background:#333; }
+        .login-error{ display:none; color:#e74c3c; font-size:13px; margin-top:10px; text-align:center; }
+
+        /* ── 관리자 화면 ── */
+        #adminScreen{ display:none; min-height:100vh; }
+        .admin-header{ background:rgb(28,28,28); color:#fff; height:60px; display:flex; align-items:center; justify-content:space-between; padding:0 32px; position:sticky; top:0; z-index:200; }
+        .admin-header-left{ display:flex; align-items:center; gap:14px; }
+        .admin-logo{ font-size:16px; font-weight:800; letter-spacing:2px; }
+        .admin-badge{ background:#00768e; color:#fff; font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; }
+        .logout-btn{ background:transparent; border:1px solid rgba(255,255,255,.3); color:#fff; font-size:12px; padding:6px 14px; border-radius:6px; cursor:pointer; font-family:'Barlow',sans-serif; }
+        .logout-btn:hover{ background:rgba(255,255,255,.1); }
+
+        /* ── 탭 ── */
+        .tab-nav{ background:#fff; border-bottom:2px solid #f0f0f0; display:flex; padding:0 32px; position:sticky; top:60px; z-index:100; }
+        .tab-btn{ padding:16px 22px; font-size:14px; font-weight:600; cursor:pointer; border:none; background:none; color:rgb(112,112,112); border-bottom:2px solid transparent; margin-bottom:-2px; transition:color .2s, border-color .2s; font-family:'Barlow',sans-serif; }
+        .tab-btn.active{ color:rgb(28,28,28); border-bottom-color:rgb(28,28,28); }
+        .tab-btn i{ margin-right:7px; }
+
+        /* ── 공통 컨테이너 ── */
+        .admin-body{ max-width:none; margin:0 auto; padding:28px 32px 80px; }
+        .tab-panel{ display:none; }
+        .tab-panel.active{ display:block; }
+
+        /* ── 통계 카드 ── */
+        .stats-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+        .stat-card{ background:#fff; border-radius:12px; padding:22px 24px; border:1px solid #e8e8e8; }
+        .stat-label{ font-size:12px; color:rgb(112,112,112); margin-bottom:10px; display:flex; align-items:center; gap:8px; font-weight:600; text-transform:uppercase; letter-spacing:.3px; }
+        .stat-icon{ width:30px; height:30px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+        .stat-value{ font-size:26px; font-weight:800; color:rgb(28,28,28); }
+        .stat-unit{ font-size:13px; font-weight:500; }
+        .ic-blue{ background:#e8f4fd; color:#2980b9; }
+        .ic-green{ background:#eafaf1; color:#27ae60; }
+        .ic-orange{ background:#fef9e7; color:#f39c12; }
+        .ic-purple{ background:#f4ecfb; color:#8e44ad; }
+
+        /* ── 필터 바 ── */
+        .filter-bar{ background:#fff; border-radius:12px; padding:16px 20px; border:1px solid #e8e8e8; margin-bottom:14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+        .fi{ height:40px; border:1.5px solid #ddd; border-radius:8px; padding:0 12px; font-size:13px; font-family:'Barlow',sans-serif; outline:none; transition:border-color .2s; background:#fff; }
+        .fi:focus{ border-color:rgb(28,28,28); }
+        .fi-search{ width:220px; }
+        .fi-select{ cursor:pointer; }
+        .fi-btn{ height:40px; padding:0 16px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Barlow',sans-serif; border:none; }
+        .fi-btn-dark{ background:rgb(28,28,28); color:#fff; }
+        .fi-btn-dark:hover{ background:#333; }
+        .fi-btn-light{ background:#f4f4f4; color:rgb(112,112,112); }
+        .fi-btn-light:hover{ background:#e8e8e8; }
+        .filter-count{ margin-left:auto; font-size:13px; color:rgb(112,112,112); white-space:nowrap; }
+
+        /* ── 테이블 카드 ── */
+        .table-card{ background:#fff; border-radius:12px; border:1px solid #e8e8e8; overflow:hidden; }
+        .table-card-header{ padding:18px 22px 14px; border-bottom:1px solid #f0f0f0; display:flex; align-items:center; justify-content:space-between; }
+        .table-card-title{ font-size:15px; font-weight:700; }
+        .refresh-btn{ display:flex; align-items:center; gap:6px; background:#f4f4f4; border:none; border-radius:8px; padding:7px 14px; font-size:12px; font-weight:600; cursor:pointer; font-family:'Barlow',sans-serif; }
+        .refresh-btn:hover{ background:#e8e8e8; }
+        table{ width:100%; border-collapse:collapse; font-size:13px; }
+        thead tr{ background:#f8f8f8; }
+        th{ padding:11px 14px; text-align:left; font-size:11px; font-weight:700; color:rgb(112,112,112); text-transform:uppercase; letter-spacing:.5px; white-space:nowrap; border-bottom:1px solid #f0f0f0; }
+        td{ padding:13px 14px; border-bottom:1px solid #f8f8f8; vertical-align:middle; }
+        tbody tr{ cursor:pointer; transition:background .15s; }
+        tbody tr:hover{ background:#fafafa; }
+        tbody tr:last-child td{ border-bottom:none; }
+        /* 예약자명·연락처가 비어 저장된 행 — 프런트가 즉시 확인해야 함 */
+        tbody tr.row-missing-guest{ background:#fdf2f2; box-shadow:inset 3px 0 0 #e74c3c; }
+        tbody tr.row-missing-guest:hover{ background:#fbe6e6; }
+        tbody tr.row-missing-guest td{ color:#c0392b; }
+        .order-id-cell{ font-family:monospace; font-size:11px; color:rgb(112,112,112); max-width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .room-cell{ color:#00768e; font-weight:600; }
+        .cur-tag{ display:inline-block; margin-left:5px; background:#eef4f6; color:#00768e; font-size:10px; font-weight:700; padding:1px 5px; border-radius:4px; vertical-align:1px; letter-spacing:0.3px; }
+        .badge-paid{ display:inline-block; background:#eafaf1; color:#27ae60; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
+        .badge-pending{ display:inline-block; background:#fef9e7; color:#f39c12; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
+        .badge-cancelled{ display:inline-block; background:#fdf2f2; color:#e74c3c; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
+        .badge-overbooked{ display:inline-block; background:#e74c3c; color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
+        .overbook-alert{ background:#fff0f0; border:2px solid #e74c3c; border-radius:10px; padding:14px 20px; margin-bottom:16px; color:#c0392b; font-weight:700; font-size:14px; display:flex; align-items:flex-start; gap:12px; }
+        .overbook-alert i{ font-size:18px; flex-shrink:0; margin-top:1px; }
+        .empty-state{ padding:60px 20px; text-align:center; color:rgb(112,112,112); }
+        .empty-state i{ font-size:36px; margin-bottom:14px; display:block; color:#ddd; }
+        .loading-state{ padding:60px 20px; text-align:center; color:rgb(112,112,112); }
+        .loading-state i{ font-size:28px; margin-bottom:12px; display:block; color:#ddd; animation:spin 1s linear infinite; }
+        @keyframes spin{ to{ transform:rotate(360deg); } }
+
+        /* ── 취소 확인 섹션 ── */
+        .cancel-confirm-section{ margin-top:20px; border-top:2px solid #fde8e8; padding-top:18px; }
+        .cancel-confirm-title{ font-size:13px; font-weight:700; color:#e74c3c; margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+        .cancel-field{ margin-bottom:14px; }
+        .cancel-field label{ font-size:12px; font-weight:600; color:rgb(112,112,112); display:block; margin-bottom:6px; }
+        .cancel-field input{ width:100%; height:42px; border:1.5px solid #ddd; border-radius:8px; padding:0 12px; font-size:14px; font-family:'Barlow',sans-serif; outline:none; transition:border-color .2s; }
+        .cancel-field input:focus{ border-color:#e74c3c; }
+        .cancel-warning{ background:#fff5f5; border:1px solid #fcc; border-radius:8px; padding:12px 14px; font-size:12px; color:#c0392b; line-height:1.7; margin-bottom:14px; }
+        .m-btn-danger{ background:#e74c3c; color:#fff; }
+        .m-btn-danger:hover{ background:#c0392b; }
+
+        /* ── 재고·요금 관리 ── */
+        .inv-top{ background:#fff; border-radius:12px; border:1px solid #e8e8e8; padding:16px 20px; margin-bottom:14px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+        .month-nav{ display:flex; align-items:center; gap:10px; }
+        .month-nav-btn{ width:34px; height:34px; border-radius:8px; border:1.5px solid #ddd; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; transition:background .15s; }
+        .month-nav-btn:hover{ background:#f4f4f4; }
+        .month-label{ font-size:16px; font-weight:700; min-width:110px; text-align:center; }
+        .bulk-btn{ display:flex; align-items:center; gap:7px; height:38px; padding:0 16px; background:rgb(28,28,28); color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Barlow',sans-serif; margin-left:auto; }
+        .bulk-btn:hover{ background:#333; }
+        .inv-legend{ display:flex; gap:18px; align-items:center; margin-bottom:12px; font-size:12px; color:rgb(112,112,112); padding:0 2px; }
+        .legend-dot{ width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:4px; }
+        .dot-avail{ background:#27ae60; }
+        .dot-closed{ background:#e74c3c; }
+        .dot-none{ background:#ddd; }
+
+        /* ── 스프레드시트 ── */
+        .inv-sheet-wrap{ background:#fff; border-radius:12px; border:1px solid #e8e8e8; overflow:hidden; }
+        .inv-scroll{ overflow-x:auto; }
+        .inv-table{ border-collapse:collapse; min-width:max-content; width:100%; }
+        .inv-table th, .inv-table td{ border:1px solid #eee; }
+        .th-room{ position:sticky; left:0; z-index:6; background:#f8f8f8; min-width:108px; padding:10px 14px; font-size:12px; font-weight:700; color:rgb(112,112,112); text-transform:uppercase; letter-spacing:.3px; border-right:2px solid #e0e0e0; white-space:nowrap; }
+        .th-date{ min-width:106px; width:106px; text-align:center; padding:8px 4px; font-size:12px; font-weight:700; background:#f8f8f8; white-space:nowrap; }
+        .th-date .d-num{ font-size:14px; font-weight:800; display:block; line-height:1; margin-bottom:2px; }
+        .th-date .d-dow{ font-size:10px; font-weight:600; }
+        .th-date.th-sun .d-num, .th-date.th-sun .d-dow{ color:#e74c3c; }
+        .th-date.th-sat .d-num, .th-date.th-sat .d-dow{ color:#2980b9; }
+        .th-date.th-today{ background:#e8f4fd; }
+        .td-room{ position:sticky; left:0; z-index:5; background:#fff; padding:0 14px; font-size:13px; font-weight:700; color:rgb(28,28,28); border-right:2px solid #e0e0e0; white-space:nowrap; min-width:108px; }
+        .td-room span{ display:block; font-size:10px; font-weight:500; color:rgb(112,112,112); margin-top:2px; }
+        .inv-cell{ width:106px; height:88px; text-align:center; cursor:pointer; padding:8px 6px; vertical-align:middle; transition:filter .12s; }
+        .inv-cell:hover{ filter:brightness(.93); }
+        .inv-cell.c-none{ background:#fafafa; }
+        .inv-cell.c-avail{ background:#f0faf5; }
+        .inv-cell.c-closed{ background:#fff2f2; }
+        .inv-cell.c-past{ opacity:.5; }
+        .inv-cell.c-today{ outline:2px solid #00768e; outline-offset:-2px; }
+        .ic-price{ font-size:13px; font-weight:800; color:rgb(28,28,28); display:block; line-height:1.2; white-space:nowrap; }
+        .ic-stock{ font-size:11px; color:#333; display:block; margin-top:4px; }
+        .ic-dot{ width:7px; height:7px; border-radius:50%; display:inline-block; margin-top:5px; }
+        .ic-dot-avail{ background:#27ae60; }
+        .ic-dot-closed{ background:#e74c3c; }
+        .ic-dot-none{ background:#ccc; }
+        .inv-loading{ padding:80px 20px; text-align:center; color:#bbb; }
+        .inv-loading i{ font-size:28px; display:block; margin-bottom:12px; animation:spin 1s linear infinite; }
+
+        /* ── 모달 공통 ── */
+        .modal-overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:9999; align-items:center; justify-content:center; padding:20px; }
+        .modal-overlay.open{ display:flex; }
+        .modal-box{ background:#fff; border-radius:16px; width:100%; display:flex; flex-direction:column; max-height:90vh; overflow:hidden; }
+        .modal-box-sm{ max-width:480px; }
+        .modal-box-md{ max-width:560px; }
+        .modal-head{ display:flex; align-items:center; justify-content:space-between; padding:20px 26px 16px; border-bottom:1px solid #ebebeb; }
+        .modal-head h3{ font-size:16px; font-weight:700; }
+        .modal-close-x{ background:none; border:none; font-size:20px; cursor:pointer; color:rgb(112,112,112); padding:2px 6px; line-height:1; }
+        .modal-close-x:hover{ color:rgb(28,28,28); }
+        .modal-body{ padding:22px 26px; overflow-y:auto; }
+        .modal-foot{ padding:14px 26px; border-top:1px solid #ebebeb; display:flex; justify-content:flex-end; gap:10px; }
+        .m-btn{ height:44px; padding:0 22px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Barlow',sans-serif; border:none; }
+        .m-btn-dark{ background:rgb(28,28,28); color:#fff; }
+        .m-btn-dark:hover{ background:#333; }
+        .m-btn-light{ background:#f4f4f4; color:rgb(112,112,112); }
+        .m-btn-light:hover{ background:#e8e8e8; }
+        .m-btn-teal{ background:#00768e; color:#fff; }
+        .m-btn-teal:hover{ background:#005f73; }
+
+        /* 날짜 편집 모달 */
+        .date-modal-date{ font-size:17px; font-weight:700; margin-bottom:20px; color:rgb(28,28,28); }
+        .avail-toggle-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid #f0f0f0; }
+        .avail-toggle-label{ font-size:14px; font-weight:600; }
+        .avail-toggle{ display:flex; border-radius:8px; overflow:hidden; border:1.5px solid #ddd; }
+        .avail-toggle button{ height:38px; padding:0 18px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Barlow',sans-serif; border:none; background:#fff; color:rgb(112,112,112); transition:all .15s; }
+        .avail-toggle button.sel-avail{ background:#27ae60; color:#fff; }
+        .avail-toggle button.sel-closed{ background:#e74c3c; color:#fff; }
+        .edit-form-group{ margin-bottom:16px; }
+        .edit-form-group:last-child{ margin-bottom:0; }
+        .edit-form-label{ font-size:13px; font-weight:600; margin-bottom:7px; display:block; }
+        .edit-form-input{ width:100%; height:46px; border:1.5px solid #ddd; border-radius:8px; padding:0 14px; font-size:15px; font-family:'Barlow',sans-serif; outline:none; transition:border-color .2s; }
+        .edit-form-input:focus{ border-color:rgb(28,28,28); }
+        .input-prefix{ position:relative; }
+        .input-prefix span{ position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:14px; color:rgb(112,112,112); pointer-events:none; }
+        .input-prefix input{ padding-left:28px; }
+
+        /* 일괄 설정 모달 */
+        .bulk-form-group{ margin-bottom:18px; }
+        .bulk-label{ font-size:13px; font-weight:600; margin-bottom:7px; display:block; }
+        .bulk-input{ width:100%; height:44px; border:1.5px solid #ddd; border-radius:8px; padding:0 14px; font-size:14px; font-family:'Barlow',sans-serif; outline:none; transition:border-color .2s; }
+        .bulk-input:focus{ border-color:rgb(28,28,28); }
+        .bulk-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        .dow-checks{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+        .dow-check{ display:none; }
+        .dow-check-label{ display:flex; align-items:center; justify-content:center; width:40px; height:36px; border-radius:8px; border:1.5px solid #ddd; font-size:12px; font-weight:700; cursor:pointer; transition:all .15s; color:rgb(112,112,112); }
+        .dow-check-label.sun{ color:#e74c3c; }
+        .dow-check-label.sat{ color:#2980b9; }
+        .dow-check:checked + .dow-check-label{ background:rgb(28,28,28); color:#fff; border-color:rgb(28,28,28); }
+        .dow-check:checked + .dow-check-label.sun{ background:#e74c3c; border-color:#e74c3c; }
+        .dow-check:checked + .dow-check-label.sat{ background:#2980b9; border-color:#2980b9; }
+        .bulk-hint{ font-size:12px; color:rgb(112,112,112); margin-top:5px; }
+
+        /* 예약 상세 모달 */
+        .modal-section-title{ font-size:11px; font-weight:700; color:rgb(112,112,112); text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid #f0f0f0; }
+        .modal-section{ margin-bottom:20px; }
+        .modal-row{ display:flex; justify-content:space-between; padding:8px 0; font-size:14px; border-bottom:1px solid #f8f8f8; }
+        .modal-row:last-child{ border-bottom:none; }
+        .modal-key{ color:rgb(112,112,112); }
+        .modal-val{ font-weight:600; text-align:right; max-width:300px; word-break:break-all; }
+
+        /* 저장 토스트 */
+        #saveToast{ position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px); background:rgb(28,28,28); color:#fff; padding:12px 24px; border-radius:10px; font-size:13px; font-weight:600; opacity:0; transition:all .3s; pointer-events:none; z-index:99999; }
+        #saveToast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+        @media(max-width:900px){
+            .stats-grid{ grid-template-columns:1fr 1fr; }
+            .cal-cell{ min-height:80px; padding:7px 8px; }
+        }
+    </style>
+    <script src="js/roomPricing.js?v=20260731"></script>
+</head>
+<body>
+
+<!-- ── 로그인 ── -->
+<div id="loginScreen">
+    <div class="login-box">
+        <div class="login-logo">INSTA HOTEL</div>
+        <div class="login-sub">관리자 페이지</div>
+        <label class="login-label">비밀번호</label>
+        <input class="login-input" id="pwInput" type="password" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="login-btn" onclick="doLogin()">로그인</button>
+        <div class="login-error" id="loginError">비밀번호가 올바르지 않습니다.</div>
+    </div>
+</div>
+
+<!-- ── 관리자 화면 ── -->
+<div id="adminScreen">
+    <header class="admin-header">
+        <div class="admin-header-left">
+            <span class="admin-logo">INSTA HOTEL</span>
+            <span class="admin-badge">ADMIN</span>
+        </div>
+        <button class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</button>
+    </header>
+
+    <nav class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('dashboard')"><i class="fa-solid fa-gauge"></i>대시보드</button>
+        <button class="tab-btn" onclick="switchTab('reservations')"><i class="fa-solid fa-list"></i>예약 목록</button>
+        <button class="tab-btn" onclick="switchTab('inventory')"><i class="fa-solid fa-calendar-days"></i>재고·요금 관리</button>
+        <button class="tab-btn" onclick="switchTab('rates')"><i class="fa-solid fa-dollar-sign"></i>환율 설정</button>
+    </nav>
+
+    <div class="admin-body">
+
+        <!-- ───── 대시보드 ───── -->
+        <div class="tab-panel active" id="panel-dashboard">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label"><span class="stat-icon ic-blue"><i class="fa-solid fa-calendar-check"></i></span>전체 예약</div>
+                    <div class="stat-value" id="statTotal">—<span class="stat-unit"> 건</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label"><span class="stat-icon ic-green"><i class="fa-solid fa-won-sign"></i></span>전체 매출</div>
+                    <div class="stat-value" id="statRevenue">—</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label"><span class="stat-icon ic-orange"><i class="fa-solid fa-calendar-days"></i></span>이번 달 예약</div>
+                    <div class="stat-value" id="statMonthly">—<span class="stat-unit"> 건</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label"><span class="stat-icon ic-purple"><i class="fa-solid fa-chart-line"></i></span>이번 달 매출</div>
+                    <div class="stat-value" id="statMonthlyRev">—</div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-card-header">
+                    <span class="table-card-title">최근 예약</span>
+                    <button class="refresh-btn" onclick="loadReservations()"><i class="fa-solid fa-arrows-rotate"></i> 새로고침</button>
+                </div>
+                <div id="recentTableArea">
+                    <div class="loading-state"><i class="fa-solid fa-circle-notch"></i><p>불러오는 중...</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ───── 예약 목록 ───── -->
+        <div class="tab-panel" id="panel-reservations">
+            <div id="overbookAlert" style="display:none;"></div>
+            <div class="filter-bar">
+                <input class="fi fi-search" id="searchInput" type="text" placeholder="이름·이메일·예약번호 검색..." oninput="applyFilter()">
+                <select class="fi fi-select" id="filterRoom" onchange="applyFilter()">
+                    <option value="">전체 객실</option>
+                    <option>이코노미 룸</option><option>스탠다드 룸 (디자인 랜덤배정)</option><option>디럭스 룸 (디자인 랜덤배정)</option>
+                    <option>트윈 룸</option><option>스페셜 룸</option><option>루비 룸</option>
+                </select>
+                <select class="fi fi-select" id="filterStatus" onchange="applyFilter()">
+                    <option value="">전체 상태</option>
+                    <option value="paid">결제 완료</option>
+                    <option value="pending">대기 중</option>
+                    <option value="cancelled">취소됨</option>
+                    <option value="overbooked">⚠ 오버부킹</option>
+                </select>
+                <input class="fi" id="filterDateFrom" type="date" onchange="applyFilter()" title="체크인 시작">
+                <input class="fi" id="filterDateTo"   type="date" onchange="applyFilter()" title="체크인 종료">
+                <button class="fi-btn fi-btn-light" onclick="resetFilter()"><i class="fa-solid fa-rotate-left"></i> 초기화</button>
+                <span class="filter-count" id="filterCount"></span>
+            </div>
+            <div class="table-card">
+                <div class="table-card-header">
+                    <span class="table-card-title">예약 목록</span>
+                    <button class="refresh-btn" onclick="loadReservations()"><i class="fa-solid fa-arrows-rotate"></i> 새로고침</button>
+                </div>
+                <div id="fullTableArea">
+                    <div class="loading-state"><i class="fa-solid fa-circle-notch"></i><p>불러오는 중...</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ───── 재고·요금 관리 ───── -->
+        <div class="tab-panel" id="panel-inventory">
+            <div class="inv-top">
+                <div class="month-nav">
+                    <button class="month-nav-btn" onclick="changeMonth(-1)">&#8249;</button>
+                    <span class="month-label" id="invMonthLabel"></span>
+                    <button class="month-nav-btn" onclick="changeMonth(1)">&#8250;</button>
+                </div>
+                <div class="inv-legend" style="margin:0;">
+                    <span><span class="legend-dot dot-avail"></span>판매가능</span>
+                    <span><span class="legend-dot dot-closed"></span>마감</span>
+                    <span><span class="legend-dot dot-none"></span>미설정</span>
+                </div>
+                <button class="bulk-btn" onclick="openBulkModal()"><i class="fa-solid fa-wand-magic-sparkles"></i> 일괄 설정</button>
+            </div>
+            <div class="inv-sheet-wrap">
+                <div class="inv-scroll">
+                    <div id="invSheetArea">
+                        <div class="inv-loading"><i class="fa-solid fa-circle-notch"></i><p>불러오는 중...</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ───── 환율 설정 ───── -->
+        <div class="tab-panel" id="panel-rates">
+            <div class="table-card" style="margin-bottom:20px;">
+                <div class="table-card-header">
+                    <span class="table-card-title">USD 환율 · 마크업 설정</span>
+                    <button class="refresh-btn" onclick="loadRates()"><i class="fa-solid fa-arrows-rotate"></i> 새로고침</button>
+                </div>
+                <div style="padding:20px 22px;">
+                    <div id="ratesCurrent" style="display:flex;gap:28px;flex-wrap:wrap;font-size:14px;color:#333;margin-bottom:22px;">
+                        <span>불러오는 중...</span>
+                    </div>
+
+                    <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;">
+                        <div>
+                            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">환율 (usd_rate, 500~3000)</label>
+                            <input class="login-input" id="rateInput" type="number" step="1" min="500" max="3000" style="width:180px;height:44px;" oninput="renderRatePreview()">
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">마크업 (usd_markup, 1.0~2.0)</label>
+                            <input class="login-input" id="markupInput" type="number" step="0.01" min="1.0" max="2.0" style="width:180px;height:44px;" oninput="renderRatePreview()">
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">관리자 비밀번호</label>
+                            <input class="login-input" id="ratePwInput" type="password" placeholder="비밀번호 입력" autocomplete="off" style="width:200px;height:44px;">
+                        </div>
+                        <button class="bulk-btn" id="rateSaveBtn" onclick="saveRates()" style="height:44px;"><i class="fa-solid fa-floppy-disk"></i> 저장</button>
+                    </div>
+                    <p style="font-size:12px;color:#888;margin-top:12px;line-height:1.6;">
+                        비밀번호는 저장 시 서버(Edge Function)에서만 검증되며 저장·기록되지 않습니다.<br>
+                        계산식: <code>USD = Math.ceil((KRW × 마크업 ÷ 환율) × 2) / 2</code> (0.50 단위 올림)
+                    </p>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-card-header">
+                    <span class="table-card-title">객실별 KRW → USD 환산 미리보기</span>
+                    <span class="filter-count" id="ratePreviewNote"></span>
+                </div>
+                <div id="ratePreviewArea">
+                    <div class="loading-state"><i class="fa-solid fa-circle-notch"></i><p>불러오는 중...</p></div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- .admin-body -->
+</div><!-- #adminScreen -->
+
+<!-- ── 예약 상세 모달 ── -->
+<div class="modal-overlay" id="resModal" onclick="if(event.target===this)closeResModal()">
+    <div class="modal-box modal-box-md">
+        <div class="modal-head"><h3>예약 상세 정보</h3><button class="modal-close-x" onclick="closeResModal()">✕</button></div>
+        <div class="modal-body" id="resModalBody"></div>
+        <div class="modal-foot" id="resModalFoot"><button class="m-btn m-btn-dark" onclick="closeResModal()">닫기</button></div>
+    </div>
+</div>
+
+<!-- ── 날짜 편집 모달 ── -->
+<div class="modal-overlay" id="dateModal" onclick="if(event.target===this)closeDateModal()">
+    <div class="modal-box modal-box-sm">
+        <div class="modal-head"><h3 id="dateModalTitle">날짜 설정</h3><button class="modal-close-x" onclick="closeDateModal()">✕</button></div>
+        <div class="modal-body">
+            <div class="avail-toggle-row">
+                <span class="avail-toggle-label">판매 상태</span>
+                <div class="avail-toggle">
+                    <button id="btnAvail"  onclick="setAvail(true)">판매 가능</button>
+                    <button id="btnClosed" onclick="setAvail(false)">마감</button>
+                </div>
+            </div>
+            <div class="edit-form-group">
+                <label class="edit-form-label">가격 (원)</label>
+                <div class="input-prefix"><span>₩</span><input class="edit-form-input" id="editPrice" type="number" min="0" step="1000" placeholder="예: 150000"></div>
+            </div>
+            <div class="edit-form-group">
+                <label class="edit-form-label">재고 수량 (객실 수)</label>
+                <input class="edit-form-input" id="editStock" type="number" min="0" step="1" placeholder="예: 3">
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button class="m-btn m-btn-light" onclick="closeDateModal()">취소</button>
+            <button class="m-btn m-btn-dark" onclick="saveDateEdit()"><i class="fa-solid fa-floppy-disk"></i> 저장</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── 일괄 설정 모달 ── -->
+<div class="modal-overlay" id="bulkModal" onclick="if(event.target===this)closeBulkModal()">
+    <div class="modal-box modal-box-sm">
+        <div class="modal-head"><h3>일괄 설정</h3><button class="modal-close-x" onclick="closeBulkModal()">✕</button></div>
+        <div class="modal-body">
+            <div class="bulk-form-group">
+                <label class="bulk-label">적용 객실</label>
+                <div class="dow-checks">
+                    <input class="dow-check" type="checkbox" id="br-edelweiss" value="edelweiss" checked><label class="dow-check-label" for="br-edelweiss" style="width:auto;padding:0 10px;font-size:11px;">이코노미</label>
+                    <input class="dow-check" type="checkbox" id="br-aurora"    value="aurora"    checked><label class="dow-check-label" for="br-aurora"    style="width:auto;padding:0 10px;font-size:11px;">스탠다드</label>
+                    <input class="dow-check" type="checkbox" id="br-glorio"    value="glorio"    checked><label class="dow-check-label" for="br-glorio"    style="width:auto;padding:0 10px;font-size:11px;">디럭스</label>
+                    <input class="dow-check" type="checkbox" id="br-envidion"  value="envidion"  checked><label class="dow-check-label" for="br-envidion"  style="width:auto;padding:0 10px;font-size:11px;">트윈</label>
+                    <input class="dow-check" type="checkbox" id="br-special"   value="special"   checked><label class="dow-check-label" for="br-special"   style="width:auto;padding:0 10px;font-size:11px;">스페셜</label>
+                    <input class="dow-check" type="checkbox" id="br-ruby"      value="ruby"      checked><label class="dow-check-label" for="br-ruby"      style="width:auto;padding:0 10px;font-size:11px;">루비</label>
+                </div>
+            </div>
+            <div class="bulk-row bulk-form-group">
+                <div>
+                    <label class="bulk-label">시작 날짜</label>
+                    <input class="bulk-input" id="bulkFrom" type="date">
+                </div>
+                <div>
+                    <label class="bulk-label">종료 날짜</label>
+                    <input class="bulk-input" id="bulkTo" type="date">
+                </div>
+            </div>
+            <div class="bulk-form-group">
+                <label class="bulk-label">적용 요일</label>
+                <div class="dow-checks">
+                    <input class="dow-check" type="checkbox" id="dow0" value="0" checked><label class="dow-check-label sun" for="dow0">일</label>
+                    <input class="dow-check" type="checkbox" id="dow1" value="1" checked><label class="dow-check-label" for="dow1">월</label>
+                    <input class="dow-check" type="checkbox" id="dow2" value="2" checked><label class="dow-check-label" for="dow2">화</label>
+                    <input class="dow-check" type="checkbox" id="dow3" value="3" checked><label class="dow-check-label" for="dow3">수</label>
+                    <input class="dow-check" type="checkbox" id="dow4" value="4" checked><label class="dow-check-label" for="dow4">목</label>
+                    <input class="dow-check" type="checkbox" id="dow5" value="5" checked><label class="dow-check-label" for="dow5">금</label>
+                    <input class="dow-check" type="checkbox" id="dow6" value="6" checked><label class="dow-check-label sat" for="dow6">토</label>
+                </div>
+            </div>
+            <div class="bulk-form-group">
+                <label class="bulk-label">판매 상태</label>
+                <select class="bulk-input" id="bulkAvail">
+                    <option value="true">판매 가능</option>
+                    <option value="false">마감</option>
+                </select>
+            </div>
+            <div class="bulk-row bulk-form-group">
+                <div>
+                    <label class="bulk-label">가격 (원)</label>
+                    <input class="bulk-input" id="bulkPrice" type="number" min="0" step="1000" placeholder="비우면 유지">
+                    <div class="bulk-hint">비워두면 기존 가격 유지</div>
+                </div>
+                <div>
+                    <label class="bulk-label">재고 수량</label>
+                    <input class="bulk-input" id="bulkStock" type="number" min="0" step="1" placeholder="비우면 유지">
+                    <div class="bulk-hint">비워두면 기존 수량 유지</div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button class="m-btn m-btn-light" onclick="closeBulkModal()">취소</button>
+            <button class="m-btn m-btn-teal" onclick="applyBulkEdit()"><i class="fa-solid fa-wand-magic-sparkles"></i> 일괄 적용</button>
+        </div>
+    </div>
+</div>
+
+<!-- 저장 토스트 -->
+<div id="saveToast">저장되었습니다 ✓</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ════════════════════════════════════════
+   설정
+════════════════════════════════════════ */
+const ADMIN_PW = 'azaz1018';
+const _sb = window.supabase.createClient(
+    'https://lbhdujheuokkmiowobzu.supabase.co',
+    'sb_publishable_2X3S_RgN_0ipbUtR-zAV6A_yIp1n5PC'
+);
+
+// 요금표(ROOM_PRICING)·객실순서(ROOM_ORDER)·요일요금(getNightRate)는 js/roomPricing.js 로 단일화됨
+function defPrice(roomId, dateStr){
+    const p = ROOM_PRICING[roomId].prices;
+    const dow = new Date(dateStr+'T00:00:00').getDay();
+    return dow===6 ? p[2] : dow===5 ? p[1] : p[0];
+}
+const COUNTRIES = {
+    KR:'대한민국',US:'미국',JP:'일본',CN:'중국',GB:'영국',
+    FR:'프랑스',DE:'독일',AU:'호주',CA:'캐나다',SG:'싱가포르',
+    TH:'태국',VN:'베트남',PH:'필리핀',MY:'말레이시아',ID:'인도네시아',IN:'인도',OTHER:'기타'
+};
+const DAYS_KO = ['일','월','화','수','목','금','토'];
+
+/* ════════════════════════════════════════
+   로그인
+════════════════════════════════════════ */
+function doLogin(){
+    if(document.getElementById('pwInput').value === ADMIN_PW){
+        sessionStorage.setItem('adminAuth','1');
+        sessionStorage.removeItem('adminTab');
+        sessionStorage.removeItem('invScrollLeft');
+        document.getElementById('loginScreen').style.display='none';
+        document.getElementById('adminScreen').style.display='block';
+        loadReservations();
+        initInventory();
+    } else {
+        document.getElementById('loginError').style.display='block';
+        document.getElementById('pwInput').value='';
+        document.getElementById('pwInput').focus();
+    }
+}
+function doLogout(){ sessionStorage.removeItem('adminAuth'); location.reload(); }
+
+if(sessionStorage.getItem('adminAuth')==='1'){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('adminScreen').style.display='block';
+}
+
+/* ════════════════════════════════════════
+   탭 전환
+════════════════════════════════════════ */
+function switchTab(id){
+    document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['dashboard','reservations','inventory','rates'][i]===id));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-'+id).classList.add('active');
+    sessionStorage.setItem('adminTab', id);
+    if (id === 'inventory') setTimeout(_applyInvScroll, 0);
+    if (id === 'rates') loadRates();
+}
+
+/* ════════════════════════════════════════
+   환율 설정 (usd_rate / usd_markup)
+   - 조회: anon SELECT (app_settings, rooms)
+   - 저장: update-app-setting Edge Function (service_role) 경유
+════════════════════════════════════════ */
+const UPDATE_SETTING_URL = 'https://lbhdujheuokkmiowobzu.supabase.co/functions/v1/update-app-setting';
+let _ratesData = { usd_rate: null, usd_markup: null, updated_at: null };
+// ★ 미리보기 요금 출처 = 실제 결제와 '동일한' 공용 요금표(js/roomPricing.js 의 ROOM_PRICING) + 동일한 요일 로직.
+//   · 실제 청구(index.html/rooms.html): 숙박일마다 room_inventory.price 가 있으면 그 값,
+//     없으면 이 공용 기본표로 fallback (index/rooms/admin 이 동일 파일을 참조).
+//   · 요일 로직(getNightRate/defPrice 와 동일): 토=prices[2], 금=prices[1], 그 외 평일=prices[0].
+//   · rooms 테이블 base_price/weekend_price 는 이 결제 플로우 어디에서도 참조되지 않는 미사용 컬럼.
+
+function _rEsc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// USD = Math.ceil((KRW * markup / rate) * 2) / 2  (0.50 단위 올림)
+function usdFromKrw(krw, rate, markup){
+    if(!krw || !rate || !markup) return null;
+    // 정수 연산 기반(currency.js krwToUsd 와 동일): markup 적용액을 원 단위로 먼저 반올림해
+    // 부동소수점 노이즈 제거 → 108000 이 $88.50이 아닌 $88.00 으로 정확히 계산됨.
+    var won = Math.round(krw * markup);
+    return Math.ceil((won / rate) * 2) / 2;
+}
+function fmtUsd(v){ return v==null ? '-' : '$' + v.toFixed(2); }
+
+async function loadRates(){
+    document.getElementById('ratesCurrent').innerHTML = '<span>불러오는 중...</span>';
+    document.getElementById('ratePreviewArea').innerHTML =
+        '<div class="loading-state"><i class="fa-solid fa-circle-notch"></i><p>불러오는 중...</p></div>';
+
+    const { data:settings, error:sErr } =
+        await _sb.from('app_settings').select('key,value,updated_at').in('key', ['usd_rate','usd_markup']);
+
+    if(sErr){
+        document.getElementById('ratesCurrent').innerHTML =
+            '<span style="color:#e74c3c;">환율 설정 조회 실패: ' + _rEsc(sErr.message) + '</span>';
+        return;
+    }
+
+    let updatedAt = null;
+    (settings||[]).forEach(row => {
+        if(row.key === 'usd_rate')   _ratesData.usd_rate   = Number(row.value);
+        if(row.key === 'usd_markup') _ratesData.usd_markup = Number(row.value);
+        if(row.updated_at && (!updatedAt || row.updated_at > updatedAt)) updatedAt = row.updated_at;
+    });
+    _ratesData.updated_at = updatedAt;
+
+    const updLabel = updatedAt ? new Date(updatedAt).toLocaleString('ko-KR', { timeZone:'Asia/Seoul' }) : '-';
+    document.getElementById('ratesCurrent').innerHTML =
+        '<span><strong>현재 환율</strong> · usd_rate = <b style="font-size:16px;">' + (_ratesData.usd_rate ?? '-') + '</b></span>' +
+        '<span><strong>현재 마크업</strong> · usd_markup = <b style="font-size:16px;">' + (_ratesData.usd_markup ?? '-') + '</b></span>' +
+        '<span style="color:#888;"><i class="fa-regular fa-clock"></i> 마지막 수정: ' + _rEsc(updLabel) + '</span>';
+
+    // 입력 필드 기본값 = 현재값
+    document.getElementById('rateInput').value   = _ratesData.usd_rate ?? '';
+    document.getElementById('markupInput').value = _ratesData.usd_markup ?? '';
+
+    renderRatePreview();
+}
+
+function renderRatePreview(){
+    const rate   = parseFloat(document.getElementById('rateInput').value);
+    const markup = parseFloat(document.getElementById('markupInput').value);
+    const area = document.getElementById('ratePreviewArea');
+    const note = document.getElementById('ratePreviewNote');
+
+    const dirty = (rate !== _ratesData.usd_rate) || (markup !== _ratesData.usd_markup);
+    note.textContent = dirty ? '※ 미저장 입력값 기준 미리보기' : '저장된 값 기준';
+    note.style.color = dirty ? '#e67e22' : '#888';
+
+    if(!(rate>0) || !(markup>0)){
+        area.innerHTML = '<div class="loading-state"><p>환율·마크업 값을 입력하세요.</p></div>';
+        return;
+    }
+
+    // ROOM_PRICING[id].prices = [평일, 금, 토] — 공용 js/roomPricing.js (실제 청구와 동일)
+    const cell = (krw) => Number(krw).toLocaleString('ko-KR') + '원 → <b>' + fmtUsd(usdFromKrw(krw, rate, markup)) + '</b>';
+    let rows = '';
+    ROOM_ORDER.forEach(id => {
+        const rd = ROOM_PRICING[id];
+        if(!rd) return;
+        const p = rd.prices;
+        rows +=
+            '<tr style="border-bottom:1px solid #f0f0f0;">' +
+            '<td style="padding:10px 14px;font-weight:600;">' + _rEsc(rd.name) + '</td>' +
+            '<td style="padding:10px 14px;text-align:right;">' + cell(p[0]) + '</td>' +
+            '<td style="padding:10px 14px;text-align:right;">' + cell(p[1]) + '</td>' +
+            '<td style="padding:10px 14px;text-align:right;">' + cell(p[2]) + '</td>' +
+            '</tr>';
+    });
+    area.innerHTML =
+        '<table style="width:100%;border-collapse:collapse;font-size:14px;">' +
+        '<thead><tr style="border-bottom:2px solid #eee;color:#666;font-size:12px;">' +
+        '<th style="padding:10px 14px;text-align:left;">객실</th>' +
+        '<th style="padding:10px 14px;text-align:right;">평일 (KRW → USD)</th>' +
+        '<th style="padding:10px 14px;text-align:right;">금요일</th>' +
+        '<th style="padding:10px 14px;text-align:right;">토요일</th>' +
+        '</tr></thead><tbody>' + rows + '</tbody></table>' +
+        '<p style="font-size:12px;color:#888;padding:12px 14px 0;line-height:1.6;">' +
+        '실제 결제와 동일한 <b>기본 요금표</b> 기준입니다. 특정 날짜에 <b>room_inventory</b> 가격이 설정돼 있으면 그 날짜는 해당 가격으로 청구됩니다.</p>';
+}
+
+async function saveRates(){
+    const rate   = parseFloat(document.getElementById('rateInput').value);
+    const markup = parseFloat(document.getElementById('markupInput').value);
+    const pw     = document.getElementById('ratePwInput').value;
+
+    // 클라이언트측 사전 검증 (서버가 최종 검증)
+    if(!(Number.isFinite(rate)) || rate < 500 || rate > 3000){
+        alert('환율(usd_rate)은 500 이상 3000 이하여야 합니다.'); return;
+    }
+    if(!(Number.isFinite(markup)) || markup < 1.0 || markup > 2.0){
+        alert('마크업(usd_markup)은 1.0 이상 2.0 이하여야 합니다.'); return;
+    }
+    if(!pw){ alert('관리자 비밀번호를 입력하세요.'); document.getElementById('ratePwInput').focus(); return; }
+
+    // 변경된 키만 전송
+    const changes = [];
+    if(rate   !== _ratesData.usd_rate)   changes.push({ key:'usd_rate',   value:rate });
+    if(markup !== _ratesData.usd_markup) changes.push({ key:'usd_markup', value:markup });
+    if(!changes.length){ alert('변경사항이 없습니다.'); return; }
+
+    // 적용 후 예상 USD 가격 확인 (오입력 방지) — 실제 결제와 동일한 기본 요금표 기준
+    let preview = ROOM_ORDER.map(id => {
+        const rd = ROOM_PRICING[id]; if(!rd) return null;
+        const p = rd.prices;
+        return '· ' + rd.name + ': 평일 ' + fmtUsd(usdFromKrw(p[0], rate, markup)) +
+               ' / 금 ' + fmtUsd(usdFromKrw(p[1], rate, markup)) +
+               ' / 토 ' + fmtUsd(usdFromKrw(p[2], rate, markup));
+    }).filter(Boolean).join('\n');
+    const ok = confirm(
+        '다음 값으로 저장합니다.\n\n' +
+        'usd_rate = ' + rate + '\nusd_markup = ' + markup + '\n\n' +
+        '── 적용 후 예상 USD 가격 ──\n' + preview + '\n\n진행하시겠습니까?'
+    );
+    if(!ok) return;
+
+    const btn = document.getElementById('rateSaveBtn');
+    btn.disabled = true; const btnHtml = btn.innerHTML; btn.textContent = '저장 중...';
+
+    try{
+        for(const ch of changes){
+            const res = await fetch(UPDATE_SETTING_URL, {
+                method:'POST',
+                headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer sb_publishable_2X3S_RgN_0ipbUtR-zAV6A_yIp1n5PC' },
+                body: JSON.stringify({ key:ch.key, value:ch.value, adminPassword:pw }),
+            });
+            const result = await res.json().catch(()=>({}));
+            if(!res.ok || !result.ok){
+                if(res.status === 401){
+                    alert('비밀번호가 올바르지 않습니다.');
+                } else {
+                    alert('저장 실패 (' + ch.key + '): ' + (result.error || ('HTTP '+res.status)));
+                }
+                btn.disabled = false; btn.innerHTML = btnHtml;
+                return; // 실패 시 중단 (이미 성공한 키는 반영됨 → 새로고침으로 최신화)
+            }
+        }
+        document.getElementById('ratePwInput').value = ''; // 비밀번호 흔적 제거
+        if(typeof showToast === 'function') showToast('환율 설정이 저장되었습니다 ✓'); else alert('저장되었습니다.');
+        await loadRates(); // 미리보기 즉시 갱신
+    } catch(err){
+        console.error('[saveRates]', err);
+        alert('네트워크 오류가 발생했습니다. 다시 시도해 주세요.');
+    } finally {
+        btn.disabled = false; btn.innerHTML = btnHtml;
+    }
+}
+
+/* ════════════════════════════════════════
+   유틸
+════════════════════════════════════════ */
+function fmtWon(n){ return n!=null ? Number(n).toLocaleString('ko-KR')+'원' : '-'; }
+/* 예약 1건의 결제 금액 표시(HTML) — 통화 분기는 취소 폼과 동일한 resCancelCurrency 기준을 재사용한다.
+   · USD 예약: paid_amount → "$XX.XX" + USD 태그
+   · 원화 예약: total_price → "X,XXX원" (기존과 동일, 태그 없음)
+   · 금액이 없으면 기존과 같이 '-' (태그도 붙이지 않는다) */
+function fmtResAmount(r){
+    const cur = resCancelCurrency(r);
+    const raw = cur.isUsd ? (r && r.paid_amount) : (r && r.total_price);
+    if(raw == null) return '-';
+    return cur.fmt(Number(raw)) + (cur.isUsd ? '<span class="cur-tag">USD</span>' : '');
+}
+function fmtDate(s){ if(!s) return '-'; const d=new Date(s+'T00:00:00'); return `${d.getMonth()+1}월 ${d.getDate()}일`; }
+function fmtDateTime(s){ if(!s) return '-'; const d=new Date(s); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
+function statusBadge(s){ if(s==='paid') return '<span class="badge-paid">결제완료</span>'; if(s==='cancelled') return '<span class="badge-cancelled">취소됨</span>'; if(s==='overbooked') return '<span class="badge-overbooked">⚠ 오버부킹</span>'; return '<span class="badge-pending">대기중</span>'; }
+function toDateStr(y,m,d){ return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+function showToast(msg='저장되었습니다 ✓'){
+    const t=document.getElementById('saveToast');
+    t.textContent=msg; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ════════════════════════════════════════
+   예약 목록
+════════════════════════════════════════ */
+let allData=[];
+let _currentRes = null;
+
+async function loadReservations(){
+    ['recentTableArea','fullTableArea'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el) el.innerHTML='<div class="loading-state"><i class="fa-solid fa-circle-notch"></i><p>불러오는 중...</p></div>';
+    });
+
+    const {data,error}=await _sb.from('reservations').select('*').order('created_at',{ascending:false});
+    if(error){
+        ['recentTableArea','fullTableArea'].forEach(id=>{
+            const el=document.getElementById(id);
+            if(el) el.innerHTML=`<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><p>오류: ${error.message}</p></div>`;
+        });
+        return;
+    }
+    allData=data||[];
+    updateStats(allData);
+    renderRecentTable(allData.slice(0,8));
+    applyFilter();
+
+    // 오버부킹 경고 배너
+    const ob = allData.filter(r => r.payment_status === 'overbooked');
+    const alertEl = document.getElementById('overbookAlert');
+    if (alertEl) {
+        if (ob.length > 0) {
+            const ids = ob.map(r => r.order_id || r.id).join(', ');
+            alertEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i><div><strong>오버부킹 ${ob.length}건 확인 필요!</strong><br><span style="font-weight:400;font-size:13px;">예약번호: ${ids}</span><br><span style="font-weight:400;font-size:12px;color:#e74c3c;">해당 고객에게 연락 후 환불 또는 대안을 안내해주세요.</span></div>`;
+            alertEl.style.display = 'flex';
+        } else {
+            alertEl.style.display = 'none';
+        }
+    }
+}
+
+function updateStats(data){
+    const now=new Date(), y=now.getFullYear(), m=now.getMonth();
+    const monthly=data.filter(r=>{ const d=new Date(r.created_at); return d.getFullYear()===y && d.getMonth()===m; });
+    const totalRev=data.reduce((s,r)=>s+(r.total_price||0),0);
+    const monthRev=monthly.reduce((s,r)=>s+(r.total_price||0),0);
+    document.getElementById('statTotal').innerHTML=data.length+'<span class="stat-unit"> 건</span>';
+    document.getElementById('statRevenue').textContent=fmtWon(totalRev);
+    document.getElementById('statMonthly').innerHTML=monthly.length+'<span class="stat-unit"> 건</span>';
+    document.getElementById('statMonthlyRev').textContent=fmtWon(monthRev);
+}
+
+function buildTableHTML(data, areaId){
+    if(!data.length) return '<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>예약 내역이 없습니다.</p></div>';
+    // 예약자명 또는 연락처가 비어 저장된 행은 배경색으로 강조 (결제는 됐는데 손님 정보 없음)
+    const _blank = v => !v || !String(v).trim();
+    const rows=data.map(r=>`
+        <tr data-id="${r.id||''}"${(_blank(r.guest_name)||_blank(r.guest_phone))?' class="row-missing-guest" title="예약자 정보 누락 — 확인 필요"':''}>
+            <td><div class="order-id-cell" title="${r.order_id||''}">${r.order_id||'-'}</div></td>
+            <td style="font-weight:600;">${r.guest_name||'-'}</td>
+            <td>${r.guest_phone ? r.guest_phone.replace(/(\d{3})(\d{3,4})(\d{4})/,'$1-$2-$3') : '-'}</td>
+            <td class="room-cell">${r.room_name||'-'}</td>
+            <td>${fmtDate(r.checkin_date)}</td>
+            <td>${fmtDate(r.checkout_date)}</td>
+            <td>${r.nights ? r.nights+'박' : '-'}</td>
+            <td class="amount-cell" style="font-weight:700;">${fmtResAmount(r)}</td>
+            <td>${statusBadge(r.payment_status)}</td>
+            <td style="color:rgb(112,112,112);font-size:12px;">${fmtDateTime(r.created_at)}</td>
+        </tr>`).join('');
+    return `<div style="overflow-x:auto;"><table>
+        <thead><tr>
+            <th>예약번호</th><th>예약자</th><th>연락처</th><th>객실</th>
+            <th>체크인</th><th>체크아웃</th><th>숙박</th>
+            <th>금액</th><th>상태</th><th>예약일시</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+    </table></div>`;
+}
+
+function bindRowClick(areaId, dataset){
+    const el=document.getElementById(areaId);
+    if(!el) return;
+    el.querySelectorAll('tbody tr').forEach((tr,i)=>{
+        tr.onclick=()=>openResModal(dataset[i]);
+    });
+}
+
+function renderRecentTable(data){
+    const el=document.getElementById('recentTableArea');
+    if(!el) return;
+    el.innerHTML=buildTableHTML(data,'recentTableArea');
+    bindRowClick('recentTableArea',data);
+}
+
+function applyFilter(){
+    const q=document.getElementById('searchInput')?.value.toLowerCase().trim()||'';
+    const room=document.getElementById('filterRoom')?.value||'';
+    const status=document.getElementById('filterStatus')?.value||'';
+    const from=document.getElementById('filterDateFrom')?.value||'';
+    const to=document.getElementById('filterDateTo')?.value||'';
+    const filtered=allData.filter(r=>{
+        if(q && !['guest_name','guest_email','order_id','guest_phone'].some(k=>r[k]&&r[k].toLowerCase().includes(q))) return false;
+        if(room   && r.room_name!==room) return false;
+        if(status && r.payment_status!==status) return false;
+        if(from   && r.checkin_date<from) return false;
+        if(to     && r.checkin_date>to) return false;
+        return true;
+    });
+    const el=document.getElementById('filterCount');
+    if(el) el.textContent=`총 ${filtered.length}건`;
+    const area=document.getElementById('fullTableArea');
+    if(area){ area.innerHTML=buildTableHTML(filtered,'fullTableArea'); bindRowClick('fullTableArea',filtered); }
+}
+
+function resetFilter(){
+    ['searchInput','filterRoom','filterStatus','filterDateFrom','filterDateTo'].forEach(id=>{
+        const el=document.getElementById(id); if(el) el.value='';
+    });
+    applyFilter();
+}
+
+/* ── 예약 상세 모달 ── */
+function openResModal(r){
+    _currentRes = r;
+    const igHandle = r.guest_instagram ? r.guest_instagram.replace(/^@/,'') : '';
+    const ig = igHandle
+        ? `<a href="https://instagram.com/${igHandle}" target="_blank" style="color:#00768e;">@${igHandle}</a>`
+        : '-';
+    const specialReq = (r.special_request && r.special_request.trim()) ? r.special_request : '없음';
+    document.getElementById('resModalBody').innerHTML=`
+        <div class="modal-section">
+            <div class="modal-section-title">예약 정보</div>
+            <div class="modal-row"><span class="modal-key">예약번호</span><span class="modal-val" style="font-family:monospace;font-size:12px;">${r.order_id||'-'}</span></div>
+            <div class="modal-row"><span class="modal-key">객실</span><span class="modal-val" style="color:#00768e;">${r.room_name||'-'}</span></div>
+            <div class="modal-row"><span class="modal-key">체크인</span><span class="modal-val">${r.checkin_date||'-'} 오후 3:00</span></div>
+            <div class="modal-row"><span class="modal-key">체크아웃</span><span class="modal-val">${r.checkout_date||'-'} 오후 12:00</span></div>
+            <div class="modal-row"><span class="modal-key">숙박</span><span class="modal-val">${r.nights?r.nights+'박':'-'}</span></div>
+            <div class="modal-row"><span class="modal-key">객실/인원</span><span class="modal-val">${r.room_count||'-'}객실 · 성인 ${r.adult_count||'-'}인</span></div>
+        </div>
+        <div class="modal-section">
+            <div class="modal-section-title">예약자 정보</div>
+            <div class="modal-row"><span class="modal-key">이름</span><span class="modal-val">${r.guest_name||'-'}</span></div>
+            <div class="modal-row"><span class="modal-key">연락처</span><span class="modal-val">${r.guest_phone?r.guest_phone.replace(/(\d{3})(\d{3,4})(\d{4})/,'$1-$2-$3'):'-'}</span></div>
+            <div class="modal-row"><span class="modal-key">이메일</span><span class="modal-val">${r.guest_email||'-'}</span></div>
+            <div class="modal-row"><span class="modal-key">나라</span><span class="modal-val">${COUNTRIES[r.guest_country]||r.guest_country||'-'}</span></div>
+            <div class="modal-row"><span class="modal-key">인스타그램 계정</span><span class="modal-val">${ig}</span></div>
+            <div class="modal-row"><span class="modal-key">특별 요청사항</span><span class="modal-val" style="${specialReq==='없음'?'color:rgb(112,112,112);font-weight:400;':''}">${specialReq}</span></div>
+        </div>
+        <div class="modal-section">
+            <div class="modal-section-title">결제 정보</div>
+            <div class="modal-row"><span class="modal-key">결제 금액</span><span class="modal-val" style="font-size:17px;font-weight:800;">${fmtResAmount(r)}</span></div>
+            <div class="modal-row"><span class="modal-key">결제 상태</span><span class="modal-val">${statusBadge(r.payment_status)}</span></div>
+            ${r.payment_key?`<div class="modal-row"><span class="modal-key">결제 키</span><span class="modal-val" style="font-family:monospace;font-size:11px;color:rgb(112,112,112);">${r.payment_key}</span></div>`:''}
+            <div class="modal-row"><span class="modal-key">예약 일시</span><span class="modal-val">${fmtDateTime(r.created_at)}</span></div>
+        </div>`;
+    /* 취소 버튼: paid 상태일 때만 표시 */
+    const _foot = document.getElementById('resModalFoot');
+    if (r.payment_status === 'paid') {
+        _foot.innerHTML = '<button class="m-btn m-btn-light" style="color:#e74c3c;border-color:#e74c3c;" onclick="showCancelConfirm()"><i class="fa-solid fa-ban"></i> 예약 취소</button><button class="m-btn m-btn-dark" onclick="closeResModal()">닫기</button>';
+    } else {
+        _foot.innerHTML = '<button class="m-btn m-btn-dark" onclick="closeResModal()">닫기</button>';
+    }
+    document.getElementById('resModal').classList.add('open');
+    document.body.style.overflow='hidden';
+}
+function closeResModal(){ document.getElementById('resModal').classList.remove('open'); document.body.style.overflow=''; _currentRes=null; }
+
+/* ── 취소 폼 통화 분기 ──
+   USD 예약(payment_provider='toss_paypal')은 실제 결제액이 paid_amount(USD)이므로
+   원화 total_price 로 취소하면 Edge Function 이 "결제 금액 초과"로 거부한다.
+   원화 예약은 기존과 동일하게 total_price(원) 기준. */
+function resCancelCurrency(r){
+    const isUsd = !!r && r.payment_provider === 'toss_paypal';
+    return isUsd
+        ? { isUsd:true,  paid:Number(r.paid_amount||0), label:'환불 금액 (USD)', min:'0.01', step:'0.01',
+            fmt:(v)=>'$'+Number(v).toFixed(2) }
+        : { isUsd:false, paid:Number((r&&r.total_price)||0), label:'환불 금액 (원)', min:'1', step:'1',
+            fmt:(v)=>Number(v).toLocaleString('ko-KR')+'원' };
+}
+
+/* ── 취소 확인 폼 표시 ── */
+function showCancelConfirm(){
+    if(!_currentRes) return;
+    const existing = document.getElementById('cancelSection');
+    if(existing) existing.remove();
+    const cur = resCancelCurrency(_currentRes);
+    const section = document.createElement('div');
+    section.id = 'cancelSection';
+    section.className = 'cancel-confirm-section';
+    section.innerHTML =
+        '<div class="cancel-confirm-title"><i class="fa-solid fa-triangle-exclamation"></i> 예약 취소 — 이 작업은 되돌릴 수 없습니다</div>' +
+        '<div class="cancel-warning">Toss 결제가 실제로 취소(환불)됩니다.<br>금액과 사유를 확인한 뒤 취소 확정을 눌러주세요.' +
+        (cur.isUsd ? '<br>이 예약은 USD 결제입니다 — 금액은 달러로 입력해 주세요.' : '') + '</div>' +
+        '<div class="cancel-field"><label>' + cur.label + '</label>' +
+        '<input type="number" id="cancelAmountInput" value="' + cur.paid + '" min="' + cur.min + '" max="' + cur.paid + '" step="' + cur.step + '"></div>' +
+        '<div class="cancel-field"><label>취소 사유 (선택)</label>' +
+        '<input type="text" id="cancelReasonInput" placeholder="예: 고객 요청 취소"></div>';
+    document.getElementById('resModalBody').appendChild(section);
+    section.scrollIntoView({behavior:'smooth', block:'nearest'});
+    document.getElementById('resModalFoot').innerHTML =
+        '<button class="m-btn m-btn-light" onclick="hideCancelConfirm()">돌아가기</button>' +
+        '<button class="m-btn m-btn-danger" id="cancelSubmitBtn" onclick="submitCancel()"><i class="fa-solid fa-ban"></i> 취소 확정</button>';
+}
+
+function hideCancelConfirm(){
+    const s = document.getElementById('cancelSection');
+    if(s) s.remove();
+    const foot = document.getElementById('resModalFoot');
+    foot.innerHTML = '<button class="m-btn m-btn-light" style="color:#e74c3c;border-color:#e74c3c;" onclick="showCancelConfirm()"><i class="fa-solid fa-ban"></i> 예약 취소</button><button class="m-btn m-btn-dark" onclick="closeResModal()">닫기</button>';
+}
+
+async function submitCancel(){
+    if(!_currentRes) return;
+    const cur = resCancelCurrency(_currentRes);
+    const rawAmount = parseFloat(document.getElementById('cancelAmountInput').value);
+    // USD 는 센트 단위로 반올림, 원화는 기존 parseInt 와 동일하게 정수 절사
+    const cancelAmount = cur.isUsd
+        ? Math.round((Number.isFinite(rawAmount) ? rawAmount : 0) * 100) / 100
+        : Math.trunc(Number.isFinite(rawAmount) ? rawAmount : 0);
+    const cancelReason = (document.getElementById('cancelReasonInput').value||'').trim() || '관리자 취소';
+    if(!cancelAmount || cancelAmount <= 0){ alert('환불 금액을 입력해 주세요.'); return; }
+    // USD 는 부동소수 오차 대비 허용치를 둔다
+    if(cancelAmount - cur.paid > (cur.isUsd ? 0.005 : 0)){
+        alert('환불 금액이 결제 금액(' + cur.fmt(cur.paid) + ')을 초과할 수 없습니다.');
+        return;
+    }
+    const confirmed = confirm(
+        '[취소 확인]\n\n' +
+        '예약번호: ' + (_currentRes.order_id||'-') + '\n' +
+        '예약자:   ' + (_currentRes.guest_name||'-') + '\n' +
+        '환불 금액: ' + cur.fmt(cancelAmount) + '\n' +
+        '취소 사유: ' + cancelReason + '\n\n' +
+        '실제 결제가 취소됩니다. 진행하시겠습니까?'
+    );
+    if(!confirmed) return;
+    const btn = document.getElementById('cancelSubmitBtn');
+    if(btn){ btn.textContent='처리 중...'; btn.disabled=true; }
+    try{
+        const res = await fetch(
+            'https://lbhdujheuokkmiowobzu.supabase.co/functions/v1/cancel-reservation',
+            {
+                method:'POST',
+                headers:{'Content-Type':'application/json','Authorization':'Bearer sb_publishable_2X3S_RgN_0ipbUtR-zAV6A_yIp1n5PC'},
+                body:JSON.stringify({orderId:_currentRes.order_id, cancelAmount, cancelReason}),
+            }
+        );
+        const result = await res.json();
+        if(!result.ok){
+            alert('취소 실패: ' + (result.error||'알 수 없는 오류'));
+            if(btn){ btn.textContent='취소 확정'; btn.disabled=false; }
+            return;
+        }
+        if(result.failedInventoryDates && result.failedInventoryDates.length > 0){
+            alert('예약이 취소되었습니다.\n\n⚠ 일부 날짜 재고 복원 실패 — 수동 확인이 필요합니다:\n' + result.failedInventoryDates.join(', '));
+        } else {
+            showToast('예약이 취소되었습니다 ✓');
+        }
+        closeResModal();
+        loadReservations();
+    } catch(err){
+        console.error('[submitCancel]', err);
+        alert('네트워크 오류가 발생했습니다. 다시 시도해 주세요.');
+        if(btn){ btn.textContent='취소 확정'; btn.disabled=false; }
+    }
+}
+
+/* ════════════════════════════════════════
+   재고·요금 관리 (전체 객실 스프레드시트)
+════════════════════════════════════════ */
+let invYear  = new Date().getFullYear();
+let invMonth = new Date().getMonth();
+let invData  = {}; // { roomId: { 'YYYY-MM-DD': { is_available, price, stock } } }
+let editingDateStr = null;
+let editingRoomId  = null;
+let editIsAvail    = true;
+
+let roomUuidMap = {}; // { name_en: uuid }
+let roomNameMap = {}; // { uuid: name_en }
+
+async function loadRoomUuids(){
+    const {data, error} = await _sb.from('rooms').select('id, name_en');
+    if(error){
+        alert('[디버그] rooms 테이블 조회 실패:\n' + JSON.stringify(error));
+        return;
+    }
+    if(!data || data.length === 0){
+        alert('[디버그] rooms 테이블이 비어있거나 name_en 컬럼이 없습니다.\ndata: ' + JSON.stringify(data));
+        return;
+    }
+    data.forEach(r => {
+        if(r.name_en && r.id){
+            roomUuidMap[r.name_en] = r.id;
+            roomNameMap[r.id]      = r.name_en;
+        }
+    });
+    console.log('[디버그] roomUuidMap 로드 완료:', roomUuidMap);
+}
+
+async function initInventory(){ await loadRoomUuids(); updateMonthLabel(); loadInventory(); }
+
+function changeMonth(dir){
+    invMonth += dir;
+    if(invMonth > 11){ invMonth = 0; invYear++; }
+    if(invMonth < 0) { invMonth = 11; invYear--; }
+    updateMonthLabel();
+    loadInventory();
+}
+
+function updateMonthLabel(){
+    document.getElementById('invMonthLabel').textContent = `${invYear}년 ${invMonth+1}월`;
+}
+
+function fmtPriceShort(p){
+    if(!p) return '-';
+    return Number(p).toLocaleString('ko-KR') + '원';
+}
+
+async function loadInventory(){
+    document.getElementById('invSheetArea').innerHTML =
+        '<div class="inv-loading"><i class="fa-solid fa-circle-notch"></i><p>불러오는 중...</p></div>';
+
+    const startDate = toDateStr(invYear, invMonth, 1);
+    const lastDay   = new Date(invYear, invMonth+1, 0).getDate();
+    const endDate   = toDateStr(invYear, invMonth, lastDay);
+
+    const {data, error} = await _sb.from('room_inventory').select('*')
+        .gte('date', startDate).lte('date', endDate);
+
+    invData = {};
+    ROOM_ORDER.forEach(id => invData[id] = {});
+    if(data) data.forEach(r => {
+        const nameEn = roomNameMap[r.room_id] || r.room_id;
+        if(!invData[nameEn]) invData[nameEn] = {};
+        invData[nameEn][r.date] = r;
+    });
+    if(error) console.error(error);
+    renderSheet();
+}
+
+function renderSheet(){
+    const today    = new Date();
+    const todayStr = toDateStr(today.getFullYear(), today.getMonth(), today.getDate());
+    const lastDay  = new Date(invYear, invMonth+1, 0).getDate();
+
+    /* 헤더 행 */
+    let thead = '<tr><th class="th-room">객실</th>';
+    for(let d = 1; d <= lastDay; d++){
+        const dow = new Date(invYear, invMonth, d).getDay();
+        const dateStr = toDateStr(invYear, invMonth, d);
+        const dowCls  = dow===0 ? 'th-sun' : dow===6 ? 'th-sat' : '';
+        const todayCls= dateStr===todayStr ? 'th-today' : '';
+        thead += `<th class="th-date ${dowCls} ${todayCls}">
+            <span class="d-num">${d}</span>
+            <span class="d-dow">${DAYS_KO[dow]}</span>
+        </th>`;
+    }
+    thead += '</tr>';
+
+    /* 객실 행 */
+    const tbody = ROOM_ORDER.map(roomId => {
+        const def = ROOM_PRICING[roomId];
+        let cells = `<td class="td-room">${def.name}<span>${roomId.toUpperCase()}</span></td>`;
+
+        for(let d = 1; d <= lastDay; d++){
+            const dateStr = toDateStr(invYear, invMonth, d);
+            const isPast  = dateStr < todayStr;
+            const isToday = dateStr === todayStr;
+            const rec     = invData[roomId]?.[dateStr];
+
+            const price = rec?.price ?? defPrice(roomId, dateStr);
+            const stock = rec?.stock ?? def.stock;
+            const avail = rec ? rec.is_available : null; // null = 미설정
+
+            let cls = 'inv-cell';
+            if(isPast)  cls += ' c-past';
+            if(isToday) cls += ' c-today';
+            if(rec === undefined)  cls += ' c-none';
+            else if(avail)         cls += ' c-avail';
+            else                   cls += ' c-closed';
+
+            const dotCls = rec===undefined ? 'ic-dot-none' : avail ? 'ic-dot-avail' : 'ic-dot-closed';
+            const priceLabel = fmtPriceShort(price);
+            const stockLabel = `재고${stock}`;
+
+            cells += `<td class="${cls}" onclick="openDateModal('${roomId}','${dateStr}')">
+                <span class="ic-price">${priceLabel}</span>
+                <span class="ic-stock">${stockLabel}</span>
+                <span class="ic-dot ${dotCls}"></span>
+            </td>`;
+        }
+        return `<tr>${cells}</tr>`;
+    }).join('');
+
+    document.getElementById('invSheetArea').innerHTML =
+        `<table class="inv-table"><thead>${thead}</thead><tbody>${tbody}</tbody></table>`;
+
+    setTimeout(_applyInvScroll, 0);
+}
+
+function _applyInvScroll(){
+    const scrollEl = document.querySelector('.inv-scroll');
+    if (!scrollEl || scrollEl.scrollWidth === 0) return; // 패널 숨김 상태면 skip
+    const isReload = (typeof performance !== 'undefined') &&
+        ((performance.getEntriesByType?.('navigation')?.[0]?.type === 'reload') ||
+         (performance.navigation?.type === 1));
+    const saved = sessionStorage.getItem('invScrollLeft');
+    if (isReload && saved !== null) {
+        scrollEl.scrollLeft = Math.min(Number(saved), scrollEl.scrollWidth - scrollEl.clientWidth);
+    } else {
+        const now = new Date();
+        if (invYear === now.getFullYear() && invMonth === now.getMonth()) {
+            scrollEl.scrollLeft = Math.min((now.getDate() - 1) * 106, scrollEl.scrollWidth - scrollEl.clientWidth);
+        }
+    }
+}
+
+/* ── 날짜 편집 모달 ── */
+function openDateModal(roomId, dateStr){
+    const d   = new Date(dateStr+'T00:00:00');
+    const def = ROOM_PRICING[roomId];
+    const rec = invData[roomId]?.[dateStr];
+
+    editingRoomId  = roomId;
+    editingDateStr = dateStr;
+    editIsAvail    = rec ? rec.is_available : true;
+
+    document.getElementById('dateModalTitle').textContent =
+        `${def.name} · ${d.getMonth()+1}월 ${d.getDate()}일 (${DAYS_KO[d.getDay()]})`;
+    document.getElementById('editPrice').value = rec?.price ?? defPrice(roomId, dateStr);
+    document.getElementById('editStock').value = rec?.stock ?? def.stock;
+    setAvail(editIsAvail);
+
+    document.getElementById('dateModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function setAvail(v){
+    editIsAvail = v;
+    document.getElementById('btnAvail').className  = v ? 'sel-avail' : '';
+    document.getElementById('btnClosed').className = v ? '' : 'sel-closed';
+}
+
+async function saveDateEdit(){
+    const price = parseInt(document.getElementById('editPrice').value) || 0;
+    const stock = parseInt(document.getElementById('editStock').value) || 0;
+
+    const roomUuid = roomUuidMap[editingRoomId];
+    if(!roomUuid){
+        alert('[디버그] UUID 매핑 실패!\neditingRoomId: ' + editingRoomId + '\nroomUuidMap: ' + JSON.stringify(roomUuidMap) + '\n\n→ rooms 테이블을 확인하세요.');
+        return;
+    }
+    const {error} = await _sb.from('room_inventory').upsert(
+        { room_id:roomUuid, date:editingDateStr, is_available:editIsAvail, price, stock },
+        { onConflict:'room_id,date' }
+    );
+    if(error){ alert('저장 실패: '+error.message); return; }
+
+    if(!invData[editingRoomId]) invData[editingRoomId] = {};
+    invData[editingRoomId][editingDateStr] = { room_id:editingRoomId, date:editingDateStr, is_available:editIsAvail, price, stock };
+    renderSheet();
+    closeDateModal();
+    showToast('저장되었습니다 ✓');
+}
+
+function closeDateModal(){ document.getElementById('dateModal').classList.remove('open'); document.body.style.overflow=''; }
+
+/* ── 일괄 설정 모달 ── */
+function openBulkModal(){
+    document.getElementById('bulkFrom').value = toDateStr(invYear, invMonth, 1);
+    document.getElementById('bulkTo').value   = toDateStr(invYear, invMonth, new Date(invYear, invMonth+1, 0).getDate());
+    document.getElementById('bulkAvail').value = 'true';
+    document.getElementById('bulkPrice').value = '';
+    document.getElementById('bulkStock').value = '';
+    document.querySelectorAll('.dow-check').forEach(c => c.checked = true);
+    document.getElementById('bulkModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+async function applyBulkEdit(){
+    const from = document.getElementById('bulkFrom').value;
+    const to   = document.getElementById('bulkTo').value;
+    if(!from || !to || from > to){ alert('날짜 범위를 올바르게 입력해 주세요.'); return; }
+
+    const isAvail = document.getElementById('bulkAvail').value === 'true';
+    const priceVal = document.getElementById('bulkPrice').value;
+    const stockVal = document.getElementById('bulkStock').value;
+
+    const selectedDows  = Array.from(document.querySelectorAll('input[id^="dow"]:checked')).map(c => parseInt(c.value));
+    const selectedRooms = Array.from(document.querySelectorAll('input[id^="br-"]:checked')).map(c => c.value);
+
+    if(!selectedRooms.length){ alert('적용할 객실을 선택해 주세요.'); return; }
+
+    const rows = [];      // Supabase upsert용 (UUID)
+    const localRows = []; // 로컬 캐시용 (name_en)
+    selectedRooms.forEach(roomId => {
+        const roomUuid = roomUuidMap[roomId] || roomId;
+        let cur = new Date(from+'T00:00:00');
+        const end = new Date(to+'T00:00:00');
+        while(cur <= end){
+            if(selectedDows.includes(cur.getDay())){
+                const dateStr  = toDateStr(cur.getFullYear(), cur.getMonth(), cur.getDate());
+                const existing = invData[roomId]?.[dateStr];
+                const def      = ROOM_PRICING[roomId];
+                const price    = priceVal !== '' ? parseInt(priceVal) : (existing?.price ?? def.price);
+                const stock    = stockVal !== '' ? parseInt(stockVal) : (existing?.stock ?? def.stock);
+                rows.push({ room_id:roomUuid, date:dateStr, is_available:isAvail, price, stock });
+                localRows.push({ room_id:roomId, date:dateStr, is_available:isAvail, price, stock });
+            }
+            cur.setDate(cur.getDate()+1);
+        }
+    });
+
+    if(!rows.length){ alert('적용할 날짜가 없습니다.'); return; }
+
+    const btn = document.querySelector('#bulkModal .m-btn-teal');
+    btn.textContent = '적용 중...'; btn.disabled = true;
+
+    const {error} = await _sb.from('room_inventory').upsert(rows, {onConflict:'room_id,date'});
+    btn.textContent = '일괄 적용'; btn.disabled = false;
+
+    if(error){ alert('일괄 저장 실패: '+error.message); return; }
+
+    localRows.forEach(r => {
+        if(!invData[r.room_id]) invData[r.room_id] = {};
+        invData[r.room_id][r.date] = r;
+    });
+    renderSheet();
+    closeBulkModal();
+    showToast(`${rows.length}개 항목 저장 완료 ✓`);
+}
+
+function closeBulkModal(){ document.getElementById('bulkModal').classList.remove('open'); document.body.style.overflow=''; }
+
+/* ── 초기 로드 ── */
+if(sessionStorage.getItem('adminAuth')==='1'){
+    switchTab(sessionStorage.getItem('adminTab') || 'dashboard');
+    loadReservations();
+    initInventory();
+}
+window.addEventListener('beforeunload', function(){
+    const panel = document.getElementById('panel-inventory');
+    if (panel && panel.classList.contains('active')) {
+        const scrollEl = document.querySelector('.inv-scroll');
+        if (scrollEl) sessionStorage.setItem('invScrollLeft', String(scrollEl.scrollLeft));
+    }
+});
+</script>
+</body>
+</html>
