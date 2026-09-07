@@ -25,7 +25,7 @@
     scrollTarget: '#rooms-target',      // [지금 적용하기] 를 누르면 갈 곳
     scrollOffset: 'auto',               // 'auto' = 상단 고정 예약바 높이를 자동 측정
 
-    showOncePerDay: true,               // 하루 1회만 노출
+    showOncePerDay: false,              // false = 페이지를 열 때마다 매번 노출 (새로고침·뒤로가기 포함)
     delaySeconds: 0,                    // 0 = 화면이 그려지자마자
     exitIntent: true,                   // 마우스가 주소창으로 빠질 때도 노출
     excludePaths: ['/reservation', '/booking', '/payment', '/complete', '/admin'],
