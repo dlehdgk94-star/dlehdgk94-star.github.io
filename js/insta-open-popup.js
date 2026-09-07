@@ -232,19 +232,23 @@
 
   /* ---- 모바일 ---- */
   + '@media(max-width:520px){'
-  + '.gb-wrap{padding:16px;justify-content:center;}'
-  + '.gb-stack{max-width:none;width:100%;padding-top:46px;}'
-  + '.gb-head{padding:26px 20px 12px;}'
-  + '.gb-lead{font-size:12.5px;}'
-  + '.gb-h{font-size:23px;line-height:1.46;margin-top:10px;}'
-  + '.gb-badge{margin-top:14px;padding:7px 17px;font-size:12px;}'
-  + '.gb-art{height:' + Math.round(CONFIG.artHeight * 0.78) + 'px;}'
-  + '.gb-cta{margin-top:18px;padding:17px 20px;font-size:16.5px;}'
-  + '.gb-x{width:36px;height:36px;}'
+  /* 모바일에서는 화면을 꽉 채우지 않도록 좌우 여백을 늘리고 전체를 한 단계 줄인다.
+     예전에는 카드가 화면 높이를 다 먹어서 [지금 적용하기] 가 하단 아이콘들과 겹쳤다. */
+  + '.gb-wrap{padding:20px 26px;justify-content:center;}'
+  + '.gb-stack{max-width:340px;width:100%;padding-top:40px;}'
+  + '.gb-head{padding:20px 18px 10px;}'
+  + '.gb-lead{font-size:11.5px;}'
+  + '.gb-h{font-size:19px;line-height:1.42;margin-top:8px;}'
+  + '.gb-badge{margin-top:11px;padding:6px 14px;font-size:11px;}'
+  + '.gb-art{height:' + Math.round(CONFIG.artHeight * 0.58) + 'px;}'
+  + '.gb-cta{margin-top:14px;padding:14px 18px;font-size:15px;}'
+  + '.gb-x{width:32px;height:32px;}'
   + '.gb-mini{right:16px;font-size:13px;padding:9px 15px;}'
   + '}'
-  + '@media(max-height:700px){.gb-art{height:' + Math.round(CONFIG.artHeight * 0.66) + 'px;}'
-  + '.gb-head{padding-top:22px;}.gb-cta{margin-top:14px;padding:15px 20px;}}'
+  /* 세로가 짧은 기기(작은 폰·가로모드)는 한 번 더 줄인다 */
+  + '@media(max-height:760px){.gb-art{height:' + Math.round(CONFIG.artHeight * 0.48) + 'px;}'
+  + '.gb-head{padding-top:16px;}.gb-h{font-size:18px;}'
+  + '.gb-cta{margin-top:12px;padding:13px 18px;font-size:14.5px;}}'
   + '@media(prefers-reduced-motion:reduce){.gb-card,.gb-bg{animation:none;}.gb-cta{transition:none;}}';
 
   function injectCSS() {
