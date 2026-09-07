@@ -247,8 +247,11 @@
   + '}'
   /* 세로가 짧은 기기(작은 폰·가로모드)는 한 번 더 줄인다 */
   + '@media(max-height:760px){.gb-art{height:' + Math.round(CONFIG.artHeight * 0.48) + 'px;}'
-  + '.gb-head{padding-top:16px;}.gb-h{font-size:18px;}'
+  + '.gb-head{padding-top:16px;}'
   + '.gb-cta{margin-top:12px;padding:13px 18px;font-size:14.5px;}}'
+  /* 제목 축소는 좁은 화면에서만. 세로 짧은 PC 창은 카드가 440px 로 넓어서
+     제목까지 줄이면 글자만 작아 보인다. */
+  + '@media(max-height:760px) and (max-width:520px){.gb-h{font-size:18px;}}'
   + '@media(prefers-reduced-motion:reduce){.gb-card,.gb-bg{animation:none;}.gb-cta{transition:none;}}';
 
   function injectCSS() {
