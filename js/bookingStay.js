@@ -90,8 +90,14 @@
     this.roomId = opts.roomId;
     this.checkin = opts.checkin ? midnight(parseYmd(opts.checkin)) : null;
     this.checkout = opts.checkout ? midnight(parseYmd(opts.checkout)) : null;
-    this.roomCount = opts.roomCount || 1;
-    this.adultCount = opts.adultCount || 1;
+    /* 다른 객실에서 넘어오면 이전 인원이 그대로 따라온다.
+       (예: 스페셜 4인 → 이코노미 2인 객실인데 4인이 유지됨)
+       ± 버튼에만 상한이 걸려 있어서, 손님이 아무것도 안 누르면
+       정원 초과 상태로 결제까지 통과했다. 처음부터 잘라준다. */
+    this.roomCount  = Math.min(Math.max(opts.roomCount || 1, 1), 5);
+    this.adultCount = Math.max(opts.adultCount || 1, 1);
+    var _cap = this._maxGuests() * this.roomCount;
+    if (this.adultCount > _cap) this.adultCount = _cap;
     this.open = opts.openPanel || null;     // 'date' | 'guest' | null
     this.today = midnight(new Date());
     this.maxDate = midnight(new Date(Date.now() + MAX_DAYS_AHEAD * 86400000));
@@ -141,11 +147,23 @@
     });
   };
 
+  /* 체크아웃이 비워졌음을 부모에게 알린다.
+     이걸 안 부르면 달력은 새 날짜를 보여주는데 결제는 옛 날짜·옛 금액으로 나간다. */
+  Widget.prototype._invalidate = function (reason, closedDate) {
+    if (!this.o.onChange) return;
+    this.o.onChange({
+      ok: false, reason: reason || 'incomplete', closedDate: closedDate || null,
+      checkin: this.checkin ? ymd(this.checkin) : null, checkout: null, nights: 0,
+      roomCount: this.roomCount, adultCount: this.adultCount, totalPrice: 0
+    });
+  };
+
   Widget.prototype._pick = function (ds) {
     var d = midnight(parseYmd(ds));
     if (d < this.today || d > this.maxDate) return;
     if (!this.checkin || this.checkout) {          // 처음 클릭 또는 다시 시작
       this.checkin = d; this.checkout = null; this.warn = '';
+      this._invalidate('incomplete');
     } else if (d.getTime() === this.checkin.getTime()) {
       return;                                       // 같은 날 무시
     } else if (d > this.checkin) {
@@ -157,12 +175,14 @@
         this.checkin = d;
         this.checkout = null;
         this.render();
+        this._invalidate('closed', blocked);
         return;
       }
       this.warn = '';
       this.checkout = d;
     } else {
       this.checkin = d;                             // 앞 날짜면 체크인 다시 잡기
+      this._invalidate('incomplete');
     }
     this.render();
     if (this.checkin && this.checkout) {

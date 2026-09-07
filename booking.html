@@ -412,8 +412,17 @@
             openPanel:  (!b.checkin || !b.checkout) ? 'date' : null
         });
 
-        if (b.checkin && b.checkout && window._stayWidget._emit) {
-            window._stayWidget._emit();     // 정가 재계산 → baseTotal 을 서버 요금으로 덮어씀
+        /* 위젯이 객실 정원에 맞춰 인원을 줄였을 수 있으므로 저장소에도 반영한다 */
+        var w = window._stayWidget;
+        if (w && (b.adultCount !== w.adultCount || b.roomCount !== w.roomCount)) {
+            b.adultCount = w.adultCount;
+            b.roomCount  = w.roomCount;
+            localStorage.setItem('instaHotelBooking', JSON.stringify(b));
+            if (typeof syncBookingLang === 'function') syncBookingLang();
+        }
+
+        if (b.checkin && b.checkout && w && w._emit) {
+            w._emit();                      // 정가 재계산 → baseTotal 을 서버 요금으로 덮어씀
         }
     }
 
@@ -425,9 +434,23 @@
         var payBtn = document.getElementById('payBtn');
         var usdBtn = document.getElementById('usdPayBtn');
 
-        if (!v.ok) {                       // 마감일이 끼어 있으면 결제 막기
+        if (!v.ok) {
+            /* 날짜가 아직 덜 골라졌거나 마감일이 끼었다.
+               결제를 잠그는 것으로 끝내면 달력은 새 날짜를, 우측 요약은 옛 날짜를 보여준다.
+               저장된 예약도 같이 비워서 화면과 결제 데이터가 어긋나지 않게 한다. */
             if (payBtn) { payBtn.disabled = true; payBtn.style.opacity = '.45'; }
             if (usdBtn) { usdBtn.disabled = true; usdBtn.style.opacity = '.45'; }
+            b.checkin    = v.checkin || null;
+            b.checkout   = null;
+            b.nights     = 0;
+            b.roomCount  = v.roomCount;
+            b.adultCount = v.adultCount;
+            b.baseTotal  = 0;
+            b.totalPrice = 0;
+            /* b.discount 는 지우지 않는다 — 설문 답변(b.survey)은 그대로 남아 있어서,
+               여기서 0으로 밀면 날짜를 다시 고를 때 할인이 조용히 사라진다. */
+            localStorage.setItem('instaHotelBooking', JSON.stringify(b));
+            if (typeof syncBookingLang === 'function') syncBookingLang();
             return;
         }
         if (payBtn) { payBtn.disabled = false; payBtn.style.opacity = ''; }
@@ -451,10 +474,12 @@
      * ===================================================================== */
     function applyDiscount(b) {
         var base = (b.baseTotal != null) ? b.baseTotal : (b.totalPrice || 0);
-        var d    = Math.min(b.discount || 0, (window.BookingSurvey ? BookingSurvey.MAX : 3000));
-        if (d > base) d = base;                      // 요금보다 크게 깎이지 않도록
-        b.discount = d;
-        return Math.max(base - d, 0);
+        var max  = (window.BookingSurvey ? BookingSurvey.MAX : 3000);
+        b.discount = Math.min(b.discount || 0, max); // 상한만 적용하고 보관값은 유지한다
+        /* 실제로 깎는 금액은 요금을 넘지 않는다. 다만 보관값(b.discount)까지 줄이면
+           날짜 재선택으로 요금이 잠시 0이 된 사이에 할인이 사라진다. */
+        var eff = Math.min(b.discount, base);
+        return Math.max(base - eff, 0);
     }
 
     function mountSurveyWidget(b) {
