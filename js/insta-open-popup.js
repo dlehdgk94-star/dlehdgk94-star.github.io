@@ -152,6 +152,15 @@
   var FONT = 'font-family:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo",'
            + '"Noto Sans KR","맑은 고딕","Malgun Gothic",-apple-system,BlinkMacSystemFont,sans-serif;';
 
+  /* 그림(popup-art.webp)은 760x520. background-size:contain 이라 카드가 그림보다 넓으면
+     그 차이만큼 카드 배경(검정)이 그림 양옆에 띠로 남는다.
+     그림·글자 크기는 그대로 두고, 카드 폭만 '그림이 그려지는 폭'에 맞춰 띠를 없앤다.
+     PC(카드 440 / 그림 300)는 원래 이 관계가 맞아서 손대지 않는다. */
+  var ART_RATIO = 760 / 520;
+  function cardW(artHeight) { return Math.round(artHeight * ART_RATIO); }
+  var MOB_ART       = Math.round(CONFIG.artHeight * 0.58);  // 모바일 그림 높이 (기존 그대로)
+  var MOB_SHORT_ART = Math.round(CONFIG.artHeight * 0.48);  // 좁고 짧은 화면 (기존 그대로)
+
   var CSS = ''
   + '.gb-wrap{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;}'
   + (CONFIG.align === 'right'
@@ -235,23 +244,24 @@
   /* 모바일에서는 화면을 꽉 채우지 않도록 좌우 여백을 늘리고 전체를 한 단계 줄인다.
      예전에는 카드가 화면 높이를 다 먹어서 [지금 적용하기] 가 하단 아이콘들과 겹쳤다. */
   + '.gb-wrap{padding:20px 26px;justify-content:center;}'
-  + '.gb-stack{max-width:340px;width:100%;padding-top:40px;}'
+  + '.gb-stack{max-width:' + cardW(MOB_ART) + 'px;width:100%;padding-top:40px;}'
   + '.gb-head{padding:20px 18px 10px;}'
   + '.gb-lead{font-size:11.5px;}'
   + '.gb-h{font-size:19px;line-height:1.42;margin-top:8px;}'
   + '.gb-badge{margin-top:11px;padding:6px 14px;font-size:11px;}'
-  + '.gb-art{height:' + Math.round(CONFIG.artHeight * 0.58) + 'px;}'
+  + '.gb-art{height:' + MOB_ART + 'px;}'
   + '.gb-cta{margin-top:14px;padding:14px 18px;font-size:15px;}'
   + '.gb-x{width:32px;height:32px;}'
   + '.gb-mini{right:16px;font-size:13px;padding:9px 15px;}'
   + '}'
   /* 세로가 짧은 기기(작은 폰·가로모드)는 한 번 더 줄인다 */
-  + '@media(max-height:760px){.gb-art{height:' + Math.round(CONFIG.artHeight * 0.48) + 'px;}'
+  + '@media(max-height:760px){.gb-art{height:' + MOB_SHORT_ART + 'px;}'
   + '.gb-head{padding-top:16px;}'
   + '.gb-cta{margin-top:12px;padding:13px 18px;font-size:14.5px;}}'
   /* 제목 축소는 좁은 화면에서만. 세로 짧은 PC 창은 카드가 440px 로 넓어서
      제목까지 줄이면 글자만 작아 보인다. */
-  + '@media(max-height:760px) and (max-width:520px){.gb-h{font-size:18px;}}'
+  + '@media(max-height:760px) and (max-width:520px){.gb-h{font-size:18px;}'
+  + '.gb-stack{max-width:' + cardW(MOB_SHORT_ART) + 'px;}}'
   + '@media(prefers-reduced-motion:reduce){.gb-card,.gb-bg{animation:none;}.gb-cta{transition:none;}}';
 
   function injectCSS() {
