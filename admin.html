@@ -74,6 +74,18 @@
 
         /* ── 테이블 카드 ── */
         .table-card{ background:#fff; border-radius:12px; border:1px solid #e8e8e8; overflow:hidden; }
+        /* ── 설문 통계 ── */
+        .svq{ padding:8px 22px 18px; }
+        .svq-row{ display:grid; grid-template-columns:170px 1fr 108px; align-items:center; gap:12px; padding:7px 0; }
+        .svq-lb{ font-size:13px; color:rgb(28,28,28); }
+        .svq-bar{ height:10px; border-radius:99px; background:#f1f1f1; overflow:hidden; }
+        .svq-bar i{ display:block; height:100%; border-radius:99px; background:rgb(28,28,28); }
+        .svq-n{ font-size:13px; color:rgb(112,112,112); text-align:right; white-space:nowrap; }
+        .svq-n b{ color:rgb(28,28,28); }
+        .sv-chk{ display:inline-flex; align-items:center; gap:6px; font-size:13px; color:#444; cursor:pointer; }
+        .sv-tag{ display:inline-block; background:#f3f0ea; color:#7a6a4f; font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; }
+        .sv-hint{ font-size:12px; color:rgb(112,112,112); padding:0 22px 16px; line-height:1.6; }
+        @media(max-width:640px){ .svq-row{ grid-template-columns:112px 1fr 84px; gap:8px; } .svq{ padding:8px 14px 16px; } }
         .table-card-header{ padding:18px 22px 14px; border-bottom:1px solid #f0f0f0; display:flex; align-items:center; justify-content:space-between; }
         .table-card-title{ font-size:15px; font-weight:700; }
         .refresh-btn{ display:flex; align-items:center; gap:6px; background:#f4f4f4; border:none; border-radius:8px; padding:7px 14px; font-size:12px; font-weight:600; cursor:pointer; font-family:'Barlow',sans-serif; }
@@ -258,6 +270,7 @@
     <nav class="tab-nav">
         <button class="tab-btn active" onclick="switchTab('dashboard')"><i class="fa-solid fa-gauge"></i>대시보드</button>
         <button class="tab-btn" onclick="switchTab('reservations')"><i class="fa-solid fa-list"></i>예약 목록</button>
+        <button class="tab-btn" onclick="switchTab('survey')"><i class="fa-solid fa-chart-pie"></i>설문 통계</button>
         <button class="tab-btn" onclick="switchTab('inventory')"><i class="fa-solid fa-calendar-days"></i>재고·요금 관리</button>
         <button class="tab-btn" onclick="switchTab('rates')"><i class="fa-solid fa-dollar-sign"></i>환율 설정</button>
     </nav>
@@ -326,6 +339,46 @@
                 <div id="fullTableArea">
                     <div class="loading-state"><i class="fa-solid fa-circle-notch"></i><p>불러오는 중...</p></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- ───── 설문 통계 ───── -->
+        <div class="tab-panel" id="panel-survey">
+            <div class="filter-bar">
+                <select class="fi fi-select" id="svPeriod" onchange="renderSurveyStats()">
+                    <option value="all">전체 기간</option>
+                    <option value="m1">이번 달</option>
+                    <option value="m3">최근 3개월</option>
+                    <option value="y1">올해</option>
+                </select>
+                <label class="sv-chk"><input type="checkbox" id="svExCancel" onchange="renderSurveyStats()"> 취소된 예약 제외</label>
+                <button class="fi-btn fi-btn-light" onclick="loadReservations()"><i class="fa-solid fa-arrows-rotate"></i> 새로고침</button>
+                <button class="fi-btn fi-btn-light" onclick="downloadSurveyCsv()"><i class="fa-solid fa-file-arrow-down"></i> CSV 내려받기</button>
+                <span class="filter-count" id="svCount"></span>
+            </div>
+
+            <div class="stats-grid" id="svCards"></div>
+
+            <div class="table-card" style="margin-bottom:20px;">
+                <div class="table-card-header">
+                    <span class="table-card-title">Q1. 인스타호텔을 어떻게 알게 되셨나요?</span>
+                </div>
+                <div id="svQ1Area"></div>
+            </div>
+
+            <div class="table-card" style="margin-bottom:20px;">
+                <div class="table-card-header">
+                    <span class="table-card-title">Q2. 이번 숙박의 주된 목적</span>
+                </div>
+                <div id="svQ2Area"></div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-card-header">
+                    <span class="table-card-title">인스타그램 계정 수집</span>
+                </div>
+                <div id="svIgArea"></div>
+                <div class="sv-hint">‘설문’ 표시는 예약 시 <b>팔로워 500명 이상</b>이라고 손님이 직접 체크한 계정입니다. 실제 확인은 체크인 때 하시면 됩니다.</div>
             </div>
         </div>
 
@@ -559,12 +612,13 @@ if(sessionStorage.getItem('adminAuth')==='1'){
    탭 전환
 ════════════════════════════════════════ */
 function switchTab(id){
-    document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['dashboard','reservations','inventory','rates'][i]===id));
+    document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['dashboard','reservations','survey','inventory','rates'][i]===id));
     document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
     document.getElementById('panel-'+id).classList.add('active');
     sessionStorage.setItem('adminTab', id);
     if (id === 'inventory') setTimeout(_applyInvScroll, 0);
     if (id === 'rates') loadRates();
+    if (id === 'survey') renderSurveyStats();
 }
 
 /* ════════════════════════════════════════
@@ -784,6 +838,7 @@ async function loadReservations(){
     updateStats(allData);
     renderRecentTable(allData.slice(0,8));
     applyFilter();
+    renderSurveyStats();
 
     // 오버부킹 경고 배너
     const ob = allData.filter(r => r.payment_status === 'overbooked');
@@ -808,6 +863,148 @@ function updateStats(data){
     document.getElementById('statRevenue').textContent=fmtWon(totalRev);
     document.getElementById('statMonthly').innerHTML=monthly.length+'<span class="stat-unit"> 건</span>';
     document.getElementById('statMonthlyRev').textContent=fmtWon(monthRev);
+}
+
+/* ════════════════════════════════════════
+   설문 통계
+   - 설문 답변은 아직 Supabase 전용 칸이 없어서 special_request 안에
+     '[설문] 알게된 경로: X / 숙박 목적: Y / 인스타(팔로워 500+ 자가신고): @z'
+     한 줄로 저장된다. booking.html 의 _requestWithSurvey() 가 쓰는 형식과
+     반드시 같아야 하므로, 그쪽 문구를 바꾸면 아래 파서도 같이 고쳐야 한다.
+   - 여기서는 그 줄을 다시 읽어 집계만 한다. DB 변경 없음 → 이미 들어온 예약도 그대로 잡힌다.
+════════════════════════════════════════ */
+const SV_PER = 1000, SV_MAX = 3000;   // js/bookingSurvey.js 의 PER / MAX 와 동일
+
+function parseSurvey(r){
+    const out = { source:'', purpose:'', instagram:'', igFromSurvey:false, answered:0 };
+    const txt  = String((r && r.special_request) || '');
+    const line = txt.split('\n').find(l => l.trim().startsWith('[설문]'));
+    if (line){
+        line.trim().replace(/^\[설문\]\s*/, '').split(' / ').forEach(seg => {
+            const t = seg.trim();
+            if (t.startsWith('알게된 경로:'))      out.source  = t.slice('알게된 경로:'.length).trim();
+            else if (t.startsWith('숙박 목적:'))   out.purpose = t.slice('숙박 목적:'.length).trim();
+            else if (t.startsWith('인스타')){
+                const i = t.indexOf(':');
+                if (i >= 0){ out.instagram = t.slice(i+1).trim(); out.igFromSurvey = !!out.instagram; }
+            }
+        });
+    }
+    /* 설문 도입 전 예약에도 인스타 칸이 있었다 — 목록에는 같이 보여주되 '설문' 표시는 안 붙인다 */
+    if (!out.instagram && r && r.guest_instagram) out.instagram = String(r.guest_instagram).trim();
+    out.answered = (out.source?1:0) + (out.purpose?1:0) + (out.igFromSurvey?1:0);
+    return out;
+}
+
+/* 기간·취소 필터를 적용한 예약 목록 */
+function _svRows(){
+    const pv = (document.getElementById('svPeriod')   || {}).value   || 'all';
+    const ex = (document.getElementById('svExCancel') || {}).checked || false;
+    const now = new Date();
+    let from = null;
+    if      (pv === 'm1') from = new Date(now.getFullYear(), now.getMonth(),     1);
+    else if (pv === 'm3') from = new Date(now.getFullYear(), now.getMonth() - 2, 1);
+    else if (pv === 'y1') from = new Date(now.getFullYear(), 0, 1);
+    return (allData || []).filter(r => {
+        if (ex && r.payment_status === 'cancelled') return false;
+        if (from && !(new Date(r.created_at) >= from)) return false;
+        return true;
+    });
+}
+
+function _svCard(cls, icon, label, value, unit, sub){
+    return '<div class="stat-card">' +
+             '<div class="stat-label"><span class="stat-icon ' + cls + '"><i class="' + icon + '"></i></span>' + label + '</div>' +
+             '<div class="stat-value">' + value + (unit ? '<span class="stat-unit"> ' + unit + '</span>' : '') + '</div>' +
+             (sub ? '<div style="margin-top:6px;font-size:12px;color:rgb(112,112,112);">' + sub + '</div>' : '') +
+           '</div>';
+}
+
+function _svBars(counts, total){
+    const entries = Object.keys(counts).map(k => [k, counts[k]]).sort((a,b) => b[1] - a[1]);
+    if (!entries.length || !total) return '<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>아직 응답이 없습니다.</p></div>';
+    const max = entries[0][1] || 1;
+    return '<div class="svq">' + entries.map(function(e){
+        const pct = Math.round(e[1] / total * 1000) / 10;
+        return '<div class="svq-row">' +
+                 '<div class="svq-lb">' + _rEsc(e[0]) + '</div>' +
+                 '<div class="svq-bar"><i style="width:' + (e[1] / max * 100) + '%"></i></div>' +
+                 '<div class="svq-n"><b>' + e[1] + '</b>건 · ' + pct + '%</div>' +
+               '</div>';
+    }).join('') + '</div>';
+}
+
+function renderSurveyStats(){
+    const cardArea = document.getElementById('svCards');
+    if (!cardArea) return;                 // 패널이 없으면 조용히 통과
+
+    const rows  = _svRows().map(r => ({ r: r, s: parseSurvey(r) }));
+    const part  = rows.filter(x => x.s.answered > 0);          // 설문에 하나라도 답한 예약
+    const q1    = {}, q2 = {};
+    let igCnt = 0, disc = 0;
+    part.forEach(function(x){
+        if (x.s.source)  q1[x.s.source]  = (q1[x.s.source]  || 0) + 1;
+        if (x.s.purpose) q2[x.s.purpose] = (q2[x.s.purpose] || 0) + 1;
+        if (x.s.igFromSurvey) igCnt++;
+        disc += Math.min(x.s.answered * SV_PER, SV_MAX);
+    });
+    const q1n = Object.keys(q1).reduce((s,k) => s + q1[k], 0);
+    const q2n = Object.keys(q2).reduce((s,k) => s + q2[k], 0);
+    const rate = rows.length ? Math.round(part.length / rows.length * 1000) / 10 : 0;
+
+    document.getElementById('svCount').textContent =
+        '기간 내 예약 ' + rows.length + '건 · 설문 참여 ' + part.length + '건';
+
+    cardArea.innerHTML =
+        _svCard('ic-blue',  'fa-solid fa-clipboard-question', '설문 참여 예약', part.length, '건', '참여율 ' + rate + '%') +
+        _svCard('ic-green', 'fa-solid fa-magnifying-glass',   'Q1 응답',        q1n,         '건', '알게된 경로') +
+        _svCard('ic-orange','fa-solid fa-suitcase',           'Q2 응답',        q2n,         '건', '숙박 목적') +
+        _svCard('ic-purple','fa-brands fa-instagram',          '인스타 계정',    igCnt,       '건', '지급 할인 약 ' + fmtWon(disc));
+
+    document.getElementById('svQ1Area').innerHTML = _svBars(q1, q1n);
+    document.getElementById('svQ2Area').innerHTML = _svBars(q2, q2n);
+
+    /* 인스타 계정 목록 — 설문으로 들어온 계정을 위로 */
+    const igs = rows.filter(x => x.s.instagram)
+                    .sort((a,b) => (b.s.igFromSurvey?1:0) - (a.s.igFromSurvey?1:0));
+    const igArea = document.getElementById('svIgArea');
+    if (!igs.length){
+        igArea.innerHTML = '<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>수집된 계정이 없습니다.</p></div>';
+    } else {
+        igArea.innerHTML = '<div style="overflow-x:auto;"><table>' +
+            '<thead><tr><th>인스타 계정</th><th>구분</th><th>예약자</th><th>객실</th><th>체크인</th><th>예약번호</th></tr></thead><tbody>' +
+            igs.map(function(x){
+                return '<tr>' +
+                    '<td style="font-weight:600;">' + _rEsc(x.s.instagram) + '</td>' +
+                    '<td>' + (x.s.igFromSurvey ? '<span class="sv-tag">설문</span>' : '<span style="color:rgb(112,112,112);font-size:12px;">기존</span>') + '</td>' +
+                    '<td>' + _rEsc(x.r.guest_name || '-') + '</td>' +
+                    '<td class="room-cell">' + _rEsc(x.r.room_name || '-') + '</td>' +
+                    '<td>' + fmtDate(x.r.checkin_date) + '</td>' +
+                    '<td><div class="order-id-cell" title="' + _rEsc(x.r.order_id || '') + '">' + _rEsc(x.r.order_id || '-') + '</div></td>' +
+                  '</tr>';
+            }).join('') + '</tbody></table></div>';
+    }
+}
+
+/* 엑셀에서 바로 열 수 있게 BOM 을 붙인 CSV */
+function downloadSurveyCsv(){
+    const rows = _svRows().map(r => ({ r: r, s: parseSurvey(r) })).filter(x => x.s.answered > 0 || x.s.instagram);
+    if (!rows.length){ alert('내려받을 설문 응답이 없습니다.'); return; }
+    const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+    const lines = [['예약일','예약번호','예약자','객실','체크인','알게된 경로','숙박 목적','인스타 계정','설문계정여부','결제상태'].map(q).join(',')];
+    rows.forEach(function(x){
+        lines.push([
+            fmtDateTime(x.r.created_at), x.r.order_id || '', x.r.guest_name || '', x.r.room_name || '',
+            x.r.checkin_date || '', x.s.source, x.s.purpose, x.s.instagram,
+            x.s.igFromSurvey ? '설문' : '', x.r.payment_status || ''
+        ].map(q).join(','));
+    });
+    const blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type:'text/csv;charset=utf-8;' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '설문통계_' + new Date().toISOString().slice(0,10) + '.csv';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 0);
 }
 
 function buildTableHTML(data, areaId){
