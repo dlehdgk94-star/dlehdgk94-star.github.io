@@ -55,6 +55,11 @@
         .form-section{ background:#fff; border-radius:12px; padding:28px 32px; margin-bottom:14px; border:1px solid #e8e8e8; }
         .section-title{ display:flex; align-items:center; gap:12px; font-size:17px; font-weight:700; color:rgb(28,28,28); margin-bottom:24px; padding-bottom:18px; border-bottom:1px solid #f0f0f0; }
         .section-num{ width:26px; height:26px; background:rgb(28,28,28); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+        /* 섹션 제목을 객실카드 [예약하기] 버튼과 같은 알약 모양으로.
+           누르는 버튼이 아니라 모양만 맞춘 것이라 button 이 아닌 span 이다. */
+        .section-pill{ display:inline-block; background:rgb(114,107,113); color:#fff;
+                       border-radius:16px; padding:6px 16px; font-size:14px; font-weight:600;
+                       letter-spacing:-.01em; line-height:1.5; }
 
         /* ── 입력 필드 ── */
         .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
@@ -514,13 +519,13 @@
 
           <!-- 1. 객실 예약 (날짜·객실·인원) -->
           <div class="form-section">
-            <div class="section-title"><div class="section-num">1</div><span>객실 예약</span></div>
+            <div class="section-title"><div class="section-num">1</div><span class="section-pill">객실 예약</span></div>
             <div id="stayWidget"></div>
           </div>
 
           <!-- 2. 특가 할인 (설문 참여) -->
           <div class="form-section">
-            <div class="section-title"><div class="section-num">2</div><span>특가 할인</span>
+            <div class="section-title"><div class="section-num">2</div><span class="section-pill">특가 할인</span>
               <span style="margin-left:auto;font-size:12.5px;font-weight:600;color:#8a8a8a;">최대 3,000원</span></div>
             <div id="surveyWidget"></div>
           </div>
