@@ -32,7 +32,9 @@
     '.sv-top{display:flex;align-items:center;gap:12px;background:#faf7f2;border-radius:10px;padding:13px 16px;margin-bottom:20px;}',
     '.sv-top-l{font-size:13px;color:#6b7681;white-space:nowrap;}',
     '.sv-track{flex:1;height:7px;border-radius:99px;background:#e6e0d6;overflow:hidden;}',
-    '.sv-track i{display:block;height:100%;border-radius:99px;background:var(--sv-accent);transition:width .25s ease;}',
+    /* 아래 네 군데는 booking.html 섹션 제목(.section-pill)과 같은 금색 그라데이션.
+       글씨는 #2A1B05 — 금색 바탕에 흰 글씨는 대비 1.8:1 이라 읽히지 않는다. */
+    '.sv-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(180deg,#FDE9A6 0%,#FAD478 38%,#F3B94C 72%,#E3A337 100%);transition:width .25s ease;}',
     '.sv-amt{font-size:16px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums;color:#b9bfc5;}',
     '.sv-amt.on{color:var(--sv-accent);}',
     '.sv-q{margin-bottom:20px;}',
@@ -46,13 +48,14 @@
     '.sv-chip{border:1.5px solid var(--sv-line);border-radius:9px;padding:11px 6px;text-align:center;',
     'font-size:13px;color:#3d4853;cursor:pointer;user-select:none;transition:border-color .12s,background .12s;}',
     '.sv-chip:hover{border-color:#b5b5b5;}',
-    '.sv-chip.on{border-color:var(--sv-accent);background:var(--sv-accent);color:#fff;font-weight:600;}',
+    '.sv-chip.on{border-color:#E3A337;background:linear-gradient(180deg,#FDE9A6 0%,#FAD478 38%,#F3B94C 72%,#E3A337 100%);color:#2A1B05;font-weight:600;}',
     '.sv-ig{margin-top:11px;border:1.5px solid var(--sv-line);border-radius:9px;padding:14px 16px;}',
-    '.sv-ig.on{border-color:var(--sv-accent);}',
+    '.sv-ig.on{border-color:#E3A337;}',
     '.sv-check{display:flex;align-items:flex-start;gap:10px;cursor:pointer;user-select:none;}',
     '.sv-box{width:19px;height:19px;flex-shrink:0;border:1.5px solid #c8c8c8;border-radius:5px;margin-top:1px;',
     'display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;line-height:1;}',
-    '.sv-check.on .sv-box{background:var(--sv-accent);border-color:var(--sv-accent);}',
+    /* .sv-box 는 체크 글리프 색이 #fff 로 박혀 있어 color 까지 덮어야 체크가 보인다 */
+    '.sv-check.on .sv-box{background:linear-gradient(180deg,#FDE9A6 0%,#FAD478 38%,#F3B94C 72%,#E3A337 100%);border-color:#E3A337;color:#2A1B05;}',
     '.sv-ct{font-size:13.5px;color:#3d4853;line-height:1.55;}',
     '.sv-note{display:block;font-size:12px;color:#9a9a9a;margin-top:5px;line-height:1.55;}',
     '.sv-input{display:none;margin-top:12px;}',
