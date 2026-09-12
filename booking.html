@@ -223,7 +223,7 @@
     <script src="js/roomAvailability.js?v=20260802"></script>
     <script src="js/bookingQuote.js?v=20260904"></script>
     <script src="js/bookingStay.js?v=20260904"></script>
-    <script src="js/bookingSurvey.js?v=20260911"></script>
+    <script src="js/bookingSurvey.js?v=20260912"></script>
     <!-- 번역 -->
     <script src="translations.js?v=20260731b"></script>
     <!-- 토스페이먼츠 SDK -->
@@ -482,12 +482,12 @@
     }
 
     /* =====================================================================
-     * 설문 참여 할인 — 문항당 1,000원, 최대 3,000원.
+     * 설문 참여 할인 — 문항당 1,000원, 최대 4,000원 (4문항).
      * 답한 즉시 우측 합계와 결제 버튼 금액이 깎입니다.
      * ===================================================================== */
     function applyDiscount(b) {
         var base = (b.baseTotal != null) ? b.baseTotal : (b.totalPrice || 0);
-        var max  = (window.BookingSurvey ? BookingSurvey.MAX : 3000);
+        var max  = (window.BookingSurvey ? BookingSurvey.MAX : 4000);
         b.discount = Math.min(b.discount || 0, max); // 상한만 적용하고 보관값은 유지한다
         /* 실제로 깎는 금액은 요금을 넘지 않는다. 다만 보관값(b.discount)까지 줄이면
            날짜 재선택으로 요금이 잠시 0이 된 사이에 할인이 사라진다. */
@@ -534,7 +534,7 @@
           <!-- 2. 특가 할인 (설문 참여) -->
           <div class="form-section">
             <div class="section-title"><div class="section-num">2</div><span class="section-pill">특가 할인</span>
-              <span style="margin-left:auto;font-size:12.5px;font-weight:600;color:#8a8a8a;">최대 3,000원</span></div>
+              <span style="margin-left:auto;font-size:12.5px;font-weight:600;color:#8a8a8a;">최대 4,000원</span></div>
             <div id="surveyWidget"></div>
           </div>
 
@@ -766,8 +766,15 @@
     }
 
     /* ── 설문 결과를 예약 정보에 실어 보내기 ──
-       Q3 계정은 기존 guest_instagram 칸에, Q1·Q2 답변은 특별요청 뒤에 덧붙입니다.
-       (Supabase 테이블에 설문 전용 칸을 만들기 전까지의 방식) */
+       Q4 계정은 기존 guest_instagram 칸에, 나머지 답변은 특별요청 맨 뒤에
+       '[설문] ...' 한 줄로 덧붙입니다.
+       (Supabase 테이블에 설문 전용 칸을 만들기 전까지의 방식)
+
+       ★ 이 줄의 형식은 admin.html 의 parseSurvey() 가 그대로 되읽습니다.
+         항목 구분자는 ' / ', 이름과 값 구분은 ': ' 입니다. 여기를 바꾸면
+         관리자 '설문 통계' 탭도 같이 고쳐야 합니다.
+       ★ 자유 입력값은 반드시 BookingSurvey.clean() 을 통과시킵니다.
+         값 안에 '/' 나 줄바꿈이 남아 있으면 위 파싱이 깨집니다. */
     function _surveyValue() {
         try { return (JSON.parse(localStorage.getItem('instaHotelBooking')) || {}).survey || null; }
         catch (e) { return null; }
@@ -780,10 +787,15 @@
         var base = document.getElementById('iRequest').value.trim();
         var v = _surveyValue();
         if (!v) return base;
+        var C = (window.BookingSurvey && BookingSurvey.clean)
+              ? BookingSurvey.clean
+              : function (x) { return String(x == null ? '' : x).replace(/[\r\n\/\[\]]/g, ' ').trim().slice(0, 60); };
         var parts = [];
-        if (v.source)  parts.push('알게된 경로: ' + v.source);
-        if (v.purpose) parts.push('숙박 목적: ' + v.purpose);
-        if (v.instagram) parts.push('인스타(팔로워 500+ 자가신고): ' + v.instagram);
+        if (v.source)    parts.push('알게된 경로: ' + v.source + (v.sourceEtc  ? ' — ' + C(v.sourceEtc)  : ''));
+        if (v.purpose)   parts.push('숙박 목적: '   + v.purpose + (v.purposeEtc ? ' — ' + C(v.purposeEtc) : ''));
+        if (v.keyword)   parts.push('검색어: ' + C(v.keyword));
+        if (v.instagram) parts.push('인스타 팔로우: ' + C(v.instagram) +
+                                    (v.igWhen === 'already' ? ' (기존 팔로워)' : ' (신규 팔로우)'));
         if (!parts.length) return base;
         var tag = '[설문] ' + parts.join(' / ');
         return base ? (base + '\n' + tag) : tag;

@@ -375,10 +375,20 @@
 
             <div class="table-card">
                 <div class="table-card-header">
-                    <span class="table-card-title">인스타그램 계정 수집</span>
+            <div class="table-card" style="margin-bottom:20px;">
+                <div class="table-card-header">
+                    <span class="table-card-title">Q3. 실제로 검색한 문구</span>
+                </div>
+                <div id="svQ3Area"></div>
+                <div class="sv-hint">손님이 직접 입력한 검색어입니다. 띄어쓰기·대소문자만 맞춰 묶었고 <b>표기가 조금만 달라도 따로 집계</b>됩니다. 네이버·구글 키워드 광고나 지도 설명 문구를 정할 때 그대로 쓰시면 됩니다.</div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-card-header">
+                    <span class="table-card-title">Q4. 인스타그램 팔로우</span>
                 </div>
                 <div id="svIgArea"></div>
-                <div class="sv-hint">‘설문’ 표시는 예약 시 <b>팔로워 500명 이상</b>이라고 손님이 직접 체크한 계정입니다. 실제 확인은 체크인 때 하시면 됩니다.</div>
+                <div class="sv-hint">'설문' 표시는 예약 시 공식 인스타그램을 <b>팔로우했다고 손님이 직접 밝힌</b> 계정입니다. 실제 팔로우 여부는 체크인 때 확인하시면 됩니다. '이전 예약'은 설문 도입 전 인스타 칸에 적혀 있던 계정입니다.</div>
             </div>
         </div>
 
@@ -845,7 +855,7 @@ async function loadReservations(){
     const alertEl = document.getElementById('overbookAlert');
     if (alertEl) {
         if (ob.length > 0) {
-            const ids = ob.map(r => r.order_id || r.id).join(', ');
+            const ids = _rEsc(ob.map(r => r.order_id || r.id).join(', '));
             alertEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i><div><strong>오버부킹 ${ob.length}건 확인 필요!</strong><br><span style="font-weight:400;font-size:13px;">예약번호: ${ids}</span><br><span style="font-weight:400;font-size:12px;color:#e74c3c;">해당 고객에게 연락 후 환불 또는 대안을 안내해주세요.</span></div>`;
             alertEl.style.display = 'flex';
         } else {
@@ -873,26 +883,51 @@ function updateStats(data){
      반드시 같아야 하므로, 그쪽 문구를 바꾸면 아래 파서도 같이 고쳐야 한다.
    - 여기서는 그 줄을 다시 읽어 집계만 한다. DB 변경 없음 → 이미 들어온 예약도 그대로 잡힌다.
 ════════════════════════════════════════ */
-const SV_PER = 1000, SV_MAX = 3000;   // js/bookingSurvey.js 의 PER / MAX 와 동일
+const SV_PER = 1000, SV_MAX = 4000;   // js/bookingSurvey.js 의 PER / MAX 와 동일
 
+/* special_request 의 '[설문] ...' 한 줄을 되읽는다.
+   형식은 booking.html 의 _requestWithSurvey() 가 만든다 — 바뀌면 여기도 같이 고칠 것.
+   손님 요청사항이 먼저 오고 설문 줄이 맨 뒤에 붙으므로, 손님이 '[설문]' 을
+   흉내내 적어도 진짜 줄(마지막 것)을 읽도록 뒤에서부터 찾는다. */
 function parseSurvey(r){
-    const out = { source:'', purpose:'', instagram:'', igFromSurvey:false, answered:0 };
-    const txt  = String((r && r.special_request) || '');
-    const line = txt.split('\n').find(l => l.trim().startsWith('[설문]'));
+    const out = { source:'', sourceEtc:'', purpose:'', purposeEtc:'', keyword:'',
+                  instagram:'', igFromSurvey:false, igWhen:'', answered:0 };
+    const lines = String((r && r.special_request) || '').split('\n');
+    let line = '';
+    for (let i = lines.length - 1; i >= 0; i--){
+        if (lines[i].trim().startsWith('[설문]')){ line = lines[i]; break; }
+    }
     if (line){
         line.trim().replace(/^\[설문\]\s*/, '').split(' / ').forEach(seg => {
             const t = seg.trim();
-            if (t.startsWith('알게된 경로:'))      out.source  = t.slice('알게된 경로:'.length).trim();
-            else if (t.startsWith('숙박 목적:'))   out.purpose = t.slice('숙박 목적:'.length).trim();
-            else if (t.startsWith('인스타')){
+            const take = (k) => t.slice(k.length).trim();
+            /* '기타 — 자유입력' 형태를 라벨과 자유입력으로 나눈다 */
+            const split = (v) => {
+                const i = v.indexOf(' — ');
+                return i < 0 ? [v, ''] : [v.slice(0, i).trim(), v.slice(i + 3).trim()];
+            };
+            if (t.startsWith('알게된 경로:')){
+                const pp = split(take('알게된 경로:')); out.source = pp[0]; out.sourceEtc = pp[1];
+            } else if (t.startsWith('숙박 목적:')){
+                const pp = split(take('숙박 목적:')); out.purpose = pp[0]; out.purposeEtc = pp[1];
+            } else if (t.startsWith('검색어:')){
+                out.keyword = take('검색어:');
+            } else if (t.startsWith('인스타')){
+                /* 신형: '인스타 팔로우: @id (신규 팔로우)'
+                   구형: '인스타(팔로워 500+ 자가신고): @id'  — 예전 예약도 잡히게 둔다 */
                 const i = t.indexOf(':');
-                if (i >= 0){ out.instagram = t.slice(i+1).trim(); out.igFromSurvey = !!out.instagram; }
+                let v = i >= 0 ? t.slice(i + 1).trim() : '';
+                if (/\(기존 팔로워\)/.test(v)) out.igWhen = '기존';
+                else if (/\(신규 팔로우\)/.test(v)) out.igWhen = '신규';
+                else if (/자가신고/.test(t)) out.igWhen = '구(팔로워500+)';
+                v = v.replace(/\s*\([^)]*\)\s*$/, '').trim();
+                if (v){ out.instagram = v; out.igFromSurvey = true; }
             }
         });
     }
     /* 설문 도입 전 예약에도 인스타 칸이 있었다 — 목록에는 같이 보여주되 '설문' 표시는 안 붙인다 */
     if (!out.instagram && r && r.guest_instagram) out.instagram = String(r.guest_instagram).trim();
-    out.answered = (out.source?1:0) + (out.purpose?1:0) + (out.igFromSurvey?1:0);
+    out.answered = (out.source?1:0) + (out.purpose?1:0) + (out.keyword?1:0) + (out.igFromSurvey?1:0);
     return out;
 }
 
@@ -940,16 +975,22 @@ function renderSurveyStats(){
 
     const rows  = _svRows().map(r => ({ r: r, s: parseSurvey(r) }));
     const part  = rows.filter(x => x.s.answered > 0);          // 설문에 하나라도 답한 예약
-    const q1    = {}, q2 = {};
+    const q1    = {}, q2 = {}, kw = {};
     let igCnt = 0, disc = 0;
     part.forEach(function(x){
         if (x.s.source)  q1[x.s.source]  = (q1[x.s.source]  || 0) + 1;
         if (x.s.purpose) q2[x.s.purpose] = (q2[x.s.purpose] || 0) + 1;
+        /* 검색어는 손님이 직접 친 문장이라 띄어쓰기·대소문자만 맞춰서 묶는다 */
+        if (x.s.keyword){
+            const k = x.s.keyword.toLowerCase().replace(/\s+/g,' ').trim();
+            kw[k] = (kw[k] || 0) + 1;
+        }
         if (x.s.igFromSurvey) igCnt++;
         disc += Math.min(x.s.answered * SV_PER, SV_MAX);
     });
     const q1n = Object.keys(q1).reduce((s,k) => s + q1[k], 0);
     const q2n = Object.keys(q2).reduce((s,k) => s + q2[k], 0);
+    const kwn = Object.keys(kw).reduce((s,k) => s + kw[k], 0);
     const rate = rows.length ? Math.round(part.length / rows.length * 1000) / 10 : 0;
 
     document.getElementById('svCount').textContent =
@@ -958,11 +999,12 @@ function renderSurveyStats(){
     cardArea.innerHTML =
         _svCard('ic-blue',  'fa-solid fa-clipboard-question', '설문 참여 예약', part.length, '건', '참여율 ' + rate + '%') +
         _svCard('ic-green', 'fa-solid fa-magnifying-glass',   'Q1 응답',        q1n,         '건', '알게된 경로') +
-        _svCard('ic-orange','fa-solid fa-suitcase',           'Q2 응답',        q2n,         '건', '숙박 목적') +
-        _svCard('ic-purple','fa-brands fa-instagram',          '인스타 계정',    igCnt,       '건', '지급 할인 약 ' + fmtWon(disc));
+        _svCard('ic-orange','fa-solid fa-magnifying-glass-chart','검색어 수집',  kwn,       '건', '실제 검색 문구') +
+        _svCard('ic-purple','fa-brands fa-instagram',          '인스타 팔로우',  igCnt,       '건', '지급 할인 약 ' + fmtWon(disc));
 
     document.getElementById('svQ1Area').innerHTML = _svBars(q1, q1n);
     document.getElementById('svQ2Area').innerHTML = _svBars(q2, q2n);
+    document.getElementById('svQ3Area').innerHTML = _svBars(kw, kwn);
 
     /* 인스타 계정 목록 — 설문으로 들어온 계정을 위로 */
     const igs = rows.filter(x => x.s.instagram)
@@ -972,11 +1014,12 @@ function renderSurveyStats(){
         igArea.innerHTML = '<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>수집된 계정이 없습니다.</p></div>';
     } else {
         igArea.innerHTML = '<div style="overflow-x:auto;"><table>' +
-            '<thead><tr><th>인스타 계정</th><th>구분</th><th>예약자</th><th>객실</th><th>체크인</th><th>예약번호</th></tr></thead><tbody>' +
+            '<thead><tr><th>인스타 계정</th><th>구분</th><th>팔로우</th><th>예약자</th><th>객실</th><th>체크인</th><th>예약번호</th></tr></thead><tbody>' +
             igs.map(function(x){
                 return '<tr>' +
                     '<td style="font-weight:600;">' + _rEsc(x.s.instagram) + '</td>' +
-                    '<td>' + (x.s.igFromSurvey ? '<span class="sv-tag">설문</span>' : '<span style="color:rgb(112,112,112);font-size:12px;">기존</span>') + '</td>' +
+                    '<td>' + (x.s.igFromSurvey ? '<span class="sv-tag">설문</span>' : '<span style="color:rgb(112,112,112);font-size:12px;">이전 예약</span>') + '</td>' +
+                    '<td style="font-size:12px;color:rgb(112,112,112);">' + _rEsc(x.s.igWhen || '-') + '</td>' +
                     '<td>' + _rEsc(x.r.guest_name || '-') + '</td>' +
                     '<td class="room-cell">' + _rEsc(x.r.room_name || '-') + '</td>' +
                     '<td>' + fmtDate(x.r.checkin_date) + '</td>' +
@@ -991,11 +1034,12 @@ function downloadSurveyCsv(){
     const rows = _svRows().map(r => ({ r: r, s: parseSurvey(r) })).filter(x => x.s.answered > 0 || x.s.instagram);
     if (!rows.length){ alert('내려받을 설문 응답이 없습니다.'); return; }
     const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
-    const lines = [['예약일','예약번호','예약자','객실','체크인','알게된 경로','숙박 목적','인스타 계정','설문계정여부','결제상태'].map(q).join(',')];
+    const lines = [['예약일','예약번호','예약자','객실','체크인','알게된 경로','경로 기타','숙박 목적','목적 기타','검색어','인스타 계정','팔로우 시점','설문여부','결제상태'].map(q).join(',')];
     rows.forEach(function(x){
         lines.push([
             fmtDateTime(x.r.created_at), x.r.order_id || '', x.r.guest_name || '', x.r.room_name || '',
-            x.r.checkin_date || '', x.s.source, x.s.purpose, x.s.instagram,
+            x.r.checkin_date || '', x.s.source, x.s.sourceEtc, x.s.purpose, x.s.purposeEtc,
+            x.s.keyword, x.s.instagram, x.s.igWhen,
             x.s.igFromSurvey ? '설문' : '', x.r.payment_status || ''
         ].map(q).join(','));
     });
@@ -1012,11 +1056,11 @@ function buildTableHTML(data, areaId){
     // 예약자명 또는 연락처가 비어 저장된 행은 배경색으로 강조 (결제는 됐는데 손님 정보 없음)
     const _blank = v => !v || !String(v).trim();
     const rows=data.map(r=>`
-        <tr data-id="${r.id||''}"${(_blank(r.guest_name)||_blank(r.guest_phone))?' class="row-missing-guest" title="예약자 정보 누락 — 확인 필요"':''}>
-            <td><div class="order-id-cell" title="${r.order_id||''}">${r.order_id||'-'}</div></td>
-            <td style="font-weight:600;">${r.guest_name||'-'}</td>
-            <td>${r.guest_phone ? r.guest_phone.replace(/(\d{3})(\d{3,4})(\d{4})/,'$1-$2-$3') : '-'}</td>
-            <td class="room-cell">${r.room_name||'-'}</td>
+        <tr data-id="${_rEsc(r.id||'')}"${(_blank(r.guest_name)||_blank(r.guest_phone))?' class="row-missing-guest" title="예약자 정보 누락 — 확인 필요"':''}>
+            <td><div class="order-id-cell" title="${_rEsc(r.order_id||'')}">${_rEsc(r.order_id||'-')}</div></td>
+            <td style="font-weight:600;">${_rEsc(r.guest_name||'-')}</td>
+            <td>${r.guest_phone ? _rEsc(String(r.guest_phone).replace(/(\d{3})(\d{3,4})(\d{4})/,'$1-$2-$3')) : '-'}</td>
+            <td class="room-cell">${_rEsc(r.room_name||'-')}</td>
             <td>${fmtDate(r.checkin_date)}</td>
             <td>${fmtDate(r.checkout_date)}</td>
             <td>${r.nights ? r.nights+'박' : '-'}</td>
@@ -1079,27 +1123,33 @@ function resetFilter(){
 /* ── 예약 상세 모달 ── */
 function openResModal(r){
     _currentRes = r;
-    const igHandle = r.guest_instagram ? r.guest_instagram.replace(/^@/,'') : '';
-    const ig = igHandle
-        ? `<a href="https://instagram.com/${igHandle}" target="_blank" style="color:#00768e;">@${igHandle}</a>`
-        : '-';
-    const specialReq = (r.special_request && r.special_request.trim()) ? r.special_request : '없음';
+    /* ★ 아래 값은 전부 손님이 직접 입력한 것이다. 설문에 자유 입력칸(기타·검색어)이
+       생기면서 임의의 문자열이 들어올 수 있으므로, 화면에 꽂기 전에 반드시
+       _rEsc() 를 통과시킨다. 이스케이프를 빼면 관리자 화면에서 스크립트가 돈다. */
+    const igRaw    = r.guest_instagram ? String(r.guest_instagram).replace(/^@/,'').trim() : '';
+    /* 계정은 인스타 아이디로 쓸 수 있는 글자만 남겨 주소에 넣는다 */
+    const igSafe   = igRaw.replace(/[^A-Za-z0-9._]/g,'');
+    const ig = igSafe
+        ? `<a href="https://instagram.com/${igSafe}" target="_blank" rel="noopener" style="color:#00768e;">@${_rEsc(igSafe)}</a>`
+        : (igRaw ? _rEsc(igRaw) : '-');
+    const _reqRaw    = (r.special_request && String(r.special_request).trim()) ? String(r.special_request) : '';
+    const specialReq = _reqRaw ? _rEsc(_reqRaw).replace(/\n/g,'<br>') : '없음';
     document.getElementById('resModalBody').innerHTML=`
         <div class="modal-section">
             <div class="modal-section-title">예약 정보</div>
-            <div class="modal-row"><span class="modal-key">예약번호</span><span class="modal-val" style="font-family:monospace;font-size:12px;">${r.order_id||'-'}</span></div>
-            <div class="modal-row"><span class="modal-key">객실</span><span class="modal-val" style="color:#00768e;">${r.room_name||'-'}</span></div>
-            <div class="modal-row"><span class="modal-key">체크인</span><span class="modal-val">${r.checkin_date||'-'} 오후 3:00</span></div>
-            <div class="modal-row"><span class="modal-key">체크아웃</span><span class="modal-val">${r.checkout_date||'-'} 오후 12:00</span></div>
+            <div class="modal-row"><span class="modal-key">예약번호</span><span class="modal-val" style="font-family:monospace;font-size:12px;">${_rEsc(r.order_id||'-')}</span></div>
+            <div class="modal-row"><span class="modal-key">객실</span><span class="modal-val" style="color:#00768e;">${_rEsc(r.room_name||'-')}</span></div>
+            <div class="modal-row"><span class="modal-key">체크인</span><span class="modal-val">${_rEsc(r.checkin_date||'-')} 오후 3:00</span></div>
+            <div class="modal-row"><span class="modal-key">체크아웃</span><span class="modal-val">${_rEsc(r.checkout_date||'-')} 오후 12:00</span></div>
             <div class="modal-row"><span class="modal-key">숙박</span><span class="modal-val">${r.nights?r.nights+'박':'-'}</span></div>
             <div class="modal-row"><span class="modal-key">객실/인원</span><span class="modal-val">${r.room_count||'-'}객실 · 성인 ${r.adult_count||'-'}인</span></div>
         </div>
         <div class="modal-section">
             <div class="modal-section-title">예약자 정보</div>
-            <div class="modal-row"><span class="modal-key">이름</span><span class="modal-val">${r.guest_name||'-'}</span></div>
-            <div class="modal-row"><span class="modal-key">연락처</span><span class="modal-val">${r.guest_phone?r.guest_phone.replace(/(\d{3})(\d{3,4})(\d{4})/,'$1-$2-$3'):'-'}</span></div>
-            <div class="modal-row"><span class="modal-key">이메일</span><span class="modal-val">${r.guest_email||'-'}</span></div>
-            <div class="modal-row"><span class="modal-key">나라</span><span class="modal-val">${COUNTRIES[r.guest_country]||r.guest_country||'-'}</span></div>
+            <div class="modal-row"><span class="modal-key">이름</span><span class="modal-val">${_rEsc(r.guest_name||'-')}</span></div>
+            <div class="modal-row"><span class="modal-key">연락처</span><span class="modal-val">${r.guest_phone?_rEsc(String(r.guest_phone).replace(/(\d{3})(\d{3,4})(\d{4})/,'$1-$2-$3')):'-'}</span></div>
+            <div class="modal-row"><span class="modal-key">이메일</span><span class="modal-val">${_rEsc(r.guest_email||'-')}</span></div>
+            <div class="modal-row"><span class="modal-key">나라</span><span class="modal-val">${_rEsc(COUNTRIES[r.guest_country]||r.guest_country||'-')}</span></div>
             <div class="modal-row"><span class="modal-key">인스타그램 계정</span><span class="modal-val">${ig}</span></div>
             <div class="modal-row"><span class="modal-key">특별 요청사항</span><span class="modal-val" style="${specialReq==='없음'?'color:rgb(112,112,112);font-weight:400;':''}">${specialReq}</span></div>
         </div>
@@ -1107,7 +1157,7 @@ function openResModal(r){
             <div class="modal-section-title">결제 정보</div>
             <div class="modal-row"><span class="modal-key">결제 금액</span><span class="modal-val" style="font-size:17px;font-weight:800;">${fmtResAmount(r)}</span></div>
             <div class="modal-row"><span class="modal-key">결제 상태</span><span class="modal-val">${statusBadge(r.payment_status)}</span></div>
-            ${r.payment_key?`<div class="modal-row"><span class="modal-key">결제 키</span><span class="modal-val" style="font-family:monospace;font-size:11px;color:rgb(112,112,112);">${r.payment_key}</span></div>`:''}
+            ${r.payment_key?`<div class="modal-row"><span class="modal-key">결제 키</span><span class="modal-val" style="font-family:monospace;font-size:11px;color:rgb(112,112,112);">${_rEsc(r.payment_key)}</span></div>`:''}
             <div class="modal-row"><span class="modal-key">예약 일시</span><span class="modal-val">${fmtDateTime(r.created_at)}</span></div>
         </div>`;
     /* 취소 버튼: paid 상태일 때만 표시 */
