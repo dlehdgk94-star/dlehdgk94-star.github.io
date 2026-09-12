@@ -85,6 +85,10 @@
         .sv-chk{ display:inline-flex; align-items:center; gap:6px; font-size:13px; color:#444; cursor:pointer; }
         .sv-tag{ display:inline-block; background:#f3f0ea; color:#7a6a4f; font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; }
         .sv-hint{ font-size:12px; color:rgb(112,112,112); padding:0 22px 16px; line-height:1.6; }
+        .sv-etc{ margin:2px 22px 18px; border-top:1px dashed #e8e8e8; padding-top:12px; }
+        .sv-etc-t{ font-size:12px; font-weight:700; color:rgb(112,112,112); margin-bottom:8px; }
+        .sv-etc-i{ display:flex; gap:10px; align-items:baseline; padding:5px 0; font-size:13px; }
+        .sv-etc-i span{ color:rgb(112,112,112); font-size:12px; white-space:nowrap; }
         @media(max-width:640px){ .svq-row{ grid-template-columns:112px 1fr 84px; gap:8px; } .svq{ padding:8px 14px 16px; } }
         .table-card-header{ padding:18px 22px 14px; border-bottom:1px solid #f0f0f0; display:flex; align-items:center; justify-content:space-between; }
         .table-card-title{ font-size:15px; font-weight:700; }
@@ -955,6 +959,17 @@ function _svCard(cls, icon, label, value, unit, sub){
            '</div>';
 }
 
+/* '기타' 는 막대에 '기타 n건' 으로만 남아 정작 손님이 쓴 내용이 안 보인다.
+   막대 아래에 그 내용을 그대로 붙여준다. 손님이 친 글이므로 반드시 _rEsc() 를 통과시킨다. */
+function _svEtcList(items, label){
+    if (!items.length) return '';
+    return '<div class="sv-etc"><div class="sv-etc-t">' + label + ' 직접 입력 ' + items.length + '건</div>' +
+        items.map(function(it){
+            return '<div class="sv-etc-i"><b>' + _rEsc(it.t) + '</b>' +
+                   '<span>' + _rEsc(it.n || '-') + ' · ' + fmtDate(it.d) + '</span></div>';
+        }).join('') + '</div>';
+}
+
 function _svBars(counts, total){
     const entries = Object.keys(counts).map(k => [k, counts[k]]).sort((a,b) => b[1] - a[1]);
     if (!entries.length || !total) return '<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>아직 응답이 없습니다.</p></div>';
@@ -976,10 +991,13 @@ function renderSurveyStats(){
     const rows  = _svRows().map(r => ({ r: r, s: parseSurvey(r) }));
     const part  = rows.filter(x => x.s.answered > 0);          // 설문에 하나라도 답한 예약
     const q1    = {}, q2 = {}, kw = {};
+    const etc1  = [], etc2 = [];
     let igCnt = 0, disc = 0;
     part.forEach(function(x){
         if (x.s.source)  q1[x.s.source]  = (q1[x.s.source]  || 0) + 1;
         if (x.s.purpose) q2[x.s.purpose] = (q2[x.s.purpose] || 0) + 1;
+        if (x.s.sourceEtc)  etc1.push({ t:x.s.sourceEtc,  n:x.r.guest_name, d:x.r.checkin_date });
+        if (x.s.purposeEtc) etc2.push({ t:x.s.purposeEtc, n:x.r.guest_name, d:x.r.checkin_date });
         /* 검색어는 손님이 직접 친 문장이라 띄어쓰기·대소문자만 맞춰서 묶는다 */
         if (x.s.keyword){
             const k = x.s.keyword.toLowerCase().replace(/\s+/g,' ').trim();
@@ -1002,8 +1020,8 @@ function renderSurveyStats(){
         _svCard('ic-orange','fa-solid fa-magnifying-glass-chart','검색어 수집',  kwn,       '건', '실제 검색 문구') +
         _svCard('ic-purple','fa-brands fa-instagram',          '인스타 팔로우',  igCnt,       '건', '지급 할인 약 ' + fmtWon(disc));
 
-    document.getElementById('svQ1Area').innerHTML = _svBars(q1, q1n);
-    document.getElementById('svQ2Area').innerHTML = _svBars(q2, q2n);
+    document.getElementById('svQ1Area').innerHTML = _svBars(q1, q1n) + _svEtcList(etc1, '기타');
+    document.getElementById('svQ2Area').innerHTML = _svBars(q2, q2n) + _svEtcList(etc2, '기타');
     document.getElementById('svQ3Area').innerHTML = _svBars(kw, kwn);
 
     /* 인스타 계정 목록 — 설문으로 들어온 계정을 위로 */
