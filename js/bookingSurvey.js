@@ -4,8 +4,8 @@
  * 예약결제 페이지에서 설문 4문항에 답하면 문항당 1,000원씩 최대 4,000원 할인.
  * 쿠폰 코드가 없습니다. 답하는 즉시 우측 결제금액이 깎입니다.
  *
- * Q1 어떻게 알게 되셨나요            → 선택 시 1,000원 (기타는 자유 입력 동반)
- * Q2 이번 숙박의 주된 목적            → 선택 시 1,000원 (기타는 자유 입력 동반)
+ * Q1 어떻게 알게 되셨나요            → 선택 시 1,000원 ('기타'는 자유 입력을 적어야 인정)
+ * Q2 이번 숙박의 주된 목적            → 선택 시 1,000원 ('기타'는 자유 입력을 적어야 인정)
  * Q3 어떤 검색어로 찾으셨나요          → 입력 후 [입력 완료] 를 눌러야 1,000원
  * Q4 공식 인스타그램 팔로우           → 계정 + 팔로우 시점 고르고 [팔로우 완료] 1,000원
  *
@@ -96,6 +96,9 @@
     'font-weight:700;color:#2A1B05;text-decoration:none;border:1.5px solid #E3A337;border-radius:8px;padding:10px 14px;background:#fdf8ec;}',
     '.sv-link:hover{background:#fbf1dc;}',
     '.sv-note{display:block;font-size:12px;color:#9a9a9a;margin-top:8px;line-height:1.55;}',
+    '.sv-note.hide{display:none;}',
+    '.sv-etc{border-color:#E3A337 !important;background:#fffdf8 !important;}',
+    '.sv-etc.ok{border-color:var(--sv-line) !important;background:#fff !important;}',
     '.sv-foot{margin-top:18px;padding-top:14px;border-top:1px solid #f0f0f0;font-size:12px;color:#9a9a9a;line-height:1.6;}',
     '@media(max-width:720px){.sv-chips{grid-template-columns:repeat(2,1fr);}',
     '.sv-row .sv-input{min-width:100%;}.sv-btn{width:100%;}}'
@@ -149,6 +152,13 @@
     this._emit();
   }
 
+  /* '기타' 는 자유 입력을 적어야 인정한다 (그냥 고르기만 하면 할인 없음) */
+  Widget.prototype._q1Ok = function () {
+    return !!this.source && (this.source !== ETC || clean(this.sourceEtc).length > 0);
+  };
+  Widget.prototype._q2Ok = function () {
+    return !!this.purpose && (this.purpose !== ETC || clean(this.purposeEtc).length > 0);
+  };
   Widget.prototype._kwOk = function () { return this.kwLocked && clean(this.kw).length > 0; };
   Widget.prototype._igOk = function () {
     return this.igLocked && !!this.igWhen && clean(this.ig).replace(/^@/, '').length >= 2;
@@ -156,8 +166,8 @@
 
   Widget.prototype.discount = function () {
     var n = 0;
-    if (this.source)   n += PER;
-    if (this.purpose)  n += PER;
+    if (this._q1Ok())  n += PER;
+    if (this._q2Ok())  n += PER;
     if (this._kwOk())  n += PER;
     if (this._igOk())  n += PER;
     return Math.min(n, MAX);
@@ -165,10 +175,10 @@
 
   Widget.prototype.value = function () {
     return {
-      source:     this.source,
-      sourceEtc:  this.source === ETC ? clean(this.sourceEtc) : '',
-      purpose:    this.purpose,
-      purposeEtc: this.purpose === ETC ? clean(this.purposeEtc) : '',
+      source:     this._q1Ok() ? this.source : null,
+      sourceEtc:  (this._q1Ok() && this.source === ETC) ? clean(this.sourceEtc) : '',
+      purpose:    this._q2Ok() ? this.purpose : null,
+      purposeEtc: (this._q2Ok() && this.purpose === ETC) ? clean(this.purposeEtc) : '',
       keyword:    this._kwOk() ? clean(this.kw) : '',
       instagram:  this._igOk() ? '@' + clean(this.ig).replace(/^@/, '') : '',
       igWhen:     this._igOk() ? this.igWhen : null,
@@ -251,6 +261,20 @@
     if (kb) kb.disabled = !clean(this.kw);
     var ib = this.el.querySelector('[data-sv="iglock"]');
     if (ib) ib.disabled = (clean(this.ig).replace(/^@/, '').length < 2 || !this.igWhen);
+
+    /* '기타' 자유 입력은 글자가 들어온 순간 할인이 붙으므로 알약도 같이 바꾼다 */
+    var self = this;
+    [['svP1', this._q1Ok(), 'svEtc1'], ['svP2', this._q2Ok(), 'svEtc2']].forEach(function (t) {
+      var pill = self.el.querySelector('#' + t[0]);
+      if (pill) {
+        pill.textContent = t[1] ? '1,000원 할인 적용됨' : '1,000원 할인 받기';
+        pill.className = 'sv-qp' + (t[1] ? ' done' : '');
+      }
+      var inp  = self.el.querySelector('#' + t[2]);
+      var note = self.el.querySelector('#' + t[2] + 'n');
+      if (inp)  inp.className  = 'sv-etc' + (t[1] ? ' ok' : '');
+      if (note) note.className = 'sv-note' + (t[1] ? ' hide' : '');
+    });
   };
 
   Widget.prototype._chips = function (q, sel, tag) {
@@ -260,15 +284,19 @@
     }).join('');
   };
 
-  Widget.prototype._pill = function (ok) {
-    return '<span class="sv-qp' + (ok ? ' done' : '') + '">' +
+  Widget.prototype._pill = function (ok, id) {
+    return '<span class="sv-qp' + (ok ? ' done' : '') + '"' + (id ? ' id="' + id + '"' : '') + '>' +
            (ok ? '1,000원 할인 적용됨' : '1,000원 할인 받기') + '</span>';
   };
 
   Widget.prototype._etcBox = function (q, sel, val, id) {
     if (sel !== ETC) return '';
-    return '<div class="sv-input"><input id="' + id + '" type="text" maxlength="' + FREE_MAX +
-           '" placeholder="' + esc(q.etcPh) + ' (선택)" autocomplete="off" value="' + esc(val) + '"></div>';
+    var ok = clean(val).length > 0;
+    return '<div class="sv-input"><input id="' + id + '" class="sv-etc' + (ok ? ' ok' : '') +
+             '" type="text" maxlength="' + FREE_MAX + '" placeholder="' + esc(q.etcPh) +
+             '" autocomplete="off" value="' + esc(val) + '"></div>' +
+           '<span class="sv-note' + (ok ? ' hide' : '') + '" id="' + id + 'n">' +
+             '적어주셔야 1,000원 할인이 적용됩니다.</span>';
   };
 
   Widget.prototype.render = function () {
@@ -320,14 +348,14 @@
 
         '<div class="sv-q">' +
           '<div class="sv-qh"><span class="sv-qk">Q1</span><span class="sv-qt">' + esc(Q1.title) + '</span>' +
-            this._pill(!!this.source) + '</div>' +
+            this._pill(this._q1Ok(), 'svP1') + '</div>' +
           '<div class="sv-chips">' + this._chips(Q1, this.source, 'q1') + '</div>' +
           this._etcBox(Q1, this.source, this.sourceEtc, 'svEtc1') +
         '</div>' +
 
         '<div class="sv-q">' +
           '<div class="sv-qh"><span class="sv-qk">Q2</span><span class="sv-qt">' + esc(Q2.title) + '</span>' +
-            this._pill(!!this.purpose) + '</div>' +
+            this._pill(this._q2Ok(), 'svP2') + '</div>' +
           '<div class="sv-chips">' + this._chips(Q2, this.purpose, 'q2') + '</div>' +
           this._etcBox(Q2, this.purpose, this.purposeEtc, 'svEtc2') +
         '</div>' +
