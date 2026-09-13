@@ -389,10 +389,10 @@
 
             <div class="table-card">
                 <div class="table-card-header">
-                    <span class="table-card-title">Q4. 인스타그램 팔로우</span>
+                    <span class="table-card-title">인스타그램 계정 (과거 수집분)</span>
                 </div>
                 <div id="svIgArea"></div>
-                <div class="sv-hint">'설문' 표시는 예약 시 공식 인스타그램을 <b>팔로우했다고 손님이 직접 밝힌</b> 계정입니다. 실제 팔로우 여부는 체크인 때 확인하시면 됩니다. '이전 예약'은 설문 도입 전 인스타 칸에 적혀 있던 계정입니다.</div>
+                <div class="sv-hint">인스타그램 문항은 <b>2026년 9월 13일에 설문에서 빠졌습니다.</b> 아래는 그 전에 모인 계정이며 새로 늘어나지 않습니다. '설문'은 팔로우했다고 손님이 직접 밝힌 계정, '이전 예약'은 설문 도입 전 인스타 칸에 적혀 있던 계정입니다.</div>
             </div>
         </div>
 
@@ -887,7 +887,7 @@ function updateStats(data){
      반드시 같아야 하므로, 그쪽 문구를 바꾸면 아래 파서도 같이 고쳐야 한다.
    - 여기서는 그 줄을 다시 읽어 집계만 한다. DB 변경 없음 → 이미 들어온 예약도 그대로 잡힌다.
 ════════════════════════════════════════ */
-const SV_PER = 1000, SV_MAX = 4000;   // js/bookingSurvey.js 의 PER / MAX 와 동일
+const SV_PER = 1000, SV_MAX = 3000;   // js/bookingSurvey.js 의 PER / MAX 와 동일
 
 /* special_request 의 '[설문] ...' 한 줄을 되읽는다.
    형식은 booking.html 의 _requestWithSurvey() 가 만든다 — 바뀌면 여기도 같이 고칠 것.
@@ -1017,8 +1017,8 @@ function renderSurveyStats(){
     cardArea.innerHTML =
         _svCard('ic-blue',  'fa-solid fa-clipboard-question', '설문 참여 예약', part.length, '건', '참여율 ' + rate + '%') +
         _svCard('ic-green', 'fa-solid fa-magnifying-glass',   'Q1 응답',        q1n,         '건', '알게된 경로') +
-        _svCard('ic-orange','fa-solid fa-magnifying-glass-chart','검색어 수집',  kwn,       '건', '실제 검색 문구') +
-        _svCard('ic-purple','fa-brands fa-instagram',          '인스타 팔로우',  igCnt,       '건', '지급 할인 약 ' + fmtWon(disc));
+        _svCard('ic-orange','fa-solid fa-suitcase',           'Q2 응답',        q2n,         '건', '숙박 목적') +
+        _svCard('ic-purple','fa-solid fa-magnifying-glass-chart','검색어 수집',   kwn,         '건', '지급 할인 약 ' + fmtWon(disc));
 
     document.getElementById('svQ1Area').innerHTML = _svBars(q1, q1n) + _svEtcList(etc1, '기타');
     document.getElementById('svQ2Area').innerHTML = _svBars(q2, q2n) + _svEtcList(etc2, '기타');

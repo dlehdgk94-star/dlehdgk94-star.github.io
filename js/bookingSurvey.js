@@ -1,13 +1,15 @@
 /* =========================================================================
  * 인스타호텔 - 설문 참여 할인 위젯 (js/bookingSurvey.js)  v2.0
  * -------------------------------------------------------------------------
- * 예약결제 페이지에서 설문 4문항에 답하면 문항당 1,000원씩 최대 4,000원 할인.
+ * 예약결제 페이지에서 설문 3문항에 답하면 문항당 1,000원씩 최대 3,000원 할인.
  * 쿠폰 코드가 없습니다. 답하는 즉시 우측 결제금액이 깎입니다.
  *
  * Q1 어떻게 알게 되셨나요            → 선택 시 1,000원 ('기타'는 자유 입력을 적어야 인정)
  * Q2 이번 숙박의 주된 목적            → 선택 시 1,000원 ('기타'는 자유 입력을 적어야 인정)
  * Q3 어떤 검색어로 찾으셨나요          → 입력 후 [입력 완료] 를 눌러야 1,000원
- * Q4 공식 인스타그램 팔로우           → 계정 + 팔로우 시점 고르고 [팔로우 완료] 1,000원
+ *
+ * 2026-09-13: Q4 '공식 인스타그램 팔로우' 문항 삭제, 상한 4,000 → 3,000원.
+ *   admin.html 의 parseSurvey() 는 예전 예약을 위해 인스타 해석을 그대로 둔다.
  *
  * ★ 자유 입력이 있는 문항(Q1기타·Q2기타·Q3검색어)은 손님이 아무 글자나 넣을 수
  *   있습니다. 이 값은 booking.html 의 _requestWithSurvey() 가 special_request
@@ -19,8 +21,7 @@
   'use strict';
 
   var PER = 1000;   // 문항당 할인액
-  var MAX = 4000;   // 최대 할인액 (조작 방지용 상한) — booking.html 표기와 함께 바꿀 것
-  var IG_URL = 'https://www.instagram.com/instar_hotel_';
+  var MAX = 3000;   // 최대 할인액 (조작 방지용 상한) — booking.html 표기와 함께 바꿀 것
   var FREE_MAX = 60;   // 자유 입력 최대 글자수
 
   var Q1 = {
@@ -84,17 +85,6 @@
     '.sv-btn.undo{background:none;color:#8a8a8a;font-weight:600;text-decoration:underline;padding:12px 6px;}',
     '.sv-done{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13.5px;color:var(--sv-ink);flex-wrap:wrap;}',
     '.sv-done b{font-weight:700;}',
-    '.sv-radios{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;}',
-    '.sv-radio{display:flex;align-items:center;gap:8px;border:1.5px solid var(--sv-line);border-radius:9px;',
-    'padding:10px 14px;font-size:13px;color:#3d4853;cursor:pointer;user-select:none;}',
-    '.sv-radio.on{border-color:#E3A337;background:#fdf8ec;color:var(--sv-ink);font-weight:600;}',
-    '.sv-dot{width:15px;height:15px;border-radius:50%;border:1.5px solid #c8c8c8;flex-shrink:0;',
-    'display:flex;align-items:center;justify-content:center;}',
-    '.sv-radio.on .sv-dot{border-color:#E3A337;}',
-    '.sv-radio.on .sv-dot::after{content:"";width:8px;height:8px;border-radius:50%;background:#E3A337;}',
-    '.sv-link{display:inline-flex;align-items:center;gap:7px;margin-top:2px;font-size:13.5px;',
-    'font-weight:700;color:#2A1B05;text-decoration:none;border:1.5px solid #E3A337;border-radius:8px;padding:10px 14px;background:#fdf8ec;}',
-    '.sv-link:hover{background:#fbf1dc;}',
     '.sv-note{display:block;font-size:12px;color:#9a9a9a;margin-top:8px;line-height:1.55;}',
     '.sv-note.hide{display:none;}',
     '.sv-etc{border-color:#E3A337 !important;background:#fffdf8 !important;}',
@@ -142,9 +132,6 @@
     this.purposeEtc = v.purposeEtc || '';
     this.kw         = v.keyword    || '';
     this.kwLocked   = !!v.keyword;
-    this.ig         = (v.instagram || '').replace(/^@/, '');
-    this.igWhen     = v.igWhen     || null;
-    this.igLocked   = !!v.instagram;
     this.el = opts.container;
     injectCss();
     this._bind();
@@ -160,16 +147,12 @@
     return !!this.purpose && (this.purpose !== ETC || clean(this.purposeEtc).length > 0);
   };
   Widget.prototype._kwOk = function () { return this.kwLocked && clean(this.kw).length > 0; };
-  Widget.prototype._igOk = function () {
-    return this.igLocked && !!this.igWhen && clean(this.ig).replace(/^@/, '').length >= 2;
-  };
 
   Widget.prototype.discount = function () {
     var n = 0;
     if (this._q1Ok())  n += PER;
     if (this._q2Ok())  n += PER;
     if (this._kwOk())  n += PER;
-    if (this._igOk())  n += PER;
     return Math.min(n, MAX);
   };
 
@@ -180,8 +163,6 @@
       purpose:    this._q2Ok() ? this.purpose : null,
       purposeEtc: (this._q2Ok() && this.purpose === ETC) ? clean(this.purposeEtc) : '',
       keyword:    this._kwOk() ? clean(this.kw) : '',
-      instagram:  this._igOk() ? '@' + clean(this.ig).replace(/^@/, '') : '',
-      igWhen:     this._igOk() ? this.igWhen : null,
       discount:   this.discount()
     };
   };
@@ -209,15 +190,6 @@
         self.kwLocked = true;  self.render(); self._emit();
       } else if (a === 'kwedit') {
         self.kwLocked = false; self.render(); self._emit(); self._focus('#svKw');
-
-      } else if (a === 'igwhen') {
-        self.igWhen = t.getAttribute('data-v');
-        self.render(); self._emit();
-      } else if (a === 'iglock') {
-        if (clean(self.ig).replace(/^@/, '').length < 2 || !self.igWhen) return;
-        self.igLocked = true;  self.render(); self._emit();
-      } else if (a === 'igedit') {
-        self.igLocked = false; self.render(); self._emit(); self._focus('#svIg');
       }
     });
 
@@ -227,7 +199,6 @@
       if      (id === 'svEtc1') self.sourceEtc = ev.target.value;
       else if (id === 'svEtc2') self.purposeEtc = ev.target.value;
       else if (id === 'svKw')   self.kw = ev.target.value;
-      else if (id === 'svIg')   self.ig = ev.target.value;
       else return;
       self._refreshLive();
       self._emit();
@@ -238,9 +209,6 @@
       if (ev.key !== 'Enter') return;
       if (ev.target.id === 'svKw' && clean(self.kw)) {
         ev.preventDefault(); self.kwLocked = true; self.render(); self._emit();
-      } else if (ev.target.id === 'svIg' &&
-                 clean(self.ig).replace(/^@/, '').length >= 2 && self.igWhen) {
-        ev.preventDefault(); self.igLocked = true; self.render(); self._emit();
       }
     });
   };
@@ -259,8 +227,6 @@
     if (bar) bar.style.width = (d / MAX * 100) + '%';
     var kb = this.el.querySelector('[data-sv="kwlock"]');
     if (kb) kb.disabled = !clean(this.kw);
-    var ib = this.el.querySelector('[data-sv="iglock"]');
-    if (ib) ib.disabled = (clean(this.ig).replace(/^@/, '').length < 2 || !this.igWhen);
 
     /* '기타' 자유 입력은 글자가 들어온 순간 할인이 붙으므로 알약도 같이 바꾼다 */
     var self = this;
@@ -302,8 +268,6 @@
   Widget.prototype.render = function () {
     var d     = this.discount();
     var kwOk  = this._kwOk();
-    var igOk  = this._igOk();
-    var igHandle = clean(this.ig).replace(/^@/, '');
 
     var q3body = kwOk
       ? '<div class="sv-done"><span>검색어 <b>' + esc(clean(this.kw)) + '</b> 로 찾으셨군요. 감사합니다.</span>' +
@@ -315,28 +279,6 @@
           '<button type="button" class="sv-btn" data-sv="kwlock"' + (clean(this.kw) ? '' : ' disabled') +
             '>입력 완료 · 1,000원 할인받기</button>' +
         '</div>';
-
-    var q4body = igOk
-      ? '<div class="sv-done"><span><b>@' + esc(igHandle) + '</b> · ' +
-          (this.igWhen === 'now' ? '지금 팔로우' : '이미 팔로우 중') + ' — 1,000원 할인이 적용됐습니다.</span>' +
-          '<button type="button" class="sv-btn undo" data-sv="igedit">수정</button></div>' +
-          '<span class="sv-note">체크인 시 프런트에서 확인될 수 있습니다.</span>'
-      : '<a class="sv-link" href="' + IG_URL + '" target="_blank" rel="noopener">' +
-          '인스타호텔 인스타그램 바로가기 &#8599;</a>' +
-        '<div class="sv-radios">' +
-          '<div class="sv-radio' + (this.igWhen === 'now' ? ' on' : '') + '" data-sv="igwhen" data-v="now">' +
-            '<span class="sv-dot"></span>지금 팔로우했습니다</div>' +
-          '<div class="sv-radio' + (this.igWhen === 'already' ? ' on' : '') + '" data-sv="igwhen" data-v="already">' +
-            '<span class="sv-dot"></span>이미 팔로우하고 있습니다</div>' +
-        '</div>' +
-        '<div class="sv-row">' +
-          '<div class="sv-input"><input id="svIg" type="text" maxlength="40" placeholder="팔로우한 계정 (예: @hotel1234)" autocomplete="off" value="' +
-            esc(this.ig) + '"></div>' +
-          '<button type="button" class="sv-btn" data-sv="iglock"' +
-            ((igHandle.length >= 2 && this.igWhen) ? '' : ' disabled') +
-            '>팔로우 완료 · 1,000원 할인받기</button>' +
-        '</div>' +
-        '<span class="sv-note">체크인 시 프런트에서 확인될 수 있습니다.</span>';
 
     this.el.innerHTML =
       '<div class="sv-wrap">' +
@@ -365,12 +307,6 @@
             '<span class="sv-qt">어떤 검색어로 인스타호텔을 찾으셨나요?</span>' + this._pill(kwOk) + '</div>' +
           '<div class="sv-sub">실제로 검색하셨던 문구를 그대로 적어주세요.</div>' +
           '<div class="sv-box2' + (kwOk ? ' on' : '') + '">' + q3body + '</div>' +
-        '</div>' +
-
-        '<div class="sv-q">' +
-          '<div class="sv-qh"><span class="sv-qk">Q4</span>' +
-            '<span class="sv-qt">공식 인스타그램을 팔로우해 주세요</span>' + this._pill(igOk) + '</div>' +
-          '<div class="sv-box2' + (igOk ? ' on' : '') + '">' + q4body + '</div>' +
         '</div>' +
 
         '<div class="sv-foot">답하신 항목만큼 바로 할인됩니다 (문항당 1,000원 · 최대 ' + won(MAX) + '). ' +
