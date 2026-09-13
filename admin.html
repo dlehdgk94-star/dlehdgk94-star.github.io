@@ -1015,10 +1015,11 @@ function renderSurveyStats(){
         '기간 내 예약 ' + rows.length + '건 · 설문 참여 ' + part.length + '건';
 
     cardArea.innerHTML =
-        _svCard('ic-blue',  'fa-solid fa-clipboard-question', '설문 참여 예약', part.length, '건', '참여율 ' + rate + '%') +
+        _svCard('ic-blue',  'fa-solid fa-clipboard-question', '설문 참여 예약', part.length, '건',
+                '참여율 ' + rate + '% · 지급 할인 약 ' + fmtWon(disc)) +
         _svCard('ic-green', 'fa-solid fa-magnifying-glass',   'Q1 응답',        q1n,         '건', '알게된 경로') +
         _svCard('ic-orange','fa-solid fa-suitcase',           'Q2 응답',        q2n,         '건', '숙박 목적') +
-        _svCard('ic-purple','fa-solid fa-magnifying-glass-chart','검색어 수집',   kwn,         '건', '지급 할인 약 ' + fmtWon(disc));
+        _svCard('ic-purple','fa-solid fa-magnifying-glass-chart','검색어 수집',   kwn,         '건', '실제 검색 문구');
 
     document.getElementById('svQ1Area').innerHTML = _svBars(q1, q1n) + _svEtcList(etc1, '기타');
     document.getElementById('svQ2Area').innerHTML = _svBars(q2, q2n) + _svEtcList(etc2, '기타');
