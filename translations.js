@@ -8,8 +8,9 @@ const translations = {
     "nav.rooms": "객실예약",
     "nav.gallery": "갤러리",
     "nav.nearby": "주변안내",
-    // LOCAL GUIDE (local.html)
-    "nav.local": "로컬 가이드",
+    // 수원 행사일정 (suwon-events.html)
+    // ※ 키 이름 nav.local 은 그대로 둔다 — 15개 파일의 data-i18n 을 다 고치지 않기 위해서.
+    "nav.local": "수원 행사일정",
     "local.hero.label": "INSTA LOCAL",
     "local.hero.title": "Eat, Move & Explore Korea Like a Local.",
     "local.section.title": "관광부터 비즈니스까지, 호텔 주변의 다양한 정보를 한눈에",
@@ -370,8 +371,8 @@ const translations = {
     "nav.rooms": "Rooms",
     "nav.gallery": "Gallery",
     "nav.nearby": "Nearby",
-    // LOCAL GUIDE (local.html)
-    "nav.local": "LOCAL GUIDE",
+    // 수원 행사일정 (suwon-events.html)
+    "nav.local": "Suwon Events",
     "local.hero.label": "INSTA LOCAL",
     "local.hero.title": "Eat, Move & Explore Korea Like a Local.",
     "local.section.title": "From sightseeing to business, everything around the hotel at a glance",
@@ -720,8 +721,8 @@ const translations = {
     "nav.rooms": "客室予約",
     "nav.gallery": "ギャラリー",
     "nav.nearby": "周辺案内",
-    // LOCAL GUIDE (local.html)
-    "nav.local": "LOCAL GUIDE",
+    // 수원 행사일정 (suwon-events.html)
+    "nav.local": "水原イベント",
     "local.hero.label": "INSTA LOCAL",
     "local.hero.title": "Eat, Move & Explore Korea Like a Local.",
     "local.section.title": "観光からビジネスまで、ホテル周辺の多彩な情報を一目で",
@@ -1070,8 +1071,8 @@ const translations = {
     "nav.rooms": "客房预订",
     "nav.gallery": "图库",
     "nav.nearby": "周边指南",
-    // LOCAL GUIDE (local.html)
-    "nav.local": "LOCAL GUIDE",
+    // 수원 행사일정 (suwon-events.html)
+    "nav.local": "水原活动日程",
     "local.hero.label": "INSTA LOCAL",
     "local.hero.title": "Eat, Move & Explore Korea Like a Local.",
     "local.section.title": "从观光到商务，酒店周边多彩资讯一目了然",
