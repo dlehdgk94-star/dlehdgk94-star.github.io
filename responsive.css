@@ -5,6 +5,13 @@
    (item1=478 + item2=626 + item4=116 + padding=60 + item3padding=296 + content=120)
    ═══════════════════════════════════════ */
 
+/* ── 헤더 인스타그램 아이콘 (전체 해상도 공통) ── */
+/* 위치 핀·전화기와 같은 검정이라 눈에 안 띄어서 인스타 브랜드색으로 바꿨다.
+   그라데이션 대신 단색을 쓴 이유: 14px 글리프에서는 그라데이션이 뭉개져 얼룩처럼 보인다.
+   href 로 고르므로 10개 HTML 파일에 클래스를 붙일 필요가 없다. */
+.hotel-info-right a[href*="instagram.com"] { color: #E4405F; }
+.hotel-info-right a[href*="instagram.com"]:hover { color: #C13584; }
+
 /* ── 모바일 네비게이션 드로어 (전체 해상도 공통) ── */
 #mobileNavOverlay {
     position: fixed;
