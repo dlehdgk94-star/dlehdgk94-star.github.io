@@ -468,9 +468,11 @@
     .mob-quick-icon { flex: 0 0 52px; }
     .mob-quick-icon i { font-size: 17px; }
     .mob-quick:active { opacity: 0.85; }
+    /* 인스타는 계정 아이디(@instar_hotel_)가 들어가 글자가 길다 — 폭을 더 준다 */
+    .mob-quick-ig { flex: 1.35 1 0; }
     /* 인스타만 브랜드색 — 셋 다 같은 색이면 또 안 보인다 */
     .mob-quick-ig { color: #E4405F; }
-    @media (max-width: 360px) { .mob-quick { font-size: 12px; gap: 5px; } .mob-quick i { font-size: 14px; } }
+    @media (max-width: 360px) { .mob-quick { font-size: 11.5px; gap: 4px; } .mob-quick i { font-size: 13px; } }
 
     /* rooms.html 은 아직 #mob-trigger-bar 안에 [예약하기] 버튼을 쓴다.
        (index.html 에서만 인스타·지도·전화로 바뀌었다 — 이 규칙을 지우면

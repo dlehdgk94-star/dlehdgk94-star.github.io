@@ -584,7 +584,8 @@
                    transition: background .15s, color .15s; }
         .ways-ig:hover { background: #E4405F; color: #fff; }
         .ways-ig i { font-size: 17px; }
-        @media (max-width: 768px) { .ways-ig { font-size: 13.5px; padding: 8px 13px; } .ways-ig i { font-size: 15px; } }
+        /* 모바일에서는 상단 바에 @instar_hotel_ 이 이미 있어 중복이므로 숨긴다 (PC 에서만 표시) */
+        @media (max-width: 768px) { .ways-ig { display: none; } }
         .hotel-ways-section .promo-pkg-wrap { max-width: 100%; }
         .hotel-ways-section .promo-pkg-slider { overflow: hidden; cursor: default; display: block; padding-bottom: 0; }
         .hw-track { display: flex; gap: 16px; width: max-content; animation: hwScroll 22s linear infinite; will-change: transform; }
@@ -750,7 +751,7 @@
         .modal-amenity-item-click{ cursor:pointer; border-radius:5px; padding:5px 6px 5px 0; transition:background 0.15s,color 0.15s; }
         .modal-amenity-item-click:hover{ background:#e8f6f8; color:#00768e; }
     </style>
-    <link rel="stylesheet" href="responsive.css?v=20260922">
+    <link rel="stylesheet" href="responsive.css?v=20260922b">
     <script src="js/roomPricing.js?v=20260731"></script>
     <script src="js/roomAvailability.js?v=20260802"></script>
     <script src="js/bookingQuote.js?v=20260904"></script>
@@ -906,7 +907,7 @@
         <div id="mob-trigger-bar">
             <a class="mob-quick mob-quick-ig" href="https://www.instagram.com/instar_hotel_/"
                target="_blank" rel="noopener" aria-label="인스타호텔 공식 인스타그램">
-                <i class="fa-brands fa-instagram" aria-hidden="true"></i><span data-i18n="mob.ig">인스타그램</span>
+                <i class="fa-brands fa-instagram" aria-hidden="true"></i><span>@instar_hotel_</span>
             </a>
             <a class="mob-quick mob-quick-icon" href="#" onclick="openLocationModal(event)"
                aria-label="오시는 길" title="오시는 길">
@@ -4215,7 +4216,7 @@
     function selectLangOption(el){setLanguage(el.dataset.code.toLowerCase());document.getElementById("langDropdown").classList.remove("open");}
     document.addEventListener("click",function(){var d=document.getElementById("langDropdown");if(d)d.classList.remove("open");});
     </script>
-    <script src="translations.js?v=20260922"></script>
+    <script src="translations.js?v=20260922b"></script>
     <!-- 갤러리 라이트박스 -->
     <div class="gallery-overlay" id="roomGalleryOverlay" onclick="handleRoomGalleryOverlayClick(event)">
         <div class="gallery-stage" id="roomGalleryStage">

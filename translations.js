@@ -127,7 +127,6 @@ const translations = {
     "price.sat": "(토)",
     "ways.title": "호텔 투숙을 즐기는 다양한 방법",
     // 모바일 상단 빠른 연결 (index.html #mob-trigger-bar)
-    "mob.ig": "인스타그램",
     "mob.tel": "전화",
     "taxi.kakao": "카카오 택시",
     "taxi.uber": "우버",
@@ -481,7 +480,6 @@ const translations = {
     "price.sat": "(Sat)",
     "ways.title": "Ways to Enjoy Your Hotel Stay",
     // 모바일 상단 빠른 연결 (index.html #mob-trigger-bar)
-    "mob.ig": "Instagram",
     "mob.tel": "Call",
     "taxi.kakao": "Kakao Taxi",
     "taxi.uber": "Uber",
@@ -834,7 +832,6 @@ const translations = {
     "price.sat": "(土)",
     "ways.title": "ホテル滞在をもっと楽しむ方法",
     // 모바일 상단 빠른 연결 (index.html #mob-trigger-bar)
-    "mob.ig": "Instagram",
     "mob.tel": "電話",
     "taxi.kakao": "カカオタクシー",
     "taxi.uber": "Uber",
@@ -1187,7 +1184,6 @@ const translations = {
     "price.sat": "(周六)",
     "ways.title": "享受酒店住宿的多种方式",
     // 모바일 상단 빠른 연결 (index.html #mob-trigger-bar)
-    "mob.ig": "Instagram",
     "mob.tel": "电话",
     "taxi.kakao": "Kakao打车",
     "taxi.uber": "Uber",
