@@ -213,18 +213,6 @@
                        font-size:13px; font-weight:700; color:rgb(150,150,150); }
         .ev-past-head::after{ content:''; flex:1; height:1px; background:#ededed; }
 
-        /* ── 하단 안내 띠 ── */
-        .ev-cta{ margin-top:34px; border:1px solid #f0e6d8; border-radius:12px;
-                 background:linear-gradient(90deg,#FFF9F2 0%,#FDF3E7 100%);
-                 padding:26px 30px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
-        .ev-cta-label{ font-size:12.5px; font-weight:700; color:#F97316; margin-bottom:7px; }
-        .ev-cta h2{ font-size:20px; font-weight:700; letter-spacing:-.5px; margin:0 0 7px; }
-        .ev-cta p{ font-size:13.5px; color:rgb(120,120,120); margin:0; line-height:1.65; }
-        .ev-cta-pills{ display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:13px;
-                       font-size:12.5px; color:rgb(130,130,130); }
-        .ev-cta-pills i{ color:rgb(165,165,165); font-size:12px; }
-        .ev-cta .ev-btn-book{ flex:none; padding:15px 26px; font-size:14px; }
-
         .ev-asof{ margin-top:22px; font-size:12.5px; color:rgb(160,160,160); line-height:1.7; text-align:center; }
 
         /* ── 모바일 ── */
@@ -277,8 +265,6 @@
             .ev-when .d, .ev-when .d2{ font-size:17px; }
             .ev-btns{ flex-direction:column; padding-top:16px; }
             .ev-btn-line, .ev-btn-book{ width:100%; padding:14px; font-size:14px; }
-            .ev-cta{ flex-direction:column; align-items:stretch; text-align:left; padding:22px 20px; }
-            .ev-cta .ev-btn-book{ width:100%; padding:15px; }
         }
         /* 320px 급 좁은 화면(폴드 커버·구형 SE)에서는 시설 안내가 한 줄에 안 들어간다.
            가운뎃점을 빼서, 줄이 바뀔 때 점이 줄머리에 혼자 남는 것을 막는다. */
@@ -441,23 +427,6 @@
         <div class="ev-grid" id="evGrid"></div>
         <div id="evPastArea"></div>
 
-        <!-- ───── 하단 안내 ───── -->
-        <section class="ev-cta">
-            <div>
-                <div class="ev-cta-label" data-i18n="ev.cta.label">수원의 특별한 순간, 인스타 호텔과 함께</div>
-                <h2 data-i18n="ev.cta.title">수원 행사 방문을 준비하고 계신가요?</h2>
-                <p data-i18n="ev.cta.sub">행사 일정에 맞춰 인스타호텔 본점의 객실을 확인해보세요.</p>
-                <div class="ev-cta-pills">
-                    <span><i class="fa-solid fa-square-parking"></i> <span data-i18n="ev.pill.parking">대형주차장 완비</span></span>
-                    <span><i class="fa-solid fa-charging-station"></i> <span data-i18n="ev.pill.evcharge">전기차 충전 가능</span></span>
-                    <span><i class="fa-regular fa-clock"></i> <span data-i18n="ev.pill.front">24시간 프런트</span></span>
-                    <span><i class="fa-solid fa-location-dot"></i> <span data-i18n="ev.pill.conv">수원컨벤션센터</span> 15분</span>
-                    <span><i class="fa-solid fa-building-columns"></i> <span data-i18n="ev.pill.messe">수원메쎄</span> 15분</span>
-                    <span><i class="fa-solid fa-landmark"></i> <span data-i18n="ev.pill.hwaseong">수원화성</span> 15분</span>
-                </div>
-            </div>
-            <a class="ev-btn-book" href="index.html#rooms-target"><span data-i18n="ev.cta.btn">행사 날짜로 객실 확인하기</span> <i class="fa-solid fa-chevron-right" style="font-size:11px;"></i></a>
-        </section>
 
         <p class="ev-asof" id="evAsOf"></p>
     </div>
