@@ -158,7 +158,7 @@
 
         /* ── 카드 ── */
         .ev-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; }
-        .ev-card{ display:flex; border:1px solid #ededed; border-radius:12px; overflow:hidden; background:#fff; }
+        .ev-card{ display:flex; min-height:212px; border:1px solid #ededed; border-radius:12px; overflow:hidden; background:#fff; }
         .ev-card.past{ opacity:.5; }
         /* 사진 없는 카드는 왼쪽 색 띠로 장소를 구분한다 (사진 28장을 다 넣기 어려우므로) */
         .ev-card{ border-left-width:4px; border-left-style:solid; }
@@ -168,7 +168,11 @@
         .ev-card.tone-gray  { border-left-color:#9AA0A6; }
         .ev-card.has-photo  { border-left-width:1px; border-left-color:#ededed; }
         .ev-photo{ flex:0 0 305px; background:#f0f0f0; position:relative; overflow:hidden; }
-        .ev-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+        /* 사진을 칸 안에 띄워서 채운다.
+           이렇게 안 하면 .ev-photo 에 높이가 없어 img{height:100%} 가 auto 로 풀리고,
+           세로로 긴 포스터(ev07·13·14)가 카드 높이를 1.8배로 밀어 올린다.
+           띄워두면 카드 높이는 글 내용만으로 정해져서 같은 줄의 두 카드가 항상 같아진다. */
+        .ev-photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
         .ev-photo .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
                        font-size:13px; font-weight:700; color:#b5b5b5; text-align:center; padding:12px; line-height:1.5; }
         .ev-body{ flex:1; display:flex; gap:18px; padding:20px 22px; min-width:0; }
