@@ -143,7 +143,8 @@
                   border-radius:10px; padding:15px 26px; font-size:14px; color:rgb(60,60,60); }
         .ev-pill i{ font-size:15px; color:rgb(90,90,90); }
         .ev-pill b{ color:#F97316; font-weight:700; }
-        .ev-amens{ display:contents; }   /* PC: 묶음이 없는 것처럼 6개가 한 줄로 흐른다 */
+        .ev-dists, .ev-amens{ display:contents; }   /* PC: 묶음이 없는 것처럼 6개가 한 줄로 흐른다 */
+        .ev-dist-all{ display:none; }              /* PC: 칩마다 값이 있으므로 공용 값은 숨긴다 */
 
         .ev-wrap{ max-width:1720px; margin:0 auto; padding:0 40px 80px; }
 
@@ -239,9 +240,20 @@
                6개를 한 줄에 흘리면 1-1-2-2 로 들쭉날쭉해진다. */
             .ev-pills{ display:block; margin-top:18px; }
             .ev-pill{ padding:12px 14px; font-size:13px; gap:8px; }
-            .ev-pill-dist{ width:100%; margin-bottom:6px; text-align:left; }
-            .ev-pill-dist span{ margin-right:auto; }
-            .ev-pill-dist b{ flex:none; }
+            /* 세 곳 모두 15분이라 칩을 셋으로 나누면 같은 말이 세 번 반복된다.
+               한 상자 안에 "A · B · C  차량 약 15분" 으로 합친다.
+               좁은 화면에서 줄이 바뀌면 값이 둘째 줄 가운데로 내려갈 뿐 모양은 유지된다. */
+            .ev-dists{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+                       background:#fff; border:1px solid #ededed; border-radius:10px;
+                       padding:13px 14px; row-gap:3px; }
+            .ev-pill-dist{ border:0; background:transparent; padding:0;
+                           font-size:12.5px; gap:0; }
+            .ev-pill-dist i{ display:none; }
+            .ev-pill-dist b{ display:none; }        /* 칩마다 붙어 있던 값은 숨긴다 */
+            .ev-pill-dist span{ white-space:nowrap; }   /* '수원화성' 이 낱자로 쪼개지지 않게 */
+            .ev-pill-dist + .ev-pill-dist::before{ content:"\00B7"; color:#ccc; margin:0 7px; }
+            .ev-dist-all{ display:inline; color:#F97316; font-weight:700;
+                          font-size:12.5px; margin-left:11px; white-space:nowrap; }
             .ev-amens{ display:flex; flex-wrap:wrap; justify-content:center;
                        column-gap:0; row-gap:6px; margin-top:12px; }
             .ev-pill-amen{ border:0; background:transparent; padding:0;
@@ -251,9 +263,13 @@
             .ev-pill-amen i{ display:none; }
             .ev-pill-amen + .ev-pill-amen::before{ content:"\00B7"; color:#ccc; margin:0 8px; }
             .ev-wrap{ padding:0 16px 56px; }
-            .ev-filters{ justify-content:flex-start; flex-wrap:nowrap; overflow-x:auto; padding:22px 0 20px; }
-            .ev-filters::-webkit-scrollbar{ display:none; }
-            .ev-chip{ flex:none; padding:8px 15px; font-size:12.5px; }
+            /* 가로 스크롤을 쓰면 장소 필터가 화면 밖에 숨어 있어 있는 줄도 모른다.
+               구분선을 줄바꿈으로 바꿔 '월 / 장소' 두 줄이 한눈에 보이게 한다. */
+            .ev-filters{ flex-wrap:wrap; justify-content:center; overflow-x:visible;
+                         gap:6px; padding:20px 0 18px; }
+            .ev-sep{ flex-basis:100%; width:100%; height:0; background:transparent; margin:0; }
+            .ev-chip{ flex:none; padding:7px 11px; font-size:12px; }
+            .ev-vpre{ display:none; }
             .ev-card{ flex-direction:column; }
             .ev-photo{ flex:none; aspect-ratio:16/9; }
             .ev-body{ flex-direction:column; gap:0; padding:18px; }
@@ -269,6 +285,9 @@
         @media (max-width:374px){
             .ev-pill-amen + .ev-pill-amen::before{ display:none; }
             .ev-amens{ column-gap:12px; }
+            /* 장소 칩 5개가 한 줄에 겨우 안 들어간다. 여백만 조금 줄여 두 줄을 지킨다. */
+            .ev-filters{ gap:5px; }
+            .ev-chip{ padding:7px 9px; }
         }
     </style>
     <link rel="stylesheet" href="responsive.css?v=20260922c">
@@ -396,9 +415,14 @@
         <h1 data-i18n="ev.title">2026 수원 행사 일정</h1>
         <p data-i18n="ev.sub">수원컨벤션센터 · 수원메쎄 · 수원화성에서 열리는 주요 행사와 숙박 정보를 확인하세요.</p>
         <div class="ev-pills">
-            <div class="ev-pill ev-pill-dist"><i class="fa-solid fa-location-dot"></i><span data-i18n="ev.pill.conv">수원컨벤션센터</span> <b data-i18n="ev.pill.min15">차량 약 15분</b></div>
-            <div class="ev-pill ev-pill-dist"><i class="fa-solid fa-building-columns"></i><span data-i18n="ev.pill.messe">수원메쎄</span> <b data-i18n="ev.pill.min15">차량 약 15분</b></div>
-            <div class="ev-pill ev-pill-dist"><i class="fa-solid fa-landmark"></i><span data-i18n="ev.pill.hwaseong">수원화성</span> <b data-i18n="ev.pill.min15">차량 약 15분</b></div>
+            <!-- 거리 안내: PC 는 display:contents 라 칩 3개가 따로 보이고,
+                 모바일에서는 한 상자 안에 "A · B · C   차량 약 15분" 한 줄로 합쳐진다. -->
+            <div class="ev-dists">
+                <div class="ev-pill ev-pill-dist"><i class="fa-solid fa-location-dot"></i><span data-i18n="ev.pill.conv">수원컨벤션센터</span> <b data-i18n="ev.pill.min15">차량 약 15분</b></div>
+                <div class="ev-pill ev-pill-dist"><i class="fa-solid fa-building-columns"></i><span data-i18n="ev.pill.messe">수원메쎄</span> <b data-i18n="ev.pill.min15">차량 약 15분</b></div>
+                <div class="ev-pill ev-pill-dist"><i class="fa-solid fa-landmark"></i><span data-i18n="ev.pill.hwaseong">수원화성</span> <b data-i18n="ev.pill.min15">차량 약 15분</b></div>
+                <b class="ev-dist-all" data-i18n="ev.pill.min15">차량 약 15분</b>
+            </div>
             <!-- 시설 안내: PC 에서는 display:contents 라 위 3개와 한 줄로 흐르고,
                  모바일에서는 이 묶음만 따로 작은 글씨 한 덩이로 내려간다. -->
             <div class="ev-amens">
@@ -818,7 +842,11 @@
         h += '<button type="button" class="ev-chip ev-venue' + (evVenue === 'all' ? ' on' : '') + '" data-v="all">전체</button>';
         ['conv','messe','hwaseong','etc'].forEach(function(v){
             if (venues.indexOf(v) < 0) return;
-            h += '<button type="button" class="ev-chip ev-venue' + (evVenue === v ? ' on' : '') + '" data-v="' + v + '">' + VENUE_LABEL[v] + '</button>';
+            /* 모바일에서 장소 칩 5개가 한 줄에 들어가지 않는다. 앞의 '수원' 을 span 으로
+               감싸 좁은 화면에서만 숨긴다(페이지 제목·상단 안내에 이미 수원이 나온다). */
+            var _lbl = VENUE_LABEL[v];
+            if (_lbl.indexOf('수원') === 0) _lbl = '<span class="ev-vpre">수원</span>' + _lbl.slice(2);
+            h += '<button type="button" class="ev-chip ev-venue' + (evVenue === v ? ' on' : '') + '" data-v="' + v + '">' + _lbl + '</button>';
         });
         document.getElementById('evFilters').innerHTML = h;
     }
