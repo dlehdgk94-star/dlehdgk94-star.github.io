@@ -57,7 +57,8 @@
     // 예약바를 주입하지 않는 페이지. booking* 는 자체 날짜·인원 선택 UI가 있으므로 반드시 제외한다
     // (주입하면 진행 중이던 예약·설문 할인이 통째로 덮어써진다)
     var isBookingFlow = /booking(-success|-fail)?\.html$/.test(path);
-    var isGalleryOrNearby = /gallery\.html$|nearby\.html$|rooms\.html$|local\.html$/.test(path) || isSubfolder || isBookingFlow;
+    // suwon-events 는 행사 카드마다 자체 예약 버튼이 있고, 주입된 예약바가 localStorage 를 덮어쓴다
+    var isGalleryOrNearby = /gallery\.html$|nearby\.html$|rooms\.html$|suwon-events\.html$/.test(path) || isSubfolder || isBookingFlow;
 
     document.addEventListener('DOMContentLoaded', function () {
         document.body.appendChild(overlay);

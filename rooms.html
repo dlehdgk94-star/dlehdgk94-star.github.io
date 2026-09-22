@@ -385,7 +385,7 @@
         .review-more-btn { background: #fff; border: 1px solid #ccc; border-radius: 20px; padding: 9px 20px; font-size: 13px; font-weight: 600; color: rgb(28,28,28); cursor: pointer; font-family: 'Barlow', sans-serif; transition: border-color 0.15s; }
         .review-more-btn:hover { border-color: rgb(112,112,112); }
     </style>
-    <link rel="stylesheet" href="responsive.css?v=20260922b">
+    <link rel="stylesheet" href="responsive.css?v=20260922c">
     <script src="js/roomPricing.js?v=20260731"></script>
     <script src="js/currency.js?v=20260731"></script>
     <script src="js/roomAvailability.js?v=20260802"></script>
@@ -1181,8 +1181,45 @@
             window.location.href = 'booking.html';
         }
 
+        /* ── 수원 행사일정 페이지에서 날짜를 물고 오는 경우 ──
+           suwon-events.html 의 [객실 예약하기] 가 ?checkin=YYYY-MM-DD&checkout=YYYY-MM-DD 로 넘긴다.
+           형식이 틀리거나 과거·예약한도(1년) 밖이면 조용히 무시하고 기본값(오늘/내일)을 쓴다. */
+        var _datesFromQuery = (function(){
+            try {
+                var q  = new URLSearchParams(location.search);
+                var ci = q.get('checkin'), co = q.get('checkout');
+                if (!ci || !co) return false;
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(ci) || !/^\d{4}-\d{2}-\d{2}$/.test(co)) return false;
+                /* new Date(2026,12,45) 는 오류가 아니라 2027-02-14 로 굴러간다.
+                   그래서 만든 날짜의 연·월·일이 입력과 같은지 반드시 되확인한다. */
+                function toD(s){
+                    var p = s.split('-'), y = +p[0], m = +p[1], d = +p[2];
+                    var o = new Date(y, m - 1, d);
+                    if (o.getFullYear() !== y || o.getMonth() !== m - 1 || o.getDate() !== d) return null;
+                    return o;
+                }
+                var a = toD(ci), b = toD(co);
+                if (!a || !b) return false;
+                if (b <= a) return false;
+                if (a < _today) {                    /* 이미 지난 행사면 오늘부터 같은 박수로 */
+                    var n = Math.round((b - a) / 86400000) || 1;
+                    a = new Date(_today);
+                    b = new Date(_today); b.setDate(b.getDate() + n);
+                }
+                if (b > _maxBookingDate) return false;
+                checkinDate = a; checkoutDate = b;
+                calViewYear = a.getFullYear(); calViewMonth = a.getMonth();
+                datesUserSelected = true; _datesExplicitlySet = true;
+                return true;
+            } catch (e) { return false; }
+        })();
+
         window.addEventListener('DOMContentLoaded', function(){
             renderCalendar(); updateDateUI();
+            if (_datesFromQuery) {
+                if (typeof updateRoomPrices === 'function') updateRoomPrices();
+                if (typeof syncMobPanel === 'function') syncMobPanel();
+            }
             // 마감일 조회용 rooms UUID 맵 사전 로드(공용 모듈)
             if (window.RoomAvailability) RoomAvailability.loadRoomUuids();
             // 통화 설정 1회 로드(REST) 후 가격 재렌더링
@@ -1609,9 +1646,9 @@
             }
         })();
     </script>
-    <script src="translations.js?v=20260922b"></script>
+    <script src="translations.js?v=20260922c"></script>
     <script>function toggleLangDropdown(e){e.stopPropagation();document.getElementById("langDropdown").classList.toggle("open");}function selectLang(el){var lang=el.dataset.code.toLowerCase();if(typeof setLanguage==='function'){setLanguage(lang);}else{document.getElementById("langCode").textContent=el.dataset.code;document.querySelectorAll(".lang-option").forEach(function(o){o.classList.remove("active");});el.classList.add("active");}document.getElementById("langDropdown").classList.remove("open");}document.addEventListener("click",function(){var d=document.getElementById("langDropdown");if(d)d.classList.remove("open");});</script>
-    <script src="mobile-nav.js?v=20260803"></script>
+    <script src="mobile-nav.js?v=20260922c"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="ai-chat.js?v=20260733"></script>
