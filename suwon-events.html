@@ -378,7 +378,8 @@
             <div class="ev-pill"><i class="fa-solid fa-location-dot"></i><span data-i18n="ev.pill.conv">수원컨벤션센터</span> <b data-i18n="ev.pill.min15">차량 약 15분</b></div>
             <div class="ev-pill"><i class="fa-solid fa-building-columns"></i><span data-i18n="ev.pill.messe">수원메쎄</span> <b data-i18n="ev.pill.min15">차량 약 15분</b></div>
             <div class="ev-pill"><i class="fa-solid fa-landmark"></i><span data-i18n="ev.pill.hwaseong">수원화성</span> <b data-i18n="ev.pill.min15">차량 약 15분</b></div>
-            <div class="ev-pill"><i class="fa-solid fa-car"></i><span data-i18n="ev.pill.parking">무료 주차</span></div>
+            <div class="ev-pill"><i class="fa-solid fa-square-parking"></i><span data-i18n="ev.pill.parking">대형주차장 완비</span></div>
+            <div class="ev-pill"><i class="fa-solid fa-charging-station"></i><span data-i18n="ev.pill.evcharge">전기차 충전 가능</span></div>
             <div class="ev-pill"><i class="fa-regular fa-clock"></i><span data-i18n="ev.pill.front">24시간 프런트</span></div>
         </div>
     </section>
@@ -398,14 +399,15 @@
                 <h2 data-i18n="ev.cta.title">수원 행사 방문을 준비하고 계신가요?</h2>
                 <p data-i18n="ev.cta.sub">행사 일정에 맞춰 인스타호텔 본점의 객실을 확인해보세요.</p>
                 <div class="ev-cta-pills">
-                    <span><i class="fa-solid fa-car"></i> <span data-i18n="ev.pill.parking">무료 주차</span></span>
+                    <span><i class="fa-solid fa-square-parking"></i> <span data-i18n="ev.pill.parking">대형주차장 완비</span></span>
+                    <span><i class="fa-solid fa-charging-station"></i> <span data-i18n="ev.pill.evcharge">전기차 충전 가능</span></span>
                     <span><i class="fa-regular fa-clock"></i> <span data-i18n="ev.pill.front">24시간 프런트</span></span>
                     <span><i class="fa-solid fa-location-dot"></i> <span data-i18n="ev.pill.conv">수원컨벤션센터</span> 15분</span>
                     <span><i class="fa-solid fa-building-columns"></i> <span data-i18n="ev.pill.messe">수원메쎄</span> 15분</span>
                     <span><i class="fa-solid fa-landmark"></i> <span data-i18n="ev.pill.hwaseong">수원화성</span> 15분</span>
                 </div>
             </div>
-            <a class="ev-btn-book" href="rooms.html"><span data-i18n="ev.cta.btn">행사 날짜로 객실 확인하기</span> <i class="fa-solid fa-chevron-right" style="font-size:11px;"></i></a>
+            <a class="ev-btn-book" href="index.html#rooms-target"><span data-i18n="ev.cta.btn">행사 날짜로 객실 확인하기</span> <i class="fa-solid fa-chevron-right" style="font-size:11px;"></i></a>
         </section>
 
         <p class="ev-asof" id="evAsOf"></p>
@@ -714,7 +716,9 @@
         var ci = _d(ev.start);
         if (ci < t) ci = new Date(t);
         var co = new Date(ci); co.setDate(co.getDate() + 1);
-        return 'rooms.html?checkin=' + _ymd(ci) + '&checkout=' + _ymd(co);
+        /* 객실 예약하기 는 메인 페이지의 '객실 & 스테이' 섹션(#rooms-target)으로 보낸다.
+           index.html 이 ?checkin=/&checkout= 를 읽어 달력을 행사 날짜로 미리 맞춘다. */
+        return 'index.html?checkin=' + _ymd(ci) + '&checkout=' + _ymd(co) + '#rooms-target';
     }
 
     function evCardHtml(ev, isPast){
@@ -831,7 +835,7 @@
     evRenderFilters();
     evRender();
     </script>
-    <script src="translations.js?v=20260922c"></script>
+    <script src="translations.js?v=20260922d"></script>
     <script src="mobile-nav.js?v=20260922c"></script>
     
 <script src="ai-chat.js?v=20260733"></script>

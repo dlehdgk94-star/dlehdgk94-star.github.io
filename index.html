@@ -3327,6 +3327,40 @@
         let datesUserSelected = false;
         let _autoAdvDate = true;
         let _datesExplicitlySet = false;
+
+        /* ───── suwon-events.html 에서 넘어온 행사 날짜 ─────
+           [객실 예약하기] 가 index.html?checkin=YYYY-MM-DD&checkout=YYYY-MM-DD#rooms-target 로 보낸다.
+           형식이 틀리거나 과거·예약한도(오늘+360일) 밖이면 조용히 무시하고 기본값(오늘/내일)을 쓴다. */
+        var _datesFromQuery = (function(){
+            try {
+                var q  = new URLSearchParams(location.search);
+                var ci = q.get('checkin'), co = q.get('checkout');
+                if (!ci || !co) return false;
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(ci) || !/^\d{4}-\d{2}-\d{2}$/.test(co)) return false;
+                /* new Date(2026,12,45) 는 오류가 아니라 2027-02-14 로 굴러간다.
+                   그래서 만든 날짜의 연·월·일이 입력과 같은지 반드시 되확인한다. */
+                function toD(s){
+                    var p = s.split('-'), y = +p[0], m = +p[1], d = +p[2];
+                    var o = new Date(y, m - 1, d);
+                    o.setHours(0,0,0,0);
+                    if (o.getFullYear() !== y || o.getMonth() !== m - 1 || o.getDate() !== d) return null;
+                    return o;
+                }
+                var a = toD(ci), b = toD(co);
+                if (!a || !b) return false;
+                if (b <= a) return false;
+                if (a < _today) {                    /* 이미 시작한 행사면 오늘부터 같은 박수로 */
+                    var n = Math.round((b - a) / 86400000) || 1;
+                    a = new Date(_today);
+                    b = new Date(_today); b.setDate(b.getDate() + n);
+                }
+                if (b > _maxBookingDate) return false;
+                checkinDate = a; checkoutDate = b;
+                currentMonthDate = new Date(a.getFullYear(), a.getMonth(), 1);
+                datesUserSelected = true; _datesExplicitlySet = true;
+                return true;
+            } catch (e) { return false; }
+        })();
         function selectDate(dateString) {
             const parts = dateString.split('-');
             const clickedDate = new Date(parts[0], parts[1]-1, parts[2]);
@@ -3382,6 +3416,10 @@
         window.addEventListener('DOMContentLoaded', () => {
             renderCalendar();
             updateDateUI();
+            if (_datesFromQuery) {
+                if (typeof updateRoomPrices === 'function') updateRoomPrices();
+                if (typeof syncMobPanel === 'function') syncMobPanel();
+            }
             document.querySelectorAll('.room-card-img-wrap').forEach(function(wrap) {
                 wrap.style.cursor = 'pointer';
                 wrap.addEventListener('click', function(e) {
@@ -4216,7 +4254,7 @@
     function selectLangOption(el){setLanguage(el.dataset.code.toLowerCase());document.getElementById("langDropdown").classList.remove("open");}
     document.addEventListener("click",function(){var d=document.getElementById("langDropdown");if(d)d.classList.remove("open");});
     </script>
-    <script src="translations.js?v=20260922c"></script>
+    <script src="translations.js?v=20260922d"></script>
     <!-- 갤러리 라이트박스 -->
     <div class="gallery-overlay" id="roomGalleryOverlay" onclick="handleRoomGalleryOverlayClick(event)">
         <div class="gallery-stage" id="roomGalleryStage">
