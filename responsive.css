@@ -451,7 +451,33 @@
         outline: none;
     }
     #mob-book-bar-btn:active { opacity: 0.85; }
+    /* 모바일 상단 빠른 연결 — 인스타 / 오시는 길 / 전화
+       (예전 #mob-book-trigger 자리. 팝업이 이미 객실 섹션으로 내려주므로 예약 버튼은 뺐다) */
+    #mob-trigger-bar { display: flex; gap: 8px; }
+    .mob-quick {
+        flex: 1 1 0; min-width: 0; height: 46px;
+        display: flex; align-items: center; justify-content: center; gap: 6px;
+        background: rgb(244,244,244); border-radius: 8px;
+        color: #1a1a1a; text-decoration: none;
+        font-size: 13px; font-weight: 700; letter-spacing: -0.2px;
+        font-family: 'Barlow', sans-serif; white-space: nowrap;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .mob-quick i { font-size: 15px; }
+    /* 지도는 글자 없이 아이콘만 — 폭을 고정해 나머지 둘에 자리를 내준다 */
+    .mob-quick-icon { flex: 0 0 52px; }
+    .mob-quick-icon i { font-size: 17px; }
+    .mob-quick:active { opacity: 0.85; }
+    /* 인스타만 브랜드색 — 셋 다 같은 색이면 또 안 보인다 */
+    .mob-quick-ig { color: #E4405F; }
+    @media (max-width: 360px) { .mob-quick { font-size: 12px; gap: 5px; } .mob-quick i { font-size: 14px; } }
+
+    /* rooms.html 은 아직 #mob-trigger-bar 안에 [예약하기] 버튼을 쓴다.
+       (index.html 에서만 인스타·지도·전화로 바뀌었다 — 이 규칙을 지우면
+        rooms.html 버튼이 브라우저 기본 회색 네모로 돌아간다)
+       flex 컨테이너 안이므로 flex:1 을 같이 준다. */
     #mob-book-trigger {
+        flex: 1 1 100%;
         width: 100%;
         height: 46px;
         background: rgb(244,244,244);

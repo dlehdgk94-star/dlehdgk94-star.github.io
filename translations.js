@@ -126,6 +126,9 @@ const translations = {
     "price.fri": "(금)",
     "price.sat": "(토)",
     "ways.title": "호텔 투숙을 즐기는 다양한 방법",
+    // 모바일 상단 빠른 연결 (index.html #mob-trigger-bar)
+    "mob.ig": "인스타그램",
+    "mob.tel": "전화",
     "taxi.kakao": "카카오 택시",
     "taxi.uber": "우버",
     "chat.label": "궁금한점<br>챗GPT에<br>문의하기",
@@ -477,6 +480,9 @@ const translations = {
     "price.fri": "(Fri)",
     "price.sat": "(Sat)",
     "ways.title": "Ways to Enjoy Your Hotel Stay",
+    // 모바일 상단 빠른 연결 (index.html #mob-trigger-bar)
+    "mob.ig": "Instagram",
+    "mob.tel": "Call",
     "taxi.kakao": "Kakao Taxi",
     "taxi.uber": "Uber",
     "chat.label": "Ask<br>ChatGPT<br>Anything",
@@ -827,6 +833,9 @@ const translations = {
     "price.fri": "(金)",
     "price.sat": "(土)",
     "ways.title": "ホテル滞在をもっと楽しむ方法",
+    // 모바일 상단 빠른 연결 (index.html #mob-trigger-bar)
+    "mob.ig": "Instagram",
+    "mob.tel": "電話",
     "taxi.kakao": "カカオタクシー",
     "taxi.uber": "Uber",
     "chat.label": "ChatGPTに<br>お問い合わせ",
@@ -1177,6 +1186,9 @@ const translations = {
     "price.fri": "(周五)",
     "price.sat": "(周六)",
     "ways.title": "享受酒店住宿的多种方式",
+    // 모바일 상단 빠른 연결 (index.html #mob-trigger-bar)
+    "mob.ig": "Instagram",
+    "mob.tel": "电话",
     "taxi.kakao": "Kakao打车",
     "taxi.uber": "Uber",
     "chat.label": "咨询<br>ChatGPT",
