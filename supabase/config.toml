@@ -1,0 +1,25 @@
+# ============================================================================
+# Supabase CLI 설정 (2026-10-15)
+# ----------------------------------------------------------------------------
+# 목적: Edge Function 의 "Enforce JWT verification" 설정을 코드로 고정한다.
+#       이 파일이 없으면 배포할 때마다 CLI 기본값이 적용되므로,
+#       누군가 --no-verify-jwt 를 붙여 배포하면 함수가 무인증으로 열린다.
+#
+# 현재 상태(2026-10-15 실측): 여섯 함수 모두 인증 적용됨.
+#   Authorization 헤더 없이 호출 → 401 UNAUTHORIZED_NO_AUTH_HEADER
+#   형식이 틀린 토큰으로 호출     → 401 UNAUTHORIZED_INVALID_JWT_FORMAT
+#   sb_publishable_ 키는 검증이 켜진 상태에서도 정상 통과한다(새 API 키 체계).
+#
+# ★ 배포는 플래그 없이:  supabase functions deploy confirm-payment
+#   (--no-verify-jwt 를 붙이면 아래 설정과 어긋난다)
+# ============================================================================
+
+project_id = "lbhdujheuokkmiowobzu"
+
+# 결제 승인 + 예약 저장. 홈페이지가 sb_publishable_ 키로 호출한다.
+[functions.confirm-payment]
+verify_jwt = true
+
+# 예약 저장 시 DB 웹훅이 호출 → 직원 문자 발송.
+[functions.notify-reservation]
+verify_jwt = true
