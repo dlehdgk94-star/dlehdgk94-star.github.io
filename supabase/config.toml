@@ -5,6 +5,8 @@
 #       이 파일이 없으면 배포할 때마다 CLI 기본값이 적용되므로,
 #       누군가 --no-verify-jwt 를 붙여 배포하면 함수가 무인증으로 열린다.
 #
+# 아래에 여섯 함수를 모두 적어 두었다. 새 함수를 만들면 여기에도 추가할 것.
+#
 # 현재 상태(2026-10-15 실측): 여섯 함수 모두 인증 적용됨.
 #   Authorization 헤더 없이 호출 → 401 UNAUTHORIZED_NO_AUTH_HEADER
 #   형식이 틀린 토큰으로 호출     → 401 UNAUTHORIZED_INVALID_JWT_FORMAT
@@ -22,4 +24,20 @@ verify_jwt = true
 
 # 예약 저장 시 DB 웹훅이 호출 → 직원 문자 발송.
 [functions.notify-reservation]
+verify_jwt = true
+
+# 예약 취소 + 환불 + 재고 복원 + 직원 취소 문자.
+# 관리자 페이지가 sb_publishable_ 키로 호출하며, 본문의 adminPassword 로 한 번 더 막는다.
+[functions.cancel-reservation]
+verify_jwt = true
+
+# 챗봇 응답.
+[functions.ai-chat]
+verify_jwt = true
+
+[functions.gemini-chat]
+verify_jwt = true
+
+# 환율(usd_rate / usd_markup) 저장. service_role 로 쓰기 때문에 특히 열리면 안 된다.
+[functions.update-app-setting]
 verify_jwt = true
