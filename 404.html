@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>페이지를 찾을 수 없습니다 | 호텔인스타 본점</title>
+<link rel="icon" href="/favicon.ico">
+<script>
+/* ── 유입 전용 짧은 주소: instarhotel.com/go/블로거이름[-글이름] ──
+   GitHub Pages 는 없는 주소를 모두 이 404.html 로 보낸다.
+   /go/ 로 시작하면 꼬리표를 붙여 메인으로 즉시 넘긴다
+   (기록은 메인의 js/referral.js 가 담당).
+   새 블로거·새 글이 생겨도 코드 수정 없이 주소만 정하면 된다.
+     /go/tripgokr          → 블로그(tripgokr)
+     /go/tripgokr-exam     → 블로그(tripgokr-exam)            */
+(function () {
+  var m = location.pathname.match(/^\/go\/([^\/?#]+)/i);
+  if (!m) return;
+  var slug;
+  try { slug = decodeURIComponent(m[1]); } catch (e) { slug = m[1]; }
+  slug = slug.replace(/[^0-9A-Za-z\uAC00-\uD7A3_\-.]/g, '').slice(0, 40);
+  if (!slug) slug = 'unknown';
+  location.replace('/?utm_source=' + encodeURIComponent(slug) + '&utm_medium=blog');
+  document.documentElement.setAttribute('data-go', '1');
+})();
+</script>
+<style>
+  html[data-go] body { visibility: hidden; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+         font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+         background:#fafafa; color:#1c1c1c; text-align:center; padding:24px; box-sizing:border-box; }
+  h1 { font-size:22px; margin:0 0 10px; }
+  p  { color:#707070; margin:0 0 24px; font-size:15px; }
+  a  { display:inline-block; background:#1c1c1c; color:#fff; text-decoration:none;
+       padding:12px 24px; border-radius:999px; font-size:15px; }
+</style>
+</head>
+<body>
+  <div>
+    <h1>페이지를 찾을 수 없습니다</h1>
+    <p>주소가 바뀌었거나 없는 페이지입니다.</p>
+    <a href="/">호텔인스타 본점 홈으로</a>
+  </div>
+</body>
+</html>
