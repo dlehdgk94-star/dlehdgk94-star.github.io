@@ -1,4 +1,5 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { sendStaffSms } from '../_shared/staff-sms.ts';
 
 // ── CORS: instarhotel.com 도메인만 허용 (update-app-setting 과 동일) ──
 const ALLOWED_ORIGINS = [
@@ -321,6 +322,46 @@ serve(async (req) => {
   }
 
   /* ════════════════════════════════════════
+     STEP 5 — 직원 취소 알림 문자 (예약 알림과 같은 5개 번호)
+     취소·환불은 이미 끝난 상태이므로, 문자가 실패해도 취소 결과는 성공으로 응답한다.
+  ════════════════════════════════════════ */
+  let sms = { sent: 0, total: 0 };
+  try {
+    const refunded = isFullCancel ? paidAmount : cancelAmount;
+    const money = isUsd
+      ? `$${Number(refunded).toFixed(2)}`
+      : `${Math.round(Number(refunded)).toLocaleString('ko-KR')}원`;
+    const rawPhone = String(r.guest_phone ?? '');
+    const phone = rawPhone
+      ? rawPhone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3')
+      : '-';
+    const lines = [
+      '[INSTA HOTEL] 예약 취소 알림',
+      '─────────────────',
+      `예약번호: ${r.order_id ?? '-'}`,
+      `객실: ${r.room_name ?? '-'}`,
+      `체크인: ${r.checkin_date ?? '-'}`,
+      `체크아웃: ${r.checkout_date ?? '-'}`,
+      `숙박: ${r.nights ? r.nights + '박' : '-'}`,
+      '─────────────────',
+      `예약자: ${r.guest_name ?? '-'}`,
+      `연락처: ${phone}`,
+      `유입: ${r.referral_source ? String(r.referral_source) : '직접 방문'}`,
+      '─────────────────',
+      `환불금액: ${money} (${isFullCancel ? '전액 취소' : '부분 취소'})`,
+      `취소사유: ${cancelReason}`,
+    ];
+    if (isUsd) lines.push('결제수단: PayPal (해외결제)');
+    if (failedDates.length > 0) {
+      lines.push('─────────────────');
+      lines.push(`※ 재고 복원 실패: ${failedDates.join(', ')} — 관리자 페이지에서 수동 확인 필요`);
+    }
+    sms = await sendStaffSms(lines.join('\n'), 'cancel-reservation');
+  } catch (e) {
+    console.error('[cancel-reservation] STEP5 취소 문자 발송 중 오류 (취소는 완료됨):', e);
+  }
+
+  /* ════════════════════════════════════════
      응답
   ════════════════════════════════════════ */
   return json({
@@ -329,6 +370,7 @@ serve(async (req) => {
     fullCancel:           isFullCancel,
     cancelAmount:         isFullCancel ? paidAmount : cancelAmount,
     failedInventoryDates: failedDates,
+    sms,
     message:              failedDates.length > 0
       ? `취소 완료. 일부 날짜 재고 복원 실패 (수동 확인 필요): ${failedDates.join(', ')}`
       : '취소 및 재고 복원이 완료되었습니다.',
