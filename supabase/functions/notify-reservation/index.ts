@@ -111,6 +111,8 @@ function buildMessage(r: Record<string, unknown>): string {
     `연락처: ${phone}`,
     `국가: ${country}`,
     `특별요청: ${specialReq}`,
+    // 유입경로 (js/referral.js → reservations.referral_source). 직원용 문자에만 표시, 손님 이메일에는 넣지 않음
+    `유입: ${r.referral_source ? String(r.referral_source) : '직접 방문'}`,
     '─────────────────',
     `결제금액: ${price}`
   );

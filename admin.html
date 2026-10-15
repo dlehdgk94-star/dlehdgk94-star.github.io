@@ -107,6 +107,7 @@
         tbody tr.row-missing-guest td{ color:#c0392b; }
         .order-id-cell{ font-family:monospace; font-size:11px; color:rgb(112,112,112); max-width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .room-cell{ color:#00768e; font-weight:600; }
+        .badge-referral{ display:inline-block; background:#fff3e6; color:#c2410c; border:1px solid #fed7aa; border-radius:999px; padding:2px 9px; font-size:12px; font-weight:600; white-space:nowrap; }
         .cur-tag{ display:inline-block; margin-left:5px; background:#eef4f6; color:#00768e; font-size:10px; font-weight:700; padding:1px 5px; border-radius:4px; vertical-align:1px; letter-spacing:0.3px; }
         .badge-paid{ display:inline-block; background:#eafaf1; color:#27ae60; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
         .badge-pending{ display:inline-block; background:#fef9e7; color:#f39c12; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
@@ -819,6 +820,21 @@ function fmtResAmount(r){
 function fmtDate(s){ if(!s) return '-'; const d=new Date(s+'T00:00:00'); return `${d.getMonth()+1}월 ${d.getDate()}일`; }
 function fmtDateTime(s){ if(!s) return '-'; const d=new Date(s); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
 function statusBadge(s){ if(s==='paid') return '<span class="badge-paid">결제완료</span>'; if(s==='cancelled') return '<span class="badge-cancelled">취소됨</span>'; if(s==='overbooked') return '<span class="badge-overbooked">⚠ 오버부킹</span>'; return '<span class="badge-pending">대기중</span>'; }
+/* 유입경로 표시 (reservations.referral_source ← js/referral.js)
+   값 있음            → 주황 배지  예) 블로그(tripgokr)
+   값 없음 + 기능 이후 → '직접 방문'
+   값 없음 + 기능 이전 → '-' (그때는 기록 자체를 안 했으므로 직접 방문이라 단정하지 않음) */
+function referralText(r){
+    const REFERRAL_SINCE = '2026-10-15T00:00:00+09:00';   // 유입경로 기록을 시작한 날
+    if(r && r.referral_source) return String(r.referral_source);
+    if(r && r.created_at && new Date(r.created_at) < new Date(REFERRAL_SINCE)) return '-';
+    return '직접 방문';
+}
+function referralBadge(r){
+    const v=referralText(r);
+    if(r && r.referral_source) return `<span class="badge-referral" title="유입경로">${_rEsc(v)}</span>`;
+    return `<span style="color:rgb(150,150,150);font-size:12px;">${_rEsc(v)}</span>`;
+}
 function toDateStr(y,m,d){ return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
 function showToast(msg='저장되었습니다 ✓'){
     const t=document.getElementById('saveToast');
@@ -1078,6 +1094,7 @@ function buildTableHTML(data, areaId){
             <td style="font-weight:600;">${_rEsc(r.guest_name||'-')}</td>
             <td>${r.guest_phone ? _rEsc(String(r.guest_phone).replace(/(\d{3})(\d{3,4})(\d{4})/,'$1-$2-$3')) : '-'}</td>
             <td class="room-cell">${_rEsc(r.room_name||'-')}</td>
+            <td>${referralBadge(r)}</td>
             <td>${fmtDate(r.checkin_date)}</td>
             <td>${fmtDate(r.checkout_date)}</td>
             <td>${r.nights ? r.nights+'박' : '-'}</td>
@@ -1087,7 +1104,7 @@ function buildTableHTML(data, areaId){
         </tr>`).join('');
     return `<div style="overflow-x:auto;"><table>
         <thead><tr>
-            <th>예약번호</th><th>예약자</th><th>연락처</th><th>객실</th>
+            <th>예약번호</th><th>예약자</th><th>연락처</th><th>객실</th><th>유입경로</th>
             <th>체크인</th><th>체크아웃</th><th>숙박</th>
             <th>금액</th><th>상태</th><th>예약일시</th>
         </tr></thead>
@@ -1117,7 +1134,7 @@ function applyFilter(){
     const from=document.getElementById('filterDateFrom')?.value||'';
     const to=document.getElementById('filterDateTo')?.value||'';
     const filtered=allData.filter(r=>{
-        if(q && !['guest_name','guest_email','order_id','guest_phone'].some(k=>r[k]&&r[k].toLowerCase().includes(q))) return false;
+        if(q && !['guest_name','guest_email','order_id','guest_phone','referral_source'].some(k=>r[k]&&String(r[k]).toLowerCase().includes(q))) return false;
         if(room   && r.room_name!==room) return false;
         if(status && r.payment_status!==status) return false;
         if(from   && r.checkin_date<from) return false;
@@ -1169,6 +1186,7 @@ function openResModal(r){
             <div class="modal-row"><span class="modal-key">나라</span><span class="modal-val">${_rEsc(COUNTRIES[r.guest_country]||r.guest_country||'-')}</span></div>
             <div class="modal-row"><span class="modal-key">인스타그램 계정</span><span class="modal-val">${ig}</span></div>
             <div class="modal-row"><span class="modal-key">특별 요청사항</span><span class="modal-val" style="${specialReq==='없음'?'color:rgb(112,112,112);font-weight:400;':''}">${specialReq}</span></div>
+            <div class="modal-row"><span class="modal-key">유입경로</span><span class="modal-val">${referralBadge(r)}</span></div>
         </div>
         <div class="modal-section">
             <div class="modal-section-title">결제 정보</div>

@@ -343,6 +343,7 @@
             guest_country:   g.country        || null,
             guest_instagram: g.instagram      || null,
             special_request: g.request        || null,
+            referral_source: g.referral || (window.InstaReferral && InstaReferral.get()) || null,
             payment_status:  'paid'
         });
         if (error) { console.error('[Supabase] reservations 저장 오류:', error.message, error); return; }
@@ -490,7 +491,8 @@
                     totalPrice: b.totalPrice,               // 원화 기준가
                     guestName: g.name, guestEmail: g.email, guestPhone: g.phone,
                     guestCountry: g.country, guestInstagram: g.instagram, specialRequest: g.request,
-                    guestNameEn: g.nameEn
+                    guestNameEn: g.nameEn,
+                    referralSource: g.referral || (window.InstaReferral && InstaReferral.get()) || null
                 }
             };
         } else {
@@ -539,6 +541,7 @@
     
 <script src="ai-chat.js?v=20260733"></script>
 <script src="taxi-btns.js?v=20260733"></script>
+<script src="js/referral.js?v=20261015"></script>
 </body>
 </html>
 

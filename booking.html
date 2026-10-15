@@ -810,6 +810,7 @@
             instagram: _surveyInstagram(),
             request:   _requestWithSurvey(),
             survey:    _surveyValue(),
+            referral:  (window.InstaReferral && InstaReferral.get()) || null,   // 유입경로 (js/referral.js)
             nameEn:    nameEnEl ? nameEnEl.value.trim() : ''   // USD 결제 영문명(없으면 빈값)
         }));
     }

@@ -70,6 +70,7 @@
     if (/(^|\.)map\.naver\.com$/.test(host) || /(^|\.)m\.place\.naver\.com$/.test(host) || /(^|\.)pcmap\.place\.naver\.com$/.test(host)) return '네이버 지도';
     if (/(^|\.)search\.naver\.com$/.test(host)) return '네이버 검색';
     if (/naver\.com$/.test(host))               return '네이버';
+    if (/gemini\.google\.com$/.test(host))      return 'Gemini';
     if (/(^|\.)google\./.test(host))            return '구글 검색';
     if (/daum\.net$/.test(host) && /search/.test(path)) return '다음 검색';
     if (/tistory\.com$/.test(host))             return '티스토리';
@@ -79,7 +80,6 @@
     if (/kakao/.test(host))                     return '카카오';
     if (/(chatgpt|openai)\.com$/.test(host))    return 'ChatGPT';
     if (/perplexity\.ai$/.test(host))           return 'Perplexity';
-    if (/gemini\.google\.com$/.test(host))      return 'Gemini';
     if (/bing\.com$/.test(host))                return '빙 검색';
     return host.replace(/^www\./, '');
   }

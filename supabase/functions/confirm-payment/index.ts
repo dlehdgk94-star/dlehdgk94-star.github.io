@@ -99,6 +99,7 @@ async function finalizeReservation(
     exchange_rate:    data.rate,        // 결제 시점 usd_rate (서버 조회 스냅샷)
     markup_rate:      data.markup,      // 결제 시점 usd_markup
     guest_name_en:    (r.guestNameEn as string) ?? null,
+    referral_source:  r.referralSource ? String(r.referralSource).slice(0, 80) : null, // 유입경로 (js/referral.js)
   };
 
   const insRes = await fetch(`${sbUrl}/rest/v1/reservations`, {
